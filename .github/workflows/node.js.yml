@@ -45,15 +45,16 @@ jobs:
     name: "Read version and changelog for release"
     needs: deploy
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     outputs:
       version: ${{ steps.step1.outputs.version }}
       changelog: ${{ steps.step2.outputs.changelog }}
     steps:
       - uses: actions/checkout@v3
       - id: version
-        run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(npx -c \'node -p "process.env.npm_package_version"\')" >> "$GITHUB_OUTPUT; echo $(npx -c \'node -p "process.env.npm_package_version"\')
       - id: changelog
-        run: echo "changelog=$(cat ./public/changelog/${{ steps.step1.outputs.version }}.md)" >> "$GITHUB_OUTPUT"
+        run: VERSION=$(npx -c 'node -p "process.env.npm_package_version"'); echo "changelog=$(cat ./public/changelog/$VERSION.md)" >> "$GITHUB_OUTPUT; echo $(cat ./public/changelog/$VERSION.md)
 
   release:
     name: "Check for release exsists"
@@ -74,7 +75,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} == "true"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} == "false"
         with:
           tag_name: ${{ needs.read-for-release.outputs.version }}
           release_name: Release ${{ needs.read-for-release.outputs.version }}
@@ -83,5 +84,5 @@ jobs:
           prerelease: false
 
       - name: "No Release"
-        if: ${{ steps.checkTag.outputs.exists }} == "false"
+        if: ${{ steps.checkTag.outputs.exists }} == "true"
         run: echo "Release canceled. Tag exsists."
