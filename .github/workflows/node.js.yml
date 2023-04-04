@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: 22
-          script: cd ~/KAdmin/kadmin-arklin2/; docker compose down; git stash; git pull; docker compose up -d --build
+          script: cd ~/KAdmin/kadmin-arklin2/sh/update.sh ${{ github.head_ref || github.ref_name }}; docker compose down; git stash; git pull; docker compose up -d --build
 
   read-for-release:
     name: "Read version and changelog for release"
@@ -52,9 +52,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: version
-        run: echo "version=$(npx -c \'node -p "process.env.npm_package_version"\')" >> "$GITHUB_OUTPUT; echo $(npx -c \'node -p "process.env.npm_package_version"\')
+        run: VERSION=$(npx -c 'node -p "process.env.npm_package_version"'); echo "version=$VERSION" >> "$GITHUB_OUTPUT; echo "$VERSION"
       - id: changelog
-        run: VERSION=$(npx -c 'node -p "process.env.npm_package_version"'); echo "changelog=$(cat ./public/changelog/$VERSION.md)" >> "$GITHUB_OUTPUT; echo $(cat ./public/changelog/$VERSION.md)
+        run: VERSION=$(npx -c 'node -p "process.env.npm_package_version"'); echo "changelog=$(cat ./public/changelog/$VERSION.md)" >> "$GITHUB_OUTPUT; echo "$(cat ./public/changelog/$VERSION.md)"
 
   release:
     name: "Check for release exsists"
@@ -77,9 +77,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} == "false"
         with:
-          tag_name: ${{ needs.read-for-release.outputs.version }}
-          release_name: Release ${{ needs.read-for-release.outputs.version }}
-          body: ${{ steps.step2.outputs.changelog }}
+          tag_name: "${{ needs.read-for-release.outputs.version }}"
+          release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"
+          body: "${{ steps.step2.outputs.changelog }}"
           draft: false
           prerelease: false
 
