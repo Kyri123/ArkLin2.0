@@ -29,7 +29,7 @@ jobs:
 
   deploy:
     needs: test
-    name: "Deploy to Server"
+    name: "Deploy to Test-Server"
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
@@ -42,20 +42,19 @@ jobs:
           script: ~/KAdmin/kadmin-arklin2/sh/update.sh "${{ github.head_ref || github.ref_name }}"
 
   read-for-release:
-    name: "Read version and changelog for release"
+    name: "Read and cache Version"
     needs: deploy
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     outputs:
-      version: ${{ steps.step1.outputs.version }}
-      changelog: ${{ steps.step2.outputs.changelog }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v3
       - id: version
         run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
 
   release:
-    name: "Check for release exsists"
+    name: "Create release if Tag not exists"
     needs: read-for-release
     runs-on: ubuntu-latest
     steps:
