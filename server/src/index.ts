@@ -32,6 +32,7 @@ import { RunTest }                          from "./Testing";
 
 // Small fix if the cert fails!
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = String( 0 );
+global.__PANNELUPDATE = false;
 
 fetch( 'http://api.ipify.org' ).then( async( r ) => {
 	global.__PublicIP = await r.text();

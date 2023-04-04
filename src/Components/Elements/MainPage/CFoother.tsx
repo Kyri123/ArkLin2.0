@@ -10,7 +10,7 @@ export default function CFoother( Props : {
 		<footer className="main-footer fixed">
 			<br className="d-block d-sm-none"/>
 			<Link className="float-right"
-				  to={ "/changelog/latest_" + Props.SystemUsage.PanelVersionName }>Version: { Props.SystemUsage.PanelVersionName }</Link>
+				  to={ "/changelog/" + Props.SystemUsage.PanelVersionName }>Version: { Props.SystemUsage.PanelVersionName }</Link>
 			<strong>Framework by <Link target="_blank" to="https://adminlte.io">AdminLTE.io</Link> | (c)
 				by Kyri123
 				<Link className="ps-1" target="_blank" to="https://github.com/Kyri123"><FontAwesomeIcon size={ "lg" }

@@ -14,7 +14,6 @@ export class ConfigManagerClass {
 	protected readonly TaskConfig : ITaskConfig;
 	protected readonly DebugConfig : IDebugConfig;
 	protected readonly SSHKey : string;
-	protected readonly CurrentGitHash : string;
 
 	constructor() {
 		this.DebugConfig = this.ReadConfigWithFallback<IDebugConfig>( "Debug.json" );
@@ -26,13 +25,6 @@ export class ConfigManagerClass {
 		this.API_BaseConfig = this.ReadConfigWithFallback<IAPI_BaseConfig>( "API_BaseConfig.json" );
 		this.TaskConfig = this.ReadConfigWithFallback<ITaskConfig>( "Tasks.json" );
 		this.SSHKey = this.ReadConfigWithFallback<string>( "id_rsa", true );
-		try {
-			this.CurrentGitHash = fs.readFileSync( path.join( __git_dir, "HEAD" ) ).toString();
-		}
-		catch ( e ) {
-			this.CurrentGitHash = "";
-			SystemLib.LogFatal( "cannot find GIT! Please check mount and git clone." )
-		}
 	}
 
 	public get GetDashboardConifg() : IDashboard_BaseConfig {
@@ -59,18 +51,14 @@ export class ConfigManagerClass {
 		return path.join( __configdir, "id_rsa" );
 	}
 
-	public get GetGitHash() : string {
-		return this.CurrentGitHash;
-	}
-
 	public Write( Config : string, Data : any ) : boolean {
 		const ConfigFile = path.join( __configdir, `${ Config }.json` );
-		if ( fs.existsSync( ConfigFile ) && Data ) {
+		if( fs.existsSync( ConfigFile ) && Data ) {
 			try {
 				fs.writeFileSync( ConfigFile, JSON.stringify( Data, null, "\t" ) );
 				return true;
 			}
-			catch ( e ) {
+			catch( e ) {
 				SystemLib.LogError( "[CONFIG]", e )
 			}
 		}
@@ -79,11 +67,11 @@ export class ConfigManagerClass {
 
 	public Get<T = any>( Config : string ) : any | T {
 		const ConfigFile = path.join( __configdir, `${ Config }.json` );
-		if ( fs.existsSync( ConfigFile ) ) {
+		if( fs.existsSync( ConfigFile ) ) {
 			try {
 				return JSON.parse( fs.readFileSync( ConfigFile ).toString() );
 			}
-			catch ( e ) {
+			catch( e ) {
 				SystemLib.LogError( "[CONFIG]", e )
 			}
 		}
@@ -95,17 +83,17 @@ export class ConfigManagerClass {
 		const ConfigPath = path.join( __configdir, File );
 
 		// Create default config file
-		if ( !fs.existsSync( ConfigPath ) ) {
+		if( !fs.existsSync( ConfigPath ) ) {
 			try {
 				fs.mkdirSync( __configdir, { recursive: true } );
 			}
-			catch ( e ) {
+			catch( e ) {
 			}
 			fs.writeFileSync( ConfigPath, fs.readFileSync( FallbackConfigPath ).toString() );
 			SystemLib.Log( "Config recreated:", SystemLib.ToBashColor( "Red" ), File );
 		}
 
-		if ( !NotAJson ) {
+		if( !NotAJson ) {
 			// Merge fallback (with maybe new values) to config file
 			const FallbackConfig = JSON.parse( fs.readFileSync( FallbackConfigPath ).toString() );
 			const Config = JSON.parse( fs.readFileSync( ConfigPath ).toString() );
@@ -117,8 +105,8 @@ export class ConfigManagerClass {
 				...Config
 			};
 
-			for ( const Key of Object.keys( Return ) ) {
-				if ( !FallbackKeys.Contains( Key ) ) {
+			for( const Key of Object.keys( Return ) ) {
+				if( !FallbackKeys.Contains( Key ) ) {
 					SystemLib.DebugLog( "[CONFIG] Removed Key", SystemLib.ToBashColor( "Red" ), Key );
 					delete Return[ Key ];
 				}
@@ -133,13 +121,13 @@ export class ConfigManagerClass {
 	}
 }
 
-if ( !global.CManager ) {
+if( !global.CManager ) {
 	global.CManager = new ConfigManagerClass();
 }
 
 export const ConfigManager = global.CManager;
 
-if ( !global.SSHManagerLib ) {
+if( !global.SSHManagerLib ) {
 	global.SSHManagerLib = new SSHLib();
 }
 

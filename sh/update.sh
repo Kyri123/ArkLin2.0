@@ -5,14 +5,14 @@ fi
 
 BRANCH="$1"
 
-export DOCKER_UID="$(id -u)"
-export DOCKER_GID="$(id -g)"
+export DOCKER_UID=$(id -u)
+export DOCKER_GID=$(id -g)
 
-cd ~/KAdmin/kadmin-arklin2
+cd ~/KAdmin/ArkLin2.0
 docker compose down
 
 git stash
-git pull https://git.kyrium.space/arktools/kadmin-arklin2.git $BRANCH
+git pull https://github.com/Kyri123/ArkLin2.0.git $BRANCH
 
 echo "Setzte Rechte..."
 chmod 777 -R ./sh

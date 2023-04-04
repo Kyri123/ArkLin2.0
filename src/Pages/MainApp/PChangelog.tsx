@@ -7,7 +7,6 @@ import {
 	Navigate,
 	useParams
 }                          from 'react-router-dom';
-import { IGitlabRelease }  from "../../Shared/Type/Gitlab.Release";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactMarkdown       from "react-markdown";
 import { API_QueryLib }    from "../../Lib/Api/API_Query.Lib";
@@ -15,75 +14,31 @@ import { EChangelogUrl }   from "../../Shared/Enum/Routing";
 
 export default function PChangelog() : JSX.Element {
 	const { version } = useParams();
-	const [ Data, setData ] = useState<IGitlabRelease[]>( [] );
-	const [ Selected, setSelected ] = useState<IGitlabRelease>( {
-		Assets: { count: 0, links: [], sources: [] },
-		Author: { avatar_url: "", id: 0, name: "", state: "", username: "", web_url: "" },
-		Commit: {
-			author_email: "",
-			author_name: "",
-			authored_date: new Date(),
-			committed_date: new Date(),
-			committer_email: "",
-			committer_name: "",
-			created_at: new Date(),
-			id: "",
-			message: "",
-			parent_ids: [],
-			short_id: "",
-			title: "",
-			trailers: undefined,
-			web_url: ""
-		},
-		Evidence: { collected_at: new Date(), filepath: "", sha: "" },
-		Link: { direct_asset_url: "", external: false, id: 0, link_type: "", name: "", url: "" },
-		Links: {
-			closed_issues_url: "",
-			closed_merge_requests_url: "",
-			merged_merge_requests_url: "",
-			opened_issues_url: "",
-			opened_merge_requests_url: "",
-			self: ""
-		},
-		Source: { format: "", url: "" },
-		Trailers: {},
-		_links: undefined,
-		assets: undefined,
-		author: undefined,
-		commit: undefined,
-		commit_path: "",
-		created_at: new Date(),
-		description: "Lade...",
-		evidences: [],
-		name: "Lade...",
-		released_at: new Date(),
-		tag_name: "",
-		tag_path: "",
-		upcoming_release: false
-	} );
+	const [ Data, setData ] = useState<any[]>( [] );
+	const [ Selected, setSelected ] = useState<any>( undefined );
+	const [ LoadFromAPI, setLoadFromAPI ] = useState( true );
 
 	useEffect( () => {
 		// get Data from API
-		API_QueryLib.GetFromAPI<IGitlabRelease[]>( EChangelogUrl.get )
+		API_QueryLib.GetFromAPI<any[]>( EChangelogUrl.get )
 			.then( Response => {
 				if ( Response.Data ) {
 					setData( Response.Data );
-					const Selected = Response.Data.find( e => e.name === version );
+					const Selected = Response.Data.find( e => e.tag_name === version );
 					if ( Selected ) {
 						setSelected( Selected );
 					}
+					setLoadFromAPI( false );
 				}
 			} )
 	}, [ version ] );
 
-	if ( version?.toLowerCase().includes( "latest" ) && Data.length > 0 ) {
-		const Selected = Data.find( e => e.name.toLowerCase().includes( version?.split( "_" )[ 1 ] ) );
-		if ( Selected ) {
-			return <Navigate to={ "/changelog/" + Data[ 0 ].name }/>;
-		}
-		else {
-			return <Navigate to="/home/404"/>;
-		}
+	if ( LoadFromAPI ) {
+		return ( <></> )
+	}
+
+	if ( !Selected ) {
+		return <Navigate to="/home/404"/>;
 	}
 
 	return (
@@ -101,8 +56,8 @@ export default function PChangelog() : JSX.Element {
 							</span>
 						<div className="dropdown-menu dropdown-menu-right" data-boundary="scrollParent">
 							{ ( Data.map( ( V, I ) => (
-								<Link to={ "/changelog/" + V.name }
-									  className={ `dropdown-item ${ V.name === version ? "active" : "" }` }
+								<Link to={ "/changelog/" + V.tag_name }
+									  className={ `dropdown-item ${ V.tag_name === version ? "active" : "" }` }
 									  key={ "CHANGELOGSEL" + I }>{ V.name }</Link>
 							) ) ) }
 						</div>

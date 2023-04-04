@@ -5,7 +5,8 @@ export enum EAuthUrl {
 }
 
 export enum EChangelogUrl {
-	get = "changelog/get"
+	get = "changelog/get",
+	branches = "changelog/branches"
 }
 
 export enum EPanelUrl {
@@ -47,5 +48,5 @@ export enum EUserUrl {
 export enum ESteamApiUrl {
 	getmods = "steamapi/getmods",
 }
- 
+
 export type TServerUrls = EAuthUrl | EChangelogUrl | EPanelUrl | ESysUrl | EServerUrl | EUserUrl | ESteamApiUrl | "";

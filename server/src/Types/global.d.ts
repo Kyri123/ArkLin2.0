@@ -34,6 +34,7 @@ export declare global {
 	var __server_backups : string;
 	var __SteamCMD : string;
 	var __PublicIP : string;
+	var __PANNELUPDATE : boolean;
 
 	namespace NodeJS {
 		interface ProcessEnv {

@@ -3,7 +3,7 @@ if [ "$(whoami)" != "steam" ]; then
         exit 1
 fi
 
-cd ~/KAdmin/kadmin-arklin2
+cd ~/KAdmin/ArkLin2.0
 
 export DOCKER_UID="$(id -u)"
 export DOCKER_GID="$(id -g)"

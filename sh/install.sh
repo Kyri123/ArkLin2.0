@@ -10,8 +10,8 @@ cd ~
 echo "Create Folder and Clone ArkLIN2..."
 mkdir KAdmin
 cd KAdmin
-git clone https://git.kyrium.space/arktools/kadmin-arklin2.git $BRANCH
-cd KAdmin-ArkLIN2
+git clone https://github.com/Kyri123/ArkLin2.0.git $BRANCH
+cd ArkLin2.0
 
 export DOCKER_UID="$(id -u)"
 export DOCKER_GID="$(id -g)"

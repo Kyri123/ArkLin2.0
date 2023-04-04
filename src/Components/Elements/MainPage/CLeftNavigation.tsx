@@ -54,14 +54,14 @@ export default function CLeftNavigation() {
 					<div className={ "ps-2 pe-2" }>
 						<Link target="_blank" to="https://discord.gg/uXxsqXD" className="btn btn-link"><FontAwesomeIcon
 							icon={ [ "fab", "discord" ] }/></Link>
-						<Link target="_blank" to="https://git.kyrium.space/arktools/KAdmin-ArkLIN2/"
-							  className="btn btn-link"><FontAwesomeIcon icon={ [ "fab", "gitlab" ] }/></Link>
+						<Link target="_blank" to="https://github.com/Kyri123/ArkLin2.0/"
+							  className="btn btn-link"><FontAwesomeIcon icon={ [ "fab", "github" ] }/></Link>
 						<Link target="_blank" to="https://app.clickup.com/30351857/v/l/s/90060096400"
 							  className="btn btn-link"><FontAwesomeIcon icon={ "clipboard-list" }/></Link>
 						<Link target="_blank"
 							  to="https://www.paypal.com/cgi-bin/webscr?shell=_s-xclick&amp;hosted_button_id=68PT9KPRABVCU&amp;source=url"
 							  className="btn btn-link"><FontAwesomeIcon icon={ "donate" }/></Link>
-						<Link target="_blank" to="https://git.kyrium.space/arktools/KAdmin-ArkLIN2/-/issues"
+						<Link target="_blank" to="https://github.com/Kyri123/ArkLin2.0/issues"
 							  className="btn btn-secondary hide-on-collapse pos-right"><FontAwesomeIcon
 							icon={ "bug" }/></Link>
 					</div>

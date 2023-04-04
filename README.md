@@ -25,16 +25,14 @@ Webbasiertes Admin Panel für Ark-Gameserver basierend auf [Arkmanager](https://
 
 * Installiere Docker + Docker Compose
 * Installiere SteamCMD &amp; Arkmanager https://github.com/arkmanager/ark-server-tools
-* Installiere ArkLin2: `su steam && curl -sL https://git.kyrium.space/arktools/kadmin-arklin2/-/raw/main/sh/install.sh`
-  bei cert
-  problemen: `git config --global http.sslVerify false; su steam && curl --insecure -sL https://git.kyrium.space/arktools/kadmin-arklin2/-/raw/main/sh/install.sh | sudo bash -s steam`
+* Installiere ArkLin2: `su steam && curl -sL https://raw.githubusercontent.com/Kyri123/ArkLin2.0/main/sh/install.sh`
 * Konfiguriere nun nacheinander alle dateien.
-* Starte das Panel (als steam user) mit `~/KAdmin/KAdmin-ArkLIN2/sh/start.sh`
+* Starte das Panel (als steam user) mit `~/KAdmin/ArkLin2.0/sh/start.sh`
 * Docker compose wird automatisch das image erstellen und alle nötigen zusätze erstellen
 
 ## Update
 
-`~/KAdmin/KAdmin-ArkLIN2/sh/update.sh main` (statt main kann auch eine andere branch verwendet werden!)
+`~/KAdmin/ArkLin2.0/sh/update.sh main` (statt main kann auch eine andere branch verwendet werden!)
 
 *Wichtig: Ist das automatische update system aktiv wird das Panel dies automatisch tun. sofern SSH richtig eingestellt
 ist!*

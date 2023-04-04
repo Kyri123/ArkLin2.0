@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: 22
-          script: ~/KAdmin/kadmin-arklin2/sh/update.sh "${{ github.head_ref || github.ref_name }}"
+          script: ~/KAdmin/ArkLin2.0/sh/update.sh "${{ github.head_ref || github.ref_name }}"
 
   read-for-release:
     name: "Read and cache Version"
@@ -70,12 +70,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: "Do a Release" 
+      - name: "Do a Release"
         if: ${{ steps.checkTag.outputs.exists }}
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} == "false"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
           release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"

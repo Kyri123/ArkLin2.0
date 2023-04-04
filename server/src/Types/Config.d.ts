@@ -1,4 +1,5 @@
 export interface ITaskConfig {
+	"GithubQueryInterval" : number;
 	"SystemInformationInterval" : number;
 	"ServerStateInterval" : number;
 	"DataCleanerInterval" : number;

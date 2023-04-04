@@ -39,14 +39,14 @@ function PreLoginApp() {
 				<div className="register-box">
 					<div className="card register-logo bg-white border border-dark mb-2" style={ { height: 60 } }>
 						<div className="d-flex justify-content-start social_icon ps-2">
-							<a href="https://discord.gg/uXxsqXD" className="pe-1 ps-1 pt-1" rel="noopener"
-							   style={ { fontSize: 30 } }>
+							<Link to="https://discord.gg/uXxsqXD" target="_blank" className="pe-1 ps-1 pt-1"
+								  style={ { fontSize: 30 } }>
 								<FontAwesomeIcon icon={ [ "fab", "discord" ] }/>
-							</a>
-							<a href="https://git.kyrium.space/arktools/KAdmin-ArkLIN2" className="ps-1 pt-1"
-							   rel="noopener" style={ { fontSize: 30 } }>
-								<FontAwesomeIcon icon={ [ "fab", "gitlab-square" ] }/>
-							</a>
+							</Link>
+							<Link to="https://github.com/Kyri123/ArkLin2.0/" target="_blank" className="ps-1 pt-1"
+								  style={ { fontSize: 30 } }>
+								<FontAwesomeIcon icon={ [ "fab", "github" ] }/>
+							</Link>
 							<span className="ps-5">
 									<b>ArkLIN2</b>
 								</span>
