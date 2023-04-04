@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: 22
-          script: cd ~/home/steam/KAdmin/kadmin-arklin2/; docker compose down; git stash; git pull; docker compose up -d --build
+          script: cd ~/KAdmin/kadmin-arklin2/; docker compose down; git stash; git pull; docker compose up -d --build
 
   read-for-release:
     name: "Read version and changelog for release"
