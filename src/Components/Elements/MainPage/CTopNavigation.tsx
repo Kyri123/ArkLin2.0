@@ -28,14 +28,14 @@ export default function CTopNavigation( Props : {
 				{ Account.HasPermission( EPerm.ManagePanel ) &&
 					<ul className="navbar-nav">
 						<li className="nav-item">
-							<span className="nav-link" data-widget="pushmenu" role="button">
+							<span className="nav-link" data-lte-toggle="sidebar-full" style={ { cursor: "pointer" } }>
 								<i className="fas fa-bars"></i>
 							</span>
 						</li>
 
 						<div className="d-sm-inline-block"></div>
 
-						<li className="nav-item dropdown" id="panelControler" style={ { cursor: "pointer" } }>
+						<li className="nav-item dropdown" id="panelControler">
 							<span className="nav-link" data-bs-toggle="dropdown">
 								<FontAwesomeIcon icon={ "desktop" } size={ "lg" } className={ "pe-1" }/> Panel
 								{ ( Props.SystemUsage.PanelNeedUpdate ) &&

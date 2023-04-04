@@ -6,8 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function CLeftNavigation() {
 	return (
-		<aside className="main-sidebar sidebar-bg-dark sidebar-color-primary shadow"
-			   style={ { overflow: "hidden" } }>
+		<aside className="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
 			<Link to="/home" className="brand-link">
 				<img src="/img/logo/logo.png" alt="AdminLTE Logo" className="brand-image" style={ { opacity: 0.8 } }/>
 				<span className="brand-text font-weight-light ps-0">ArkLIN2</span>
