@@ -7,13 +7,14 @@ import { Table }           from "react-bootstrap";
 import { Link }            from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { EChangelogUrl }   from "../../Shared/Enum/Routing";
+import { IGithubReleases } from "../../Shared/Api/github";
 
 export default function PHome() {
-	const [ Data, setData ] = useState<any[]>( [] );
+	const [ Data, setData ] = useState<IGithubReleases[]>( [] );
 
 	useEffect( () => {
 		// get Data from API
-		API_QueryLib.GetFromAPI<any[]>( EChangelogUrl.get )
+		API_QueryLib.GetFromAPI<IGithubReleases[]>( EChangelogUrl.get )
 			.then( Response => {
 				if ( Response.Data ) {
 					setData( Response.Data );
@@ -35,7 +36,7 @@ export default function PHome() {
 				{ Data.map( ( Row, Index ) => (
 					<tr key={ "VERSION" + Index }>
 						<td>{ Row.name }</td>
-						<td align="center">{ new Date( Row.published_at ).toLocaleString() }</td>
+						<td align="center">{ new Date( Row.created_at ).toLocaleString() }</td>
 						<td align="center">
 							<Link to={ "/changelog/" + Row.tag_name }><FontAwesomeIcon size="xl"
 																					   icon={ "book" }/></Link>

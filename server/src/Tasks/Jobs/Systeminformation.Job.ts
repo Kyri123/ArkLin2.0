@@ -3,13 +3,8 @@ import * as Si           from "systeminformation";
 import { ISystemUsage }  from "../../../../src/Shared/Type/Systeminformation";
 import { ConfigManager } from "../../Lib/ConfigManager.Lib";
 import DB_Usage          from "../../MongoDB/DB_Usage";
-import { Octokit }       from "octokit";
 
-const octokit = new Octokit( {
-	auth: ''
-} )
-
-export default new JobTask( ConfigManager.GetTaskConfig.SystemInformationInterval, "Systeminformation", async( CallCount : number ) => {
+export default new JobTask( ConfigManager.GetTaskConfig.SystemInformationInterval, "Systeminformation", async() => {
 	SystemLib.DebugLog( "[TASKS] Running Task", SystemLib.ToBashColor( "Red" ), "Systeminformation" );
 
 	const CPU = await Si.currentLoad();

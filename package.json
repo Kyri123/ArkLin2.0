@@ -11,7 +11,8 @@
     "Client": "vite build",
     "Nodemon": "concurrently -m 2 \"nodemon --config nodemon.react.json\" \"nodemon\"",
     "Dev": "concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
-    "TestApp": "eslint src --fix && eslint server --fix"
+    "TestApp": "eslint src --fix && eslint server --fix",
+    "FullTestApp": "eslint src --fix && eslint server --fix && vite build && tsc --project ./server/tsconfig.json"
   },
   "resolutions": {
     "autoprefixer": "10.4.5",
