@@ -52,9 +52,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: version
-        run: VERSION=$(npx -c 'node -p "process.env.npm_package_version"'); echo "version=$VERSION" >> "$GITHUB_OUTPUT; echo "$VERSION"
+        run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> "$GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
       - id: changelog
-        run: VERSION=$(npx -c 'node -p "process.env.npm_package_version"'); echo "changelog=$(cat ./public/changelog/$VERSION.md)" >> "$GITHUB_OUTPUT; echo "$(cat ./public/changelog/$VERSION.md)"
+        run: echo "changelog='$(cat ./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md)'" >> "$GITHUB_OUTPUT; echo "$(cat ./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md)"
 
   release:
     name: "Check for release exsists"
@@ -79,7 +79,7 @@ jobs:
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
           release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"
-          body: "${{ steps.step2.outputs.changelog }}"
+          body: $(cat ./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md)
           draft: false
           prerelease: false
 
