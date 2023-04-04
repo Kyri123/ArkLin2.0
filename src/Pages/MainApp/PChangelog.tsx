@@ -11,11 +11,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactMarkdown       from "react-markdown";
 import { API_QueryLib }    from "../../Lib/Api/API_Query.Lib";
 import { EChangelogUrl }   from "../../Shared/Enum/Routing";
+import { IGithubReleases } from "../../Shared/Api/github";
 
 export default function PChangelog() : JSX.Element {
 	const { version } = useParams();
-	const [ Data, setData ] = useState<any[]>( [] );
-	const [ Selected, setSelected ] = useState<any>( undefined );
+	const [ Data, setData ] = useState<IGithubReleases[]>( [] );
+	const [ Selected, setSelected ] = useState<IGithubReleases | undefined>( undefined );
 	const [ LoadFromAPI, setLoadFromAPI ] = useState( true );
 
 	useEffect( () => {
@@ -44,15 +45,15 @@ export default function PChangelog() : JSX.Element {
 	return (
 		<div className="card card-default">
 			<div className="card-header d-flex p-0">
-				<h3 className="card-title p-3">
+				<h3 className="card-title p-3 flex-fill">
 					<FontAwesomeIcon icon={ "book" } size="lg" className="pe-2"/>
-					{ version }
+					{ Selected.name }
 				</h3>
 				<ul className="nav nav-pills ml-auto p-2">
 					<li className="nav-item dropdown">
 							<span className="nav-link dropdown-toggle" data-toggle="dropdown"
 								  aria-expanded="false">
-								Dropdown <span className="caret"></span>
+								{ Selected.tag_name } <span className="caret"></span>
 							</span>
 						<div className="dropdown-menu dropdown-menu-right" data-boundary="scrollParent">
 							{ ( Data.map( ( V, I ) => (
@@ -66,11 +67,11 @@ export default function PChangelog() : JSX.Element {
 			</div>
 
 			<div className="card-body p-3 pb-0">
-				<ReactMarkdown>{ Selected.description }</ReactMarkdown>
+				<ReactMarkdown>{ Selected.body }</ReactMarkdown>
 			</div>
 
 			<div className="card-footer pb-0">
-				<ReactMarkdown>{ new Date( Selected.released_at ).toLocaleString() }</ReactMarkdown>
+				<ReactMarkdown>{ new Date( Selected.created_at ).toLocaleString() }</ReactMarkdown>
 			</div>
 
 		</div>
