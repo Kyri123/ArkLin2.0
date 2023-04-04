@@ -44,10 +44,12 @@ jobs:
   read-for-release:
     name: "Read version and changelog for release"
     needs: deploy
+    runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.step1.outputs.version }}
       changelog: ${{ steps.step2.outputs.changelog }}
     steps:
+      - uses: actions/checkout@v3
       - id: version
         run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> "$GITHUB_OUTPUT"
       - id: changelog
@@ -58,6 +60,7 @@ jobs:
     needs: read-for-release
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: "Check Version"
         uses: mukunku/tag-exists-action@v1.2.0
         id: checkTag
