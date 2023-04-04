@@ -70,7 +70,7 @@ jobs:
         with:
           tag: '${{ needs.read-for-release.outputs.version }}'
         env:
-          GITHUB_TOKEN: ${{ TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           CI: true
 
       - name: "Release!"
