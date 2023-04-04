@@ -1,16 +1,15 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
+    "outDir": "../buildserver",
     "rootDirs": [
       "./src",
-      "../src"
+      "../src/shared"
     ],
     "types": [
       "node"
     ],
     "target": "ESNext",
     "module": "commonjs",
-    "outDir": "../buildserver/",
     "strict": true,
     "moduleResolution": "Node",
     "importHelpers": true,

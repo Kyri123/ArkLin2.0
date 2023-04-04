@@ -1,9 +1,9 @@
-import { ISelectMask }                   from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import Arkmanager_Command_Checkmodupdate from "../Shared/SelectMask/Arkmanager_Command_Checkmodupdate.json"
 import Arkmanager_Command_Restart        from "../Shared/SelectMask/Arkmanager_Command_Restart.json"
 import Arkmanager_Command_Stop           from "../Shared/SelectMask/Arkmanager_Command_Stop.json"
 import Arkmanager_Command_Update         from "../Shared/SelectMask/Arkmanager_Command_Update.json"
 import Arkmanager_Command_Start          from "../Shared/SelectMask/Arkmanager_Command_Start.json"
+import { ISelectMask }                   from "../Shared/Type/Systeminformation";
 
 export enum EArkmanagerCommands {
 	start = "start",

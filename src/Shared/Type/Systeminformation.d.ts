@@ -10,3 +10,10 @@ export interface ISystemUsage {
 	PanelBuildVersion : string;
 	NextPanelBuildVersion : string;
 }
+
+export interface ISelectMask {
+	Value : string,
+	Text : string,
+	PreAndSuffix : "'" | '"' | "";
+	HasValue? : boolean,
+}

@@ -18,6 +18,7 @@ COPY ./config ./config
 
 # create main files
 RUN yarn install
+RUN yarn BuildServer
 RUN yarn Client
 
 EXPOSE 28080:28080

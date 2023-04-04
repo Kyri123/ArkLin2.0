@@ -16,13 +16,7 @@ import {
 }                          from "./AdminLTE_Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select              from "react-select";
-
-export interface ISelectMask {
-	Value : string,
-	Text : string,
-	PreAndSuffix : "'" | '"' | "";
-	HasValue? : boolean,
-}
+import { ISelectMask }     from "../../../Shared/Type/Systeminformation";
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 
