@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: 22
-          script: cd ~/KAdmin/kadmin-arklin2/sh/update.sh "${{ github.head_ref || github.ref_name }}" ; docker compose down; git stash; git pull; docker compose up -d --build
+          script: ~/KAdmin/kadmin-arklin2/sh/update.sh "${{ github.head_ref || github.ref_name }}"
 
   read-for-release:
     name: "Read version and changelog for release"
