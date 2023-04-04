@@ -36,7 +36,7 @@ export default function CTopNavigation( Props : {
 						<div className="d-sm-inline-block"></div>
 
 						<li className="nav-item dropdown" id="panelControler" style={ { cursor: "pointer" } }>
-							<span className="nav-link" data-toggle="dropdown">
+							<span className="nav-link" data-bs-toggle="dropdown">
 								<FontAwesomeIcon icon={ "desktop" } size={ "lg" } className={ "pe-1" }/> Panel
 								{ ( Props.SystemUsage.PanelNeedUpdate ) &&
 									<span className="bg-success rounded ml-2 p-2">Update verfügbar!</span>
@@ -96,7 +96,7 @@ export default function CTopNavigation( Props : {
 						</li>
 
 						<li className="dropdown user user-menu open">
-							<span className="nav-link dropdown-toggle" data-toggle="dropdown"
+							<span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
 								  aria-expanded="true">
 								<img src="/img/logo/logo.png" className="user-image border-0 rounded-0"
 									 alt="User"/>

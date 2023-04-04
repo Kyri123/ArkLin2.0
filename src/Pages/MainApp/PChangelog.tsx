@@ -51,7 +51,7 @@ export default function PChangelog() : JSX.Element {
 				</h3>
 				<ul className="nav nav-pills ml-auto p-2">
 					<li className="nav-item dropdown">
-							<span className="nav-link dropdown-toggle" data-toggle="dropdown"
+							<span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
 								  aria-expanded="false">
 								{ Selected.tag_name } <span className="caret"></span>
 							</span>

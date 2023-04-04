@@ -8,8 +8,6 @@ import reportWebVitals     from './reportWebVitals';
 
 import 'icheck-bootstrap/icheck-bootstrap.min.css'
 import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap/dist/js/bootstrap.bundle.min"
-import "admin-lte/dist/js/adminlte.min"
 import "admin-lte/dist/css/adminlte.min.css"
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import './Css/App.css'
