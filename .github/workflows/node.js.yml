@@ -74,7 +74,7 @@ jobs:
           CI: true
 
       - name: "Release!"
-        if: steps.checkTag.outputs.exists == "false"
+        if: ${{ steps.checkTag.outputs.exists == "false" }}
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -87,5 +87,5 @@ jobs:
           prerelease: false
 
       - name: "No Release"
-        if: steps.checkTag.outputs.exists == "true"
+        if: ${{ steps.checkTag.outputs.exists == "true" }}
         run: echo "Release canceled. Tag exsists."
