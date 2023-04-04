@@ -1,0 +1,7 @@
+node_modules
+./src/setupProxy.js
+.gitlab-ci.yml
+nodemon.json
+__OLD
+.env.example
+.env.development
