@@ -47,11 +47,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version: ${{ steps.version.outputs.out }}
+      changelogfile: ${{ steps.changelogfile.outputs.out }}
     steps:
       - uses: actions/checkout@v3
       - id: version
-        run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+        run: echo "out=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+      - id: changelogfile
+        run: echo "out=./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
 
   release:
     name: "Create release if Tag not exists"
@@ -76,7 +79,7 @@ jobs:
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
           release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"
-          body_path: ./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md
+          body_path: "${{ needs.read-for-release.outputs.changelogfile }}"
           draft: false
           prerelease: false
 
