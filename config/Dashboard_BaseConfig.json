@@ -1,0 +1,10 @@
+{
+  "PANEL_Branch": "main",
+  "LOG_MaxLogCount": 25,
+  "SSH_Host": "localhost",
+  "SSH_User": "steam",
+  "SSH_Password": "RandomSteamPassword",
+  "Shell_ArkmanagerCommand": "arkmanager",
+  "Shell_SteamCMDCommand": "steamcmd",
+  "SteamApi_Key": ""
+}

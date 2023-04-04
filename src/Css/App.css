@@ -1,0 +1,11 @@
+.btn, .form-control {
+    border-radius: 0 !important;
+}
+
+.close {
+    border: 0 !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    font-size: 25px;
+    padding: 0 !important;
+    margin-right: 10px !important;
+}
