@@ -41,7 +41,7 @@ export default function PHome() {
 							<Link to={ "/changelog/" + Row.tag_name }><FontAwesomeIcon size="xl"
 																					   icon={ "book" }/></Link>
 							<Link target="_blank" className="ps-2" to={ Row.html_url }><FontAwesomeIcon size="xl"
-																										icon={ [ "fab", "gitlab-square" ] }/></Link>
+																										icon={ [ "fab", "github-square" ] }/></Link>
 						</td>
 					</tr>
 				) ) }

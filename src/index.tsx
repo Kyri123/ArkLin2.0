@@ -1,5 +1,4 @@
-import React, {
-	Suspense,
+import {
 	useEffect,
 	useState
 }                          from 'react';
@@ -7,9 +6,7 @@ import ReactDOM            from 'react-dom/client';
 import reportWebVitals     from './reportWebVitals';
 
 import 'icheck-bootstrap/icheck-bootstrap.min.css'
-import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap/dist/js/bootstrap.bundle.min"
-import "admin-lte/dist/js/adminlte.min"
+//import "bootstrap/dist/css/bootstrap.min.css"
 import "admin-lte/dist/css/adminlte.min.css"
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import './Css/App.css'
@@ -19,9 +16,8 @@ import { Modal }           from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAuth             from "./Hooks/useAuth";
 import AccountContext      from './Context/AccountContext';
-
-const PreLoginApp = React.lazy( () => import("./PreLoginApp") );
-const MainApp = React.lazy( () => import("./MainApp") );
+import PreLoginApp         from "./PreLoginApp";
+import MainApp             from "./MainApp";
 
 const root = ReactDOM.createRoot(
 	document.getElementById( 'root' ) as HTMLElement
@@ -96,12 +92,10 @@ function IndexApp() {
 			<AccountContext.Provider value={ {
 				Account: User
 			} }>
-				<Suspense fallback={ <></> }>
-					{ ( WasChecked && !User.IsLoggedIn() ) ?
-						<PreLoginApp/> :
-						<MainApp/>
-					}
-				</Suspense>
+				{ ( WasChecked && !User.IsLoggedIn() ) ?
+					<PreLoginApp/> :
+					<MainApp/>
+				}
 			</AccountContext.Provider>
 		</>
 	);
