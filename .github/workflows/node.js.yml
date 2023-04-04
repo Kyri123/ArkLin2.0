@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: version
-        run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> "$GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+        run: echo "version=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
 
   release:
     name: "Check for release exsists"
