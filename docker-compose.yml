@@ -44,7 +44,7 @@ services:
       - ./mount/config/:/mount/config/
       - /home/steam/Steam/:/mount/steamCMD/
     networks:
-      - arklinnet
+      - arklin2
 
   mongodb:
     user: "${DOCKER_UID}:${DOCKER_GID}"
@@ -56,7 +56,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: kadmin
       MONGO_INITDB_ROOT_PASSWORD: arklin2
     networks:
-      - arklinnet
+      - arklin2
 
 networks:
-  arklinnet:
+  arklin2:
