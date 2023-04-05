@@ -1,5 +1,6 @@
 import { ILTELoadingButton } from "../../../Types/AdminLTE";
 import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
+import { Button }            from "react-bootstrap";
 
 
 export function LTELoadingButton( Props : ILTELoadingButton ) {
@@ -8,12 +9,10 @@ export function LTELoadingButton( Props : ILTELoadingButton ) {
 	}
 
 	return (
-		<button onClick={ Props.onClick } ref={ Props.ref }
-				className={ `btn ${ Props.Flat ? "btn-flat" : "" } btn${ Props.Outline ? "-outline" : "" }-${ Props.BtnColor || "primary" } ${ Props.className || "" }` }
-				disabled={ Props.IsLoading || Props.Disabled }>
+		<Button { ...Props } disabled={ Props.IsLoading }>
 			{ Props.IsLoading ?
 				<FontAwesomeIcon icon={ Props.LoadingIcon || "spinner" } spin={ true }/> : Props.children }
-		</button>
+		</Button>
 	);
 }
 

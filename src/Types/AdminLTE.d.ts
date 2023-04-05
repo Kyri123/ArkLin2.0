@@ -1,6 +1,7 @@
 import {
 	IAdminLTEBaseT,
-	IChildrenBaseProps
+	IChildrenBaseProps,
+	IPropsWithPermission
 }                     from "./BaseTypes";
 import { IconProp }   from "@fortawesome/fontawesome-svg-core";
 import {
@@ -9,6 +10,7 @@ import {
 }                     from "react";
 import { TLTEColors } from "../Shared/Type/AdminLTE";
 import { Variant }    from "react-bootstrap/types";
+import { Button }     from "react-bootstrap";
 
 export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
 
@@ -35,7 +37,7 @@ export interface INavLinkProps extends IChildrenBaseProps {
 	Target? : HTMLAttributeAnchorTarget | undefined;
 }
 
-export interface ILTELoadingButton extends IAdminLTEButton {
+export type ILTELoadingButton = IPropsWithPermission & Button.ButtonProps & {
 	IsLoading? : boolean;
 	LoadingIcon? : IconProp;
 }

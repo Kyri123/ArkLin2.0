@@ -6,9 +6,9 @@ import ReactDOM            from 'react-dom/client';
 import reportWebVitals     from './reportWebVitals';
 
 import 'icheck-bootstrap/icheck-bootstrap.min.css'
-//import "bootstrap/dist/css/bootstrap.min.css"
-import "admin-lte/dist/css/adminlte.min.css"
+import "bootstrap/dist/css/bootstrap.min.css"
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import './Css/Ribbon.scss'
 import './Css/App.css'
 import { API_AuthLib }     from "./Lib/Api/API_Auth.Lib";
 import { BrowserRouter }   from "react-router-dom";
