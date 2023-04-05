@@ -1,3 +1,3 @@
 export interface IMapIconRequest {
-  MapName: string;
+  MapName : string;
 }

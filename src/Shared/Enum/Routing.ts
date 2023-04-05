@@ -50,11 +50,11 @@ export enum ESteamApiUrl {
 }
 
 export type TServerUrls =
-  | EAuthUrl
-  | EChangelogUrl
-  | EPanelUrl
-  | ESysUrl
-  | EServerUrl
-  | EUserUrl
-  | ESteamApiUrl
-  | "";
+	| EAuthUrl
+	| EChangelogUrl
+	| EPanelUrl
+	| ESysUrl
+	| EServerUrl
+	| EUserUrl
+	| ESteamApiUrl
+	| "";

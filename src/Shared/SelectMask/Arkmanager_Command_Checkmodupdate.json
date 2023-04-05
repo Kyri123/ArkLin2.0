@@ -1,8 +1,8 @@
 [
-  {
-    "Value": "--revstatus",
-    "Text": "Kehrt den Exit-Code um und fügt zusätzliche Codes für Fehler hinzu",
-    "PreAndSuffix": "",
-    "HasValue": false
-  }
+	{
+		"Value": "--revstatus",
+		"Text": "Kehrt den Exit-Code um und fügt zusätzliche Codes für Fehler hinzu",
+		"PreAndSuffix": "",
+		"HasValue": false
+	}
 ]

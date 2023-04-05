@@ -1,3 +1,3 @@
 export interface IAccountInformations {
-  JsonWebToken: string;
+  JsonWebToken : string;
 }

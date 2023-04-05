@@ -10,8 +10,8 @@ export enum EPerm_Server {
   ExecuteActions = "Befehle an Server senden.",
 }
 
-export function GetEnumValue<T>(Enum: T, Value: T | string): string {
-  return Object.entries(Enum as any).find(([, val]) => val === Value)?.[0]!;
+export function GetEnumValue<T>( Enum : T, Value : T | string ) : string {
+  return Object.entries( Enum as any ).find( ( [ , val ] ) => val === Value )?.[ 0 ]!;
 }
 
 export type TPermissions = EPerm | EPerm_Server;

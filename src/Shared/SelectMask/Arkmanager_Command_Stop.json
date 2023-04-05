@@ -1,38 +1,38 @@
 [
-  {
-    "Value": "--warn",
-    "Text": "Warnt alle verbundenen Spieler, dass der Server ausfällt",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--warnreason",
-    "Text": "Gibt einen Grund für das Herunterfahren an. Standardmäßig auf Wartung",
-    "PreAndSuffix": "'",
-    "HasValue": true
-  },
-  {
-    "Value": "--saveworld",
-    "Text": "Speichert die Welt. (Sollte nicht nötig sein da der Server beim normalen Runterfahren die Welt speichert)",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--force",
-    "Text": "Umgeht die Prüfung, ob ein Update verfügbar ist",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--safe",
-    "Text": "Fährt den Server nur herunter, wenn der Server in der letzten Minute gespeichert hat",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--warn",
-    "Text": "Warnt alle verbundenen Spieler, dass der Server für ein Update heruntergefahren wird",
-    "PreAndSuffix": "",
-    "HasValue": false
-  }
+	{
+		"Value": "--warn",
+		"Text": "Warnt alle verbundenen Spieler, dass der Server ausfällt",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--warnreason",
+		"Text": "Gibt einen Grund für das Herunterfahren an. Standardmäßig auf Wartung",
+		"PreAndSuffix": "'",
+		"HasValue": true
+	},
+	{
+		"Value": "--saveworld",
+		"Text": "Speichert die Welt. (Sollte nicht nötig sein da der Server beim normalen Runterfahren die Welt speichert)",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--force",
+		"Text": "Umgeht die Prüfung, ob ein Update verfügbar ist",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--safe",
+		"Text": "Fährt den Server nur herunter, wenn der Server in der letzten Minute gespeichert hat",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--warn",
+		"Text": "Warnt alle verbundenen Spieler, dass der Server für ein Update heruntergefahren wird",
+		"PreAndSuffix": "",
+		"HasValue": false
+	}
 ]

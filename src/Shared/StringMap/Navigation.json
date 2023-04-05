@@ -1,19 +1,19 @@
 {
-  "Subpage": {
-    "benutzer": "Benutzer",
-    "API_BaseConfig": "API",
-    "Dashboard_BaseConfig": "ArkLin2",
-    "Debug": "Debug",
-    "Tasks": "Aufgaben"
-  },
-  "MainPage": {
-    "home": "Startseite",
-    "404": "404: Error Seite",
-    "403": "403: Error Seite",
-    "500": "500: Error Seite",
-    "users": "Benutzer Administration",
-    "adminserver": "Server Verwaltung",
-    "me": "Benutzer Einstellung",
-    "paneladmin": "Panel Einstellungen"
-  }
+	"Subpage": {
+		"benutzer": "Benutzer",
+		"API_BaseConfig": "API",
+		"Dashboard_BaseConfig": "ArkLin2",
+		"Debug": "Debug",
+		"Tasks": "Aufgaben"
+	},
+	"MainPage": {
+		"home": "Startseite",
+		"404": "404: Error Seite",
+		"403": "403: Error Seite",
+		"500": "500: Error Seite",
+		"users": "Benutzer Administration",
+		"adminserver": "Server Verwaltung",
+		"me": "Benutzer Einstellung",
+		"paneladmin": "Panel Einstellungen"
+	}
 }

@@ -1,15 +1,15 @@
 {
-  "PANEL_Branch": "Update Branch",
-  "LOG_MaxLogCount": "Maximale Anzahl an Panel Logs",
-  "SSH_Host": "SSH Host",
-  "SSH_User": "SSH Username",
-  "SSH_Password": "SSH Passwort",
-  "Shell_ArkmanagerCommand": "Arkmanager Kommandline",
-  "Shell_SteamCMDCommand": "SteamCMD Kommandline",
-  "AccountHashExpire": "Laufzeit einer Session (in Tage)",
-  "UseDebug": "Debug Aktivieren",
-  "FilterDebug": "Filter für Debug ([<filter>])",
-  "SystemInformationInterval": "System Usage Intervall (in ms)",
-  "ServerStateInterval": "Server Status Intervall (in ms)",
-  "DataCleanerInterval": "Session und Daten Reiniger Intervall (in ms)"
+	"PANEL_Branch": "Update Branch",
+	"LOG_MaxLogCount": "Maximale Anzahl an Panel Logs",
+	"SSH_Host": "SSH Host",
+	"SSH_User": "SSH Username",
+	"SSH_Password": "SSH Passwort",
+	"Shell_ArkmanagerCommand": "Arkmanager Kommandline",
+	"Shell_SteamCMDCommand": "SteamCMD Kommandline",
+	"AccountHashExpire": "Laufzeit einer Session (in Tage)",
+	"UseDebug": "Debug Aktivieren",
+	"FilterDebug": "Filter für Debug ([<filter>])",
+	"SystemInformationInterval": "System Usage Intervall (in ms)",
+	"ServerStateInterval": "Server Status Intervall (in ms)",
+	"DataCleanerInterval": "Session und Daten Reiniger Intervall (in ms)"
 }

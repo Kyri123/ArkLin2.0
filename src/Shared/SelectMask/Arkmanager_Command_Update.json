@@ -1,74 +1,74 @@
 [
-  {
-    "Value": "--force",
-    "Text": "Umgeht die Prüfung, ob ein Update verfügbar ist",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--safe",
-    "Text": "Fährt den Server nur herunter, wenn der Server in der letzten Minute gespeichert hat",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--warn",
-    "Text": "Warnt alle verbundenen Spieler, dass der Server für ein Update heruntergefahren wird",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--ifempty",
-    "Text": "Aktualisiert den Server nur, wenn niemand verbunden ist",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--validate",
-    "Text": "Validiert die ARK-Serverinstallation erneut",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--saveworld",
-    "Text": "Speichert die Welt. (Sollte nicht nötig sein da der Server beim normalen Runterfahren die Welt speichert)",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--update-mods",
-    "Text": "Aktualisiert alle installierten Mods",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--backup",
-    "Text": "Sichert die gespeicherte Welt und Spielkonfiguration vor dem Update",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--stagingdir",
-    "Text": "Legt das Staging-Verzeichnis fest, um das Update vor dem Herunterfahren des Servers herunterzuladen",
-    "PreAndSuffix": "\"",
-    "HasValue": true
-  },
-  {
-    "Value": "--downloadonly",
-    "Text": "Lädt das Update herunter, wendet es aber nicht an. Nur wirksam, wenn ein Staging-Verzeichnis festgelegt ist.",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--beta",
-    "Text": "Wählen Sie die zu installierende Beta aus.",
-    "PreAndSuffix": "",
-    "HasValue": true
-  },
-  {
-    "Value": "--betapassword",
-    "Text": "Verwenden Sie ein Passwort, um die Beta zu entsperren (für passwortgeschützte Betas).",
-    "PreAndSuffix": "",
-    "HasValue": true
-  }
+	{
+		"Value": "--force",
+		"Text": "Umgeht die Prüfung, ob ein Update verfügbar ist",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--safe",
+		"Text": "Fährt den Server nur herunter, wenn der Server in der letzten Minute gespeichert hat",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--warn",
+		"Text": "Warnt alle verbundenen Spieler, dass der Server für ein Update heruntergefahren wird",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--ifempty",
+		"Text": "Aktualisiert den Server nur, wenn niemand verbunden ist",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--validate",
+		"Text": "Validiert die ARK-Serverinstallation erneut",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--saveworld",
+		"Text": "Speichert die Welt. (Sollte nicht nötig sein da der Server beim normalen Runterfahren die Welt speichert)",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--update-mods",
+		"Text": "Aktualisiert alle installierten Mods",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--backup",
+		"Text": "Sichert die gespeicherte Welt und Spielkonfiguration vor dem Update",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--stagingdir",
+		"Text": "Legt das Staging-Verzeichnis fest, um das Update vor dem Herunterfahren des Servers herunterzuladen",
+		"PreAndSuffix": "\"",
+		"HasValue": true
+	},
+	{
+		"Value": "--downloadonly",
+		"Text": "Lädt das Update herunter, wendet es aber nicht an. Nur wirksam, wenn ein Staging-Verzeichnis festgelegt ist.",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--beta",
+		"Text": "Wählen Sie die zu installierende Beta aus.",
+		"PreAndSuffix": "",
+		"HasValue": true
+	},
+	{
+		"Value": "--betapassword",
+		"Text": "Verwenden Sie ein Passwort, um die Beta zu entsperren (für passwortgeschützte Betas).",
+		"PreAndSuffix": "",
+		"HasValue": true
+	}
 ]

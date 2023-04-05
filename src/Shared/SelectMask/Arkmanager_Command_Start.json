@@ -1,20 +1,20 @@
 [
-  {
-    "Value": "--noautoupdate",
-    "Text": "Deaktiviert die automatische Aktualisierung beim Start, wenn sie aktiviert ist",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--alwaysrestart",
-    "Text": "Aktiviert den automatischen Neustart des Servers, auch wenn er abstürzt, ohne für Player-Verbindungen bereit zu sein.",
-    "PreAndSuffix": "",
-    "HasValue": false
-  },
-  {
-    "Value": "--validate",
-    "Text": "Validiert die ARK-Serverinstallation erneut",
-    "PreAndSuffix": "",
-    "HasValue": false
-  }
+	{
+		"Value": "--noautoupdate",
+		"Text": "Deaktiviert die automatische Aktualisierung beim Start, wenn sie aktiviert ist",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--alwaysrestart",
+		"Text": "Aktiviert den automatischen Neustart des Servers, auch wenn er abstürzt, ohne für Player-Verbindungen bereit zu sein.",
+		"PreAndSuffix": "",
+		"HasValue": false
+	},
+	{
+		"Value": "--validate",
+		"Text": "Validiert die ARK-Serverinstallation erneut",
+		"PreAndSuffix": "",
+		"HasValue": false
+	}
 ]
