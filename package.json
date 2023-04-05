@@ -15,8 +15,13 @@
 		"FullTestApp": "eslint src --fix && eslint server --fix && vite build && tsc --project ./server/tsconfig.json"
 	},
 	"resolutions": {
-		"autoprefixer": "10.4.5", 
+		"autoprefixer": "10.4.5",
 		"react-error-overlay": "6.0.9"
+	},
+	"babel": {
+		"presets": [
+		"@babel/typescript"
+		]
 	},
 	"dependencies": {
 		"@codemirror/lang-json": "^6.0.1",
@@ -127,6 +132,7 @@
 		"@types/systeminformation": "^3.54.1",
 		"@vitejs/plugin-react": "^3.1.0",
 		"eslint": "^8.37.0",
+		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"eslint-plugin-react": "^7.32.2",
 		"prettier": "^2.8.7",
