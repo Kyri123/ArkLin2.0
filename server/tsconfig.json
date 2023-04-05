@@ -1,13 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "../buildserver",
-    "rootDirs": [
-      "./src",
-      "../src/shared"
-    ],
-    "types": [
-      "node"
-    ],
+    "rootDirs": ["./src", "../src/shared"],
+    "types": ["node"],
     "target": "ESNext",
     "module": "commonjs",
     "strict": true,
@@ -22,9 +17,7 @@
     "removeComments": true,
     "noImplicitAny": false,
     "isolatedModules": false,
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "typeRoots": [
       "../node_modules/@types",
       "./src/Types",
@@ -36,15 +29,7 @@
     "sourceMap": true,
     "baseUrl": "../"
   },
-  "files": [
-    "./src/Types/global.d.ts"
-  ],
-  "include": [
-    "./src/**/*.ts",
-    "../src/Shared/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "files": ["./src/Types/global.d.ts"],
+  "include": ["./src/**/*.ts", "../src/Shared/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

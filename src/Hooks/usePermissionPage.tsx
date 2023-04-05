@@ -1,16 +1,13 @@
-import {
-	useContext,
-	useEffect
-}                       from "react";
+import { useContext, useEffect } from "react";
 import { TPermissions } from "../Shared/Enum/User.Enum";
-import AccountContext   from "../Context/AccountContext";
+import AccountContext from "../Context/AccountContext";
 
-export default function usePermissionPage( Permission : TPermissions ) {
-	const { Account } = useContext( AccountContext );
+export default function usePermissionPage(Permission: TPermissions) {
+  const { Account } = useContext(AccountContext);
 
-	useEffect( () => {
-		if ( !Account.HasPermission( Permission ) ) {
-			window.location.href = "/home/401";
-		}
-	}, [ Account, Permission ] )
+  useEffect(() => {
+    if (!Account.HasPermission(Permission)) {
+      window.location.href = "/home/401";
+    }
+  }, [Account, Permission]);
 }
