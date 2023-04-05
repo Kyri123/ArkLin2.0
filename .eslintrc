@@ -21,8 +21,9 @@
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
-	"plugins": ["react", "import", "jsx-a11y", "react-hooks"],
+	"plugins": ["react", "import", "jsx-a11y", "react-hooks", "prettier"],
 	"rules": {
+		"prettier/prettier": "error",
 		"semi-style": ["error", "last"],
 		"array-element-newline": "off",
 		"keyword-spacing": [
