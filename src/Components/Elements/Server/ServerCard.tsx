@@ -1,5 +1,4 @@
 import { IServerCardProps }   from "../../../Types/Server";
-import { Link }               from "react-router-dom";
 import {
 	useEffect,
 	useRef
@@ -7,6 +6,8 @@ import {
 import { useArkServer }       from "../../../Hooks/useArkServer";
 import { FontAwesomeIcon }    from "@fortawesome/react-fontawesome";
 import { ServerStateToColor } from "../../../Lib/Conversion.Lib";
+import { Dropdown }           from "react-bootstrap";
+import { Link }               from "react-router-dom";
 
 export default function CServerCard( Props : IServerCardProps ) {
 	const CardRef = useRef<HTMLDivElement>( null );
@@ -24,27 +25,26 @@ export default function CServerCard( Props : IServerCardProps ) {
 
 	return (
 		<>
-			<div className="dropdown-divider"></div>
-			<Link to={ `/server/${ Props.InstanceName }/logs` } className={ "dropdown-item" }>
+			<Dropdown.Divider className={ "m-0" }/>
+			<Dropdown.Item as={ Link } to={ `/server/${ Props.InstanceName }/logs` } className={ "p-2" }>
 				<div className="d-flex">
 					<div className="flex-shrink-0">
-						<img src={ ServerMap.LOGO } alt={ Data.serverMap }
-							 className="img-size-50 img-circle me-3"/>
+						<img src={ ServerMap.LOGO } alt={ Data.serverMap } width={ 65 }/>
 					</div>
-					<div className="flex-grow-1">
-						<h3 className="dropdown-item-title">
+					<div className="flex-grow-1 pe-1 ps-2">
+						<h6 className="dropdown-item-title">
 							{ Data.ark_SessionName }
-							<span className={ `float-end text-${ ServerStateToColor( State.State ) }` }>
-							 	<FontAwesomeIcon icon={ "server" }/>
-							</span>
-						</h3>
+						</h6>
 						<p className="fs-7 text-muted mt-1">
 							<FontAwesomeIcon icon={ "users" }
 											 className={ "me-1" }/> { State.Player } / { Data.ark_MaxPlayers }
+							<span className={ `float-end text-${ ServerStateToColor( State.State ) }` }>
+							 	<FontAwesomeIcon icon={ "server" }/>
+							</span>
 						</p>
 					</div>
 				</div>
-			</Link>
+			</Dropdown.Item>
 		</>
 	);
 }

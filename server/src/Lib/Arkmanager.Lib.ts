@@ -8,7 +8,7 @@ export function ConfigToJSON( Content : string ) : Partial<IInstanceData> {
 	const InstanceData : Partial<IInstanceData> = {
 		Flags: {},
 		Options: {}
-	};
+	}; 
 
 	const ClearInstance : string[] = Content.split( "\n" );
 	for ( let Line = 0; Line < ClearInstance.length; ++Line ) {

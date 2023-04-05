@@ -2,3 +2,156 @@ html, body, body > div {
     margin: 0;
     height: 100%;
 }
+
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+html {
+    height: -webkit-fill-available;
+}
+
+main {
+    height: 100vh;
+    height: -webkit-fill-available;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.dropdown-toggle {
+    outline: 0;
+}
+
+.btn-toggle {
+    padding: .25rem .5rem;
+    font-weight: 600;
+    color: var(--bs-emphasis-color);
+    background-color: transparent;
+}
+
+.btn-toggle:hover,
+.btn-toggle:focus {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.btn-toggle::before {
+    width: 1.25em;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+}
+
+[data-bs-theme="dark"] .btn-toggle::before {
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+}
+
+.btn-toggle[aria-expanded="true"] {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+}
+
+.btn-toggle[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+}
+
+.btn-toggle-nav a {
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: var(--bs-tertiary-bg);
+}
+
+.scrollarea {
+    overflow-y: auto;
+}
+
+.r0 {
+    border-radius: 0 !important;
+}
+
+.dropdown-item-danger {
+    color: var(--bs-red);
+}
+
+.dropdown-item-danger:hover,
+.dropdown-item-danger:focus {
+    color: #fff;
+    background-color: var(--bs-red);
+}
+
+.dropdown-item-danger.active {
+    background-color: var(--bs-red);
+}
+
+.btn-hover-light {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+}
+
+.btn-hover-light:hover,
+.btn-hover-light:focus {
+    color: var(--bs-link-hover-color);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.cal-month,
+.cal-days,
+.cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: center;
+}
+
+.cal-month-name {
+    grid-column-start: 2;
+    grid-column-end: 7;
+    text-align: center;
+}
+
+.cal-weekday,
+.cal-btn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    padding: 0;
+}
+
+.cal-btn:not([disabled]) {
+    font-weight: 500;
+    color: var(--bs-emphasis-color);
+}
+
+.cal-btn:hover,
+.cal-btn:focus {
+    background-color: var(--bs-secondary-bg);
+}
+
+.cal-btn[disabled] {
+    border: 0;
+    opacity: .5;
+}
+
+.w-220px {
+    width: 220px;
+}
+
+.w-280px {
+    width: 280px;
+}
+
+.w-340px {
+    width: 340px;
+}
+
+.opacity-10 {
+    opacity: .1;
+}

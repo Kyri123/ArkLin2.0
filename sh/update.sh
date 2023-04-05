@@ -11,7 +11,7 @@ export DOCKER_GID=$(id -g)
 cd ~/KAdmin/ArkLin2.0
 docker compose down
 
-git stash
+git stash 
 git pull https://github.com/Kyri123/ArkLin2.0.git $BRANCH
 
 echo "Setzte Rechte..."

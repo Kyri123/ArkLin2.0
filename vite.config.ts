@@ -3,9 +3,12 @@ import { defineConfig } from 'vite'
 // @ts-ignore
 import react            from '@vitejs/plugin-react'
 // @ts-ignore
-import eslint from 'vite-plugin-eslint';
+import eslint           from 'vite-plugin-eslint';
 
-export default defineConfig({
+export default defineConfig( {
+	optimizeDeps: {
+		include: [ 'esm-dep > cjs-dep' ],
+	},
 	server: {
 		proxy: {
 			"/api": {
@@ -19,14 +22,16 @@ export default defineConfig({
 	build: {
 		outDir: "build"
 	},
-	plugins: [react({
-		include: "{**/*,*}.{js,ts,jsx,tsx}",
-		babel: {
-			parserOpts: {
-				plugins: ['decorators-legacy'],
+	plugins: [
+		react( {
+			include: "{**/*,*}.{js,ts,jsx,tsx}",
+			babel: {
+				parserOpts: {
+					plugins: [ 'decorators-legacy' ],
+				},
 			},
-		},
-	}), eslint( {
-		include: "{**/*,*}.{js,ts,jsx,tsx}"
-	} )]
-})
+		} ), eslint( {
+			include: "{**/*,*}.{js,ts,jsx,tsx}"
+		} )
+	]
+} )

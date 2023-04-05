@@ -137,58 +137,62 @@ export default function MainApp() {
 				value={ { DoSetAlert: setAlert, setAcceptAction: setAcceptAction } }><ServerContext.Provider
 				value={ { InstanceData: Instances, HasData: HasData } }>
 				<Suspense fallback={ <></> }>
-					<CTopNavigation ShowLog={ setShowLog } ServerState={ [ GameServerOnline, GameServerOffline ] }
-									SystemUsage={ SystemUsage }/>
-					<CLeftNavigation/>
+					<main className="d-flex flex-nowrap">
+						<CLeftNavigation/>
+						<div className={ "flex-fill" }>
+							<CTopNavigation ShowLog={ setShowLog }
+											ServerState={ [ GameServerOnline, GameServerOffline ] }
+											SystemUsage={ SystemUsage }/>
 
-					<div className="content-wrapper">
-						<div className="content-header">
-							<div className="container-fluid">
-								<div className="row mb-2">
-									<div className="col-sm-6">
-										<h3>{ StringMapLib.Nav( Pathname[ Pathname.length - 1 ] ) }</h3>
-									</div>
-									<div className="col-sm-6">
-										<ol className="breadcrumb float-sm-end">
-											{ Pathname.map( ( V ) => (
-												<li className="breadcrumb-item" key={ V }>{ StringMapLib.Nav( V ) }</li>
-											) ) }
-										</ol>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<section className="content">
-							<div className="container-fluid">
+							<div className="content-header">
 								<div className="container-fluid">
-									<CTraffics SystemUsage={ SystemUsage }
-											   ServerState={ [ GameServerOnline, GameServerOffline, GameServerTotal ] }/>
-
-									<CAlert Data={ Alert } OnClear={ () => setAlert( undefined ) }/>
-
-									<Suspense fallback={ <></> }>
-										<Routes>
-											<Route path="/home" element={ <PHome/> }/>
-											<Route path="/changelog/:version" element={ <PChangelog/> }/>
-											<Route path="/adminserver" element={ <PAdminServer/> }/>
-											<Route path="/users" element={ <PUsers/> }/>
-											<Route path="/me/*" element={ <PUsersettings/> }/>
-											<Route path="/paneladmin" element={ <PPanelsettings/> }/>
-											<Route path="/server/:InstanceName/*" element={ <PServer/> }/>
-											<Route path="/home/404" element={ <P404/> }/>
-											<Route path="/home/403" element={ <P403/> }/>
-											<Route path={ "*" } element={ <Navigate to={ "/home/404" }/> }/>
-										</Routes>
-									</Suspense>
+									<div className="row mb-2">
+										<div className="col-sm-6">
+											<h3>{ StringMapLib.Nav( Pathname[ Pathname.length - 1 ] ) }</h3>
+										</div>
+										<div className="col-sm-6">
+											<ol className="breadcrumb float-sm-end">
+												{ Pathname.map( ( V ) => (
+													<li className="breadcrumb-item"
+														key={ V }>{ StringMapLib.Nav( V ) }</li>
+												) ) }
+											</ol>
+										</div>
+									</div>
 								</div>
 							</div>
-						</section>
-					</div>
 
-					<CFoother SystemUsage={ SystemUsage }/>
-					<CPanelLog Show={ ShowLog } OnHide={ () => setShowLog( false ) }/>
-					<CAcceptAction Function={ AcceptAction } SetFunction={ setAcceptAction }/>
+							<section className="content">
+								<div className="container-fluid">
+									<div className="container-fluid">
+										<CTraffics SystemUsage={ SystemUsage }
+												   ServerState={ [ GameServerOnline, GameServerOffline, GameServerTotal ] }/>
+
+										<CAlert Data={ Alert } OnClear={ () => setAlert( undefined ) }/>
+
+										<Suspense fallback={ <></> }>
+											<Routes>
+												<Route path="/home" element={ <PHome/> }/>
+												<Route path="/changelog/:version" element={ <PChangelog/> }/>
+												<Route path="/adminserver" element={ <PAdminServer/> }/>
+												<Route path="/users" element={ <PUsers/> }/>
+												<Route path="/me/*" element={ <PUsersettings/> }/>
+												<Route path="/paneladmin" element={ <PPanelsettings/> }/>
+												<Route path="/server/:InstanceName/*" element={ <PServer/> }/>
+												<Route path="/home/404" element={ <P404/> }/>
+												<Route path="/home/403" element={ <P403/> }/>
+												<Route path={ "*" } element={ <Navigate to={ "/home/404" }/> }/>
+											</Routes>
+										</Suspense>
+									</div>
+								</div>
+							</section>
+
+							<CFoother SystemUsage={ SystemUsage }/>
+							<CPanelLog Show={ ShowLog } OnHide={ () => setShowLog( false ) }/>
+							<CAcceptAction Function={ AcceptAction } SetFunction={ setAcceptAction }/>
+						</div>
+					</main>
 				</Suspense>
 			</ServerContext.Provider></AlertContext.Provider>
 		</>

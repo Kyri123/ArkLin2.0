@@ -11,7 +11,7 @@ import { Socket }           from "socket.io";
 export default function InstallSocketIO() {
 	const Connection = async( socket : Socket<IListenEvents, IEmitEvents, DefaultEventsMap, any> ) => {
 		socket.emit( "Connect" );
-	}
+	}  
 
 	SocketIO.on( "connection", Connection );
 }

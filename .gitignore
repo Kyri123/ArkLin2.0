@@ -1,5 +1,6 @@
 # IDE
 .idea
+.vscode
 
 # APP
 app/json/serverinfo

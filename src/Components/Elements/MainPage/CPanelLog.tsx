@@ -11,7 +11,7 @@ import io, { Socket }   from "socket.io-client";
 import { Modal }        from "react-bootstrap";
 import { SocketIOLib }  from "../../../Lib/Api/SocketIO.Lib";
 import CFormatLog       from "../Server/CFormatLog";
-
+ 
 interface IPanelLogProps {
 	Show : boolean;
 	OnHide : () => void;
