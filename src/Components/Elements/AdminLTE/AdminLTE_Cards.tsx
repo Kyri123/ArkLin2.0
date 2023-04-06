@@ -6,16 +6,16 @@ import { FunctionComponent } from "react";
 import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
 
 export const CStateCard : FunctionComponent<IStateCardProps> = ( {
-	Hide,
-	Color,
-	Permission,
-	BarPercent,
-	BarColor,
-	Icon,
-	Title,
-	children,
-	...Props
-} ) => {
+																	 Hide,
+																	 Color,
+																	 Permission,
+																	 BarPercent,
+																	 BarColor,
+																	 Icon,
+																	 Title,
+																	 children,
+																	 ...Props
+																 } ) => {
 	if ( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}
@@ -44,9 +44,5 @@ export const CStateCard : FunctionComponent<IStateCardProps> = ( {
 				</div>
 			</Card>
 		</>
-	);
-
-	return (
-		<></>
 	);
 };

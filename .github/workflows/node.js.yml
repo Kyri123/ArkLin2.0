@@ -23,8 +23,14 @@ jobs:
           cache: 'npm'
       - run: yarn install
       - run: yarn tailwindcss
+        env:
+          CI: true
       - run: yarn TestApp
+        env:
+          CI: true
       - run: yarn BuildServer
+        env:
+          CI: true
       - run: yarn Client
         env:
           CI: true
