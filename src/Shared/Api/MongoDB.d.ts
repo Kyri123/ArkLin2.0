@@ -8,6 +8,8 @@ import { ISystemUsage } from "../Type/Systeminformation";
 export interface IMongoDB {
 	_id? : string;
 	__v? : number;
+	created_at? : number;
+	updated_at? : number;
 }
 
 export interface IMO_Accounts extends IMongoDB {
@@ -16,6 +18,23 @@ export interface IMO_Accounts extends IMongoDB {
 	mail : string;
 	servers : string[];
 	permissions? : string[];
+}
+
+export interface IMO_Cluster extends IMongoDB {
+	Instances : string[];
+	SyncInis : string[];
+	SyncSettings : string[];
+	DisplayName : string;
+	Master : string;
+	NoTransferFromFiltering : boolean;
+	NoTributeDownloads : boolean;
+	PreventDownloadSurvivors : boolean;
+	PreventUploadSurvivors : boolean;
+	PreventDownloadItems : boolean;
+	PreventUploadItems : boolean;
+	PreventDownloadDinos : boolean;
+	PreventUploadDinos : boolean;
+
 }
 
 export interface IMO_Instance extends IMongoDB {
