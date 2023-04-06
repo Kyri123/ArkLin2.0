@@ -3,5 +3,6 @@
   "ServerStateInterval": 3500,
   "DataCleanerInterval": 3600000,
   "SteamAPIQuery": 3600000,
-  "GithubQueryInterval": 300000
+  "GithubQueryInterval": 300000,
+  "ServerTasksInterval": 300000
 }

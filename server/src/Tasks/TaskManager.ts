@@ -1,6 +1,8 @@
 import fs   from "fs";
 import path from "path";
 
+export type TTasksRunner = "ServerState" | "Systeminformation" | "DataCleaner" | "Github" | "SteamAPI" | "Server";
+
 export class JobTask {
 	public JobName = "";
 	protected Interval = 60000;
@@ -12,7 +14,7 @@ export class JobTask {
 
 	constructor(
 		Interval : number,
-		JobName : string,
+		JobName : TTasksRunner,
 		Task : ( CallCount : number ) => void
 	) {
 		this.JobName = JobName;
@@ -59,8 +61,6 @@ export class JobTask {
 		}
 	}
 }
-
-export type TTasksRunner = "ServerState" | "Systeminformation" | "DataCleaner";
 
 export class TaskManagerClass {
 	public Jobs : Record<string, JobTask> = {};

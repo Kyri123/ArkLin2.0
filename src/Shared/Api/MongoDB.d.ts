@@ -46,6 +46,8 @@ export interface IMO_Instance extends IMongoDB {
 		LOGO : string;
 		BG : string;
 	};
+	LastAutoUpdate? : number;
+	LastAutoBackup? : number;
 }
 
 export type IMO_Usage = ISystemUsage & IMongoDB;

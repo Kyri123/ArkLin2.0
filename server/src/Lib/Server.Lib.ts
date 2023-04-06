@@ -17,8 +17,12 @@ import { SSHManager }          from "./ConfigManager.Lib";
 import DB_Instances            from "../MongoDB/DB_Instances";
 import { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
 import * as ini                from "ini";
-import { IMO_Instance }        from "../../../src/Shared/Api/MongoDB";
+import {
+	IMO_Cluster,
+	IMO_Instance
+}                              from "../../../src/Shared/Api/MongoDB";
 import { MakeRandomID }        from "./PathBuilder.Lib";
+import DB_Cluster              from "../MongoDB/DB_Cluster";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
@@ -57,6 +61,7 @@ export class ServerLib {
 	public readonly Instance : string;
 	public readonly InstanceConfigFile : string;
 	private MongoDBData : IMO_Instance | null = null;
+	private Cluster : IMO_Cluster | null = null;
 
 	constructor( ServerInstance : string ) {
 		this.Instance = ServerInstance;
@@ -76,10 +81,21 @@ export class ServerLib {
 			this.MongoDBData = ( await DB_Instances.findOne( {
 				Instance: this.Instance
 			} ) )!.toJSON();
+
+			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } )
+			this.Cluster = Cluster ? Cluster.toJSON() : null;
 		}
 		catch ( e ) {
 		}
 		return this.IsValid();
+	}
+
+	public IsInCluster() : boolean {
+		return this.Cluster !== null;
+	}
+
+	public get GetCluster() : IMO_Cluster | null {
+		return this.Cluster;
 	}
 
 	public EmitUpdate() {
@@ -101,7 +117,7 @@ export class ServerLib {
 
 	async ExecuteCommand(
 		Command : EArkmanagerCommands,
-		Params : string[]
+		Params : string[] = []
 	) : Promise<boolean> {
 		const State = await this.GetState();
 		if ( State.ArkmanagerPID === 0 ) {
@@ -358,5 +374,22 @@ export class ServerLib {
 			}
 		}
 		return false;
+	}
+
+	public async Update( Data : Partial<IMO_Instance> ) {
+		if ( !this.IsValid() ) {
+			return;
+		}
+
+		for ( const [ Key, Value ] of Object.entries( Data ) ) {
+			if ( typeof Value === "object" ) {
+				await this.ModifySubDocument( Key as keyof IMO_Instance, Value );
+			}
+			else {
+				await DB_Instances.findByIdAndUpdate( this.MongoDBData!._id, { [ Key ]: Value } )
+			}
+		}
+
+		this.EmitUpdate();
 	}
 }

@@ -4,6 +4,8 @@ import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
 
 const Schema = new mongoose.Schema<IMO_Instance>( {
 	Instance: { type: String, required: true, unique: true },
+	LastAutoBackup: { type: Number, required: false },
+	LastAutoUpdate: { type: Number, required: false },
 
 	ArkmanagerCfg: {
 		type: mongoose.Schema.Types.Mixed,

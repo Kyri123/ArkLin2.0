@@ -4,6 +4,7 @@ export interface ITaskConfig {
 	ServerStateInterval : number;
 	DataCleanerInterval : number;
 	SteamAPIQuery : number;
+	ServerTasksInterval : number;
 }
 
 export interface IDebugConfig {
