@@ -43,8 +43,8 @@ export default function CTopNavigation( Props : {
 					className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start p-2">
 					<div className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
 						<Link onClick={ ToggleSidebar }
-						      to="#"
-						      className="d-block d-md-none link-dark text-decoration-none me-3"
+							  to="#"
+							  className="d-block d-md-none link-dark text-decoration-none me-3"
 						>
 							<FontAwesomeIcon icon={ "bars" } className={ "me-2" }/>
 							Navigation

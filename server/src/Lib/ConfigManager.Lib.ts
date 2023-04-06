@@ -56,7 +56,16 @@ export class ConfigManagerClass {
 		return path.join( __configdir, "id_rsa" );
 	}
 
-	public Write( Config : string, Data : any ) : boolean {
+	public get GetGitHash() : string | undefined {
+		try {
+			return fs.readFileSync( path.join( __git_dir, "HEAD" ) ).toString().split( " " )[ 0 ];
+		}
+		catch ( e ) {
+		}
+		return undefined;
+	}
+
+	public Write<T>( Config : string, Data : T ) : boolean {
 		const ConfigFile = path.join( __configdir, `${ Config }.json` );
 		if ( fs.existsSync( ConfigFile ) && Data ) {
 			try {

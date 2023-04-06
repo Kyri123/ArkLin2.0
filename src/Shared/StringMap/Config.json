@@ -1,5 +1,11 @@
 {
   "PANEL_Branch": "Update Branch",
+  "PANEL_AutomaticUpdate": "Updates automatisch aktualisieren",
+  "PANEL_UseCommitAsUpdateIndicator": "Benutzer Commits um Updates zu identifizieren",
+  "PANEL_GithubToken": "Github Token für API Query (optional sollte das limit je stunde überschritten werden)",
+  "SteamApi_Key": "Steam Api Key",
+  "SteamAPIQuery": "Interval für die Steam API Query (Mods, Spieler, etc.)",
+  "GithubQueryInterval": "Interval für die Github API Query (Updates, Releases, etc.)",
   "LOG_MaxLogCount": "Maximale Anzahl an Panel Logs",
   "SSH_Host": "SSH Host",
   "SSH_User": "SSH Username",

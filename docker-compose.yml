@@ -35,13 +35,13 @@ services:
       - "28080:28080"
     volumes:
       # config for the cashboard if you want to edit that copy to a other path and mount it to here.
-      - ./mount/PanelLogs/:/mount/PanelLogs/
+      - ../mount/PanelLogs/:/mount/PanelLogs/
       - ./.git:/mount/Git/
       - /etc/arkmanager/:/mount/Arkmanager/
-      - ./mount/Server/:/mount/Server/
-      - ./mount/Logs/:/mount/Logs/
-      - ./mount/Backups/:/mount/Backups/
-      - ./mount/config/:/mount/config/
+      - ../mount/Server/:/mount/Server/
+      - ../mount/Logs/:/mount/Logs/
+      - ../mount/Backups/:/mount/Backups/
+      - ../mount/config/:/mount/config/
       - /home/steam/Steam/:/mount/steamCMD/
     networks:
       - arklin2

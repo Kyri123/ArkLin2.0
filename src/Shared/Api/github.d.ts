@@ -21,3 +21,11 @@ export interface IGithubReleases {
 	published_at : string;
 	body : string;
 }
+
+
+export interface IGithubCommits {
+	message : string;
+	sha : string;
+	branch : string;
+	created_at : Date;
+}

@@ -1,5 +1,8 @@
 {
   "PANEL_Branch": "main",
+  "PANEL_AutomaticUpdate": true,
+  "PANEL_UseCommitAsUpdateIndicator": true,
+  "PANEL_GithubToken": "",
   "LOG_MaxLogCount": 25,
   "SSH_Host": "localhost",
   "SSH_User": "steam",

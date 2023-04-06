@@ -13,6 +13,9 @@ export interface IDebugConfig {
 
 export interface IDashboard_BaseConfig {
 	PANEL_Branch : string;
+	PANEL_AutomaticUpdate : boolean;
+	PANEL_UseCommitAsUpdateIndicator : boolean;
+	PANEL_GithubToken : string;
 	LOG_MaxLogCount : number;
 	SSH_Host : string;
 	SSH_User : string;
