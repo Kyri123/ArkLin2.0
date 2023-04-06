@@ -108,7 +108,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					variant={ "gray-dark" }
 					Disabled={ ModIndex - 1 < 0 }
 					onClick={ () => MoveMod( -1 ) }
-					className="btn btn-sm btn-flat text-bg-dark m-0"
+					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-up" }/>
 				</LTELoadingButton>
@@ -118,7 +118,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					variant={ "gray-dark" }
 					onClick={ () => MoveMod( 1 ) }
 					Disabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
-					className="btn btn-sm btn-flat text-bg-dark m-0"
+					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-down" }/>
 				</LTELoadingButton>

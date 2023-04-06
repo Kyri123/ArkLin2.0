@@ -162,7 +162,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								<tr key={ Key }>
 									<td className={ "p-0" } style={ { width: 0 } }>
 										<LTEToggleButton
-											className={ " w-100 h-100 btn-flat " }
+											className={ " w-100 h-100 flat " }
 											Value={ Form.permissions?.includes( Key ) || false }
 											OnToggle={ ( Value : boolean ) =>
 												setForm( ( Current ) => {

@@ -35,7 +35,7 @@ export const LTEToggleButton : React.FunctionComponent<ILTEToggleButton> = ( { O
 
 	const OnClick = () => {
 		if ( OnToggle ) {
-			OnToggle( !Props.Value );
+			OnToggle( !Value );
 		}
 		if ( Ref ) {
 			Ref.current = !Props.Ref.current;
