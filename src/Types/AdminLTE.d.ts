@@ -13,6 +13,7 @@ import {
 	IPropsWithPermission
 }                     from "./BaseTypes";
 import { Button }     from "react-bootstrap";
+import { CardProps }  from "react-bootstrap/Card";
 
 export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
 
@@ -24,10 +25,10 @@ export interface IInputWithIcon extends IChildrenBaseProps {
 	Outline? : TFormOutline;
 }
 
-export interface IStateCardProps extends IChildrenBaseProps {
+export type IStateCardProps = CardProps & IPropsWithPermission & {
+	Color : TLTEColors;
 	BarPercent : number;
 	Title : string;
-	Color : TLTEColors;
 	Icon : IconProp;
 	BarColor : Variant;
 }
