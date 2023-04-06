@@ -5,7 +5,7 @@ import { ServerLib }           from "../../Lib/Server.Lib";
 import { EArkmanagerCommands } from "../../../../src/Lib/ServerUtils.Lib";
 
 export default new JobTask(
-	ConfigManager.GetTaskConfig.SystemInformationInterval,
+	ConfigManager.GetTaskConfig.ServerTasksInterval,
 	"Server",
 	async() => {
 		SystemLib.DebugLog(
