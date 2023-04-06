@@ -1,3 +1,4 @@
+
 /** @format */
 
 import {
@@ -100,12 +101,14 @@ function IndexApp() {
 
 	return (
 		<>
+
 			<AccountContext.Provider
 				value={ {
 					Account: User
 				} }
 			>
 				{ WasChecked && !User.IsLoggedIn() ? <PreLoginApp/> : <MainApp/> }
+
 			</AccountContext.Provider>
 		</>
 	);
