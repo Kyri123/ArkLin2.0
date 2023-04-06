@@ -129,6 +129,13 @@ export class ServerLib {
 			fs.mkdirSync( path.join( __server_backups, this.Instance ), {
 				recursive: true
 			} );
+
+			await this.ModifySubDocument( "State", {
+				...this.MongoDBData!.State,
+				State: "ActionInProgress",
+				ArkmanagerPID: 1
+			} );
+
 			SSHManager.ExecCommand(
 				[
 					`${ path.join(
@@ -139,6 +146,7 @@ export class ServerLib {
 				].join( " " )
 			).then( () => {
 			} );
+			this.EmitUpdate();
 			return true;
 			/*SSHManager.ExecCommand( [ "screen", '-dmS', this.Instance, 'bash', '-c', `'${ path.join( process.env.APPEND_BASEDIR, __basedir, "sh/arkmanager.sh" ) } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"'` ].join( " " ) ).then( () => {} );
 			 return true;*/

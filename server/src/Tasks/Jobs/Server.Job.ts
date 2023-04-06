@@ -20,14 +20,14 @@ export default new JobTask(
 				const Cfg = Server.Get!;
 				const PanelConfig = Cfg.PanelConfig;
 
-				if ( PanelConfig.AutoUpdateEnabled && ( ( Cfg.LastAutoUpdate || 0 ) + PanelConfig.AutoUpdateInterval ) >= Date.now() ) {
+				if ( PanelConfig.AutoUpdateEnabled && ( ( Cfg.LastAutoUpdate || 0 ) + PanelConfig.AutoUpdateInterval ) <= Date.now() && Cfg.State.State !== "ActionInProgress" ) {
 					await Server.ExecuteCommand( EArkmanagerCommands.update, PanelConfig.AutoUpdateParameters );
 					await Server.Update( {
 						LastAutoUpdate: Date.now()
 					} );
 				}
 
-				if ( PanelConfig.BackupEnabled && ( ( Cfg.LastAutoBackup || 0 ) + PanelConfig.BackupInterval ) >= Date.now() ) {
+				if ( PanelConfig.BackupEnabled && ( ( Cfg.LastAutoBackup || 0 ) + PanelConfig.BackupInterval ) <= Date.now() && Cfg.State.State !== "ActionInProgress" ) {
 					await Server.ExecuteCommand( EArkmanagerCommands.backup );
 					await Server.Update( {
 						LastAutoBackup: Date.now()

@@ -95,10 +95,10 @@ export function GetRawInstanceData() : IInstanceData {
 export function GetDefaultPanelServerConfig() : IPanelServerConfig {
 	return structuredClone<IPanelServerConfig>( {
 		AutoUpdateEnabled: false,
-		AutoUpdateInterval: 30,
+		AutoUpdateInterval: 1800000,
 		AutoUpdateParameters: [],
 		BackupEnabled: false,
-		BackupInterval: 30,
+		BackupInterval: 1800000,
 		MaxBackupfolderSize: 25600
 	} );
 }
