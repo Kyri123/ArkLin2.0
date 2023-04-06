@@ -157,3 +157,7 @@ main {
 .opacity-10 {
     opacity: 0.1;
 }
+
+.flat {
+    border-radius: 0 !important;
+}
