@@ -16,4 +16,5 @@ export default class StringMapLib {
 	static Config( Key : string ) : string {
 		return ( Config as Record<string, string> )[ Key ] || Key;
 	}
+
 }

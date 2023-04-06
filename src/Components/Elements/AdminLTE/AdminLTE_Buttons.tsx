@@ -1,6 +1,7 @@
 import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
 import { Button }            from "react-bootstrap";
 import { ILTELoadingButton } from "../../../Types/AdminLTE";
+import React                 from "react";
 
 export function LTELoadingButton( Props : ILTELoadingButton ) {
 	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
@@ -20,22 +21,39 @@ export function LTELoadingButton( Props : ILTELoadingButton ) {
 
 export function LTEToggleButton(
 	Props : ILTELoadingButton & {
-		Value : boolean;
-		OnToggle : ( NewValue : boolean ) => void;
+		Value? : boolean;
+		OnChange? : ( Value : boolean ) => void;
+		Ref? : React.Ref<boolean>;
 	}
 ) {
 	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
 		return <></>;
 	}
 
+	const OnClick = () => {
+		if ( Props.OnChange ) {
+			Props.OnChange( !Props.Value );
+		}
+		if ( Props.Ref ) {
+			Props.Ref.current = !Props.Ref.current;
+		}
+	}
+
+	const IsActive = () => {
+		if ( Props.Value === undefined ) {
+			return Props.Ref?.current;
+		}
+		return Props.Value;
+	}
+
 	return (
 		<LTELoadingButton
 			{ ...Props }
 			className={ Props.className || "btn-sm rounded-0" }
-			BtnColor={ Props.Value ? "success" : "danger" }
-			onClick={ () => Props.OnToggle( !Props.Value ) }
+			BtnColor={ IsActive() ? "success" : "danger" }
+			onClick={ OnClick }
 		>
-			<FontAwesomeIcon icon={ Props.Value ? "check" : "times" } />{ " " }
+			<FontAwesomeIcon icon={ IsActive() ? "check" : "times" } />{ " " }
 			{ Props.children }
 		</LTELoadingButton>
 	);

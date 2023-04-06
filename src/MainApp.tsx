@@ -40,24 +40,36 @@ import { IAPIResponseBase }                     from "./Types/API";
 const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
 const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
 
-const PUsersettings = React.lazy( () => import("./Pages/MainApp/PUsersettings") );
-const PServer = React.lazy( () => import("./Pages/MainApp/PServer") );
+const PUsersettings = React.lazy(
+	() => import("./Pages/MainApp/PUsersettings")
+);
+const PServer = React.lazy(
+	() => import("./Pages/MainApp/PServer")
+);
 const PPanelsettings = React.lazy(
 	() => import("./Pages/MainApp/PPanelsettings")
 );
-const PAdminServer = React.lazy( () => import("./Pages/MainApp/PAdminServer") );
+const PAdminServer = React.lazy(
+	() => import("./Pages/MainApp/PAdminServer")
+);
 const CTraffics = React.lazy(
 	() => import("./Components/Elements/MainPage/CTraffics")
 );
 const CFoother = React.lazy(
 	() => import("./Components/Elements/MainPage/CFoother")
 );
-const PUsers = React.lazy( () => import("./Pages/MainApp/PUsers") );
+const PUsers = React.lazy(
+	() => import("./Pages/MainApp/PUsers")
+);
 const CPanelLog = React.lazy(
 	() => import("./Components/Elements/MainPage/CPanelLog")
 );
-const PHome = React.lazy( () => import("./Pages/MainApp/PHome") );
-const PChangelog = React.lazy( () => import("./Pages/MainApp/PChangelog") );
+const PHome = React.lazy(
+	() => import("./Pages/MainApp/PHome")
+);
+const PChangelog = React.lazy(
+	() => import("./Pages/MainApp/PChangelog")
+);
 
 const SocketIO : Socket<IEmitEvents, IListenEvents> = io(
 	SocketIOLib.GetSpocketHost()
@@ -139,7 +151,8 @@ export default function MainApp() {
 
 	if ( !HasData ) {
 		return (
-			<Modal show={ true } size={ "xl" } centered>
+			<Modal show={ true } size={ "xl" } onHide={ () => {
+			} } centered>
 				<Modal.Body style={ { paddingTop: 150, paddingBottom: 150 } }>
 					<center>
 						<p style={ { fontSize: 100 } }>

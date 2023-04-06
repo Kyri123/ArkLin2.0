@@ -5,7 +5,6 @@ import {
 	useState
 }                          from "react";
 import ReactDOM            from "react-dom/client";
-import reportWebVitals     from "./reportWebVitals";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,22 +25,20 @@ const root = ReactDOM.createRoot(
 );
 
 function IndexApp() {
-	const { User, SetToken, Token } = useAuth();
+	const { User, SetToken, Token, Logout } = useAuth();
 	const [ WasChecked, setWasChecked ] = useState( false );
-
-	console.log( Token );
 
 	useEffect( () => {
 		const Check = async() => {
 			const Result = await API_AuthLib.IsLoggedIn();
 
 			if ( !User.IsLoggedIn() && Token !== "" ) {
-				//Logout();
+				Logout();
 			}
 
 			if ( Result.Reached ) {
 				if ( !Result.Auth && Token !== "" ) {
-					//Logout();
+					Logout();
 				}
 
 				if ( Result.Data && Result.Data.JsonWebToken !== Token ) {
@@ -121,4 +118,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals( console.log );
+//reportWebVitals( console.log );

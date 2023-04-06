@@ -58,36 +58,38 @@ export default function( Api : core.Express ) {
 			}
 
 			const User : IMO_Accounts & jwt.JwtPayload = user;
-			try {
-				let UserDB = await DB_Accounts.findById( User._id );
-				if ( UserDB ) {
-					if ( !UserDB.permissions ) {
-						UserDB = ( await DB_Accounts.findByIdAndUpdate( User._id, {
-							permissions: []
-						} ) )!;
-					}
+			if ( ( User.exp || 0 ) >= Date.now() / 1000 ) {
+				try {
+					let UserDB = await DB_Accounts.findById( User._id );
+					if ( UserDB ) {
+						if ( !UserDB.permissions ) {
+							UserDB = ( await DB_Accounts.findByIdAndUpdate( User._id, {
+								permissions: []
+							} ) )!;
+						}
 
-					if ( User.permissions !== UserDB.permissions && User.exp ) {
-						const NewToken = GenerateAccessToken(
-							UserDB.toJSON(),
-							( User.exp - Math.trunc( Date.now() / 1000 ) ) / 24 / 60 / 60
-						);
+						if ( User.permissions !== UserDB.permissions && User.exp ) {
+							const NewToken = GenerateAccessToken(
+								UserDB.toJSON(),
+								( User.exp - Math.trunc( Date.now() / 1000 ) ) / 24 / 60 / 60
+							);
+							response.json( {
+								Data: { JsonWebToken: NewToken },
+								Auth: true,
+								Success: true
+							} );
+							return;
+						}
+
 						response.json( {
-							Data: { JsonWebToken: NewToken },
 							Auth: true,
 							Success: true
 						} );
 						return;
 					}
-
-					response.json( {
-						Auth: true,
-						Success: true
-					} );
-					return;
 				}
-			}
-			catch ( e ) {
+				catch ( e ) {
+				}
 			}
 
 			response.json( {

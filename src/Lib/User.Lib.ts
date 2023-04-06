@@ -55,7 +55,7 @@ export default class FrontendUserLib {
 
 	IsLoggedIn() {
 		if ( this.LoggedIn ) {
-			return this.Data.exp || 0 >= Date.now() / 1000;
+			return ( this.Data.exp || 0 ) >= Date.now() / 1000;
 		}
 		return false;
 	}
