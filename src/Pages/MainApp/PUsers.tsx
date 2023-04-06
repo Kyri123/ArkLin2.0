@@ -202,23 +202,21 @@ export default function PUsers() {
 													ActionTitle: `Möchtest du den Key ${ Key.key } wirklich löschen?`
 												} )
 											}
-											className={ "btn-sm" }
+											className={ "btn-sm flat" }
 											IsLoading={
 												IsSending.Delete.IsKey &&
 												IsSending.Delete.Id === Key._id
 											}
 											variant="danger"
-											Flat
 										>
 											<FontAwesomeIcon icon={ "trash-alt" }/>
 										</LTELoadingButton>
 										<LTELoadingButton
 											Disabled={ IsCopied( Key._id ) }
 											onClick={ () => DoCopy( Key.key, Key._id ) }
-											className={ "btn-sm" }
+											className={ "btn-sm flat" }
 											IsLoading={ false }
 											variant="success"
-											Flat
 										>
 											<FontAwesomeIcon
 												icon={ IsCopied( Key._id ) ? "check" : "copy" }
@@ -250,10 +248,9 @@ export default function PUsers() {
 								</LTEToggleButton>
 								<LTELoadingButton
 									onClick={ CreateAccountKey }
-									className={ "btn-sm" }
+									className={ "btn-sm flat" }
 									IsLoading={ IsSending.IsAddingKey }
 									variant="success"
-									Flat
 								>
 									<FontAwesomeIcon icon={ "plus" }/> Key Erstellen
 								</LTELoadingButton>

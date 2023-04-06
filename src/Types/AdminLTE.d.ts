@@ -8,7 +8,6 @@ import React, {
 import { Variant }    from "react-bootstrap/types";
 import { TLTEColors } from "../Shared/Type/AdminLTE";
 import {
-	IAdminLTEBaseT,
 	IChildrenBaseProps,
 	IPropsWithPermission
 }                     from "./BaseTypes";
@@ -51,10 +50,4 @@ export type ILTEToggleButton = IPropsWithPermission &
 	Value? : boolean;
 	OnToggle? : ( Value : boolean ) => void;
 	Ref? : React.Ref<boolean>;
-}
-
-export interface IAdminLTEButton extends IAdminLTEBaseT<HTMLButtonElement> {
-	Disabled? : boolean;
-	Outline? : boolean;
-	Flat? : boolean;
 }

@@ -141,7 +141,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 				<ButtonGroup className={ "w-100" }>
 					<LTELoadingButton
 						IsLoading={ IsSending }
-						Flat
+						className={ "flat" }
 						onClick={ SaveConfig }
 						variant={ "success" }
 					>

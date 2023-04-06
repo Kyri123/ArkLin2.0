@@ -92,10 +92,9 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 										ActionTitle: `Möchtest du den Benutzer ${ User.username } wirklich löschen?`
 									} )
 								}
-								className={ "btn-sm" }
+								className={ "btn-sm flat" }
 								IsLoading={ IsSending }
 								variant="danger"
-								Flat
 							>
 								<FontAwesomeIcon icon={ "trash-alt" }/>
 							</LTELoadingButton>
@@ -196,18 +195,16 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 							<div className="input-group-append">
 								<LTELoadingButton
 									onClick={ SetPermissions }
-									className={ "btn-sm" }
+									className={ "btn-sm flat" }
 									IsLoading={ IsSending }
 									variant="success"
-									Flat
 								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
 								</LTELoadingButton>
 								<LTELoadingButton
 									onClick={ () => setShowPermissionModal( false ) }
-									className={ "btn-sm" }
+									className={ "btn-sm flat" }
 									variant="danger"
-									Flat
 								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 								</LTELoadingButton>
@@ -277,18 +274,16 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 							<div className="input-group-append">
 								<LTELoadingButton
 									onClick={ SetAllowedServer }
-									className={ "btn-sm" }
+									className={ "btn-sm flat" }
 									IsLoading={ IsSending }
 									variant="success"
-									Flat
 								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
 								</LTELoadingButton>
 								<LTELoadingButton
 									onClick={ () => setShowServerModal( false ) }
-									className={ "btn-sm" }
+									className={ "btn-sm flat" }
 									variant="danger"
-									Flat
 								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 								</LTELoadingButton>
