@@ -13,6 +13,7 @@ import { Modal }           from "react-bootstrap";
 import { BrowserRouter }   from "react-router-dom";
 import AccountContext      from "./Context/AccountContext";
 import "./tailwind.css";
+import "./Css/App-TW.css";
 import "./Css/App.css";
 import "./Css/Ribbon.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
