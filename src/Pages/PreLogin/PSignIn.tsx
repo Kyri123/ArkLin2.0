@@ -78,7 +78,7 @@ export default function PSignIn() {
 				label="E-Mail / Benutzername"
 				className="mb-3"
 			>
-				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] } />
+				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] }/>
 			</FloatingLabel>
 
 			<FloatingLabel controlId="password" label="Passwort" className="mb-3">
@@ -102,7 +102,7 @@ export default function PSignIn() {
 						varian="primary"
 						IsLoading={ IsSending }
 					>
-						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" } />
+						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" }/>
 						Einloggen
 					</LTELoadingButton>
 				</Col>

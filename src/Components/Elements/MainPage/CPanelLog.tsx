@@ -52,7 +52,7 @@ export default function CPanelLog( Props : IPanelLogProps ) {
 				className="bg-dark p-0"
 				style={ { height: 700, overflow: "auto" } }
 			>
-				<CFormatLog LogContent={ [ ...LogData ].reverse().join( "\n" ) } />
+				<CFormatLog LogContent={ [ ...LogData ].reverse().join( "\n" ) }/>
 			</Modal.Body>
 		</Modal>
 	);

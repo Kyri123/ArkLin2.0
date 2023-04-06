@@ -24,12 +24,31 @@ export default function CTopNavigation( Props : {
 	const { Logout } = useAuth();
 	const { Account } = useContext( AccountContext );
 
+	const ToggleSidebar = () => {
+		const Sidebar = window.document.getElementById( "Sidebar" );
+		if ( Sidebar && Sidebar.classList.contains( "d-none" ) ) {
+			Sidebar.classList.remove( "d-none" );
+			Sidebar.classList.add( "show" );
+		}
+		else if ( Sidebar ) {
+			Sidebar.classList.add( "d-none" );
+			Sidebar.classList.remove( "show" );
+		}
+	};
+
 	return (
 		<>
-			<div className="container-fluid bg-light p-2 border-bottom">
+			<div className="container-fluid bg-gray-200 p-2 border-bottom">
 				<div
 					className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start p-2">
 					<div className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+						<Link onClick={ ToggleSidebar }
+						      to="#"
+						      className="d-block d-md-none link-dark text-decoration-none me-3"
+						>
+							<FontAwesomeIcon icon={ "bars" } className={ "me-2" }/>
+							Navigation
+						</Link>
 						<div className="dropdown text-end ms-2">
 							<Link
 								to="#"
@@ -37,7 +56,7 @@ export default function CTopNavigation( Props : {
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
 							>
-								<Icon.BsWindowDesktop className={ "me-2" } />
+								<Icon.BsWindowDesktop className={ "me-2" }/>
 								Dashboard
 							</Link>
 
@@ -49,7 +68,7 @@ export default function CTopNavigation( Props : {
 											} }
 											className="dropdown-item text-info"
 										>
-											<Icon.BsDownload className={ "pe-2" } size={ 22 } />
+											<Icon.BsDownload className={ "pe-2" } size={ 22 }/>
 											<b>{ Props.SystemUsage.NextPanelBuildVersion }</b>{ " " }
 											Installieren
 										</button>
@@ -62,7 +81,7 @@ export default function CTopNavigation( Props : {
 									data-toggle="modal"
 									data-target="#panelControlerLogs"
 								>
-									<Icon.BsClipboard className={ "pe-2" } size={ 22 } />
+									<Icon.BsClipboard className={ "pe-2" } size={ 22 }/>
 									Panel Log
 								</button>
 								{ Account.HasPermission( EPerm.PanelSettings ) && (
@@ -72,7 +91,7 @@ export default function CTopNavigation( Props : {
 										data-toggle="modal"
 										data-target="#panelControlerLogs"
 									>
-										<FontAwesomeIcon icon={ "cogs" } className={ "pe-2" } />
+										<FontAwesomeIcon icon={ "cogs" } className={ "pe-2" }/>
 										Panel Einstellungen
 									</Link>
 								) }
@@ -82,7 +101,7 @@ export default function CTopNavigation( Props : {
 									data-toggle="modal"
 									data-target="#panelControlerLogs"
 								>
-									<FontAwesomeIcon icon={ "refresh" } className={ "pe-2" } />
+									<FontAwesomeIcon icon={ "refresh" } className={ "pe-2" }/>
 									Panel Neustarten
 								</button>
 							</div>
@@ -96,7 +115,7 @@ export default function CTopNavigation( Props : {
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
 						>
-							<Icon.BsServer className={ "me-2" } />
+							<Icon.BsServer className={ "me-2" }/>
 							<>
 								Server { Props.ServerState[ 0 ] } /{ " " }
 								<span className="text-danger">{ Props.ServerState[ 1 ] }</span>
@@ -108,9 +127,9 @@ export default function CTopNavigation( Props : {
 							</Dropdown.Item>
 
 							{ Object.keys( InstanceData ).map( ( Instance ) => (
-								<CServerCard InstanceName={ Instance } key={ ID + Instance } />
+								<CServerCard InstanceName={ Instance } key={ ID + Instance }/>
 							) ) }
-							<Dropdown.Divider className={ "m-0" } />
+							<Dropdown.Divider className={ "m-0" }/>
 							<Dropdown.Item
 								as={ Link }
 								to="/adminserver"
@@ -128,7 +147,7 @@ export default function CTopNavigation( Props : {
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
 						>
-							<Icon.BsPeople className={ "me-2" } />
+							<Icon.BsPeople className={ "me-2" }/>
 							{ Account.GetDBInformation().username }
 						</Link>
 						<div

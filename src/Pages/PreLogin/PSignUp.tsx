@@ -90,11 +90,11 @@ export default function PSignUp() {
 			/>
 
 			<FloatingLabel controlId="login" label="Benutzername" className="mb-3">
-				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] } />
+				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] }/>
 			</FloatingLabel>
 
 			<FloatingLabel controlId="mail" label="E-Mail" className="mb-3">
-				<Form.Control type="email" ref={ EmailRef } isInvalid={ InputState[ 1 ] } />
+				<Form.Control type="email" ref={ EmailRef } isInvalid={ InputState[ 1 ] }/>
 			</FloatingLabel>
 
 			<FloatingLabel controlId="password1" label="Passwort" className="mb-3">
@@ -122,7 +122,7 @@ export default function PSignUp() {
 				label="Account Schlüssel"
 				className="mb-3"
 			>
-				<Form.Control type="text" ref={ CodeRef } isInvalid={ InputState[ 4 ] } />
+				<Form.Control type="text" ref={ CodeRef } isInvalid={ InputState[ 4 ] }/>
 			</FloatingLabel>
 
 			<Row>
@@ -133,7 +133,7 @@ export default function PSignUp() {
 						varian="primary"
 						IsLoading={ IsSending }
 					>
-						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" } />
+						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" }/>
 						Account Erstellen und Einloggen
 					</LTELoadingButton>
 				</Col>

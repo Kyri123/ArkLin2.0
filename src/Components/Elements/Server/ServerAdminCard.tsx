@@ -124,7 +124,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 								onClick={ () => setShowEditServer( true ) }
 								className="w-100 pe-5 rounded-0 btn btn-dark"
 							>
-								<FontAwesomeIcon icon={ "cogs" } />
+								<FontAwesomeIcon icon={ "cogs" }/>
 							</button>
 						</div>
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
@@ -139,7 +139,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 	              className="w-100 ps-5 rounded-0 text-white btn btn-danger"
 	              data-toggle="modal"
               >
-                <FontAwesomeIcon icon={ "trash-alt" } />
+                <FontAwesomeIcon icon={ "trash-alt" }/>
               </span>
 						</div>
 					</div>
@@ -196,7 +196,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 													setSendCancel( false );
 												} }
 											>
-												<FontAwesomeIcon icon={ "cancel" } />
+												<FontAwesomeIcon icon={ "cancel" }/>
 											</LTELoadingButton>
 										</ButtonGroup>
 									</div>
@@ -247,7 +247,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 				Show={ ShowAction }
 				OnClose={ () => setShowAction( false ) }
 			/>
-			<CAcceptAction Function={ AcceptAction } SetFunction={ setAcceptAction } />
+			<CAcceptAction Function={ AcceptAction } SetFunction={ setAcceptAction }/>
 
 			{ Account.Account.HasPermission( EPerm.ManageServers ) && (
 				<Modal
@@ -295,13 +295,13 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 							IsLoading={ IsSending.Edit }
 							onClick={ SavePanelConfig }
 						>
-							<FontAwesomeIcon icon={ "save" } /> Speichern
+							<FontAwesomeIcon icon={ "save" }/> Speichern
 						</LTELoadingButton>
 						<LTELoadingButton
 							BtnColor={ "danger" }
 							onClick={ () => setShowEditServer( false ) }
 						>
-							<FontAwesomeIcon icon={ "cancel" } /> Abbrechen
+							<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 						</LTELoadingButton>
 					</Modal.Footer>
 				</Modal>

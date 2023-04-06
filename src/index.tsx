@@ -8,13 +8,14 @@ import ReactDOM            from "react-dom/client";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "icheck-bootstrap/icheck-bootstrap.min.css";
 import { Modal }           from "react-bootstrap";
 import { BrowserRouter }   from "react-router-dom";
 import AccountContext      from "./Context/AccountContext";
+import "./tailwind.css";
 import "./Css/App.css";
 import "./Css/Ribbon.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
 import useAuth             from "./Hooks/useAuth";
 import { API_AuthLib }     from "./Lib/Api/API_Auth.Lib";
 import MainApp             from "./MainApp";
@@ -84,7 +85,7 @@ function IndexApp() {
 				<Modal.Body style={ { paddingTop: 150, paddingBottom: 150 } }>
 					<center>
 						<p style={ { fontSize: 100 } }>
-							<FontAwesomeIcon icon={ "spinner" } spin={ true } />
+							<FontAwesomeIcon icon={ "spinner" } spin={ true }/>
 						</p>
 						<p style={ { fontSize: 35 } }>
 							{ " " }
@@ -103,7 +104,7 @@ function IndexApp() {
 					Account: User
 				} }
 			>
-				{ WasChecked && !User.IsLoggedIn() ? <PreLoginApp /> : <MainApp /> }
+				{ WasChecked && !User.IsLoggedIn() ? <PreLoginApp/> : <MainApp/> }
 			</AccountContext.Provider>
 		</>
 	);
@@ -111,7 +112,7 @@ function IndexApp() {
 
 root.render(
 	<BrowserRouter>
-		<IndexApp />
+		<IndexApp/>
 	</BrowserRouter>
 );
 

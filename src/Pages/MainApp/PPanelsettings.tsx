@@ -124,7 +124,7 @@ export default function PPanelsettings() {
 						IsLoading={ IsSending }
 						onClick={ SendConfig }
 					>
-						<FontAwesomeIcon icon={ "save" } /> Speichern
+						<FontAwesomeIcon icon={ "save" }/> Speichern
 					</LTELoadingButton>
 				</Card.Footer>
 			</Card>

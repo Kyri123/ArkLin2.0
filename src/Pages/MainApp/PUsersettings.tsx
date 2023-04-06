@@ -39,8 +39,8 @@ export default function PUsersettings() {
 			</Card.Header>
 			<Suspense fallback={ <></> }>
 				<Routes>
-					<Route path={ "/benutzer" } element={ <SPUser /> } />
-					<Route path={ "*" } element={ <Navigate to={ "/me/benutzer" } /> } />
+					<Route path={ "/benutzer" } element={ <SPUser/> }/>
+					<Route path={ "*" } element={ <Navigate to={ "/me/benutzer" }/> }/>
 				</Routes>
 			</Suspense>
 		</Card>

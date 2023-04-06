@@ -7,12 +7,13 @@ import CServerAdminCard                from "../../Components/Elements/Server/Se
 import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import { Modal }                       from "react-bootstrap";
 import { LTELoadingButton }            from "../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import CLTEInput, { ISelectMask }      from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import CLTEInput                       from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "../../Shared/Default/Server.Default";
 import { API_ServerLib }               from "../../Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "../../Shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerContext                   from "../../Context/ServerContext";
 import AlertContext                    from "../../Context/AlertContext";
+import { ISelectMask }                 from "../../Shared/Type/Systeminformation";
 
 export default function PAdminServer() {
 	const { InstanceData } = useContext( ServerContext );
@@ -46,7 +47,7 @@ export default function PAdminServer() {
 	          className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100"
 	          style={ { fontSize: 75, height: 450, cursor: "pointer" } }
           >
-            <FontAwesomeIcon icon={ "plus" } />
+            <FontAwesomeIcon icon={ "plus" }/>
           </div>
         </span>
 			</div>
@@ -93,13 +94,13 @@ export default function PAdminServer() {
 						IsLoading={ IsSending }
 						onClick={ CreateServer }
 					>
-						<FontAwesomeIcon icon={ "save" } /> Erstellen
+						<FontAwesomeIcon icon={ "save" }/> Erstellen
 					</LTELoadingButton>
 					<LTELoadingButton
 						BtnColor={ "danger" }
 						onClick={ () => setShowNewServer( false ) }
 					>
-						<FontAwesomeIcon icon={ "cancel" } /> Abbrechen
+						<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 					</LTELoadingButton>
 				</Modal.Footer>
 			</Modal>

@@ -1,6 +1,6 @@
 import {
-  IMO_Instance,
-  IMongoDB
+	IMO_Instance,
+	IMongoDB
 } from "../Api/MongoDB";
 
 export type TServerState =

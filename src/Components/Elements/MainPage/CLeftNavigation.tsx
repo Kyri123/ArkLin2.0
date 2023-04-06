@@ -18,7 +18,8 @@ export default function CLeftNavigation() {
 
 	return (
 		<div
-			className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+			id={ "Sidebar" }
+			className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark d-none d-md-block"
 			style={ { width: 280 } }
 		>
 			<Link
@@ -33,7 +34,7 @@ export default function CLeftNavigation() {
 				/>
 				<span className="fs-4">Sidebar</span>
 			</Link>
-			<hr />
+			<hr/>
 			<Nav as="ul" variant="pills" className={ "mb-auto flex-column nav-pills" }>
 				<Nav.Item as="li" className="">
 					<Link
@@ -41,7 +42,7 @@ export default function CLeftNavigation() {
 						className={ `nav-link ${
 							pathname.endsWith( "/home" ) ? "active" : ""
 						} text-white` }>
-						<BsHouseDoor size={ 17 } className={ "me-1" } />
+						<BsHouseDoor size={ 17 } className={ "me-1" }/>
 						Startseite
 					</Link>
 				</Nav.Item>
@@ -53,7 +54,7 @@ export default function CLeftNavigation() {
 							className={ `nav-link ${
 								pathname.endsWith( "/users" ) ? "active" : ""
 							} text-white` }>
-							<BsPeople size={ 17 } className={ "me-1" } />
+							<BsPeople size={ 17 } className={ "me-1" }/>
 							Benutzer
 						</Link>
 					</Nav.Item>
@@ -67,7 +68,7 @@ export default function CLeftNavigation() {
 								pathname.endsWith( "/adminserver" ) ? "active" : ""
 							} text-white` }
 						>
-							<BsServer size={ 17 } className={ "me-1" } />
+							<BsServer size={ 17 } className={ "me-1" }/>
 							Server
 						</Link>
 					</Nav.Item>

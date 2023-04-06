@@ -30,10 +30,10 @@ interface IProps {
 }
 
 const PCUserRow : React.FunctionComponent<IProps> = ( {
-	                                                      User,
-	                                                      Remove,
-	                                                      UpdateUsers
-                                                      } ) => {
+	User,
+	Remove,
+	UpdateUsers
+} ) => {
 	const { setAcceptAction, DoSetAlert } = useContext( AlertContext );
 	const { InstanceData } = useContext( ServerContext );
 	const { Account } = useContext( AccountContext );
@@ -97,7 +97,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								BtnColor="danger"
 								Flat
 							>
-								<FontAwesomeIcon icon={ "trash-alt" } />
+								<FontAwesomeIcon icon={ "trash-alt" }/>
 							</LTELoadingButton>
 							<LTELoadingButton
 								onClick={ () => setShowServerModal( true ) }
@@ -105,7 +105,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								IsLoading={ false }
 								Flat
 							>
-								<FontAwesomeIcon icon={ "server" } />
+								<FontAwesomeIcon icon={ "server" }/>
 							</LTELoadingButton>
 							<LTELoadingButton
 								onClick={ () => setShowPermissionModal( true ) }
@@ -113,7 +113,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								IsLoading={ false }
 								Flat
 							>
-								<FontAwesomeIcon icon={ "ranking-star" } />
+								<FontAwesomeIcon icon={ "ranking-star" }/>
 							</LTELoadingButton>
 						</ButtonGroup>
 					) }
@@ -164,7 +164,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 										<LTEToggleButton
 											className={ " w-100 h-100 btn-flat " }
 											Value={ Form.permissions?.includes( Key ) || false }
-											OnToggle={ ( Value ) =>
+											OnToggle={ ( Value : boolean ) =>
 												setForm( ( Current ) => {
 													let Permissions = [ ...Current.permissions! ];
 													if ( Value ) {
@@ -201,7 +201,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 									BtnColor="success"
 									Flat
 								>
-									<FontAwesomeIcon icon={ "check" } /> Speichern
+									<FontAwesomeIcon icon={ "check" }/> Speichern
 								</LTELoadingButton>
 								<LTELoadingButton
 									onClick={ () => setShowPermissionModal( false ) }
@@ -209,7 +209,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 									BtnColor="danger"
 									Flat
 								>
-									<FontAwesomeIcon icon={ "cancel" } /> Abbrechen
+									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 								</LTELoadingButton>
 							</div>
 						</div>
@@ -246,7 +246,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 										<ButtonGroup>
 											<LTEToggleButton
 												Value={ Form.servers.includes( Instance ) }
-												OnToggle={ ( V ) =>
+												OnToggle={ ( V : boolean ) =>
 													setForm( ( Current ) => {
 														const Cur = { ...Current };
 														if ( V ) {
@@ -282,7 +282,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 									BtnColor="success"
 									Flat
 								>
-									<FontAwesomeIcon icon={ "check" } /> Speichern
+									<FontAwesomeIcon icon={ "check" }/> Speichern
 								</LTELoadingButton>
 								<LTELoadingButton
 									onClick={ () => setShowServerModal( false ) }
@@ -290,7 +290,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 									BtnColor="danger"
 									Flat
 								>
-									<FontAwesomeIcon icon={ "cancel" } /> Abbrechen
+									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 								</LTELoadingButton>
 							</div>
 						</div>

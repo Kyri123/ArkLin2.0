@@ -145,7 +145,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 						onClick={ SaveConfig }
 						BtnColor={ "success" }
 					>
-						<FontAwesomeIcon icon={ "save" } /> Speichern{ " " }
+						<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
 					</LTELoadingButton>
 					<LTELoadingButton Flat onClick={ ToggleTextEditor }>
 						{ " " }
@@ -165,7 +165,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 							size={ "xl" }
 						/>{ " " }
 						Wurde nicht gespeichert. Error wurde erkannt...
-						<hr /> <b>{ JsonError }</b>
+						<hr/> <b>{ JsonError }</b>
 					</Alert>
 				) }
 			</Card.Header>

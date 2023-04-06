@@ -27,7 +27,6 @@ import ServerContext                            from "./Context/ServerContext";
 import { API_ServerLib }                        from "./Lib/Api/API_Server.Lib";
 import { API_System }                           from "./Lib/Api/API_System";
 import { SocketIOLib }                          from "./Lib/Api/SocketIO.Lib";
-import StringMapLib                             from "./Lib/StringMap.Lib";
 import { IMO_Instance }                         from "./Shared/Api/MongoDB";
 import { DefaultSystemUsage }                   from "./Shared/Default/Server.Default";
 import {
@@ -36,6 +35,9 @@ import {
 }                                               from "./Shared/Type/Socket";
 import { ISystemUsage }                         from "./Shared/Type/Systeminformation";
 import { IAPIResponseBase }                     from "./Types/API";
+import CSideHeader                              from "./Components/Elements/MainPage/CSideHeader";
+import CTraffics                                from "./Components/Elements/MainPage/CTraffics";
+import CFoother                                 from "./Components/Elements/MainPage/CFoother";
 
 const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
 const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
@@ -51,12 +53,6 @@ const PPanelsettings = React.lazy(
 );
 const PAdminServer = React.lazy(
 	() => import("./Pages/MainApp/PAdminServer")
-);
-const CTraffics = React.lazy(
-	() => import("./Components/Elements/MainPage/CTraffics")
-);
-const CFoother = React.lazy(
-	() => import("./Components/Elements/MainPage/CFoother")
 );
 const PUsers = React.lazy(
 	() => import("./Pages/MainApp/PUsers")
@@ -146,9 +142,6 @@ export default function MainApp() {
 		return <></>;
 	}
 
-	const Pathname = window.location.pathname.split( "/" );
-	Pathname.shift();
-
 	if ( !HasData ) {
 		return (
 			<Modal show={ true } size={ "xl" } onHide={ () => {
@@ -156,7 +149,7 @@ export default function MainApp() {
 				<Modal.Body style={ { paddingTop: 150, paddingBottom: 150 } }>
 					<center>
 						<p style={ { fontSize: 100 } }>
-							<FontAwesomeIcon icon={ "spinner" } spin={ true } />
+							<FontAwesomeIcon icon={ "spinner" } spin={ true }/>
 						</p>
 						<p style={ { fontSize: 35 } }> Lese Server Daten...</p>
 					</center>
@@ -177,39 +170,25 @@ export default function MainApp() {
 					value={ { InstanceData: Instances, HasData: HasData } }
 				>
 					<Suspense fallback={ <></> }>
-						<main className="d-flex flex-nowrap">
-							<CLeftNavigation />
-							<div className={ "flex-fill" }>
-								<CTopNavigation
-									ShowLog={ setShowLog }
-									ServerState={ [ GameServerOnline, GameServerOffline ] }
-									SystemUsage={ SystemUsage }
-								/>
-
-								<div className="content-header">
-									<div className="container-fluid">
-										<div className="row mb-2">
-											<div className="col-sm-6">
-												<h3>
-													{ StringMapLib.Nav( Pathname[ Pathname.length - 1 ] ) }
-												</h3>
-											</div>
-											<div className="col-sm-6">
-												<ol className="breadcrumb float-sm-end">
-													{ Pathname.map( ( V ) => (
-														<li className="breadcrumb-item" key={ V }>
-															{ StringMapLib.Nav( V ) }
-														</li>
-													) ) }
-												</ol>
-											</div>
-										</div>
-									</div>
+						<main className="d-flex flex-nowrap w-100">
+							<CLeftNavigation/>
+							<div className="flex-fill d-flex flex-column w-100">
+								<div className="flex-grow-0">
+									<CTopNavigation
+										ShowLog={ setShowLog }
+										ServerState={ [ GameServerOnline, GameServerOffline ] }
+										SystemUsage={ SystemUsage }
+									/>
 								</div>
 
-								<section className="content">
-									<div className="container-fluid">
-										<div className="container-fluid">
+								<div className="flex-grow-0">
+									<CSideHeader/>
+								</div>
+
+								<div className="flex-auto h-100 overflow-y-scroll overflow-x-hidden">
+									<section
+										className="content p-3 h-100 pt-0 pb-0">
+										<div className="py-3">
 											<CTraffics
 												SystemUsage={ SystemUsage }
 												ServerState={ [
@@ -226,45 +205,48 @@ export default function MainApp() {
 
 											<Suspense fallback={ <></> }>
 												<Routes>
-													<Route path="/home" element={ <PHome /> } />
+													<Route path="/home" element={ <PHome/> }/>
 													<Route
-														path="/changelog/:version"
-														element={ <PChangelog /> }
+														path="/version/:version/*"
+														element={ <PChangelog/> }
 													/>
 													<Route
 														path="/adminserver"
-														element={ <PAdminServer /> }
+														element={ <PAdminServer/> }
 													/>
-													<Route path="/users" element={ <PUsers /> } />
-													<Route path="/me/*" element={ <PUsersettings /> } />
+													<Route path="/users" element={ <PUsers/> }/>
+													<Route path="/me/*" element={ <PUsersettings/> }/>
 													<Route
 														path="/paneladmin"
-														element={ <PPanelsettings /> }
+														element={ <PPanelsettings/> }
 													/>
 													<Route
 														path="/server/:InstanceName/*"
-														element={ <PServer /> }
+														element={ <PServer/> }
 													/>
-													<Route path="/home/404" element={ <P404 /> } />
-													<Route path="/home/403" element={ <P403 /> } />
+													<Route path="/home/404" element={ <P404/> }/>
+													<Route path="/home/403" element={ <P403/> }/>
 													<Route
 														path={ "*" }
-														element={ <Navigate to={ "/home/404" } /> }
+														element={ <Navigate to={ "/home/404" }/> }
 													/>
 												</Routes>
 											</Suspense>
 										</div>
-									</div>
-								</section>
+									</section>
+								</div>
 
-								<CFoother SystemUsage={ SystemUsage } />
-								<CPanelLog Show={ ShowLog } OnHide={ () => setShowLog( false ) } />
-								<CAcceptAction
-									Function={ AcceptAction }
-									SetFunction={ setAcceptAction }
-								/>
+								<div className="flex-grow-0">
+									<CFoother SystemUsage={ SystemUsage }/>
+								</div>
 							</div>
 						</main>
+
+						<CPanelLog Show={ ShowLog } OnHide={ () => setShowLog( false ) }/>
+						<CAcceptAction
+							Function={ AcceptAction }
+							SetFunction={ setAcceptAction }
+						/>
 					</Suspense>
 				</ServerContext.Provider>
 			</AlertContext.Provider>

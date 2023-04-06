@@ -41,14 +41,14 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 				IsLoading={ false }
 				Disabled={ Page <= 0 }
 			>
-				<FontAwesomeIcon icon={ "angle-double-left" } />
+				<FontAwesomeIcon icon={ "angle-double-left" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( Page - 1 ) }
 				IsLoading={ false }
 				Disabled={ PageGroups[ Page - 1 ] === undefined }
 			>
-				<FontAwesomeIcon icon={ "angle-left" } />
+				<FontAwesomeIcon icon={ "angle-left" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				IsLoading={ false }
@@ -102,14 +102,14 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 				IsLoading={ false }
 				Disabled={ PageGroups[ Page + 1 ] === undefined }
 			>
-				<FontAwesomeIcon icon={ "angle-right" } />
+				<FontAwesomeIcon icon={ "angle-right" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( PageGroups.length - 1 ) }
 				IsLoading={ false }
 				Disabled={ Page === PageGroups.length - 1 }
 			>
-				<FontAwesomeIcon icon={ "angle-double-right" } />
+				<FontAwesomeIcon icon={ "angle-double-right" }/>
 			</LTELoadingButton>
 		</ButtonGroup>
 	);

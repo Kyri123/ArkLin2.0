@@ -12,7 +12,7 @@ export function CStateCard( Props : IStateCardProps ) {
 		<div className={ Props.className }>
 			<div className="info-box">
         <span className={ `info-box-icon text-bg-${ Props.Color } shadow-sm` }>
-          <FontAwesomeIcon icon={ Props.Icon } />
+          <FontAwesomeIcon icon={ Props.Icon }/>
         </span>
 
 				<div className="info-box-content">

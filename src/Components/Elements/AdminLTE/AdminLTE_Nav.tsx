@@ -28,7 +28,7 @@ export function LTENavLink( Props : INavLinkProps ) {
 				} ` }
 				target={ Props.Target }
 			>
-				<FontAwesomeIcon icon={ Props.Icon } className="nav-icon" />
+				<FontAwesomeIcon icon={ Props.Icon } className="nav-icon"/>
 				<p>{ Props.children }</p>
 			</Link>
 		</li>

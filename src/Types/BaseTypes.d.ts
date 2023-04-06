@@ -1,8 +1,8 @@
 /** @format */
 
 import {
-  HTMLAttributes,
-  PropsWithChildren
+	HTMLAttributes,
+	PropsWithChildren
 }                       from "react";
 import { TPermissions } from "../Shared/Enum/User.Enum";
 import { TLTEColors }   from "../Shared/Type/AdminLTE";

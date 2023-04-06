@@ -1,7 +1,7 @@
 /** @format */
 
 import { IconProp }   from "@fortawesome/fontawesome-svg-core";
-import {
+import React, {
 	HTMLAttributeAnchorTarget,
 	HTMLInputTypeAttribute
 }                     from "react";
@@ -12,6 +12,7 @@ import {
 	IChildrenBaseProps,
 	IPropsWithPermission
 }                     from "./BaseTypes";
+import { Button }     from "react-bootstrap";
 
 export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
 
@@ -43,6 +44,13 @@ export type ILTELoadingButton = IPropsWithPermission &
 	IsLoading? : boolean;
 	LoadingIcon? : IconProp;
 };
+
+export type ILTEToggleButton = IPropsWithPermission &
+	Button.ButtonProps & {
+	Value? : boolean;
+	OnToggle? : ( Value : boolean ) => void;
+	Ref? : React.Ref<boolean>;
+}
 
 export interface IAdminLTEButton extends IAdminLTEBaseT<HTMLButtonElement> {
 	Disabled? : boolean;

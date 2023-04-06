@@ -102,7 +102,7 @@ export default function SPUser() {
 					Disabled={ DisableSend }
 					IsLoading={ IsSending }
 				>
-					<FontAwesomeIcon icon={ "save" } /> Speichern{ " " }
+					<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
 				</LTELoadingButton>
 			</Card.Footer>
 		</>

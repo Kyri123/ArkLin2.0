@@ -93,7 +93,7 @@ export default function CServerAction( Props : {
 				/>
 				{ ParameterMask.para.length > 0 && Selected !== null && (
 					<>
-						<hr />
+						<hr/>
 						<CLTEInput
 							Value={ Parameter }
 							OnValueSet={ setParameter }
@@ -112,10 +112,10 @@ export default function CServerAction( Props : {
 					Disabled={ Selected === null }
 					IsLoading={ IsSending }
 				>
-					<FontAwesomeIcon icon={ "terminal" } /> Ausführen
+					<FontAwesomeIcon icon={ "terminal" }/> Ausführen
 				</LTELoadingButton>
 				<LTELoadingButton BtnColor={ "danger" } onClick={ Props.OnClose }>
-					<FontAwesomeIcon icon={ "cancel" } /> Abbrechen
+					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 				</LTELoadingButton>
 			</Modal.Footer>
 		</Modal>

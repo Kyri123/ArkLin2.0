@@ -145,7 +145,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 															setSendCancel( false );
 														} }
 													>
-														<FontAwesomeIcon icon={ "cancel" } />
+														<FontAwesomeIcon icon={ "cancel" }/>
 													</LTELoadingButton>
 												</ButtonGroup>
 											</h6>

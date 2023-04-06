@@ -61,7 +61,7 @@ export default function CAcceptAction<F extends ( ...args : any[] ) => void>(
 							BtnColor="success"
 							IsLoading={ false }
 						>
-							<FontAwesomeIcon icon={ "check" } /> Action Ausführen
+							<FontAwesomeIcon icon={ "check" }/> Action Ausführen
 						</LTELoadingButton>
 						<LTELoadingButton
 							className={ "ml-4" }
@@ -69,7 +69,7 @@ export default function CAcceptAction<F extends ( ...args : any[] ) => void>(
 							BtnColor="danger"
 							IsLoading={ false }
 						>
-							<FontAwesomeIcon icon={ "cancel" } /> Action Abbrechen
+							<FontAwesomeIcon icon={ "cancel" }/> Action Abbrechen
 						</LTELoadingButton>
 					</center>
 				) }

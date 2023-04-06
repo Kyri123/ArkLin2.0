@@ -2,22 +2,22 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Suspense,
-  useContext
+	Suspense,
+	useContext
 }                          from "react";
 import {
-  Col,
-  Modal,
-  Row
+	Col,
+	Modal,
+	Row
 }                          from "react-bootstrap";
 import {
-  Route,
-  Routes
+	Route,
+	Routes
 }                          from "react-router";
 import {
-  Link,
-  Navigate,
-  useLocation
+	Link,
+	Navigate,
+	useLocation
 }                          from "react-router-dom";
 import { LTERibbon }       from "./Components/Elements/AdminLTE/AdminLTE";
 import AccountContext      from "./Context/AccountContext";
@@ -64,11 +64,11 @@ function PreLoginApp() {
 					</Modal.Header>
 					<Modal.Body className={ "p-3 pt-0" }>
 						<Routes>
-							<Route path="/signin" element={ <PSignIn /> } />
-							<Route path="/signup" element={ <PSignUp /> } />
-							<Route path={ "*" } element={ <Navigate replace to="/signin" /> } />
+							<Route path="/signin" element={ <PSignIn/> }/>
+							<Route path="/signup" element={ <PSignUp/> }/>
+							<Route path={ "*" } element={ <Navigate replace to="/signin"/> }/>
 						</Routes>
-						<hr className="my-4" />
+						<hr className="my-4"/>
 						<Row>
 							<Col span={ 6 }>
 								<Link

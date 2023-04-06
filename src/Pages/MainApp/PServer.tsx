@@ -50,12 +50,12 @@ export default function PServer() {
 		!Server.IsValid() ||
 		!Account.Account.HasPermissionForServer( InstanceName as string )
 	) {
-		return <Navigate to={ "/home/404" } />;
+		return <Navigate to={ "/home/404" }/>;
 	}
 
 	return (
 		<>
-			<CServerHead InstanceName={ Instance } />
+			<CServerHead InstanceName={ Instance }/>
 
 			<Navbar
 				collapseOnSelect
@@ -64,7 +64,7 @@ export default function PServer() {
 				variant="dark"
 				className={ "mb-3" }
 			>
-				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+				<Navbar.Toggle aria-controls="responsive-navbar-nav"/>
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="me-auto">
 						<Nav.Link
@@ -72,7 +72,7 @@ export default function PServer() {
 							to={ `/server/${ InstanceName }/logs` }
 							active={ Location.pathname.endsWith( "/logs" ) }
 						>
-							<FontAwesomeIcon className={ "icon" } icon={ "list" } /> Logs
+							<FontAwesomeIcon className={ "icon" } icon={ "list" }/> Logs
 						</Nav.Link>
 
 						<Nav.Link
@@ -80,7 +80,7 @@ export default function PServer() {
 							to={ `/server/${ InstanceName }/konfiguration` }
 							active={ Location.pathname.endsWith( "/konfiguration" ) }
 						>
-							<FontAwesomeIcon className={ "icon" } icon={ "cogs" } /> Konfiguration
+							<FontAwesomeIcon className={ "icon" } icon={ "cogs" }/> Konfiguration
 						</Nav.Link>
 
 						<Nav.Link
@@ -88,7 +88,7 @@ export default function PServer() {
 							to={ `/server/${ InstanceName }/mods` }
 							active={ Location.pathname.endsWith( "/mods" ) }
 						>
-							<FontAwesomeIcon className={ "icon" } icon={ "star" } /> Mods
+							<FontAwesomeIcon className={ "icon" } icon={ "star" }/> Mods
 						</Nav.Link>
 					</Nav>
 				</Navbar.Collapse>
@@ -100,19 +100,19 @@ export default function PServer() {
 						<Routes>
 							<Route
 								path={ `/logs` }
-								element={ <SPServerLogs InstanceName={ Instance } /> }
+								element={ <SPServerLogs InstanceName={ Instance }/> }
 							/>
 							<Route
 								path={ `/mods` }
-								element={ <SPServerMods InstanceName={ Instance } /> }
+								element={ <SPServerMods InstanceName={ Instance }/> }
 							/>
 							<Route
 								path={ `/konfiguration` }
-								element={ <SPServerConfig InstanceName={ Instance } /> }
+								element={ <SPServerConfig InstanceName={ Instance }/> }
 							/>
 							<Route
 								path={ "*" }
-								element={ <Navigate to={ `/server/${ InstanceName }/logs` } /> }
+								element={ <Navigate to={ `/server/${ InstanceName }/logs` }/> }
 							/>
 						</Routes>
 					</Suspense>

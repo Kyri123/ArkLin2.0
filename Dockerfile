@@ -18,6 +18,7 @@ COPY ./config ./config
 
 # create main files
 RUN yarn install
+RUN yarn tailwindcss
 RUN yarn BuildServer
 RUN yarn Client
 

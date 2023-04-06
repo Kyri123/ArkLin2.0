@@ -142,7 +142,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 							}
 						} }
 					>
-						<FontAwesomeIcon icon={ "plus" } />
+						<FontAwesomeIcon icon={ "plus" }/>
 					</LTELoadingButton>
 				</InputGroup>
 				<Table striped>

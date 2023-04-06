@@ -1,7 +1,7 @@
 import {
-  IInstanceData,
-  IInstanceState,
-  IPanelServerConfig
+	IInstanceData,
+	IInstanceState,
+	IPanelServerConfig
 }                       from "../Type/ArkSE";
 import { ISystemUsage } from "../Type/Systeminformation";
 

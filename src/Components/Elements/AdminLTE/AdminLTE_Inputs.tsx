@@ -383,10 +383,10 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 										onClick={ () => OnRemoveIndex( Idx ) }
 										BtnColor={ "danger" }
 									>
-										<FontAwesomeIcon icon={ "trash-alt" } />
+										<FontAwesomeIcon icon={ "trash-alt" }/>
 									</LTELoadingButton>
 									<LTELoadingButton onClick={ OnAddIndex }>
-										<FontAwesomeIcon icon={ "plus" } />
+										<FontAwesomeIcon icon={ "plus" }/>
 									</LTELoadingButton>
 								</ButtonGroup>
 							</CLTESelectMask>
@@ -404,10 +404,10 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 											onClick={ () => OnRemoveIndex( Idx ) }
 											BtnColor={ "danger" }
 										>
-											<FontAwesomeIcon icon={ "trash-alt" } />
+											<FontAwesomeIcon icon={ "trash-alt" }/>
 										</LTELoadingButton>
 										<LTELoadingButton onClick={ OnAddIndex }>
-											<FontAwesomeIcon icon={ "plus" } />
+											<FontAwesomeIcon icon={ "plus" }/>
 										</LTELoadingButton>
 									</ButtonGroup>
 								</div>
@@ -429,7 +429,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 							>
 								<ButtonGroup>
 									<LTELoadingButton onClick={ OnAddIndex }>
-										<FontAwesomeIcon icon={ "plus" } />
+										<FontAwesomeIcon icon={ "plus" }/>
 									</LTELoadingButton>
 								</ButtonGroup>
 							</CLTESelectMask>
@@ -444,7 +444,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 								<div className="input-group-append">
 									<ButtonGroup>
 										<LTELoadingButton onClick={ OnAddIndex }>
-											<FontAwesomeIcon icon={ "plus" } />
+											<FontAwesomeIcon icon={ "plus" }/>
 										</LTELoadingButton>
 									</ButtonGroup>
 								</div>

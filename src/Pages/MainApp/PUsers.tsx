@@ -130,7 +130,7 @@ export default function PUsers() {
 			<Card>
 				<ButtonGroup>
 					<LTELoadingButton IsLoading={ false } onClick={ () => setShowKeys( true ) }>
-						<FontAwesomeIcon icon={ "key" } /> Account Keys
+						<FontAwesomeIcon icon={ "key" }/> Account Keys
 					</LTELoadingButton>
 				</ButtonGroup>
 			</Card>
@@ -210,7 +210,7 @@ export default function PUsers() {
 											BtnColor="danger"
 											Flat
 										>
-											<FontAwesomeIcon icon={ "trash-alt" } />
+											<FontAwesomeIcon icon={ "trash-alt" }/>
 										</LTELoadingButton>
 										<LTELoadingButton
 											Disabled={ IsCopied( Key._id ) }
@@ -255,7 +255,7 @@ export default function PUsers() {
 									BtnColor="success"
 									Flat
 								>
-									<FontAwesomeIcon icon={ "plus" } /> Key Erstellen
+									<FontAwesomeIcon icon={ "plus" }/> Key Erstellen
 								</LTELoadingButton>
 							</div>
 						</div>

@@ -18,11 +18,11 @@ interface IProps {
 }
 
 const PCServerModsRow : React.FunctionComponent<IProps> = ( {
-	                                                            ModId,
-	                                                            ModData,
-	                                                            InstanceName,
-	                                                            ModIndex
-                                                            } ) => {
+	ModId,
+	ModData,
+	InstanceName,
+	ModIndex
+} ) => {
 	const { DoSetAlert } = useContext( AlertContext );
 	const { Data, TempModify } = useArkServer( InstanceName );
 	const [ IsSending, setIsSending ] = useState( false );
@@ -110,7 +110,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					onClick={ () => MoveMod( -1 ) }
 					className="btn btn-sm btn-flat text-bg-dark m-0"
 				>
-					<FontAwesomeIcon icon={ "arrow-up" } />
+					<FontAwesomeIcon icon={ "arrow-up" }/>
 				</LTELoadingButton>
 				<LTELoadingButton
 					IsLoading={ IsSendingMove }
@@ -120,7 +120,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					Disabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
 					className="btn btn-sm btn-flat text-bg-dark m-0"
 				>
-					<FontAwesomeIcon icon={ "arrow-down" } />
+					<FontAwesomeIcon icon={ "arrow-down" }/>
 				</LTELoadingButton>
 			</td>
 			<td width="62px" className="p-0">
@@ -134,7 +134,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 				<b>
 					[{ ModId }] { ModData?.title || "Warte auf SteamAPI daten..." }
 				</b>{ " " }
-				<br />
+				<br/>
 				<span className="text-sm">
           ModID:{ " " }
 					<Link
@@ -159,7 +159,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 						className="btn btn-danger m-0"
 						onClick={ RemoveMod }
 					>
-						<FontAwesomeIcon icon={ "trash-alt" } /> Entfernen
+						<FontAwesomeIcon icon={ "trash-alt" }/> Entfernen
 					</LTELoadingButton>
 				</div>
 			</td>

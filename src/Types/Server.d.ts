@@ -1,5 +1,5 @@
 /** @format */
 
 export interface IServerCardProps {
-  InstanceName : string;
+	InstanceName : string;
 }

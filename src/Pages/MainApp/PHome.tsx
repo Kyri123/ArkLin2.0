@@ -45,11 +45,11 @@ export default function PHome() {
 							{ new Date( Row.created_at ).toLocaleString() }
 						</td>
 						<td align="center">
-							<Link to={ "/changelog/" + Row.tag_name }>
-								<FontAwesomeIcon size="xl" icon={ "book" } />
+							<Link to={ "/version/" + Row.tag_name }>
+								<FontAwesomeIcon size="xl" icon={ "book" }/>
 							</Link>
 							<Link target="_blank" className="ps-2" to={ Row.html_url }>
-								<FontAwesomeIcon size="xl" icon={ [ "fab", "github-square" ] } />
+								<FontAwesomeIcon size="xl" icon={ [ "fab", "github-square" ] }/>
 							</Link>
 						</td>
 					</tr>

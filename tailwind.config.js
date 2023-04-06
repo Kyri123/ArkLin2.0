@@ -1,10 +1,23 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+
+const { join } = require( "path" );
+module.exports = {
+	mode: 'jit',
 	content: [
-		"./index.html",
-		"./src/**/*.{js,ts,jsx,tsx}",
+		join( __dirname, 'index.html' ),
+		join( __dirname, 'src/**/*.{js,jsx,ts,tsx}' )
 	],
+	darkMode: 'media',
 	theme: {
+		extend: {},
+		screens: {
+			'sm': '576px',
+			'md': '768px',
+			'lg': '992px',
+			'xl': '1200px',
+		}
+	},
+	variants: {
 		extend: {},
 	},
 	plugins: [],

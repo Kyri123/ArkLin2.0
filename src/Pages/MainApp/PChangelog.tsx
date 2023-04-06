@@ -40,14 +40,14 @@ export default function PChangelog() : JSX.Element {
 	}
 
 	if ( !Selected ) {
-		return <Navigate to="/home/404" />;
+		return <Navigate to="/home/404"/>;
 	}
 
 	return (
 		<div className="card card-default">
 			<div className="card-header d-flex p-0">
 				<h3 className="card-title p-3 flex-fill">
-					<FontAwesomeIcon icon={ "book" } size="lg" className="pe-2" />
+					<FontAwesomeIcon icon={ "book" } size="lg" className="pe-2"/>
 					{ Selected.name }
 				</h3>
 				<ul className="nav nav-pills ml-auto p-2">
@@ -65,7 +65,7 @@ export default function PChangelog() : JSX.Element {
 						>
 							{ Data.map( ( V, I ) => (
 								<Link
-									to={ "/changelog/" + V.tag_name }
+									to={ "/version/" + V.tag_name }
 									className={ `dropdown-item ${
 										V.tag_name === version ? "active" : ""
 									}` }

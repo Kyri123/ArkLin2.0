@@ -51,7 +51,7 @@ export default function SPServerLogs( Props : IServerCardProps ) {
 				className={ "bg-dark text-light p-0" }
 				style={ { overflowX: "hidden", overflowY: "scroll", maxHeight: 750 } }
 			>
-				<CFormatLog LogContent={ LogContent } />
+				<CFormatLog LogContent={ LogContent }/>
 			</Card.Body>
 		</Card>
 	);

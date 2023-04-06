@@ -25,7 +25,7 @@ export default function CServerCard( Props : IServerCardProps ) {
 
 	return (
 		<>
-			<Dropdown.Divider className={ "m-0" } />
+			<Dropdown.Divider className={ "m-0" }/>
 			<Dropdown.Item
 				as={ Link }
 				to={ `/server/${ Props.InstanceName }/logs` }
@@ -33,17 +33,17 @@ export default function CServerCard( Props : IServerCardProps ) {
 			>
 				<div className="d-flex">
 					<div className="flex-shrink-0">
-						<img src={ ServerMap.LOGO } alt={ Data.serverMap } width={ 65 } />
+						<img src={ ServerMap.LOGO } alt={ Data.serverMap } width={ 65 }/>
 					</div>
 					<div className="flex-grow-1 pe-1 ps-2">
 						<h6 className="dropdown-item-title">{ Data.ark_SessionName }</h6>
 						<p className="fs-7 text-muted mt-1">
-							<FontAwesomeIcon icon={ "users" } className={ "me-1" } />{ " " }
+							<FontAwesomeIcon icon={ "users" } className={ "me-1" }/>{ " " }
 							{ State.Player } / { Data.ark_MaxPlayers }
 							<span
 								className={ `float-end text-${ ServerStateToColor( State.State ) }` }
 							>
-                <FontAwesomeIcon icon={ "server" } />
+                <FontAwesomeIcon icon={ "server" }/>
               </span>
 						</p>
 					</div>

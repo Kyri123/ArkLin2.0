@@ -8,7 +8,7 @@ export default function P404() : JSX.Element {
 			<div className="error-content">
 				<h3 className="text-warning">
 					<b>
-						<FontAwesomeIcon icon="triangle-exclamation" /> OH NEIN! Seite wurde
+						<FontAwesomeIcon icon="triangle-exclamation"/> OH NEIN! Seite wurde
 						gefressen!
 					</b>
 				</h3>
