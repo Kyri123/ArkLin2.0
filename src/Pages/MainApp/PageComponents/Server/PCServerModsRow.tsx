@@ -105,7 +105,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 				<LTELoadingButton
 					IsLoading={ IsSendingMove }
 					id="FB_upload"
-					BtnColor={ "gray-dark" }
+					variant={ "gray-dark" }
 					Disabled={ ModIndex - 1 < 0 }
 					onClick={ () => MoveMod( -1 ) }
 					className="btn btn-sm btn-flat text-bg-dark m-0"
@@ -115,7 +115,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 				<LTELoadingButton
 					IsLoading={ IsSendingMove }
 					id="FB_upload"
-					BtnColor={ "gray-dark" }
+					variant={ "gray-dark" }
 					onClick={ () => MoveMod( 1 ) }
 					Disabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
 					className="btn btn-sm btn-flat text-bg-dark m-0"

@@ -381,7 +381,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 								<ButtonGroup>
 									<LTELoadingButton
 										onClick={ () => OnRemoveIndex( Idx ) }
-										BtnColor={ "danger" }
+										variant={ "danger" }
 									>
 										<FontAwesomeIcon icon={ "trash-alt" }/>
 									</LTELoadingButton>
@@ -402,7 +402,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 									<ButtonGroup>
 										<LTELoadingButton
 											onClick={ () => OnRemoveIndex( Idx ) }
-											BtnColor={ "danger" }
+											variant={ "danger" }
 										>
 											<FontAwesomeIcon icon={ "trash-alt" }/>
 										</LTELoadingButton>

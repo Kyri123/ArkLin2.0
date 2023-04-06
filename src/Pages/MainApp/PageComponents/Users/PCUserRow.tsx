@@ -94,7 +94,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								}
 								className={ "btn-sm" }
 								IsLoading={ IsSending }
-								BtnColor="danger"
+								variant="danger"
 								Flat
 							>
 								<FontAwesomeIcon icon={ "trash-alt" }/>
@@ -198,7 +198,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 									onClick={ SetPermissions }
 									className={ "btn-sm" }
 									IsLoading={ IsSending }
-									BtnColor="success"
+									variant="success"
 									Flat
 								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
@@ -206,7 +206,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								<LTELoadingButton
 									onClick={ () => setShowPermissionModal( false ) }
 									className={ "btn-sm" }
-									BtnColor="danger"
+									variant="danger"
 									Flat
 								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
@@ -279,7 +279,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 									onClick={ SetAllowedServer }
 									className={ "btn-sm" }
 									IsLoading={ IsSending }
-									BtnColor="success"
+									variant="success"
 									Flat
 								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
@@ -287,7 +287,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								<LTELoadingButton
 									onClick={ () => setShowServerModal( false ) }
 									className={ "btn-sm" }
-									BtnColor="danger"
+									variant="danger"
 									Flat
 								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen

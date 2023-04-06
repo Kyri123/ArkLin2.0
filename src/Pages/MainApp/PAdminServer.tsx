@@ -41,10 +41,10 @@ export default function PAdminServer() {
 					/>
 				) ) }
 
-				<span className="col-lg-6 col-xl-4">
+				<span className="col-lg-6 col-xl-4 mt-3">
           <div
 	          onClick={ () => setShowNewServer( true ) }
-	          className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100"
+	          className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100 rounded-0"
 	          style={ { fontSize: 75, height: 450, cursor: "pointer" } }
           >
             <FontAwesomeIcon icon={ "plus" }/>
@@ -90,14 +90,14 @@ export default function PAdminServer() {
 				</Modal.Body>
 				<Modal.Footer>
 					<LTELoadingButton
-						BtnColor={ "success" }
+						variant={ "success" }
 						IsLoading={ IsSending }
 						onClick={ CreateServer }
 					>
 						<FontAwesomeIcon icon={ "save" }/> Erstellen
 					</LTELoadingButton>
 					<LTELoadingButton
-						BtnColor={ "danger" }
+						variant={ "danger" }
 						onClick={ () => setShowNewServer( false ) }
 					>
 						<FontAwesomeIcon icon={ "cancel" }/> Abbrechen

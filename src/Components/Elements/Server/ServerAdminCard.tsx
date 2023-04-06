@@ -85,12 +85,12 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 
 	return (
 		<>
-			<div className="col-lg-6 col-xl-4">
+			<div className="col-lg-6 col-xl-4 mt-3">
 				<div className="card card-widget widget-user  item-box">
 					<div className="rounded-0 card bg-dark card-widget widget-user mb-0">
 						<div className="row p-2">
 							<div className="col-12 text-center">
-								<h5 className="text-center left d-inline pt-3 ps-0 m-0">
+								<h5 className="text-center left d-inline pt-3 ps-0 m-0 text-light">
 									{ Server.Data.ark_SessionName }
 								</h5>
 							</div>
@@ -155,7 +155,6 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 												Server.State.State
 											) }` }
 										>
-											{ " " }
 											{ ServerStateToReadableString( Server.State.State ) }
 										</h6>
 									</div>
@@ -164,7 +163,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 							<div className="col-sm-6 border-sm-right ps-sm-0 rounded-0">
 								<div className="info-box mb-0 p-3 rounded-0 h-100">
 									<div className="info-box-content pt-2 ps-3 text-center">
-										<span className="description-text">AKTION</span>
+										<span className="description-text">AKTION</span> <br/>
 										<ButtonGroup>
 											<LTELoadingButton
 												Disabled={
@@ -184,7 +183,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 													)
 												}
 												Hide={ Server.State.ArkmanagerPID <= 1 }
-												BtnColor={ "danger" }
+												variant={ "danger" }
 												IsLoading={ SendCancel }
 												onClick={ async() => {
 													setSendCancel( true );
@@ -291,14 +290,14 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 					</Modal.Body>
 					<Modal.Footer>
 						<LTELoadingButton
-							BtnColor={ "success" }
+							variant={ "success" }
 							IsLoading={ IsSending.Edit }
 							onClick={ SavePanelConfig }
 						>
 							<FontAwesomeIcon icon={ "save" }/> Speichern
 						</LTELoadingButton>
 						<LTELoadingButton
-							BtnColor={ "danger" }
+							variant={ "danger" }
 							onClick={ () => setShowEditServer( false ) }
 						>
 							<FontAwesomeIcon icon={ "cancel" }/> Abbrechen

@@ -114,7 +114,7 @@ export default function CServerAction( Props : {
 				>
 					<FontAwesomeIcon icon={ "terminal" }/> Ausführen
 				</LTELoadingButton>
-				<LTELoadingButton BtnColor={ "danger" } onClick={ Props.OnClose }>
+				<LTELoadingButton variant={ "danger" } onClick={ Props.OnClose }>
 					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 				</LTELoadingButton>
 			</Modal.Footer>

@@ -207,7 +207,7 @@ export default function PUsers() {
 												IsSending.Delete.IsKey &&
 												IsSending.Delete.Id === Key._id
 											}
-											BtnColor="danger"
+											variant="danger"
 											Flat
 										>
 											<FontAwesomeIcon icon={ "trash-alt" }/>
@@ -217,7 +217,7 @@ export default function PUsers() {
 											onClick={ () => DoCopy( Key.key, Key._id ) }
 											className={ "btn-sm" }
 											IsLoading={ false }
-											BtnColor="success"
+											variant="success"
 											Flat
 										>
 											<FontAwesomeIcon
@@ -252,7 +252,7 @@ export default function PUsers() {
 									onClick={ CreateAccountKey }
 									className={ "btn-sm" }
 									IsLoading={ IsSending.IsAddingKey }
-									BtnColor="success"
+									variant="success"
 									Flat
 								>
 									<FontAwesomeIcon icon={ "plus" }/> Key Erstellen

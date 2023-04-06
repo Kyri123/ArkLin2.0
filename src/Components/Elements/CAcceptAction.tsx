@@ -58,7 +58,7 @@ export default function CAcceptAction<F extends ( ...args : any[] ) => void>(
 						<p>{ Props.Function.ActionTitle }</p>
 						<LTELoadingButton
 							onClick={ OnAccept }
-							BtnColor="success"
+							variant="success"
 							IsLoading={ false }
 						>
 							<FontAwesomeIcon icon={ "check" }/> Action Ausführen
@@ -66,7 +66,7 @@ export default function CAcceptAction<F extends ( ...args : any[] ) => void>(
 						<LTELoadingButton
 							className={ "ml-4" }
 							onClick={ OnCancel }
-							BtnColor="danger"
+							variant="danger"
 							IsLoading={ false }
 						>
 							<FontAwesomeIcon icon={ "cancel" }/> Action Abbrechen

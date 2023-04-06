@@ -131,7 +131,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 					<LTELoadingButton
 						Flat
 						IsLoading={ IsSending }
-						BtnColor={ "success" }
+						variant={ "success" }
 						Disabled={
 							InputRef.current !== null && InputRef.current.value === ""
 						}

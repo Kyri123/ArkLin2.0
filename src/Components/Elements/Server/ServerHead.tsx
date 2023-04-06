@@ -85,7 +85,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 							<div className="row">
 								<div className="col-12 col-md-3 pe-md-0">
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
-										<div className="info-box-content pt-2 ps-3 text-center">
+										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text"> STATUS </span>
 											<h6
 												className={ `description-header text-${ ServerStateToColor(
@@ -100,7 +100,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 								</div>
 								<div className="col-12 col-md-3 p-md-0">
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
-										<div className="info-box-content pt-2 ps-3 text-center">
+										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text">SPIELER</span>
 											<h6 className="description-header">
 												{ " " }
@@ -113,7 +113,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
 										<div className="info-box-content pt-2 ps-3 text-center">
 											<span className="description-text">AKTION</span>
-											<h6 className="description-header text-success">
+											<h6 className="description-header text-success h-100 align-middle">
 												<ButtonGroup>
 													<LTELoadingButton
 														Disabled={
@@ -133,7 +133,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 															)
 														}
 														Hide={ Server.State.ArkmanagerPID <= 1 }
-														BtnColor={ "danger" }
+														variant={ "danger" }
 														IsLoading={ SendCancel }
 														onClick={ async() => {
 															setSendCancel( true );
@@ -154,7 +154,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 								</div>
 								<div className="col-12 col-md-3 ps-md-0">
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
-										<div className="info-box-content pt-2 ps-3 text-center">
+										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text">VERSION</span>
 											<h6 className="description-header">
 												<b>{ Server.State.ServerVersion }</b>

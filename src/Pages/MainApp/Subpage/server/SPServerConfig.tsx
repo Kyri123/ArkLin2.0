@@ -143,7 +143,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 						IsLoading={ IsSending }
 						Flat
 						onClick={ SaveConfig }
-						BtnColor={ "success" }
+						variant={ "success" }
 					>
 						<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
 					</LTELoadingButton>
