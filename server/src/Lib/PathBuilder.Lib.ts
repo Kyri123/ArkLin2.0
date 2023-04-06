@@ -12,14 +12,15 @@ export function CreateUrl( Url : TServerUrls ) : string {
 }
 
 export function MakeRandomID( length : number, useSplitter = false ) {
-	let result = '';
-	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let result = "";
+	const characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	const charactersLength = characters.length;
 	let counter = 0;
 	while ( counter < length ) {
 		result += characters.charAt( Math.floor( Math.random() * charactersLength ) );
 		if ( useSplitter && counter % 5 === 4 ) {
-			result += "-"
+			result += "-";
 		}
 		counter += 1;
 	}

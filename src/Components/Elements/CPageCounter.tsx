@@ -1,12 +1,12 @@
-import { IPageCounterProps } from "../../Types/PageAddons";
+import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
 import {
 	useEffect,
 	useMemo,
 	useState
 }                            from "react";
 import { ButtonGroup }       from "react-bootstrap";
+import { IPageCounterProps } from "../../Types/PageAddons";
 import { LTELoadingButton }  from "./AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
 
 export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 	const [ Page, setPage ] = useState( 0 );
@@ -28,40 +28,87 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 	useEffect( () => {
 		Props.OnSetPage( PageGroups[ Page ] || [] );
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ Page, PageGroups ] )
+	}, [ Page, PageGroups ] );
 
 	if ( PageGroups.length <= 1 ) {
-		return <></>
+		return <></>;
 	}
 
 	return (
 		<ButtonGroup>
-			<LTELoadingButton onClick={ () => setPage( 0 ) } IsLoading={ false } Disabled={ Page <= 0 }>
+			<LTELoadingButton
+				onClick={ () => setPage( 0 ) }
+				IsLoading={ false }
+				Disabled={ Page <= 0 }
+			>
 				<FontAwesomeIcon icon={ "angle-double-left" }/>
 			</LTELoadingButton>
-			<LTELoadingButton onClick={ () => setPage( Page - 1 ) } IsLoading={ false }
-							  Disabled={ PageGroups[ Page - 1 ] === undefined }>
+			<LTELoadingButton
+				onClick={ () => setPage( Page - 1 ) }
+				IsLoading={ false }
+				Disabled={ PageGroups[ Page - 1 ] === undefined }
+			>
 				<FontAwesomeIcon icon={ "angle-left" }/>
 			</LTELoadingButton>
-			<LTELoadingButton IsLoading={ false } Hide={ PageGroups[ Page - 3 ] === undefined }
-							  Disabled={ true }>...</LTELoadingButton>
-			<LTELoadingButton className="d-sm-none d-md-block" onClick={ () => setPage( Page - 2 ) } IsLoading={ false }
-							  Hide={ PageGroups[ Page - 2 ] === undefined }>{ Page - 2 }</LTELoadingButton>
-			<LTELoadingButton onClick={ () => setPage( Page - 1 ) } IsLoading={ false }
-							  Hide={ PageGroups[ Page - 1 ] === undefined }>{ Page - 1 }</LTELoadingButton>
-			<LTELoadingButton IsLoading={ false } Disabled={ true }>{ Page }</LTELoadingButton>
-			<LTELoadingButton onClick={ () => setPage( Page + 1 ) } IsLoading={ false }
-							  Hide={ PageGroups[ Page + 1 ] === undefined }>{ Page + 1 }</LTELoadingButton>
-			<LTELoadingButton className="d-sm-none d-md-block" onClick={ () => setPage( Page + 2 ) } IsLoading={ false }
-							  Hide={ PageGroups[ Page + 2 ] === undefined }>{ Page + 2 }</LTELoadingButton>
-			<LTELoadingButton IsLoading={ false } Hide={ PageGroups[ Page + 3 ] === undefined }
-							  Disabled={ true }>...</LTELoadingButton>
-			<LTELoadingButton onClick={ () => setPage( Page + 1 ) } IsLoading={ false }
-							  Disabled={ PageGroups[ Page + 1 ] === undefined }>
+			<LTELoadingButton
+				IsLoading={ false }
+				Hide={ PageGroups[ Page - 3 ] === undefined }
+				Disabled={ true }
+			>
+				...
+			</LTELoadingButton>
+			<LTELoadingButton
+				className="d-sm-none d-md-block"
+				onClick={ () => setPage( Page - 2 ) }
+				IsLoading={ false }
+				Hide={ PageGroups[ Page - 2 ] === undefined }
+			>
+				{ Page - 2 }
+			</LTELoadingButton>
+			<LTELoadingButton
+				onClick={ () => setPage( Page - 1 ) }
+				IsLoading={ false }
+				Hide={ PageGroups[ Page - 1 ] === undefined }
+			>
+				{ Page - 1 }
+			</LTELoadingButton>
+			<LTELoadingButton IsLoading={ false } Disabled={ true }>
+				{ Page }
+			</LTELoadingButton>
+			<LTELoadingButton
+				onClick={ () => setPage( Page + 1 ) }
+				IsLoading={ false }
+				Hide={ PageGroups[ Page + 1 ] === undefined }
+			>
+				{ Page + 1 }
+			</LTELoadingButton>
+			<LTELoadingButton
+				className="d-sm-none d-md-block"
+				onClick={ () => setPage( Page + 2 ) }
+				IsLoading={ false }
+				Hide={ PageGroups[ Page + 2 ] === undefined }
+			>
+				{ Page + 2 }
+			</LTELoadingButton>
+			<LTELoadingButton
+				IsLoading={ false }
+				Hide={ PageGroups[ Page + 3 ] === undefined }
+				Disabled={ true }
+			>
+				...
+			</LTELoadingButton>
+			<LTELoadingButton
+				onClick={ () => setPage( Page + 1 ) }
+				IsLoading={ false }
+				Disabled={ PageGroups[ Page + 1 ] === undefined }
+			>
 				<FontAwesomeIcon icon={ "angle-right" }/>
 			</LTELoadingButton>
-			<LTELoadingButton onClick={ () => setPage( PageGroups.length - 1 ) } IsLoading={ false }
-							  Disabled={ Page === PageGroups.length - 1 }>
+			<LTELoadingButton
+				onClick={ () => setPage( PageGroups.length - 1 ) }
+				IsLoading={ false }
+				Disabled={ Page === PageGroups.length - 1 }
+			>
 				<FontAwesomeIcon icon={ "angle-double-right" }/>
 			</LTELoadingButton>
 		</ButtonGroup>

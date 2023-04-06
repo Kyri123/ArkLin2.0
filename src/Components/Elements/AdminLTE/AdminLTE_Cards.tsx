@@ -1,29 +1,52 @@
-import { IStateCardProps } from "../../../Types/AdminLTE";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+/** @format */
 
-export function CStateCard( Props : IStateCardProps ) {
-	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
+import { IStateCardProps }   from "../../../Types/AdminLTE";
+import { Card }              from "react-bootstrap";
+import { FunctionComponent } from "react";
+import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
+
+export const CStateCard : FunctionComponent<IStateCardProps> = ( {
+	Hide,
+	Color,
+	Permission,
+	BarPercent,
+	BarColor,
+	Icon,
+	Title,
+	children,
+	...Props
+} ) => {
+	if ( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}
 
 	return (
-		<div className={ Props.className }>
-			<div className="info-box">
-			<span className={ `info-box-icon text-bg-${ Props.Color } shadow-sm` }>
-				<FontAwesomeIcon icon={ Props.Icon }/>
-			</span>
+		<>
+			<Card { ...Props }>
+				<div className={ "d-flex" }>
+					<span className={ `text-bg-${ Color } flex-grow-0 p-4 rounded-tl rounded-bl` }>
+			          <FontAwesomeIcon icon={ Icon } size={ "2x" }/>
+			        </span>
 
-				<div className="info-box-content">
-					<span className="info-box-text">{ Props.Title }</span>
-					<div className="progress mb-0 mt-1 me-2 rounded" style={ { height: 5 } }>
-						<div className={ `progress-bar bg-${ Props.BarColor }` }
-							 style={ { width: `${ Props.BarPercent }%` } }></div>
+					<div className="flex-fill p-3 py-2">
+						<span className="info-box-text font-bold">{ Title }</span>
+						<div
+							className="progress rounded my-1 mt-2"
+							style={ { height: 5 } }
+						>
+							<div
+								className={ `progress-bar bg-${ BarColor }` }
+								style={ { width: `${ BarPercent }%` } }
+							></div>
+						</div>
+						<span className="text-sm mt-1">{ children }</span>
 					</div>
-					<span className="info-box-number text-sm">
-					{ Props.children }
-				</span>
 				</div>
-			</div>
-		</div>
+			</Card>
+		</>
 	);
-}
+
+	return (
+		<></>
+	);
+};

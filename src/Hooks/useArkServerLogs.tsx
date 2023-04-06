@@ -21,9 +21,11 @@ export function useArkServerLogs( InstanceName : string ) : IArkServerLogsHook {
 	useEffect( () => {
 		const GetLogFiles = async() => {
 			setLogFiles( await API_ServerLib.GetLogFiles( InstanceName ) );
-			setLogContent( await API_ServerLib.GetLogFromFile( InstanceName, ReqLogFile ) );
+			setLogContent(
+				await API_ServerLib.GetLogFromFile( InstanceName, ReqLogFile )
+			);
 			setInit( true );
-		}
+		};
 
 		GetLogFiles();
 		const Timer = setInterval( GetLogFiles, 1000 );
@@ -33,11 +35,11 @@ export function useArkServerLogs( InstanceName : string ) : IArkServerLogsHook {
 			setLogFiles( {} );
 			setInit( false );
 			clearInterval( Timer );
-		}
-	}, [ InstanceName, ReqLogFile ] )
+		};
+	}, [ InstanceName, ReqLogFile ] );
 
 	useEffect( () => {
-		API_ServerLib.GetLogFiles( InstanceName ).then( Data => {
+		API_ServerLib.GetLogFiles( InstanceName ).then( ( Data ) => {
 			if ( Data[ "panel.txt" ] ) {
 				setReqLogFile( Data[ "panel.txt" ] );
 				return;
@@ -46,8 +48,8 @@ export function useArkServerLogs( InstanceName : string ) : IArkServerLogsHook {
 			if ( First ) {
 				setReqLogFile( First );
 			}
-		} )
-	}, [ InstanceName ] )
+		} );
+	}, [ InstanceName ] );
 
 	return {
 		RequestLogContent: setReqLogFile,
@@ -55,5 +57,5 @@ export function useArkServerLogs( InstanceName : string ) : IArkServerLogsHook {
 		LogFiles: LogFiles,
 		Init: Init,
 		CurrentFile: ReqLogFile
-	}
+	};
 }

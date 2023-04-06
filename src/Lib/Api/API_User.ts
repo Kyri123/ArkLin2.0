@@ -6,17 +6,28 @@ import { IMO_Accounts }     from "../../Shared/Api/MongoDB";
 import { EUserUrl }         from "../../Shared/Enum/Routing";
 
 export class API_User {
-	static async UserSettings_EditAccount( UserData : IMO_Accounts, PasswordInput : string[] ) : Promise<IAPIResponseBase> {
-		return await API_QueryLib.PostToAPI<Record<string, IInstanceData>>( EUserUrl.usereditaccount, {
-			UserData: UserData,
-			Passwd: PasswordInput
-		} );
+	static async UserSettings_EditAccount(
+		UserData : IMO_Accounts,
+		PasswordInput : string[]
+	) : Promise<IAPIResponseBase> {
+		return await API_QueryLib.PostToAPI<Record<string, IInstanceData>>(
+			EUserUrl.usereditaccount,
+			{
+				UserData: UserData,
+				Passwd: PasswordInput
+			}
+		);
 	}
 
-	static async GetAllowedServer( UserID : string ) : Promise<Record<string, IInstanceData>> {
-		const Data = await API_QueryLib.PostToAPI<Record<string, IInstanceData>>( EUserUrl.getallowedservers, {
-			Id: UserID
-		} );
+	static async GetAllowedServer(
+		UserID : string
+	) : Promise<Record<string, IInstanceData>> {
+		const Data = await API_QueryLib.PostToAPI<Record<string, IInstanceData>>(
+			EUserUrl.getallowedservers,
+			{
+				Id: UserID
+			}
+		);
 		if ( Data.Data ) {
 			return Data.Data;
 		}
@@ -31,7 +42,9 @@ export class API_User {
 	}
 
 	static async GetAllUsers( Default : IMO_Accounts ) : Promise<IMO_Accounts[]> {
-		const Data = await API_QueryLib.GetFromAPI<IMO_Accounts[]>( EUserUrl.alluser );
+		const Data = await API_QueryLib.GetFromAPI<IMO_Accounts[]>(
+			EUserUrl.alluser
+		);
 		if ( Data.Data && Array.isArray( Data.Data ) ) {
 			return Data.Data;
 		}
@@ -39,7 +52,9 @@ export class API_User {
 	}
 
 	static async GetAllKeys() : Promise<IMO_AccountKeys[]> {
-		const Data = await API_QueryLib.GetFromAPI<IMO_AccountKeys[]>( EUserUrl.allkeys );
+		const Data = await API_QueryLib.GetFromAPI<IMO_AccountKeys[]>(
+			EUserUrl.allkeys
+		);
 		if ( Data.Data && Array.isArray( Data.Data ) ) {
 			return Data.Data;
 		}

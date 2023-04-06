@@ -11,12 +11,20 @@ import { ESysUrl }          from "../../../src/Shared/Enum/Routing";
 
 export default function( Api : core.Express ) {
 	const Url = CreateUrl( ESysUrl.usage );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "GET" )
-	Api.get( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"GET"
+	);
+	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<ISystemUsage> = {
 			Auth: false,
-			Success: true,
-		}
+			Success: true
+		};
 
 		const Data = await DB_Usage.findOne();
 		if ( Data ) {
@@ -24,5 +32,5 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
+	} );
 }

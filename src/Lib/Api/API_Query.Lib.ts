@@ -5,23 +5,29 @@ import {
 import { TServerUrls } from "../../Shared/Enum/Routing";
 
 export class API_QueryLib {
-	static async PostToAPI<T, D extends IAPIRequestBase = any>( Path : TServerUrls, Data : D = ( {} as D ) ) : Promise<IAPIResponseBase<T>> {
+	static async PostToAPI<T, D extends IAPIRequestBase = any>(
+		Path : TServerUrls,
+		Data : D = {} as D
+	) : Promise<IAPIResponseBase<T>> {
 		const Token = window.localStorage.getItem( "AuthToken" );
 		const requestOptions : RequestInit = {
-			method: 'POST',
+			method: "POST",
 			headers: {
-				'Authorization': "Bearer " + Token || "",
+				Authorization: "Bearer " + Token || "",
 				"User-Agent": "Frontend",
-				"Content-Type": "application/json",
+				"Content-Type": "application/json"
 			},
 			body: JSON.stringify( Data )
 		};
 
 		try {
-			const Resp : Response | void = await fetch( `/api/v1/${ Path }`, requestOptions ).catch( e => console.log( e ) );
+			const Resp : Response | void = await fetch(
+				`/api/v1/${ Path }`,
+				requestOptions
+			).catch( ( e ) => console.log( e ) );
 			if ( Resp ) {
 				if ( Resp.ok && Resp.status === 200 ) {
-					const Response = await Resp.json() as IAPIResponseBase<T>;
+					const Response = ( await Resp.json() ) as IAPIResponseBase<T>;
 					Response.Reached = true;
 					return Response;
 				}
@@ -36,37 +42,44 @@ export class API_QueryLib {
 			Success: false,
 			Message: {
 				Title: "API konnte nicht erreicht werden!",
-				Message: "Leider konnte keine verbindung zur API aufgebaut werden... Ist die API offline?",
+				Message:
+					"Leider konnte keine verbindung zur API aufgebaut werden... Ist die API offline?",
 				AlertType: "danger"
 			}
 		} as IAPIResponseBase<T>;
 	}
 
-	static async GetFromAPI<T, D extends IAPIRequestBase = any>( Path : TServerUrls, Data : D = ( {} as D ) ) : Promise<IAPIResponseBase<T>> {
+	static async GetFromAPI<T, D extends IAPIRequestBase = any>(
+		Path : TServerUrls,
+		Data : D = {} as D
+	) : Promise<IAPIResponseBase<T>> {
 		const RequestData : string[] = [];
 
 		if ( Data ) {
-			if ( typeof Data === 'object' && !Array.isArray( Data ) ) {
+			if ( typeof Data === "object" && !Array.isArray( Data ) ) {
 				for ( const [ Key, Value ] of Object.entries( Data ) ) {
-					RequestData.push( `${ Key }=${ Value }` )
+					RequestData.push( `${ Key }=${ Value }` );
 				}
 			}
 		}
 
 		const Token = window.localStorage.getItem( "AuthToken" );
 		const requestOptions : RequestInit = {
-			method: 'GET',
+			method: "GET",
 			headers: {
-				'Authorization': "Bearer " + Token || "",
+				Authorization: "Bearer " + Token || "",
 				"User-Agent": "Frontend",
-				"Content-Type": "application/json",
+				"Content-Type": "application/json"
 			}
 		};
 
-		const Resp : Response | void = await fetch( `/api/v1/${ Path }?${ RequestData.join( "&" ) }`, requestOptions ).catch( e => console.log( e ) );
+		const Resp : Response | void = await fetch(
+			`/api/v1/${ Path }?${ RequestData.join( "&" ) }`,
+			requestOptions
+		).catch( ( e ) => console.log( e ) );
 		if ( Resp ) {
 			if ( Resp.ok && Resp.status === 200 ) {
-				const Response = await Resp.json() as IAPIResponseBase<T>;
+				const Response = ( await Resp.json() ) as IAPIResponseBase<T>;
 				Response.Reached = true;
 				return Response;
 			}
@@ -77,7 +90,8 @@ export class API_QueryLib {
 			Success: false,
 			Message: {
 				Title: "API konnte nicht erreicht werden!",
-				Message: "Leider konnte keine verbindung zur API aufgebaut werden... Ist die API offline?",
+				Message:
+					"Leider konnte keine verbindung zur API aufgebaut werden... Ist die API offline?",
 				AlertType: "danger"
 			}
 		};

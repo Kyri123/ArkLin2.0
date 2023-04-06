@@ -1,23 +1,23 @@
 export enum EAuthUrl {
 	check = "auth/check",
 	signup = "auth/signup",
-	signin = "auth/signin"
+	signin = "auth/signin",
 }
 
 export enum EChangelogUrl {
 	get = "changelog/get",
-	branches = "changelog/branches"
+	branches = "changelog/branches",
 }
 
 export enum EPanelUrl {
 	log = "panel/log",
 	restart = "panel/restart",
 	setconfig = "panel/setconfig",
-	getconfig = "panel/getconfig"
+	getconfig = "panel/getconfig",
 }
 
 export enum ESysUrl {
-	usage = "system/usage"
+	usage = "system/usage",
 }
 
 export enum EServerUrl {
@@ -31,7 +31,7 @@ export enum EServerUrl {
 	setserverconfig = "server/setserverconfig",
 	getglobalstate = "server/getglobalstate",
 	getmapicon = "server/getmapicon",
-	getallserver = "server/getallserver"
+	getallserver = "server/getallserver",
 }
 
 export enum EUserUrl {
@@ -42,11 +42,19 @@ export enum EUserUrl {
 	addkey = "user/addkey",
 	removekey = "user/removekey",
 	edituser = "user/edituser",
-	usereditaccount = "user/usereditaccount"
+	usereditaccount = "user/usereditaccount",
 }
 
 export enum ESteamApiUrl {
 	getmods = "steamapi/getmods",
 }
 
-export type TServerUrls = EAuthUrl | EChangelogUrl | EPanelUrl | ESysUrl | EServerUrl | EUserUrl | ESteamApiUrl | "";
+export type TServerUrls =
+	| EAuthUrl
+	| EChangelogUrl
+	| EPanelUrl
+	| ESysUrl
+	| EServerUrl
+	| EUserUrl
+	| ESteamApiUrl
+	| "";

@@ -42,21 +42,27 @@ export function GetRawInstanceData() : IInstanceData {
 		chatCommandRestartCancel: "/cancelupdate",
 		discordWebhookURL: "",
 		msgWarnCancelled: "Restart cancelled by player request",
-		msgWarnRestartMinutes: "This ARK server will shutdown for a restart in %d minutes",
-		msgWarnRestartSeconds: "This ARK server will shutdown for a restart in %d seconds",
+		msgWarnRestartMinutes:
+			"This ARK server will shutdown for a restart in %d minutes",
+		msgWarnRestartSeconds:
+			"This ARK server will shutdown for a restart in %d seconds",
 		msgWarnShutdownMinutes: "This ARK server will shutdown in %d minutes",
 		msgWarnShutdownSeconds: "This ARK server will shutdown in %d seconds",
-		msgWarnUpdateMinutes: "This ARK server will shutdown for an update in %d minutes",
-		msgWarnUpdateSeconds: "This ARK server will shutdown for an update in %d seconds",
+		msgWarnUpdateMinutes:
+			"This ARK server will shutdown for an update in %d minutes",
+		msgWarnUpdateSeconds:
+			"This ARK server will shutdown for an update in %d seconds",
 		noNotifyWarning: true,
 		// eslint-disable-next-line no-template-curly-in-string
-		notifyCommand: 'echo "$msg" | mailx -s "Message from instance ${instance} on server ${HOSTNAME}" "email@domain.com"',
+		notifyCommand:
+			"echo \"$msg\" | mailx -s \"Message from instance ${instance} on server ${HOSTNAME}\" \"email@domain.com\"",
 		notifyMsgServerTerminated: "Server exited - restarting",
 		notifyMsgServerUp: "Server is up",
 		notifyMsgShuttingDown: "Shutting down",
 		notifyMsgStarting: "Starting",
 		notifyMsgStoppedListening: "Server has stopped listening - restarting",
-		notifyTemplate: "Message from instance {instance} on server {server}: {msg}",
+		notifyTemplate:
+			"Message from instance {instance} on server {server}: {msg}",
 		Flags: {},
 		Options: {
 			culture: "en"

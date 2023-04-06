@@ -1,71 +1,79 @@
-import { Link }            from "react-router-dom";
-import { LTERibbon }       from "../AdminLTE/AdminLTE";
-import { LTENavLink }      from "../AdminLTE/AdminLTE_Nav";
-import { EPerm }           from "../../../Shared/Enum/User.Enum";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
+import { Nav }        from "react-bootstrap";
+import {
+	BsHouseDoor,
+	BsPeople,
+	BsServer
+}                     from "react-icons/bs";
+import {
+	Link,
+	useLocation
+}                     from "react-router-dom";
+import AccountContext from "../../../Context/AccountContext";
+import { EPerm }      from "../../../Shared/Enum/User.Enum";
 
 export default function CLeftNavigation() {
+	const { pathname } = useLocation();
+	const { Account } = useContext( AccountContext );
+
 	return (
-		<aside className="main-sidebar sidebar-bg-dark sidebar-color-primary shadow">
-			<Link to="/home" className="brand-link">
-				<img src="/img/logo/logo.png" alt="AdminLTE Logo" className="brand-image" style={ { opacity: 0.8 } }/>
-				<span className="brand-text font-weight-light ps-0">ArkLIN2</span>
-				<LTERibbon>
-					Alpha
-				</LTERibbon>
+		<div
+			id={ "Sidebar" }
+			className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark d-none d-md-block"
+			style={ { width: 280 } }
+		>
+			<Link
+				to="/home"
+				className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+			>
+				<img
+					alt="logo"
+					src="/img/logo/logo.png"
+					className="pe-none me-2"
+					width={ 40 }
+				/>
+				<span className="fs-4">Sidebar</span>
 			</Link>
+			<hr/>
+			<Nav as="ul" variant="pills" className={ "mb-auto flex-column nav-pills" }>
+				<Nav.Item as="li" className="">
+					<Link
+						to="/home"
+						className={ `nav-link ${
+							pathname.endsWith( "/home" ) ? "active" : ""
+						} text-white` }>
+						<BsHouseDoor size={ 17 } className={ "me-1" }/>
+						Startseite
+					</Link>
+				</Nav.Item>
 
-			<div className="brand-container">
-				<Link to="/home" className="brand-link">
-					<img src="/img/logo/logo.png" alt="AdminLTE Logo" className="brand-image"
-						 style={ { opacity: 0.8 } }/>
-					<span className="brand-text font-weight-light ps-0">ArkLIN2</span>
-				</Link>
-				<LTERibbon>
-					Alpha
-				</LTERibbon>
-			</div>
-
-			<div className="sidebar">
-				<nav className="mt-2">
-					<ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-						data-accordion="false">
-						<li className="nav-header">ARKLIN 2</li>
-						<LTENavLink Icon="tachometer-alt" To="/home">
-							Startseite
-						</LTENavLink>
-
-						<LTENavLink Permission={ EPerm.Super } Icon="users" To="/users">
+				{ Account.HasPermission( EPerm.Super ) && (
+					<Nav.Item as="li" className="mt-2">
+						<Link
+							to="/users"
+							className={ `nav-link ${
+								pathname.endsWith( "/users" ) ? "active" : ""
+							} text-white` }>
+							<BsPeople size={ 17 } className={ "me-1" }/>
 							Benutzer
-						</LTENavLink>
+						</Link>
+					</Nav.Item>
+				) }
 
-						<LTENavLink Permission={ EPerm.Super } Icon="server" To="/adminserver">
+				{ Account.HasPermission( EPerm.Super ) && (
+					<Nav.Item as="li" className="mt-2">
+						<Link
+							to="/adminserver"
+							className={ `nav-link ${
+								pathname.endsWith( "/adminserver" ) ? "active" : ""
+							} text-white` }
+						>
+							<BsServer size={ 17 } className={ "me-1" }/>
 							Server
-						</LTENavLink>
-
-						<LTENavLink Permission={ EPerm.Super } Icon="network-wired" To="/cluster" Hide>
-							Cluster
-						</LTENavLink>
-					</ul>
-				</nav>
-				<div className="sidebar-custom pb-3">
-					<hr/>
-					<div className={ "ps-2 pe-2" }>
-						<Link target="_blank" to="https://discord.gg/uXxsqXD" className="btn btn-link"><FontAwesomeIcon
-							icon={ [ "fab", "discord" ] }/></Link>
-						<Link target="_blank" to="https://github.com/Kyri123/ArkLin2.0/"
-							  className="btn btn-link"><FontAwesomeIcon icon={ [ "fab", "github" ] }/></Link>
-						<Link target="_blank" to="https://app.clickup.com/30351857/v/l/s/90060096400"
-							  className="btn btn-link"><FontAwesomeIcon icon={ "clipboard-list" }/></Link>
-						<Link target="_blank"
-							  to="https://www.paypal.com/cgi-bin/webscr?shell=_s-xclick&amp;hosted_button_id=68PT9KPRABVCU&amp;source=url"
-							  className="btn btn-link"><FontAwesomeIcon icon={ "donate" }/></Link>
-						<Link target="_blank" to="https://github.com/Kyri123/ArkLin2.0/issues"
-							  className="btn btn-secondary hide-on-collapse pos-right"><FontAwesomeIcon
-							icon={ "bug" }/></Link>
-					</div>
-				</div>
-			</div>
-		</aside>
+						</Link>
+					</Nav.Item>
+				) }
+			</Nav>
+		</div>
 	);
 }

@@ -12,20 +12,30 @@ import DB_SteamAPI_Mods     from "../MongoDB/DB_SteamAPI_Mods";
 
 export default function( Api : core.Express ) {
 	const Url = CreateUrl( ESteamApiUrl.getmods );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "GET" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"GET"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<Record<number, ISteamApiMod>> = {
 			Auth: false,
 			Success: true,
 			Data: {}
-		}
+		};
 
 		const Request : IRequestBody<{
-			modsIds : number[]
+			modsIds : number[];
 		}> = request.body;
 
 		if ( Request.modsIds ) {
-			for await ( const Mod of DB_SteamAPI_Mods.find( { publishedfileid: Request.modsIds } ) ) {
+			for await ( const Mod of DB_SteamAPI_Mods.find( {
+				publishedfileid: Request.modsIds
+			} ) ) {
 				if ( Response.Data ) {
 					Response.Data[ Mod.publishedfileid ] = Mod;
 				}
@@ -33,5 +43,5 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
+	} );
 }

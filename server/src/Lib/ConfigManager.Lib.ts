@@ -19,10 +19,15 @@ export class ConfigManagerClass {
 		this.DebugConfig = this.ReadConfigWithFallback<IDebugConfig>( "Debug.json" );
 		SystemLib.SetDebugConfig( this.DebugConfig );
 
-		this.Dashboard_BaseConfig = this.ReadConfigWithFallback<IDashboard_BaseConfig>( "Dashboard_BaseConfig.json" );
+		this.Dashboard_BaseConfig =
+			this.ReadConfigWithFallback<IDashboard_BaseConfig>(
+				"Dashboard_BaseConfig.json"
+			);
 		// we want to set the Debug mod here on true if we want to
 
-		this.API_BaseConfig = this.ReadConfigWithFallback<IAPI_BaseConfig>( "API_BaseConfig.json" );
+		this.API_BaseConfig = this.ReadConfigWithFallback<IAPI_BaseConfig>(
+			"API_BaseConfig.json"
+		);
 		this.TaskConfig = this.ReadConfigWithFallback<ITaskConfig>( "Tasks.json" );
 		this.SSHKey = this.ReadConfigWithFallback<string>( "id_rsa", true );
 	}
@@ -59,7 +64,7 @@ export class ConfigManagerClass {
 				return true;
 			}
 			catch ( e ) {
-				SystemLib.LogError( "[CONFIG]", e )
+				SystemLib.LogError( "[CONFIG]", e );
 			}
 		}
 		return false;
@@ -72,7 +77,7 @@ export class ConfigManagerClass {
 				return JSON.parse( fs.readFileSync( ConfigFile ).toString() );
 			}
 			catch ( e ) {
-				SystemLib.LogError( "[CONFIG]", e )
+				SystemLib.LogError( "[CONFIG]", e );
 			}
 		}
 		return {};
@@ -89,13 +94,18 @@ export class ConfigManagerClass {
 			}
 			catch ( e ) {
 			}
-			fs.writeFileSync( ConfigPath, fs.readFileSync( FallbackConfigPath ).toString() );
+			fs.writeFileSync(
+				ConfigPath,
+				fs.readFileSync( FallbackConfigPath ).toString()
+			);
 			SystemLib.Log( "Config recreated:", SystemLib.ToBashColor( "Red" ), File );
 		}
 
 		if ( !NotAJson ) {
 			// Merge fallback (with maybe new values) to config file
-			const FallbackConfig = JSON.parse( fs.readFileSync( FallbackConfigPath ).toString() );
+			const FallbackConfig = JSON.parse(
+				fs.readFileSync( FallbackConfigPath ).toString()
+			);
 			const Config = JSON.parse( fs.readFileSync( ConfigPath ).toString() );
 
 			const FallbackKeys = Object.keys( FallbackConfig );
@@ -107,7 +117,11 @@ export class ConfigManagerClass {
 
 			for ( const Key of Object.keys( Return ) ) {
 				if ( !FallbackKeys.Contains( Key ) ) {
-					SystemLib.DebugLog( "[CONFIG] Removed Key", SystemLib.ToBashColor( "Red" ), Key );
+					SystemLib.DebugLog(
+						"[CONFIG] Removed Key",
+						SystemLib.ToBashColor( "Red" ),
+						Key
+					);
 					delete Return[ Key ];
 				}
 			}

@@ -19,7 +19,7 @@ export function GetSecretAppToken() : string {
 		return __AppToken;
 	}
 
-	let Token = crypto.randomBytes( 64 ).toString( 'hex' );
+	let Token = crypto.randomBytes( 64 ).toString( "hex" );
 	const TokenFile = path.join( __configdir, "app.token" );
 	if ( fs.existsSync( TokenFile ) ) {
 		Token = fs.readFileSync( TokenFile ).toString().trim();
@@ -51,7 +51,9 @@ export class UserLib {
 
 	public async Read() : Promise<boolean> {
 		if ( this.UserData !== null && this.UserID !== null ) {
-			const Query = await DB_Instances.findById( this.UserData?._id || this.UserID );
+			const Query = await DB_Instances.findById(
+				this.UserData?._id || this.UserID
+			);
 			if ( Query ) {
 				this.UserData = Query.toJSON();
 			}
@@ -68,11 +70,19 @@ export class UserLib {
 	}
 
 	public HasPermission( Permission : TPermissions ) : boolean {
-		return this.UserData?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) || this.UserData?.permissions?.includes( GetEnumValue( EPerm, Permission ) ) || false;
+		return (
+			this.UserData?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) ||
+			this.UserData?.permissions?.includes( GetEnumValue( EPerm, Permission ) ) ||
+			false
+		);
 	}
 
 	public HasPermissionForServer( ServerName : string ) : boolean {
-		return this.UserData?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) || this.UserData?.servers?.includes( ServerName ) || false;
+		return (
+			this.UserData?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) ||
+			this.UserData?.servers?.includes( ServerName ) ||
+			false
+		);
 	}
 
 	/**
@@ -94,7 +104,9 @@ export class UserLib {
 		return true;
 	}
 
-	public async GetAllServerWithPermission() : Promise<Record<string, IMO_Instance>> {
+	public async GetAllServerWithPermission() : Promise<
+		Record<string, IMO_Instance>
+	> {
 		const Data : Record<string, IMO_Instance> = {};
 		for await ( const Instance of DB_Instances.find( {} ) ) {
 			const InstData : IMO_Instance = Instance.toJSON();

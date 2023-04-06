@@ -6,7 +6,7 @@ import {
 	IEmitEvents,
 	IListenEvents
 }                             from "../../../src/Shared/Type/Socket";
-import "./Types"
+import "./Types";
 import { SystemLib_Class }    from "../Lib/System.Lib";
 import { ConfigManagerClass } from "../Lib/ConfigManager.Lib";
 import { TaskManagerClass }   from "../Tasks/TaskManager";
@@ -14,8 +14,11 @@ import { SSHLib }             from "../Lib/SSH.Lib";
 
 export declare global {
 	var Api : core.Express;
-	var HttpServer : http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
-	var SocketIO : Server<IListenEvents, IEmitEvents, DefaultEventsMap, any>
+	var HttpServer : http.Server<
+		typeof http.IncomingMessage,
+		typeof http.ServerResponse
+	>;
+	var SocketIO : Server<IListenEvents, IEmitEvents, DefaultEventsMap, any>;
 	//var RedisClient : RedisClientType<RedisModules, RedisFunctions, RedisScripts>;
 	var TManager : TaskManagerClass;
 	var CManager : ConfigManagerClass;
@@ -38,7 +41,7 @@ export declare global {
 
 	namespace NodeJS {
 		interface ProcessEnv {
-			NODE_ENV : 'development' | 'production' | string;
+			NODE_ENV : "development" | "production" | string;
 			MONGODB_PORT : string;
 			MONGODB_HOST : string;
 			MONGODB_USER : string;

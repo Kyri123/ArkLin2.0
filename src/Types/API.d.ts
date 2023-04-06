@@ -1,3 +1,5 @@
+/** @format */
+
 import { TLTEColors } from "../Shared/Type/AdminLTE";
 
 export interface IAPIRequestBase {

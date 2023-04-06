@@ -9,9 +9,10 @@ export DOCKER_UID=$(id -u)
 export DOCKER_GID=$(id -g)
 
 cd ~/KAdmin/ArkLin2.0
+echo "Stoppe Docker..."
 docker compose down
 
-git stash
+git stash 
 git pull https://github.com/Kyri123/ArkLin2.0.git $BRANCH
 
 echo "Setzte Rechte..."

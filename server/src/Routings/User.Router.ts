@@ -23,12 +23,20 @@ import { EUserUrl }         from "../../../src/Shared/Enum/Routing";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EUserUrl.alluser );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "GET" )
-	Api.get( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"GET"
+	);
+	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase = {
 			Auth: false,
-			Success: true,
-		}
+			Success: true
+		};
 
 		const Request : IRequestBody = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) ) {
@@ -41,16 +49,23 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.allkeys );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "GET" )
-	Api.get( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"GET"
+	);
+	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase = {
 			Auth: false,
-			Success: true,
-		}
+			Success: true
+		};
 
 		const Request : IRequestBody = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) ) {
@@ -61,20 +76,27 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.getallowedservers );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<Record<string, IMO_Instance>> = {
 			Auth: false,
 			Success: true,
 			Data: {}
-		}
+		};
 
 		const Request : IRequestBody<{
-			Id? : string
+			Id? : string;
 		}> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id ) {
 			const User = new UserLib( Request.Id );
@@ -83,22 +105,32 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.removeaccount );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<Record<string, IInstanceData>> = {
 			Auth: false,
 			Success: false,
 			Data: {}
-		}
+		};
 
 		const Request : IRequestBody<{
-			Id? : number
+			Id? : number;
 		}> = request.body;
-		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id !== undefined ) {
+		if (
+			Request.UserClass.HasPermission( EPerm.Super ) &&
+			Request.Id !== undefined
+		) {
 			await DB_Accounts.deleteMany( { _id: Request.Id } );
 
 			Response.Success = true;
@@ -106,72 +138,99 @@ export default function( Api : core.Express ) {
 				AlertType: "success",
 				Message: "Account und alle Sessions wurden erfolgreich entfernt.",
 				Title: "Erfolgreich!"
-			}
+			};
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.addkey );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<Record<string, IInstanceData>> = {
 			Auth: false,
 			Success: false,
 			Data: {}
-		}
+		};
 
 		const Request : IRequestBody<{
-			rang? : number
+			rang? : number;
 		}> = request.body;
-		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.rang !== undefined ) {
+		if (
+			Request.UserClass.HasPermission( EPerm.Super ) &&
+			Request.rang !== undefined
+		) {
 			const Key = MakeRandomID( 20, true );
 			await DB_AccountKey.create( {
 				AsSuperAdmin: Request.rang !== 0,
 				key: Key
-			} )
+			} );
 			Response.Success = true;
 			Response.Message = {
 				AlertType: "success",
 				Message: `Account Key ${ Key } wurde erstellt.`,
 				Title: "Erfolgreich!"
-			}
+			};
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.removekey );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<Record<string, IInstanceData>> = {
 			Auth: false,
 			Success: false,
 			Data: {}
-		}
+		};
 
 		const Request : IRequestBody<{
-			Id? : string
+			Id? : string;
 		}> = request.body;
-		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id !== undefined ) {
+		if (
+			Request.UserClass.HasPermission( EPerm.Super ) &&
+			Request.Id !== undefined
+		) {
 			await DB_AccountKey.deleteOne( { _id: Request.Id } );
 			Response.Success = true;
 			Response.Message = {
 				AlertType: "success",
 				Message: `Account Key wurde erstellt.`,
 				Title: "Erfolgreich!"
-			}
+			};
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.usereditaccount );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase = {
 			Auth: false,
 			Success: false,
@@ -180,14 +239,17 @@ export default function( Api : core.Express ) {
 				Message: `Fehler beim verarbeiten der Daten.`,
 				Title: "Fehler!"
 			}
-		}
+		};
 
 		const Request : IRequestBody<{
-			UserData? : IMO_Accounts,
-			Passwd? : string[]
+			UserData? : IMO_Accounts;
+			Passwd? : string[];
 		}> = request.body;
 
-		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.UserData !== undefined ) {
+		if (
+			Request.UserClass.HasPermission( EPerm.Super ) &&
+			Request.UserData !== undefined
+		) {
 			const LoginData = {
 				...Request.UserClass.GetDB(),
 				...Request.UserData,
@@ -200,25 +262,36 @@ export default function( Api : core.Express ) {
 				}
 			}
 
-			if ( LoginData.username.length >= 6 && /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test( LoginData.mail ) ) {
+			if (
+				LoginData.username.length >= 6 &&
+				/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test( LoginData.mail )
+			) {
 				DB_Accounts.findByIdAndUpdate( LoginData._id, LoginData );
 
 				Response.Success = true;
 				Response.Message = {
 					AlertType: "success",
-					Message: "Account Daten wurde bearbeitet. Du wirst die nächsten sekunden ausgeloggt!",
+					Message:
+						"Account Daten wurde bearbeitet. Du wirst die nächsten sekunden ausgeloggt!",
 					Title: "Erfolgreich!"
-				}
+				};
 			}
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 
 	Url = CreateUrl( EUserUrl.edituser );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.post( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase = {
 			Auth: false,
 			Success: false,
@@ -227,23 +300,27 @@ export default function( Api : core.Express ) {
 				Message: `Fehler beim verarbeiten der Daten.`,
 				Title: "Fehler!"
 			}
-		}
+		};
 
 		const Request : IRequestBody<{
-			UserID : string,
-			User : Partial<IMO_Accounts>
+			UserID : string;
+			User : Partial<IMO_Accounts>;
 		}> = request.body;
 
-		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.UserID && Request.User ) {
+		if (
+			Request.UserClass.HasPermission( EPerm.Super ) &&
+			Request.UserID &&
+			Request.User
+		) {
 			await DB_Accounts.findByIdAndUpdate( Request.UserID, Request.User );
 			Response.Success = true;
 			Response.Message = {
 				AlertType: "success",
 				Message: "Account Daten wurde bearbeitet.",
 				Title: "Erfolgreich!"
-			}
+			};
 		}
 
 		response.json( Response );
-	} ) );
+	} );
 }

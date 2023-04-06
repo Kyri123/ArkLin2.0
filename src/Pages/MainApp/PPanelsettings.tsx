@@ -22,12 +22,7 @@ import { API_QueryLib }     from "../../Lib/Api/API_Query.Lib";
 import { EChangelogUrl }    from "../../Shared/Enum/Routing";
 import { IGithubBranche }   from "../../Shared/Api/github";
 
-const CONFIGS = [
-	"API_BaseConfig",
-	"Dashboard_BaseConfig",
-	"Debug",
-	"Tasks"
-]
+const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 
 export default function PPanelsettings() {
 	const GAlert = useContext( AlertContext );
@@ -37,39 +32,43 @@ export default function PPanelsettings() {
 	const [ IsSending, setIsSending ] = useState( false );
 	const [ searchParams, setSearchParams ] = useSearchParams();
 	const [ BRANCHES, setBRANCHES ] = useState<ISelectMask[]>( [] );
-	usePermissionPage( EPerm.PanelSettings )
+	usePermissionPage( EPerm.PanelSettings );
 
 	useEffect( () => {
 		let Config = searchParams.get( "config" ) || CONFIGS[ 1 ];
-		if ( !CONFIGS.find( e => e === Config ) ) {
+		if ( !CONFIGS.find( ( e ) => e === Config ) ) {
 			Config = CONFIGS[ 1 ];
 		}
 		API_PanelLib.GetConfig( Config ).then( setConfigData );
-		API_QueryLib.GetFromAPI<IGithubBranche[]>( EChangelogUrl.branches ).then( Data => {
-			if ( Data.Data ) {
-				setBRANCHES( Data.Data.map<ISelectMask>( R => ( {
-					Value: R.name,
-					PreAndSuffix: '',
-					Text: R.name
-				} ) ) )
+		API_QueryLib.GetFromAPI<IGithubBranche[]>( EChangelogUrl.branches ).then(
+			( Data ) => {
+				if ( Data.Data ) {
+					setBRANCHES(
+						Data.Data.map<ISelectMask>( ( R ) => ( {
+							Value: R.name,
+							PreAndSuffix: "",
+							Text: R.name
+						} ) )
+					);
+				}
 			}
-		} )
+		);
 	}, [ searchParams ] );
 
 	const SendConfig = async() => {
 		setIsSending( true );
 
 		let Config = searchParams.get( "config" ) || CONFIGS[ 1 ];
-		if ( !CONFIGS.find( e => e === Config ) ) {
+		if ( !CONFIGS.find( ( e ) => e === Config ) ) {
 			Config = CONFIGS[ 1 ];
 		}
 		GAlert.DoSetAlert( await API_PanelLib.SetConfig( Config, ConfigData ) );
 
 		setIsSending( false );
-	}
+	};
 
 	let Config = searchParams.get( "config" ) || CONFIGS[ 1 ];
-	if ( !CONFIGS.find( e => e === Config ) ) {
+	if ( !CONFIGS.find( ( e ) => e === Config ) ) {
 		Config = CONFIGS[ 1 ];
 	}
 
@@ -77,14 +76,24 @@ export default function PPanelsettings() {
 		<>
 			<Card>
 				<Card.Header className="d-flex p-0">
-					<h3 className="card-title p-3 flex-fill">{ StringMapLib.Nav( Location.pathname.split( "/" ).pop() as string ) } - { StringMapLib.SubNav( Config ) }<b></b>
+					<h3 className="card-title p-3 flex-fill">
+						{ StringMapLib.Nav( Location.pathname.split( "/" ).pop() as string ) } -{ " " }
+						{ StringMapLib.SubNav( Config ) }
+						<b></b>
 					</h3>
 					<ul className="nav nav-pills ml-auto p-2 flex-fill">
 						<li className="nav-item w-100">
-							<select value={ Config } className="form-control w-100"
-									onChange={ Event => setSearchParams( { config: Event.target.value } ) }>
+							<select
+								value={ Config }
+								className="form-control w-100"
+								onChange={ ( Event ) =>
+									setSearchParams( { config: Event.target.value } )
+								}
+							>
 								{ CONFIGS.map( ( Value ) => (
-									<option key={ Id + Value } value={ Value }>{ StringMapLib.SubNav( Value ) }</option>
+									<option key={ Id + Value } value={ Value }>
+										{ StringMapLib.SubNav( Value ) }
+									</option>
 								) ) }
 							</select>
 						</li>
@@ -92,22 +101,33 @@ export default function PPanelsettings() {
 				</Card.Header>
 				<Card.Body>
 					{ Object.entries( ConfigData ).map( ( [ Key, Value ], Idx ) => (
-						<CLTEInput NumMin={ 1 } Type={ typeof Value === "number" ? "number" : "text" } key={ Id + Idx }
-								   Value={ Value } OnValueSet={ Value => {
-							const Config = { ...ConfigData };
-							Config[ Key ] = Value;
-							setConfigData( Config );
-						} } SelectMask={ { "PANEL_Branch": BRANCHES } }
-								   ValueKey={ Key }>{ StringMapLib.Config( Key ) }</CLTEInput>
+						<CLTEInput
+							NumMin={ 1 }
+							Type={ typeof Value === "number" ? "number" : "text" }
+							key={ Id + Idx }
+							Value={ Value }
+							OnValueSet={ ( Value ) => {
+								const Config = { ...ConfigData };
+								Config[ Key ] = Value;
+								setConfigData( Config );
+							} }
+							SelectMask={ { PANEL_Branch: BRANCHES } }
+							ValueKey={ Key }
+						>
+							{ StringMapLib.Config( Key ) }
+						</CLTEInput>
 					) ) }
 				</Card.Body>
 				<Card.Footer>
-					<LTELoadingButton Hide={ Object.keys( ConfigData ).length <= 0 } IsLoading={ IsSending }
-									  onClick={ SendConfig }>
+					<LTELoadingButton
+						Hide={ Object.keys( ConfigData ).length <= 0 }
+						IsLoading={ IsSending }
+						onClick={ SendConfig }
+					>
 						<FontAwesomeIcon icon={ "save" }/> Speichern
 					</LTELoadingButton>
 				</Card.Footer>
 			</Card>
 		</>
-	)
+	);
 }

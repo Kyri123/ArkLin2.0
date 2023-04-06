@@ -1,36 +1,63 @@
-import { ILTELoadingButton } from "../../../Types/AdminLTE";
-import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button }          from "react-bootstrap";
+import {
+	ILTELoadingButton,
+	ILTEToggleButton
+}                          from "../../../Types/AdminLTE";
+import React               from "react";
 
-
-export function LTELoadingButton( Props : ILTELoadingButton ) {
-	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
+export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
+	Permission,
+	IsLoading,
+	Hide,
+	LoadingIcon,
+	...Props
+} ) => {
+	if ( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}
 
 	return (
-		<button onClick={ Props.onClick } ref={ Props.ref }
-				className={ `btn ${ Props.Flat ? "btn-flat" : "" } btn${ Props.Outline ? "-outline" : "" }-${ Props.BtnColor || "primary" } ${ Props.className || "" }` }
-				disabled={ Props.IsLoading || Props.Disabled }>
-			{ Props.IsLoading ?
-				<FontAwesomeIcon icon={ Props.LoadingIcon || "spinner" } spin={ true }/> : Props.children }
-		</button>
+		<Button { ...Props } disabled={ IsLoading }>
+			{ Props.IsLoading ? (
+				<FontAwesomeIcon icon={ LoadingIcon || "spinner" } spin={ true }/>
+			) : (
+				Props.children
+			) }
+		</Button>
 	);
-}
+};
 
-
-export function LTEToggleButton( Props : ILTELoadingButton & {
-	Value : boolean;
-	OnToggle : ( NewValue : boolean ) => void;
-} ) {
+export const LTEToggleButton : React.FunctionComponent<ILTEToggleButton> = ( { OnToggle, Value, Ref, ...Props } ) => {
 	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
 		return <></>;
 	}
 
+	const OnClick = () => {
+		if ( OnToggle ) {
+			OnToggle( !Value );
+		}
+		if ( Ref ) {
+			Ref.current = !Props.Ref.current;
+		}
+	};
+
+	const IsActive = () => {
+		if ( Value === undefined ) {
+			return Ref?.current;
+		}
+		return Value;
+	};
+
 	return (
-		<LTELoadingButton { ...Props } className={ Props.className || "btn-sm rounded-0" }
-						  BtnColor={ Props.Value ? "success" : "danger" }
-						  onClick={ () => Props.OnToggle( !Props.Value ) }>
-			<FontAwesomeIcon icon={ Props.Value ? "check" : "times" }/> { Props.children }
-		</LTELoadingButton>
+		<Button
+			{ ...Props }
+			className={ Props.className || "btn-sm rounded-0" }
+			variant={ IsActive() ? "success" : "danger" }
+			onClick={ OnClick }
+		>
+			<FontAwesomeIcon icon={ IsActive() ? "check" : "times" }/>{ " " }
+			{ Props.children }
+		</Button>
 	);
-}
+};

@@ -1,12 +1,14 @@
-import { IChildrenBaseProps }    from "../../Types/BaseTypes";
+/** @format */
+
+import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
 import {
 	useEffect,
 	useState
 }                                from "react";
-import { IAPIResponseBase }      from "../../Types/API";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
-import { GenerateIconFromColor } from "../../Lib/Conversion.Lib";
 import { Alert }                 from "react-bootstrap";
+import { GenerateIconFromColor } from "../../Lib/Conversion.Lib";
+import { IAPIResponseBase }      from "../../Types/API";
+import { IChildrenBaseProps }    from "../../Types/BaseTypes";
 
 export interface IAlertProps extends IChildrenBaseProps {
 	Data : IAPIResponseBase | undefined;
@@ -22,7 +24,7 @@ export function CAlert( Props : IAlertProps ) {
 
 		const Timeout = setTimeout( () => setDismiss( true ), 10000 );
 		return () => clearTimeout( Timeout );
-	}, [ Props.Data ] )
+	}, [ Props.Data ] );
 
 	if ( Props.Disable || Dismiss || !Props.Data || !Props.Data.Message ) {
 		return <></>;
@@ -30,8 +32,12 @@ export function CAlert( Props : IAlertProps ) {
 
 	return (
 		<Alert variant={ Props.Data.Message.AlertType }>
-			<h5><FontAwesomeIcon
-				icon={ GenerateIconFromColor( Props.Data.Message.AlertType ) }/> { Props.Data.Message.Title }</h5>
+			<h5>
+				<FontAwesomeIcon
+					icon={ GenerateIconFromColor( Props.Data.Message.AlertType ) }
+				/>{ " " }
+				{ Props.Data.Message.Title }
+			</h5>
 			{ Props.Data.Message.Message }
 		</Alert>
 	);

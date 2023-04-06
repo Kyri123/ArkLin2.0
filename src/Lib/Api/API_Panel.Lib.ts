@@ -15,14 +15,19 @@ export class API_PanelLib {
 		return [ "Fehler beim laden vom Log" ];
 	}
 
-	static async GetConfig( Config : string | undefined ) : Promise<Record<string, any>> {
+	static async GetConfig(
+		Config : string | undefined
+	) : Promise<Record<string, any>> {
 		if ( !Config ) {
 			return {};
 		}
 
-		const Data = await API_QueryLib.GetFromAPI<Record<string, any>>( EPanelUrl.getconfig, {
-			Config: Config
-		} );
+		const Data = await API_QueryLib.GetFromAPI<Record<string, any>>(
+			EPanelUrl.getconfig,
+			{
+				Config: Config
+			}
+		);
 
 		if ( Data.Data ) {
 			return Data.Data;

@@ -8,33 +8,53 @@ import { EArkmanagerCommands } from "../ServerUtils.Lib";
 import { EServerUrl }          from "../../Shared/Enum/Routing";
 
 export class API_ServerLib {
-
-	static async SetServerConfig( ServerInstance : string, ConfigFile : string, Data : any ) : Promise<IAPIResponseBase> {
-		return await API_QueryLib.PostToAPI<Record<string, string>>( EServerUrl.setserverconfig, {
-			ConfigFile: ConfigFile,
-			ConfigContent: Data,
-			ServerInstance: ServerInstance
-		} );
+	static async SetServerConfig(
+		ServerInstance : string,
+		ConfigFile : string,
+		Data : any
+	) : Promise<IAPIResponseBase> {
+		return await API_QueryLib.PostToAPI<Record<string, string>>(
+			EServerUrl.setserverconfig,
+			{
+				ConfigFile: ConfigFile,
+				ConfigContent: Data,
+				ServerInstance: ServerInstance
+			}
+		);
 	}
 
-	static async SetPanelConfig( ServerInstance : string, Data : Partial<IPanelServerConfig> ) : Promise<IAPIResponseBase> {
-		return await API_QueryLib.PostToAPI<Record<string, string>>( EServerUrl.setpanelconfig, {
-			ServerInstance: ServerInstance,
-			Config: Data
-		} );
+	static async SetPanelConfig(
+		ServerInstance : string,
+		Data : Partial<IPanelServerConfig>
+	) : Promise<IAPIResponseBase> {
+		return await API_QueryLib.PostToAPI<Record<string, string>>(
+			EServerUrl.setpanelconfig,
+			{
+				ServerInstance: ServerInstance,
+				Config: Data
+			}
+		);
 	}
 
-	static async GetConfigFiles( ServerInstance : string ) : Promise<Record<string, string>> {
-		const Resp = await API_QueryLib.PostToAPI<Record<string, string>>( EServerUrl.getconfigs, {
-			ServerInstance: ServerInstance
-		} );
+	static async GetConfigFiles(
+		ServerInstance : string
+	) : Promise<Record<string, string>> {
+		const Resp = await API_QueryLib.PostToAPI<Record<string, string>>(
+			EServerUrl.getconfigs,
+			{
+				ServerInstance: ServerInstance
+			}
+		);
 		return Resp.Data || {};
 	}
 
-	static async GetConfigFromFile( ServerInstance : string, LogFile : string ) : Promise<[ Record<string, any>, string ]> {
+	static async GetConfigFromFile(
+		ServerInstance : string,
+		LogFile : string
+	) : Promise<[ Record<string, any>, string ]> {
 		const Resp = await API_QueryLib.PostToAPI<{
-			Obj : Record<string, any>,
-			String : string
+			Obj : Record<string, any>;
+			String : string;
 		}>( EServerUrl.getconfigs, {
 			ServerInstance: ServerInstance,
 			LogFile: LogFile
@@ -42,14 +62,22 @@ export class API_ServerLib {
 		return [ Resp.Data?.Obj || {}, Resp.Data?.String || "" ];
 	}
 
-	static async GetLogFiles( ServerInstance : string ) : Promise<Record<string, string>> {
-		const Resp = await API_QueryLib.PostToAPI<Record<string, string>>( EServerUrl.getlogs, {
-			ServerInstance: ServerInstance
-		} );
+	static async GetLogFiles(
+		ServerInstance : string
+	) : Promise<Record<string, string>> {
+		const Resp = await API_QueryLib.PostToAPI<Record<string, string>>(
+			EServerUrl.getlogs,
+			{
+				ServerInstance: ServerInstance
+			}
+		);
 		return Resp.Data || {};
 	}
 
-	static async GetLogFromFile( ServerInstance : string, LogFile : string ) : Promise<string> {
+	static async GetLogFromFile(
+		ServerInstance : string,
+		LogFile : string
+	) : Promise<string> {
 		const Resp = await API_QueryLib.PostToAPI<string>( EServerUrl.getlogs, {
 			ServerInstance: ServerInstance,
 			LogFile: LogFile
@@ -63,7 +91,11 @@ export class API_ServerLib {
 		} );
 	}
 
-	static async SendCommandToServer( ServerInstance : string, Command : EArkmanagerCommands, Parameter : string[] ) {
+	static async SendCommandToServer(
+		ServerInstance : string,
+		Command : EArkmanagerCommands,
+		Parameter : string[]
+	) {
 		return await API_QueryLib.PostToAPI<any>( EServerUrl.sendcommand, {
 			ServerInstance: ServerInstance,
 			Command: Command,
@@ -72,23 +104,39 @@ export class API_ServerLib {
 	}
 
 	static async GetAllServer() {
-		return await API_QueryLib.GetFromAPI<IFullData>( EServerUrl.getallserver, {} );
+		return await API_QueryLib.GetFromAPI<IFullData>(
+			EServerUrl.getallserver,
+			{}
+		);
 	}
 
 	static async GetGlobalState() : Promise<number[]> {
-		const Data = await API_QueryLib.GetFromAPI<number[]>( EServerUrl.getglobalstate, {} );
+		const Data = await API_QueryLib.GetFromAPI<number[]>(
+			EServerUrl.getglobalstate,
+			{}
+		);
 		return Data.Data ? Data.Data : [ 0, 0, 0 ];
 	}
 
-	static async AddServer( Config : IPanelServerConfig ) : Promise<IAPIResponseBase<IPanelServerConfig>> {
-		return await API_QueryLib.PostToAPI<IPanelServerConfig>( EServerUrl.addserver, {
-			Config: Config
-		} );
+	static async AddServer(
+		Config : IPanelServerConfig
+	) : Promise<IAPIResponseBase<IPanelServerConfig>> {
+		return await API_QueryLib.PostToAPI<IPanelServerConfig>(
+			EServerUrl.addserver,
+			{
+				Config: Config
+			}
+		);
 	}
 
-	static async RemoveServer( InstanceName : string ) : Promise<IAPIResponseBase<IPanelServerConfig>> {
-		return await API_QueryLib.PostToAPI<IPanelServerConfig>( EServerUrl.removeserver, {
-			InstanceName: InstanceName
-		} );
+	static async RemoveServer(
+		InstanceName : string
+	) : Promise<IAPIResponseBase<IPanelServerConfig>> {
+		return await API_QueryLib.PostToAPI<IPanelServerConfig>(
+			EServerUrl.removeserver,
+			{
+				InstanceName: InstanceName
+			}
+		);
 	}
 }

@@ -4,7 +4,7 @@ import React, {
 	useId,
 	useRef,
 	useState
-}                           from 'react';
+}                           from "react";
 import { useArkServer }     from "../../../../Hooks/useArkServer";
 import {
 	Card,
@@ -27,10 +27,12 @@ import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
 import AlertContext         from "../../../../Context/AlertContext";
 
 interface IProps {
-	InstanceName : string
+	InstanceName : string;
 }
 
-const SocketIO : Socket<IEmitEvents, IListenEvents> = io( SocketIOLib.GetSpocketHost() );
+const SocketIO : Socket<IEmitEvents, IListenEvents> = io(
+	SocketIOLib.GetSpocketHost()
+);
 const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 	const { DoSetAlert } = useContext( AlertContext );
 	const ID = useId();
@@ -46,7 +48,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 		try {
 			const AsUrl = new URL( Input );
 			if ( AsUrl.searchParams.has( "id" ) ) {
-				Id = parseInt( AsUrl.searchParams.get( "id" )! )
+				Id = parseInt( AsUrl.searchParams.get( "id" )! );
 			}
 		}
 		catch ( e ) {
@@ -63,20 +65,24 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 						Title: "Achtung!",
 						AlertType: "warning"
 					}
-				} )
+				} );
 				setIsSending( false );
 				return;
 			}
 
 			const CopyData = {
 				...Data
-			}
+			};
 
-			CopyData.ark_GameModIds.push( Id )
+			CopyData.ark_GameModIds.push( Id );
 			CopyData.ark_GameModIds = [ ...new Set( CopyData.ark_GameModIds ) ];
-			const Result = await API_ServerLib.SetServerConfig( InstanceName, "Arkmanager.cfg", CopyData );
+			const Result = await API_ServerLib.SetServerConfig(
+				InstanceName,
+				"Arkmanager.cfg",
+				CopyData
+			);
 			if ( Result.Success ) {
-				TempModify( Current => ( {
+				TempModify( ( Current ) => ( {
 					...Current,
 					ArkmanagerCfg: CopyData
 				} ) );
@@ -92,52 +98,63 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 					Title: "Fehler!",
 					AlertType: "danger"
 				}
-			} )
+			} );
 		}
 
 		setIsSending( false );
-	}
-
+	};
 
 	useEffect( () => {
 		const QueryMods = () => {
-			API_SteamAPILib.GetMods( Data.ark_GameModIds )
-				.then( setSteamMods )
-		}
+			API_SteamAPILib.GetMods( Data.ark_GameModIds ).then( setSteamMods );
+		};
 
 		QueryMods();
 		SocketIO.on( "SteamApiUpdated", QueryMods );
 		return () => {
 			SocketIO.off( "SteamApiUpdated", QueryMods );
-		}
-	}, [ Data.ark_GameModIds ] )
+		};
+	}, [ Data.ark_GameModIds ] );
 
 	return (
 		<Card>
 			<Card.Header className={ "p-0" }>
-				<h3 className="card-title p-3">
-					Server Mods
-				</h3>
+				<h3 className="card-title p-3">Server Mods</h3>
 			</Card.Header>
 			<Card.Body className={ "text-dark p-0" }>
 				<InputGroup>
-					<FormControl className={ "rounded-0" } type="text" ref={ InputRef }></FormControl>
-					<LTELoadingButton Flat IsLoading={ IsSending } BtnColor={ "success" }
-									  Disabled={ InputRef.current !== null && InputRef.current.value === "" }
-									  onClick={ () => {
-										  if ( InputRef.current !== null && InputRef.current.value !== "" ) {
-											  AddMod( InputRef.current.value );
-											  InputRef.current.value = "";
-										  }
-									  } }>
+					<FormControl
+						className={ "rounded-0" }
+						type="text"
+						ref={ InputRef }
+					></FormControl>
+					<LTELoadingButton
+						Flat
+						IsLoading={ IsSending }
+						variant={ "success" }
+						Disabled={
+							InputRef.current !== null && InputRef.current.value === ""
+						}
+						onClick={ () => {
+							if ( InputRef.current !== null && InputRef.current.value !== "" ) {
+								AddMod( InputRef.current.value );
+								InputRef.current.value = "";
+							}
+						} }
+					>
 						<FontAwesomeIcon icon={ "plus" }/>
 					</LTELoadingButton>
 				</InputGroup>
 				<Table striped>
 					<tbody>
 					{ Data.ark_GameModIds.map( ( ModId, Index ) => (
-						<PCServerModsRow key={ ID + ModId.toString() } InstanceName={ InstanceName }
-										 ModData={ SteamMods[ ModId ] } ModId={ ModId } ModIndex={ Index }/>
+						<PCServerModsRow
+							key={ ID + ModId.toString() }
+							InstanceName={ InstanceName }
+							ModData={ SteamMods[ ModId ] }
+							ModId={ ModId }
+							ModIndex={ Index }
+						/>
 					) ) }
 					</tbody>
 				</Table>

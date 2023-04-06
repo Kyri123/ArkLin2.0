@@ -12,11 +12,11 @@ import ServerContext from "../Context/ServerContext";
 
 export function useArkServer( InstanceName : string ) {
 	const { InstanceData } = useContext( ServerContext );
-	const [ Instance, setInstance ] = useState( InstanceData[ InstanceName ] )
+	const [ Instance, setInstance ] = useState( InstanceData[ InstanceName ] );
 
 	const IsValid = () : boolean => {
 		return Instance !== undefined;
-	}
+	};
 
 	useEffect( () => {
 		setInstance( () => InstanceData[ InstanceName ] );
@@ -34,5 +34,5 @@ export function useArkServer( InstanceName : string ) {
 		State: Instance?.State || DefaultInstanceState(),
 		InstanceName: InstanceName,
 		PanelConfig: Instance?.PanelConfig || GetDefaultPanelServerConfig()
-	}
+	};
 }

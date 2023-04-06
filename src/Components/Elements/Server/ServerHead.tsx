@@ -1,5 +1,5 @@
 import { IServerCardProps } from "../../../Types/Server";
-import { Link, }            from "react-router-dom";
+import { Link }             from "react-router-dom";
 import {
 	useContext,
 	useState
@@ -22,7 +22,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 	const Server = useArkServer( Props.InstanceName );
 	const GAlert = useContext( AlertContext );
 	const [ SendCancel, setSendCancel ] = useState( false );
-	const [ ShowModals, setShowModal ] = useState( false )
+	const [ ShowModals, setShowModal ] = useState( false );
 
 	return (
 		<>
@@ -35,45 +35,77 @@ export default function CServerHead( Props : IServerCardProps ) {
 
 				<div className="col-12 mb-3">
 					<div className="card card-widget widget-user item-box m-0">
-						<div className="widget-user-header rounded-0 text-white p-0"
-							 style={ { background: `url('${ Server.ServerMap.BG }') center right` } }>
-							<div style={ { backgroundColor: "rgba(66,66,66,0.30)", height: "100%" } } className="p-3">
-								<h3 className="widget-user-username text-center text-light left">{ Server.Data.ark_SessionName }</h3>
+						<div
+							className="widget-user-header rounded-0 text-white p-0"
+							style={ {
+								background: `url('${ Server.ServerMap.BG }') center right`
+							} }
+						>
+							<div
+								style={ {
+									backgroundColor: "rgba(66,66,66,0.30)",
+									height: "100%"
+								} }
+								className="p-3"
+							>
+								<h3 className="widget-user-username text-center text-light left">
+									{ Server.Data.ark_SessionName }
+								</h3>
 
 								{ Server.State.IsListen ? (
 									<h5 className="widget-user-desc text-center">
 										<Link
 											to={ `steam://connect/${ Server.Data.panel_publicip }:${ Server.Data.ark_QueryPort }` }
-											className="text-light">
+											className="text-light"
+										>
 											{ Server.Data.panel_publicip }:{ Server.Data.ark_QueryPort }
 										</Link>
 									</h5>
 								) : (
-									<h5 className="widget-user-desc text-center text-light">{ Server.Data.panel_publicip }:{ Server.Data.ark_QueryPort }</h5>
+									<h5 className="widget-user-desc text-center text-light">
+										{ Server.Data.panel_publicip }:{ Server.Data.ark_QueryPort }
+									</h5>
 								) }
 							</div>
-							<div style={ { zIndex: 1000, height: 50 } } className={ "position-relative" }>
-								<img src={ Server.ServerMap.LOGO }
-									 className="position-absolute top-100 start-50 translate-middle"
-									 style={ { height: 100, width: 100 } }
-									 alt={ Server.Data.serverMap } /*style="border-top-width: 3px!important;height: 90px;width: 90px;background-color: #001f3f"*/ />
+							<div
+								style={ { zIndex: 1000, height: 50 } }
+								className={ "position-relative" }
+							>
+								<img
+									src={ Server.ServerMap.LOGO }
+									className="position-absolute top-100 start-50 translate-middle"
+									style={ { height: 100, width: 100 } }
+									alt={
+										Server.Data.serverMap
+									} /*style="border-top-width: 3px!important;height: 90px;width: 90px;background-color: #001f3f"*/
+								/>
 							</div>
 						</div>
 						<div className="card-footer p-0">
 							<div className="row">
 								<div className="col-12 col-md-3 pe-md-0">
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
-										<div className="info-box-content pt-2 ps-3 text-center">
+										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text"> STATUS </span>
-											<h6 className={ `description-header text-${ ServerStateToColor( Server.State.State ) }` }> { ServerStateToReadableString( Server.State.State ) }</h6>
+											<h6
+												className={ `description-header text-${ ServerStateToColor(
+													Server.State.State
+												) }` }
+											>
+												{ " " }
+												{ ServerStateToReadableString( Server.State.State ) }
+											</h6>
 										</div>
 									</div>
 								</div>
 								<div className="col-12 col-md-3 p-md-0">
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
-										<div className="info-box-content pt-2 ps-3 text-center">
+										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text">SPIELER</span>
-											<h6 className="description-header"> { Server.State.Player } / { Server.Data.ark_MaxPlayers } </h6>
+											<h6 className="description-header">
+												{ " " }
+												{ Server.State.Player } / { Server.Data.ark_MaxPlayers }{ " " }
+											</h6>
 										</div>
 									</div>
 								</div>
@@ -81,21 +113,38 @@ export default function CServerHead( Props : IServerCardProps ) {
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
 										<div className="info-box-content pt-2 ps-3 text-center">
 											<span className="description-text">AKTION</span>
-											<h6 className="description-header text-success">
+											<h6 className="description-header text-success h-100 align-middle">
 												<ButtonGroup>
 													<LTELoadingButton
-														Disabled={ !Account.Account.HasPermissionForServer( Server.InstanceName ) }
+														Disabled={
+															!Account.Account.HasPermissionForServer(
+																Server.InstanceName
+															)
+														}
 														IsLoading={ Server.State.ArkmanagerPID !== 0 }
-														onClick={ () => setShowModal( true ) }>Aktion</LTELoadingButton>
+														onClick={ () => setShowModal( true ) }
+													>
+														Aktion
+													</LTELoadingButton>
 													<LTELoadingButton
-														Disabled={ !Account.Account.HasPermissionForServer( Server.InstanceName ) }
+														Disabled={
+															!Account.Account.HasPermissionForServer(
+																Server.InstanceName
+															)
+														}
 														Hide={ Server.State.ArkmanagerPID <= 1 }
-														BtnColor={ "danger" } IsLoading={ SendCancel }
+														variant={ "danger" }
+														IsLoading={ SendCancel }
 														onClick={ async() => {
-															setSendCancel( true )
-															GAlert.DoSetAlert( await API_ServerLib.CancelAction( Server.InstanceName ) )
-															setSendCancel( false )
-														} }>
+															setSendCancel( true );
+															GAlert.DoSetAlert(
+																await API_ServerLib.CancelAction(
+																	Server.InstanceName
+																)
+															);
+															setSendCancel( false );
+														} }
+													>
 														<FontAwesomeIcon icon={ "cancel" }/>
 													</LTELoadingButton>
 												</ButtonGroup>
@@ -105,9 +154,10 @@ export default function CServerHead( Props : IServerCardProps ) {
 								</div>
 								<div className="col-12 col-md-3 ps-md-0">
 									<div className="info-box mb-0 p-0 rounded-0 h-100">
-										<div className="info-box-content pt-2 ps-3 text-center">
+										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text">VERSION</span>
-											<h6 className="description-header"><b>{ Server.State.ServerVersion }</b>
+											<h6 className="description-header">
+												<b>{ Server.State.ServerVersion }</b>
 											</h6>
 										</div>
 									</div>
@@ -118,8 +168,11 @@ export default function CServerHead( Props : IServerCardProps ) {
 				</div>
 			</div>
 
-			<CServerAction InstanceName={ Server.InstanceName } Show={ ShowModals }
-						   OnClose={ () => setShowModal( false ) }/>
+			<CServerAction
+				InstanceName={ Server.InstanceName }
+				Show={ ShowModals }
+				OnClose={ () => setShowModal( false ) }
+			/>
 		</>
-	)
+	);
 }

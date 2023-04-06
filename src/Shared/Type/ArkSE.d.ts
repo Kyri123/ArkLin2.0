@@ -3,7 +3,12 @@ import {
 	IMongoDB
 } from "../Api/MongoDB";
 
-export type TServerState = "NotInstalled" | "Offline" | "Online" | "ActionInProgress" | "Running";
+export type TServerState =
+	| "NotInstalled"
+	| "Offline"
+	| "Online"
+	| "ActionInProgress"
+	| "Running";
 
 export interface IInstanceState extends IMongoDB {
 	State : TServerState;
@@ -67,18 +72,18 @@ export interface IInstanceData extends Record<string, any> {
 
 export interface IOnlineUsers {
 	Username : string;
-	SteamID : number
+	SteamID : number;
 }
 
 export interface IPanelServerConfig {
 	BackupEnabled : boolean;
 	MaxBackupfolderSize : number;
 	BackupInterval : number;
-	AutoUpdateParameters : string[],
+	AutoUpdateParameters : string[];
 	AutoUpdateEnabled : boolean;
 	AutoUpdateInterval : number;
-	_id? : string
-	__v? : number
+	_id? : string;
+	__v? : number;
 }
 
 export interface IFullData {

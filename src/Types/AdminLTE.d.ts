@@ -1,14 +1,18 @@
-import {
-	IAdminLTEBaseT,
-	IChildrenBaseProps
-}                     from "./BaseTypes";
+/** @format */
+
 import { IconProp }   from "@fortawesome/fontawesome-svg-core";
-import {
+import React, {
 	HTMLAttributeAnchorTarget,
 	HTMLInputTypeAttribute
 }                     from "react";
-import { TLTEColors } from "../Shared/Type/AdminLTE";
 import { Variant }    from "react-bootstrap/types";
+import { TLTEColors } from "../Shared/Type/AdminLTE";
+import {
+	IChildrenBaseProps,
+	IPropsWithPermission
+}                     from "./BaseTypes";
+import { Button }     from "react-bootstrap";
+import { CardProps }  from "react-bootstrap/Card";
 
 export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
 
@@ -20,10 +24,10 @@ export interface IInputWithIcon extends IChildrenBaseProps {
 	Outline? : TFormOutline;
 }
 
-export interface IStateCardProps extends IChildrenBaseProps {
+export type IStateCardProps = CardProps & IPropsWithPermission & {
+	Color : TLTEColors;
 	BarPercent : number;
 	Title : string;
-	Color : TLTEColors;
 	Icon : IconProp;
 	BarColor : Variant;
 }
@@ -35,14 +39,15 @@ export interface INavLinkProps extends IChildrenBaseProps {
 	Target? : HTMLAttributeAnchorTarget | undefined;
 }
 
-export interface ILTELoadingButton extends IAdminLTEButton {
+export type ILTELoadingButton = IPropsWithPermission &
+	Button.ButtonProps & {
 	IsLoading? : boolean;
 	LoadingIcon? : IconProp;
-}
+};
 
-
-export interface IAdminLTEButton extends IAdminLTEBaseT<HTMLButtonElement> {
-	Disabled? : boolean;
-	Outline? : boolean;
-	Flat? : boolean;
+export type ILTEToggleButton = IPropsWithPermission &
+	Button.ButtonProps & {
+	Value? : boolean;
+	OnToggle? : ( Value : boolean ) => void;
+	Ref? : React.Ref<boolean>;
 }

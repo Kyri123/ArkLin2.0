@@ -10,7 +10,7 @@ interface IEmitEvents extends DefaultEventsMap {
 	OnPanelLogUpdated : ( Log : string[] ) => void;
 	OnServerUpdated : ( Updated : Record<string, IMO_Instance> ) => void;
 	OnServerRemoved : () => void;
-	"SteamApiUpdated" : () => void;
+	SteamApiUpdated : () => void;
 }
 
-type IListenEvents = DefaultEventsMap
+type IListenEvents = DefaultEventsMap;

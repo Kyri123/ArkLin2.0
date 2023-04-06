@@ -12,14 +12,21 @@ import { IGithubBranche }   from "../../../src/Shared/Api/github";
 import DB_GithubReleases    from "../MongoDB/DB_GithubReleases";
 
 export default function( Api : core.Express ) {
-
 	let Url = CreateUrl( EChangelogUrl.get );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.get( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<any[]> = {
 			Auth: false,
 			Success: true
-		}
+		};
 
 		const Request : IRequestBody = request.body;
 		if ( Request.UserClass ) {
@@ -27,15 +34,23 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
+	} );
 
 	Url = CreateUrl( EChangelogUrl.branches );
-	SystemLib.Log( "Install Router", SystemLib.ToBashColor( "Red" ), Url, SystemLib.ToBashColor( "Default" ), "| Mode:", SystemLib.ToBashColor( "Red" ), "POST" )
-	Api.get( Url, ( async( request : Request, response : Response ) => {
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		Url,
+		SystemLib.ToBashColor( "Default" ),
+		"| Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		"POST"
+	);
+	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : IAPIResponseBase<IGithubBranche[]> = {
 			Auth: false,
 			Success: true
-		}
+		};
 
 		const Request : IRequestBody = request.body;
 		if ( Request.UserClass ) {
@@ -43,6 +58,5 @@ export default function( Api : core.Express ) {
 		}
 
 		response.json( Response );
-	} ) );
-
+	} );
 }

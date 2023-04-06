@@ -10,13 +10,18 @@ export class JobTask {
 	private IsRun = false;
 	private RunNextTask = [ false, false ];
 
-	constructor( Interval : number, JobName : string, Task : ( CallCount : number ) => void ) {
+	constructor(
+		Interval : number,
+		JobName : string,
+		Task : ( CallCount : number ) => void
+	) {
 		this.JobName = JobName;
 		this.Interval = Interval;
 		this.TaskFunction = Task;
 		this.Task = setInterval( this.Tick.bind( this ), this.Interval );
-		this.Tick()
-			.then( () => SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName ) );
+		this.Tick().then( () =>
+			SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
+		);
 	}
 
 	public DestroyTask() {
@@ -61,10 +66,16 @@ export class TaskManagerClass {
 	public Jobs : Record<string, JobTask> = {};
 
 	async Init() {
-		for ( const File of fs.readdirSync( path.join( __basedir, "server/src/Tasks/Jobs" ) ) ) {
-			const Stats = fs.statSync( path.join( __basedir, "server/src/Tasks/Jobs", File ) );
+		for ( const File of fs.readdirSync(
+			path.join( __basedir, "server/src/Tasks/Jobs" )
+		) ) {
+			const Stats = fs.statSync(
+				path.join( __basedir, "server/src/Tasks/Jobs", File )
+			);
 			if ( Stats.isFile() && File.endsWith( ".Job.ts" ) ) {
-				const JobClass : JobTask = ( await import( path.join( __basedir, "server/src/Tasks/Jobs", File ) ) ).default as JobTask;
+				const JobClass : JobTask = (
+					await import(path.join( __basedir, "server/src/Tasks/Jobs", File ))
+				).default as JobTask;
 				this.Jobs[ JobClass.JobName ] = JobClass;
 			}
 		}
@@ -85,4 +96,3 @@ if ( !global.TManager ) {
 }
 
 export default TaskManager;
-

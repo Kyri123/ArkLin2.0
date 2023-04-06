@@ -3,15 +3,15 @@ export enum EPerm {
 	ManagePanel = "ArkLin verwalten",
 	PanelSettings = "ArkLin einstellen",
 	PanelLog = "ArkLin Log ansehen",
-	ManageServers = "Server Verwalten"
+	ManageServers = "Server Verwalten",
 }
 
 export enum EPerm_Server {
-	ExecuteActions = "Befehle an Server senden."
+	ExecuteActions = "Befehle an Server senden.",
 }
 
 export function GetEnumValue<T>( Enum : T, Value : T | string ) : string {
-	return ( Object.entries( Enum as any ).find( ( [ , val ] ) => val === Value )?.[ 0 ] )!;
+	return Object.entries( Enum as any ).find( ( [ , val ] ) => val === Value )?.[ 0 ]!;
 }
 
-export type TPermissions = EPerm | EPerm_Server
+export type TPermissions = EPerm | EPerm_Server;

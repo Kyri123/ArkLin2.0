@@ -43,10 +43,6 @@
       "warn",
       "always"
     ],
-    "react/jsx-curly-spacing": [
-      "warn",
-      "always"
-    ],
     "prefer-const": "warn",
     "no-control-regex": "off",
     "no-empty": "off",

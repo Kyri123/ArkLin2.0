@@ -1,5 +1,5 @@
 export type TLTEColors =
-	"danger"
+	| "danger"
 	| "success"
 	| "info"
 	| "primary"

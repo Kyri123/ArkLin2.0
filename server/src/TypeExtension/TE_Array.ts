@@ -3,7 +3,7 @@ export const INDEX_NONE = -1;
 export function TE_Array() {
 	Array.prototype.IsValidIndex = function( Idx ) {
 		return Idx > INDEX_NONE && Idx < this.length;
-	}
+	};
 
 	Array.prototype.RemoveByIndex = function( Idx ) {
 		if ( this.IsValidIndex( Idx ) ) {
@@ -13,7 +13,7 @@ export function TE_Array() {
 			SystemLib.DebugLog( "[ARRAY] Invalid index", Idx, "of", this.length );
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.AddAtIndex = function( Idx, Content ) {
 		if ( this.IsValidIndex( Idx ) ) {
@@ -28,16 +28,16 @@ export function TE_Array() {
 
 		SystemLib.DebugLog( "[ARRAY] Invalid index", Idx, "of", this.length );
 		return this;
-	}
+	};
 
 	Array.prototype.AddFirst = function( Content ) {
-		this.AddAtIndex( 0, Content )
+		this.AddAtIndex( 0, Content );
 		return this;
-	}
+	};
 
 	Array.prototype.AddBeforeIndex = function( Idx, Content ) {
 		if ( this.IsValidIndex( Idx ) ) {
-			this.AddAtIndex( Math.max( Idx - 1, 0 ), Content )
+			this.AddAtIndex( Math.max( Idx - 1, 0 ), Content );
 		}
 		else if ( Idx === 0 ) {
 			this.AddFirst( Content );
@@ -46,17 +46,17 @@ export function TE_Array() {
 			SystemLib.DebugLog( "[ARRAY] Invalid index", Idx, "of", this.length );
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.AddAfterIndex = function( Idx, Content ) {
 		if ( this.IsValidIndex( Idx ) || Idx === this.length ) {
-			this.AddAtIndex( Math.min( Idx + 1, this.length ), Content )
+			this.AddAtIndex( Math.min( Idx + 1, this.length ), Content );
 		}
 		else {
 			SystemLib.DebugLog( "[ARRAY] Invalid index", Idx, "of", this.length );
 		}
 		return this;
-	}
+	};
 
 	Array.prototype.RemoveFirst = function( Content ) {
 		const Index = this.FindIndexOf( Content );
