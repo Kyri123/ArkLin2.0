@@ -110,7 +110,7 @@ export default function CServerAction( Props : {
 			<Modal.Footer>
 				<LTELoadingButton
 					onClick={ SendCommand }
-					sisabled={ Selected === null }
+					disabled={ Selected === null }
 					IsLoading={ IsSending }
 				>
 					<FontAwesomeIcon icon={ "terminal" }/> Ausführen

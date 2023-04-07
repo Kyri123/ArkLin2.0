@@ -131,7 +131,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 						Flat
 						IsLoading={ IsSending }
 						variant={ "success" }
-						sisabled={
+						disabled={
 							InputRef.current !== null && InputRef.current.value === ""
 						}
 						onClick={ () => {

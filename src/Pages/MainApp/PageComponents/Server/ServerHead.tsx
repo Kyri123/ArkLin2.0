@@ -116,7 +116,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 											<h6 className="description-header text-success h-100 align-middle">
 												<ButtonGroup>
 													<LTELoadingButton
-														sisabled={
+														disabled={
 															!Account.Account.HasPermissionForServer(
 																Server.InstanceName
 															)
@@ -127,7 +127,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 														Aktion
 													</LTELoadingButton>
 													<LTELoadingButton
-														sisabled={
+														disabled={
 															!Account.Account.HasPermissionForServer(
 																Server.InstanceName
 															)

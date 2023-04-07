@@ -39,21 +39,21 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 			<LTELoadingButton
 				onClick={ () => setPage( 0 ) }
 				IsLoading={ false }
-				sisabled={ Page <= 0 }
+				disabled={ Page <= 0 }
 			>
 				<FontAwesomeIcon icon={ "angle-double-left" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( Page - 1 ) }
 				IsLoading={ false }
-				sisabled={ PageGroups[ Page - 1 ] === undefined }
+				disabled={ PageGroups[ Page - 1 ] === undefined }
 			>
 				<FontAwesomeIcon icon={ "angle-left" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				IsLoading={ false }
 				Hide={ PageGroups[ Page - 3 ] === undefined }
-				sisabled={ true }
+				disabled={ true }
 			>
 				...
 			</LTELoadingButton>
@@ -72,7 +72,7 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 			>
 				{ Page - 1 }
 			</LTELoadingButton>
-			<LTELoadingButton IsLoading={ false } sisabled={ true }>
+			<LTELoadingButton IsLoading={ false } disabled={ true }>
 				{ Page }
 			</LTELoadingButton>
 			<LTELoadingButton
@@ -93,21 +93,21 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 			<LTELoadingButton
 				IsLoading={ false }
 				Hide={ PageGroups[ Page + 3 ] === undefined }
-				sisabled={ true }
+				disabled={ true }
 			>
 				...
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( Page + 1 ) }
 				IsLoading={ false }
-				sisabled={ PageGroups[ Page + 1 ] === undefined }
+				disabled={ PageGroups[ Page + 1 ] === undefined }
 			>
 				<FontAwesomeIcon icon={ "angle-right" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( PageGroups.length - 1 ) }
 				IsLoading={ false }
-				sisabled={ Page === PageGroups.length - 1 }
+				disabled={ Page === PageGroups.length - 1 }
 			>
 				<FontAwesomeIcon icon={ "angle-double-right" }/>
 			</LTELoadingButton>

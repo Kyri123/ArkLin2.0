@@ -99,7 +99,7 @@ export default function SPUser() {
 			<Card.Footer>
 				<LTELoadingButton
 					onClick={ SaveSettings }
-					sisabled={ DisableSend }
+					disabled={ DisableSend }
 					IsLoading={ IsSending }
 				>
 					<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }

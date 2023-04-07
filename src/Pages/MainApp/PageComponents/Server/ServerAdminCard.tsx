@@ -166,7 +166,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 										<span className="description-text">AKTION</span> <br/>
 										<ButtonGroup>
 											<LTELoadingButton
-												sisabled={
+												disabled={
 													!Account.Account.HasPermissionForServer(
 														Server.InstanceName
 													)
@@ -177,7 +177,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 												Aktion
 											</LTELoadingButton>
 											<LTELoadingButton
-												sisabled={
+												disabled={
 													!Account.Account.HasPermissionForServer(
 														Server.InstanceName
 													)

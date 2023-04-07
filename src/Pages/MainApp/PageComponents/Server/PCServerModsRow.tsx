@@ -106,7 +106,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					IsLoading={ IsSendingMove }
 					id="FB_upload"
 					variant={ "gray-dark" }
-					sisabled={ ModIndex - 1 < 0 }
+					disabled={ ModIndex - 1 < 0 }
 					onClick={ () => MoveMod( -1 ) }
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
@@ -117,7 +117,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					id="FB_upload"
 					variant={ "gray-dark" }
 					onClick={ () => MoveMod( 1 ) }
-					sisabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
+					disabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-down" }/>

@@ -214,7 +214,7 @@ export default function PUsers() {
 											<FontAwesomeIcon icon={ "trash-alt" }/>
 										</LTELoadingButton>
 										<LTELoadingButton
-											sisabled={ IsCopied( Key._id ) }
+											disabled={ IsCopied( Key._id ) }
 											onClick={ () => DoCopy( Key.key, Key._id ) }
 											className={ "btn-sm flat" }
 											IsLoading={ false }

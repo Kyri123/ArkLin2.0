@@ -130,7 +130,12 @@ export default function MainApp() {
 			} ) )
 		);
 
+		SocketIO.on( "connect", GetAllServer );
+		SocketIO.on( "disconnect", () => setHasData( false ) );
+
 		return () => {
+			SocketIO.off( "connect" );
+			SocketIO.off( "disconnect" );
 			SocketIO.off( "OnServerUpdated" );
 			SocketIO.off( "OnServerStateFinished", GetAllServer );
 			SocketIO.off( "OnSystemUpdate" );
@@ -151,7 +156,7 @@ export default function MainApp() {
 						<p style={ { fontSize: 100 } }>
 							<FontAwesomeIcon icon={ "spinner" } spin={ true }/>
 						</p>
-						<p style={ { fontSize: 35 } }> Lese Server Daten...</p>
+						<p style={ { fontSize: 35 } }> Versuche verbindung zur API aufzubauen...</p>
 					</center>
 				</Modal.Body>
 			</Modal>
