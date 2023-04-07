@@ -4,6 +4,7 @@ if [ "$(whoami)" != "steam" ]; then
 fi
 
 BRANCH="$1"
+echo "useBranch: $BRANCH"
 
 export DOCKER_UID=$(id -u)
 export DOCKER_GID=$(id -g)

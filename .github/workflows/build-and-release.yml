@@ -32,10 +32,8 @@ jobs:
           context: .
           push: false
           tags: user/app:latest
-      - name: Archive Test Results
-        if: always()
-
-
+            
+  
   test-app:
     name: "Test and Build as App"
     needs: test-app
