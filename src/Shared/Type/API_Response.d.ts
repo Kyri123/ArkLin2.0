@@ -9,16 +9,18 @@ import { ISteamApiMod }         from "../Api/SteamAPI";
 import { TMO_Instance }         from "../Api/MongoDB";
 import { ISystemUsage }         from "./Systeminformation";
 
-export type ResponseWithMessage = {
-	Message : IAPIResponseMessage;
-}
-
-export type IAPIResponseBase<MessageOpt extends boolean = false, T = any> = {
+type ResponseBase = {
 	Success : boolean;
 	Auth : boolean;
 	Data : T;
 	Reached? : boolean;
-} & MessageOpt extends false ? ResponseWithMessage : Partial<ResponseWithMessage>;
+}
+
+type ResponseWithMessage = {
+	Message : IAPIResponseMessage;
+}
+
+export type IAPIResponseBase<MessageOpt extends boolean = false, T = any> = MessageOpt extends false ? ( ResponseBase & ResponseWithMessage ) : ( ResponseBase & Partial<ResponseWithMessage> );
 
 export interface IAPIResponseMessage {
 	Title : string;

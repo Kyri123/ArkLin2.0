@@ -1,6 +1,6 @@
 import { IAPIResponseBase } from "../../../src/Shared/Type/API_Response";
 
-export const DefaultResponseSuccess : IAPIResponseBase<undefined> = {
+export const DefaultResponseSuccess : IAPIResponseBase<false, undefined> = {
 	Auth: false,
 	Data: undefined,
 	Message: {
@@ -11,7 +11,7 @@ export const DefaultResponseSuccess : IAPIResponseBase<undefined> = {
 	Success: true
 };
 
-export const DefaultResponseFailed : IAPIResponseBase<undefined> = {
+export const DefaultResponseFailed : IAPIResponseBase<false, undefined> = {
 	Auth: false,
 	Data: undefined,
 	Message: {
