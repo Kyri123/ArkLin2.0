@@ -91,12 +91,42 @@ export class ServerLib {
 		return this.IsValid();
 	}
 
-	public IsInCluster() : boolean {
+	public get IsInCluster() : boolean {
 		return this.Cluster !== null;
 	}
 
+	/*
+	 * @return {IMO_Cluster | null} return null if not in a cluster
+	 */
 	public get GetCluster() : IMO_Cluster | null {
 		return this.Cluster;
+	}
+
+	/*
+	 * @return {ServerLib | undefined} return undefined if not in a cluster
+	 */
+	public async GetClusterMaster() : Promise<ServerLib | undefined> {
+		if ( this.IsMaster ) {
+			// we return self if we are the master
+			return this;
+		}
+		else if ( this.IsInCluster ) {
+			const Cluster = this.GetCluster!;
+			const MasterServer = new ServerLib( Cluster.Master );
+			if ( await MasterServer.Init() && MasterServer.IsMaster ) {
+				// we only want to return a init master to we make sure it's the master and it's valid
+				return MasterServer;
+			}
+		}
+		return undefined;
+	}
+
+	public get IsMaster() : boolean {
+		const Cluster = this.GetCluster;
+		if ( Cluster && this.IsValid() ) {
+			return Cluster.Master === this.MongoDBData?._id;
+		}
+		return false;
 	}
 
 	public EmitUpdate() {

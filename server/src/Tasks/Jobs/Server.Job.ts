@@ -34,6 +34,19 @@ export default new JobTask(
 					} );
 				}
 			}
+
+			if ( !Server.IsMaster && Server.IsInCluster ) {
+				const Cluster = Server.GetCluster;
+				const Master = await Server.GetClusterMaster();
+				if ( Master && Cluster ) {
+					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
+						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
+							const MasterContent = Master.GetConfigContent( Filename );
+							await Server.SetServerConfig( Path, MasterContent );
+						}
+					}
+				}
+			}
 		}
 	}
 );

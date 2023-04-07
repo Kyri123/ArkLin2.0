@@ -37,7 +37,6 @@ jobs:
   test-app:
     name: "Test and Build as App"
     runs-on: ubuntu-latest
-    needs: test-app
 
     strategy:
       matrix:
