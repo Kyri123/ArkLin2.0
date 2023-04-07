@@ -19,16 +19,18 @@ import { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
 import * as ini                from "ini";
 import {
 	IMO_Cluster,
-	IMO_Instance
+	IMO_Instance,
+	TMO_Instance
 }                              from "../../../src/Shared/Api/MongoDB";
 import { MakeRandomID }        from "./PathBuilder.Lib";
 import DB_Cluster              from "../MongoDB/DB_Cluster";
 import { EBashScript }         from "../Enum/EBashScript";
+import { If }                  from "../Types/Utils";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
 	InstanceName? : string
-) : Promise<ServerLib | undefined> {
+) : Promise<ServerLib<true> | undefined> {
 	const InstanceID = InstanceName || MakeRandomID( 20, true );
 	const ConfigFile = path.join(
 		__server_arkmanager,
@@ -49,8 +51,9 @@ export async function CreateServer(
 				LOGO: `/img/maps/TheIsland.jpg`
 			}
 		} );
-		const Lib = new ServerLib( InstanceID );
-		if ( await Lib.Init() ) {
+
+		const Lib = await ServerLib.build( InstanceID );
+		if ( Lib.IsValid() ) {
 			return Lib;
 		}
 	}
@@ -58,13 +61,13 @@ export async function CreateServer(
 	return undefined;
 }
 
-export class ServerLib {
+export class ServerLib<Ready extends boolean = boolean> {
 	public readonly Instance : string;
 	public readonly InstanceConfigFile : string;
-	private MongoDBData : IMO_Instance | null = null;
-	private Cluster : IMO_Cluster | null = null;
+	private MongoDBData : If<Ready, IMO_Instance, null> = null as If<Ready, IMO_Instance, null>;
+	private Cluster : If<Ready, IMO_Cluster, undefined> = undefined as If<Ready, IMO_Cluster, undefined>;
 
-	constructor( ServerInstance : string ) {
+	private constructor( ServerInstance : string ) {
 		this.Instance = ServerInstance;
 		this.InstanceConfigFile = path.join(
 			__server_arkmanager,
@@ -73,32 +76,43 @@ export class ServerLib {
 		);
 	}
 
-	get Get() : IMO_Instance | null {
-		return this.MongoDBData;
-	}
-
-	public async Init() : Promise<boolean> {
+	static async build( ServerInstance : string ) {
+		const Server = new ServerLib( ServerInstance );
 		try {
-			this.MongoDBData = ( await DB_Instances.findOne( {
-				Instance: this.Instance
-			} ) )!.toJSON();
-
-			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } );
-			this.Cluster = Cluster ? Cluster.toJSON() : null;
+			await Server.Init();
 		}
 		catch ( e ) {
 		}
+		return Server;
+	}
+
+	get Get() : If<Ready, TMO_Instance, undefined> {
+		return this.GetWithCluster();
+	}
+
+	private async Init() : Promise<boolean> {
+		try {
+			this.MongoDBData = ( await DB_Instances.findOne( {
+				Instance: this.Instance
+			} ) )!.toJSON() as If<Ready, IMO_Instance>;
+
+			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } );
+			this.Cluster = ( Cluster ? Cluster.toJSON() : null ) as If<Ready, IMO_Cluster, undefined>;
+		}
+		catch ( e ) {
+		}
+
 		return this.IsValid();
 	}
 
-	public get IsInCluster() : boolean {
-		return this.Cluster !== null;
+	public IsInCluster() : boolean {
+		return this.Cluster !== null && this.IsValid();
 	}
 
 	/*
 	 * @return {IMO_Cluster | null} return null if not in a cluster
 	 */
-	public get GetCluster() : IMO_Cluster | null {
+	public get GetCluster() : If<Ready, IMO_Cluster, undefined> {
 		return this.Cluster;
 	}
 
@@ -106,13 +120,17 @@ export class ServerLib {
 	 * @return {ServerLib | undefined} return undefined if not in a cluster
 	 */
 	public async GetClusterMaster() : Promise<ServerLib | undefined> {
+		if ( !this.IsValid() ) {
+			return undefined;
+		}
+
 		if ( this.IsMaster ) {
 			// we return self if we are the master
 			return this;
 		}
-		else if ( this.IsInCluster ) {
+		else if ( this.IsInCluster() ) {
 			const Cluster = this.GetCluster!;
-			const MasterServer = new ServerLib( Cluster.Master );
+			const MasterServer = await ServerLib.build( Cluster.Master );
 			if ( await MasterServer.Init() && MasterServer.IsMaster ) {
 				// we only want to return a init master to we make sure it's the master and it's valid
 				return MasterServer;
@@ -122,6 +140,10 @@ export class ServerLib {
 	}
 
 	public get IsMaster() : boolean {
+		if ( !this.IsValid() ) {
+			return false;
+		}
+
 		const Cluster = this.GetCluster;
 		if ( Cluster && this.IsValid() ) {
 			return Cluster.Master === this.MongoDBData?._id;
@@ -130,11 +152,22 @@ export class ServerLib {
 	}
 
 	public EmitUpdate() {
-		if ( this.MongoDBData !== null && this.IsValid() ) {
-			SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: this.MongoDBData } );
+		if ( this.IsValid() ) {
+			SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: this.GetWithCluster() as TMO_Instance } );
 		}
 	}
 
+	public GetWithCluster() : If<Ready, TMO_Instance, undefined> {
+		if ( this.IsValid() ) {
+			return ( {
+				...this.MongoDBData,
+				Cluster: this.GetCluster
+			} as TMO_Instance ) as If<Ready, TMO_Instance, undefined>;
+		}
+		return undefined as If<Ready, TMO_Instance, undefined>;
+	}
+
+	public IsValid() : this is ServerLib<true>;
 	public IsValid() : boolean {
 		return fs.existsSync( this.InstanceConfigFile ) && this.MongoDBData !== null;
 	}

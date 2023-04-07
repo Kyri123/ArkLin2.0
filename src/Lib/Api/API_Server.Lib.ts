@@ -3,7 +3,7 @@ import {
 	IFullData,
 	IPanelServerConfig
 }                              from "../../Shared/Type/ArkSE";
-import { IAPIResponseBase }    from "../../Types/API";
+import { IAPIResponseBase }    from "../../Shared/Type/API_Response";
 import { EArkmanagerCommands } from "../ServerUtils.Lib";
 import { EServerUrl }          from "../../Shared/Enum/Routing";
 

@@ -1,15 +1,21 @@
-import * as core            from "express-serve-static-core";
+import * as core                  from "express-serve-static-core";
 import {
 	Request,
 	Response
-}                           from "express-serve-static-core";
-import { CreateUrl }        from "../Lib/PathBuilder.Lib";
-import { IRequestBody }     from "../Types/Express";
-import { IAPIResponseBase } from "../../../src/Types/API";
-import { EChangelogUrl }    from "../../../src/Shared/Enum/Routing";
-import DB_GithubBranches    from "../MongoDB/DB_GithubBranches";
-import { IGithubBranche }   from "../../../src/Shared/Api/github";
-import DB_GithubReleases    from "../MongoDB/DB_GithubReleases";
+}                                 from "express-serve-static-core";
+import { CreateUrl }              from "../Lib/PathBuilder.Lib";
+import {
+	TResponse_Changelog_GetBranches,
+	TResponse_Changelog_GetChangelogs
+}                                 from "../../../src/Shared/Type/API_Response";
+import { EChangelogUrl }          from "../../../src/Shared/Enum/Routing";
+import DB_GithubBranches          from "../MongoDB/DB_GithubBranches";
+import DB_GithubReleases          from "../MongoDB/DB_GithubReleases";
+import { DefaultResponseSuccess } from "../Defaults/ApiRequest.Default";
+import {
+	TRequest_Changelog_GetBranches,
+	TRequest_Changelog_GetChangelogs
+}                                 from "../../../src/Shared/Type/API_Request";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EChangelogUrl.get );
@@ -23,13 +29,13 @@ export default function( Api : core.Express ) {
 		"POST"
 	);
 	Api.get( Url, async( request : Request, response : Response ) => {
-		const Response : IAPIResponseBase<any[]> = {
-			Auth: false,
-			Success: true
+		const Response : TResponse_Changelog_GetChangelogs = {
+			...DefaultResponseSuccess,
+			Data: []
 		};
 
-		const Request : IRequestBody = request.body;
-		if ( Request.UserClass ) {
+		const Request : TRequest_Changelog_GetChangelogs = request.body;
+		if ( Request.UserClass.IsValid() ) {
 			Response.Data = await DB_GithubReleases.find();
 		}
 
@@ -47,13 +53,13 @@ export default function( Api : core.Express ) {
 		"POST"
 	);
 	Api.get( Url, async( request : Request, response : Response ) => {
-		const Response : IAPIResponseBase<IGithubBranche[]> = {
-			Auth: false,
-			Success: true
+		const Response : TResponse_Changelog_GetBranches = {
+			...DefaultResponseSuccess,
+			Data: []
 		};
 
-		const Request : IRequestBody = request.body;
-		if ( Request.UserClass ) {
+		const Request : TRequest_Changelog_GetBranches = request.body;
+		if ( Request.UserClass.IsValid() ) {
 			Response.Data = await DB_GithubBranches.find();
 		}
 

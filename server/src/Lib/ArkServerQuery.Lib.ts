@@ -94,8 +94,8 @@ export async function SendCommand(
 		Response: "Server ist nicht vorhanden!",
 		Successfuly: false
 	};
-	const Server = new ServerLib( Instance );
-	if ( ( await Server.Init() ) && global.__PublicIP ) {
+	const Server = await ServerLib.build( Instance );
+	if ( Server.IsValid() && global.__PublicIP ) {
 		const Config = Server.GetConfig();
 		const State = await Server.GetState();
 		if ( Config.ark_RCONPort && Config.ark_RCONEnabled && State.IsListen ) {

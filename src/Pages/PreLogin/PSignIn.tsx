@@ -4,7 +4,7 @@ import {
 }                               from "react";
 import { CAlert }               from "../../Components/Elements/CAlert";
 import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
-import { IAPIResponseBase }     from "../../Types/API";
+import { IAPIResponseBase }     from "../../Shared/Type/API_Response";
 import { API_AuthLib }          from "../../Lib/Api/API_Auth.Lib";
 import { IAccountInformations } from "../../Shared/Type/User";
 import { CLTECheckbox }         from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";

@@ -37,6 +37,10 @@ export interface IMO_Cluster extends IMongoDB {
 
 }
 
+type TMO_Instance = IMO_Instance & {
+	Cluster? : IMO_Cluster | null | undefined;
+}
+
 export interface IMO_Instance extends IMongoDB {
 	Instance : string;
 	ArkmanagerCfg : IInstanceData;

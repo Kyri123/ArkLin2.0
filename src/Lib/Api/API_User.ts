@@ -1,6 +1,6 @@
 import { API_QueryLib }     from "./API_Query.Lib";
 import { IMO_AccountKeys }  from "../../Shared/Api/MariaDB";
-import { IAPIResponseBase } from "../../Types/API";
+import { IAPIResponseBase } from "../../Shared/Type/API_Response";
 import { IInstanceData }    from "../../Shared/Type/ArkSE";
 import { IMO_Accounts }     from "../../Shared/Api/MongoDB";
 import { EUserUrl }         from "../../Shared/Enum/Routing";

@@ -2,7 +2,7 @@ import {
 	useRef,
 	useState
 }                               from "react";
-import { IAPIResponseBase }     from "../../Types/API";
+import { IAPIResponseBase }     from "../../Shared/Type/API_Response";
 import { CAlert }               from "../../Components/Elements/CAlert";
 import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
 import { API_AuthLib }          from "../../Lib/Api/API_Auth.Lib";
@@ -77,14 +77,7 @@ export default function PSignUp() {
 		<>
 			<CAlert
 				OnClear={ () => {
-					if ( Response ) {
-						const Copy : IAPIResponseBase<IAccountInformations> | undefined =
-							structuredClone( Response );
-						if ( Copy ) {
-							Copy.Message = undefined;
-							setResponse( Copy );
-						}
-					}
+					setResponse( undefined );
 				} }
 				Data={ Response }
 			/>

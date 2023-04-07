@@ -1,14 +1,15 @@
 import {
-	IAPIRequestBase,
-	IAPIResponseBase
-}                      from "../../Types/API";
-import { TServerUrls } from "../../Shared/Enum/Routing";
+	IAPIResponseBase,
+	TResponse_NoData
+}                          from "../../Shared/Type/API_Response";
+import { TServerUrls }     from "../../Shared/Enum/Routing";
+import { IAPIRequestBase } from "../../Shared/Type/API_Request";
 
 export class API_QueryLib {
-	static async PostToAPI<T, D extends IAPIRequestBase = any>(
+	static async PostToAPI<T extends IAPIResponseBase = TResponse_NoData, D extends IAPIRequestBase = any>(
 		Path : TServerUrls,
 		Data : D = {} as D
-	) : Promise<IAPIResponseBase<T>> {
+	) : Promise<T> {
 		const Token = window.localStorage.getItem( "AuthToken" );
 		const requestOptions : RequestInit = {
 			method: "POST",
@@ -29,7 +30,7 @@ export class API_QueryLib {
 				if ( Resp.ok && Resp.status === 200 ) {
 					const Response = ( await Resp.json() ) as IAPIResponseBase<T>;
 					Response.Reached = true;
-					return Response;
+					return Response as T;
 				}
 			}
 		}
@@ -46,13 +47,13 @@ export class API_QueryLib {
 					"Leider konnte keine verbindung zur API aufgebaut werden... Ist die API offline?",
 				AlertType: "danger"
 			}
-		} as IAPIResponseBase<T>;
+		} as T;
 	}
 
-	static async GetFromAPI<T, D extends IAPIRequestBase = any>(
+	static async GetFromAPI<T extends IAPIResponseBase = TResponse_NoData, D extends IAPIRequestBase = any>(
 		Path : TServerUrls,
 		Data : D = {} as D
-	) : Promise<IAPIResponseBase<T>> {
+	) : Promise<T> {
 		const RequestData : string[] = [];
 
 		if ( Data ) {
@@ -81,7 +82,7 @@ export class API_QueryLib {
 			if ( Resp.ok && Resp.status === 200 ) {
 				const Response = ( await Resp.json() ) as IAPIResponseBase<T>;
 				Response.Reached = true;
-				return Response;
+				return Response as T;
 			}
 		}
 
@@ -94,6 +95,6 @@ export class API_QueryLib {
 					"Leider konnte keine verbindung zur API aufgebaut werden... Ist die API offline?",
 				AlertType: "danger"
 			}
-		};
+		} as T;
 	}
 }

@@ -1,29 +1,32 @@
-import * as core                from "express-serve-static-core";
+import * as core         from "express-serve-static-core";
 import {
 	Request,
 	Response
-}                               from "express-serve-static-core";
-import { CreateUrl }            from "../Lib/PathBuilder.Lib";
+}                        from "express-serve-static-core";
+import { CreateUrl }     from "../Lib/PathBuilder.Lib";
 import {
-	IAPIResponseBase,
-	IAPIResponseMessage
-}                               from "../../../src/Types/API";
-import { Md5 }                  from "ts-md5";
-import { ConfigManager }        from "../Lib/ConfigManager.Lib";
-import {
-	ISignInRequest,
-	ISignUpRequest
-}                               from "../../../src/Shared/Api/Auth.Request";
-import { IAccountInformations } from "../../../src/Shared/Type/User";
+	TResponse_Auth_SignIn,
+	TResponse_Auth_SignUp
+}                        from "../../../src/Shared/Type/API_Response";
+import { Md5 }           from "ts-md5";
+import { ConfigManager } from "../Lib/ConfigManager.Lib";
 import {
 	GenerateAccessToken,
 	GetSecretAppToken
-}                               from "../Lib/User.Lib";
-import DB_Accounts              from "../MongoDB/DB_Accounts";
-import DB_AccountKey            from "../MongoDB/DB_AccountKey";
-import { IMO_Accounts }         from "../../../src/Shared/Api/MongoDB";
-import * as jwt                 from "jsonwebtoken";
-import { EAuthUrl }             from "../../../src/Shared/Enum/Routing";
+}                        from "../Lib/User.Lib";
+import DB_Accounts       from "../MongoDB/DB_Accounts";
+import DB_AccountKey     from "../MongoDB/DB_AccountKey";
+import { IMO_Accounts }  from "../../../src/Shared/Api/MongoDB";
+import * as jwt          from "jsonwebtoken";
+import { EAuthUrl }      from "../../../src/Shared/Enum/Routing";
+import {
+	TRequest_Auth_SignIn,
+	TRequest_Auth_SignUp
+}                        from "../../../src/Shared/Type/API_Request";
+import {
+	DefaultResponseFailed,
+	DefaultResponseSuccess
+}                        from "../Defaults/ApiRequest.Default";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EAuthUrl.check );
@@ -42,7 +45,7 @@ export default function( Api : core.Express ) {
 
 		if ( Token == null ) {
 			response.json( {
-				Auth: false,
+				...DefaultResponseFailed,
 				Success: true
 			} );
 			return;
@@ -51,7 +54,7 @@ export default function( Api : core.Express ) {
 		jwt.verify( Token, GetSecretAppToken(), async( err, user : any ) => {
 			if ( err ) {
 				response.json( {
-					Auth: false,
+					...DefaultResponseFailed,
 					Success: true
 				} );
 				return;
@@ -74,16 +77,16 @@ export default function( Api : core.Express ) {
 								( User.exp - Math.trunc( Date.now() / 1000 ) ) / 24 / 60 / 60
 							);
 							response.json( {
+								...DefaultResponseSuccess,
 								Data: { JsonWebToken: NewToken },
-								Auth: true,
-								Success: true
+								Auth: true
 							} );
 							return;
 						}
 
 						response.json( {
-							Auth: true,
-							Success: true
+							...DefaultResponseSuccess,
+							Auth: true
 						} );
 						return;
 					}
@@ -110,18 +113,19 @@ export default function( Api : core.Express ) {
 		"POST"
 	);
 	Api.post( Url, async( request : Request, response : Response ) => {
-		const Failed = true;
-		const Message : IAPIResponseMessage = {
-			AlertType: "danger",
-			Message:
-				"Account konnte nicht erstellt werden da die daten nicht richtig sind.",
-			Title: "Account wurde nicht erstellt!"
+		const Response : TResponse_Auth_SignUp = {
+			...DefaultResponseFailed,
+			Message: {
+				AlertType: "danger",
+				Message:
+					"Account konnte nicht erstellt werden da die daten nicht richtig sind.",
+				Title: "Account wurde nicht erstellt!"
+			},
+			Data: {
+				JsonWebToken: ""
+			}
 		};
-		const Response : IAPIResponseBase<IAccountInformations> = {
-			Auth: false,
-			Success: true
-		};
-		const Request : ISignUpRequest = request.body as ISignUpRequest;
+		const Request : TRequest_Auth_SignUp = request.body;
 
 		if (
 			Request.password &&
@@ -162,10 +166,10 @@ export default function( Api : core.Express ) {
 						if ( NewAccount !== null ) {
 							await DB_AccountKey.deleteMany( { key: Request.accountkey } );
 
-							Message.Message =
-								"Account wurde erstellt du wirst nun eingeloggt.";
-							Message.AlertType = "success";
-							Message.Title = "Account erstellt!";
+							Response.Success = true;
+							Response.Message.Message = "Account wurde erstellt du wirst nun eingeloggt.";
+							Response.Message.AlertType = "success";
+							Response.Message.Title = "Account erstellt!";
 							Response.Auth = true;
 							Response.Data = {
 								JsonWebToken: GenerateAccessToken( NewAccount.toJSON() )
@@ -173,18 +177,15 @@ export default function( Api : core.Express ) {
 						}
 					}
 					else {
-						Message.Message = "Account Existiert bereits!";
+						Response.Message.Message = "Account Existiert bereits!";
 					}
 				}
 				else {
-					Message.Message = "Account Schlüssel ist nicht verfügbar!";
+					Response.Message.Message = "Account Schlüssel ist nicht verfügbar!";
 				}
 			}
 		}
 
-		if ( Failed ) {
-			Response.Message = Message;
-		}
 		response.json( Response );
 	} );
 
@@ -199,17 +200,18 @@ export default function( Api : core.Express ) {
 		"POST"
 	);
 	Api.post( Url, async( request : Request, response : Response ) => {
-		const Failed = true;
-		const Message : IAPIResponseMessage = {
-			AlertType: "danger",
-			Message: "Account wurde nicht gefunden.",
-			Title: "Fehler!"
+		const Response : TResponse_Auth_SignIn = {
+			...DefaultResponseFailed,
+			Message: {
+				AlertType: "danger",
+				Message: "Account wurde nicht gefunden.",
+				Title: "Fehler!"
+			},
+			Data: {
+				JsonWebToken: ""
+			}
 		};
-		const Response : IAPIResponseBase<IAccountInformations> = {
-			Auth: false,
-			Success: true
-		};
-		const Request : ISignInRequest = request.body as ISignInRequest;
+		const Request : TRequest_Auth_SignIn = request.body;
 
 		if (
 			Request.login &&
@@ -223,9 +225,10 @@ export default function( Api : core.Express ) {
 			} );
 
 			if ( UserCheck !== null ) {
-				Message.Message = "Erfolgreich eingeloggt!";
-				Message.AlertType = "success";
-				Message.Title = "Account erstellt!";
+				Response.Message.Message = "Erfolgreich eingeloggt!";
+				Response.Message.AlertType = "success";
+				Response.Message.Title = "Account erstellt!";
+				Response.Success = true;
 				Response.Auth = true;
 				Response.Data = {
 					JsonWebToken: GenerateAccessToken(
@@ -238,9 +241,6 @@ export default function( Api : core.Express ) {
 			}
 		}
 
-		if ( Failed ) {
-			Response.Message = Message;
-		}
 		response.json( Response );
 	} );
 }

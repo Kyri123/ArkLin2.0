@@ -30,7 +30,6 @@ export enum EServerUrl {
 	setpanelconfig = "server/setpanelconfig",
 	setserverconfig = "server/setserverconfig",
 	getglobalstate = "server/getglobalstate",
-	getmapicon = "server/getmapicon",
 	getallserver = "server/getallserver",
 }
 

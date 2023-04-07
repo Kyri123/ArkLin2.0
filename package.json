@@ -7,11 +7,11 @@
     "BuildServer": "tsc --project ./server/tsconfig.json",
     "Server": "ts-node --project ./server/tsconfig.json --files server/src production",
     "ServerDev": "ts-node --project ./server/tsconfig.json --files server/src development",
-    "Client": "vite build",
+    "Client": "tsc && vite build",
     "Nodemon": "concurrently -m 2 \"nodemon --config nodemon.react.json\" \"nodemon\"",
     "Dev": "yarn tailwindcss && concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
     "TestApp": "eslint src --fix && eslint server --fix",
-    "FullTestApp": "eslint src --fix && eslint server --fix && vite build && tsc --project ./server/tsconfig.json",
+    "FullTestApp": "yarn TestApp && yarn BuildServer && yarn Client",
     "tailwindcss": "postcss src/tailwind.css -o src/Css/App-TW.css"
   },
   "babel": {

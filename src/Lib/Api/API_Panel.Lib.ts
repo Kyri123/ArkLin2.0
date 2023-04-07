@@ -1,5 +1,5 @@
 import { API_QueryLib }     from "./API_Query.Lib";
-import { IAPIResponseBase } from "../../Types/API";
+import { IAPIResponseBase } from "../../Shared/Type/API_Response";
 import { EPanelUrl }        from "../../Shared/Enum/Routing";
 
 export class API_PanelLib {

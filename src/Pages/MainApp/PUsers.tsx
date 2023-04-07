@@ -17,7 +17,7 @@ import {
 import { EPerm }            from "../../Shared/Enum/User.Enum";
 import { API_User }         from "../../Lib/Api/API_User";
 import CPageCounter         from "../../Components/Elements/CPageCounter";
-import { IAPIResponseBase } from "../../Types/API";
+import { IAPIResponseBase } from "../../Shared/Type/API_Response";
 import { CAlert }           from "../../Components/Elements/CAlert";
 import { useCopy }          from "@kyri123/k-reactutils";
 import { IMO_Accounts }     from "../../Shared/Api/MongoDB";

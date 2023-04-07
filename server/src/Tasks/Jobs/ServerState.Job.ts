@@ -52,8 +52,8 @@ export default new JobTask(
 
 				ServerData[ Server ].Instance = Server;
 				if ( ( await DB_Instances.exists( { Instance: Server } ) ) !== null ) {
-					const ServerL = new ServerLib( Server );
-					if ( await ServerL.Init() ) {
+					const ServerL = await ServerLib.build( Server );
+					if ( ServerL.IsValid() ) {
 						await ServerL.SetServerConfig( "arkmanager.cfg", ServerData[ Server ] );
 					}
 				}
@@ -67,8 +67,8 @@ export default new JobTask(
 		if ( global.__PublicIP ) {
 			const Count = Math.max( Object.keys( ServerData ).length, 1 ) * 2;
 			for ( const [ InstanceName, InstanceData ] of Object.entries( ServerData ) ) {
-				const ServerL = new ServerLib( InstanceName );
-				if ( await ServerL.Init() ) {
+				const ServerL = await ServerLib.build( InstanceName );
+				if ( ServerL.IsValid() ) {
 					const InstanceState : Partial<IInstanceState> = {
 						IsListen: false,
 						State: "NotInstalled",

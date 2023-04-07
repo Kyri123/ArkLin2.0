@@ -19,8 +19,8 @@ export default new JobTask(
 		// Clear old Instances
 		for await ( const Instance of DB_Instances.find() ) {
 			const Data : IMO_Instance = Instance.toJSON();
-			const Server = new ServerLib( Data.Instance );
-			if ( !Server.Init() || !fs.existsSync( Server.InstanceConfigFile ) ) {
+			const Server = await ServerLib.build( Data.Instance );
+			if ( !Server.IsValid() || !fs.existsSync( Server.InstanceConfigFile ) ) {
 				SystemLib.LogWarning(
 					"[DB] Cleanup old DB information (Not Exsisting):",
 					Data.Instance

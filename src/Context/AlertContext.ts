@@ -1,5 +1,5 @@
 import React, { createContext }  from "react";
-import { IAPIResponseBase }      from "../Types/API";
+import { IAPIResponseBase }      from "../Shared/Type/API_Response";
 import { IAcceptActionFunction } from "../Components/Elements/CAcceptAction";
 
 export default createContext<{

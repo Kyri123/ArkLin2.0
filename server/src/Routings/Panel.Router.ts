@@ -1,15 +1,29 @@
-import * as core            from "express-serve-static-core";
+import * as core         from "express-serve-static-core";
 import {
 	Request,
 	Response
-}                           from "express-serve-static-core";
-import { CreateUrl }        from "../Lib/PathBuilder.Lib";
-import { IAPIResponseBase } from "../../../src/Types/API";
-import fs                   from "fs";
-import { IRequestBody }     from "../Types/Express";
-import { EPerm }            from "../../../src/Shared/Enum/User.Enum";
-import { ConfigManager }    from "../Lib/ConfigManager.Lib";
-import { EPanelUrl }        from "../../../src/Shared/Enum/Routing";
+}                        from "express-serve-static-core";
+import { CreateUrl }     from "../Lib/PathBuilder.Lib";
+import {
+	TResponse_Panel_GetConfig,
+	TResponse_Panel_Log,
+	TResponse_Panel_Restart,
+	TResponse_Panel_SetConfig
+}                        from "../../../src/Shared/Type/API_Response";
+import fs                from "fs";
+import { EPerm }         from "../../../src/Shared/Enum/User.Enum";
+import { ConfigManager } from "../Lib/ConfigManager.Lib";
+import { EPanelUrl }     from "../../../src/Shared/Enum/Routing";
+import {
+	DefaultResponseFailed,
+	DefaultResponseSuccess
+}                        from "../Defaults/ApiRequest.Default";
+import {
+	TRequest_Panel_GetConfig,
+	TRequest_Panel_Log,
+	TRequest_Panel_Restart,
+	TRequest_Panel_SetConfig
+}                        from "../../../src/Shared/Type/API_Request";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EPanelUrl.log );
@@ -23,13 +37,12 @@ export default function( Api : core.Express ) {
 		"GET"
 	);
 	Api.get( Url, async( request : Request, response : Response ) => {
-		const Response : IAPIResponseBase<string[]> = {
-			Auth: false,
-			Success: true,
+		const Response : TResponse_Panel_Log = {
+			...DefaultResponseSuccess,
 			Data: []
 		};
 
-		const Request : IRequestBody = request.body;
+		const Request : TRequest_Panel_Log = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.PanelLog ) ) {
 			if ( fs.existsSync( __LogFile ) ) {
 				Response.Data = fs
@@ -54,13 +67,11 @@ export default function( Api : core.Express ) {
 		"POST"
 	);
 	Api.post( Url, async( request : Request, response : Response ) => {
-		const Response : IAPIResponseBase<string[]> = {
-			Auth: false,
-			Success: true,
-			Data: []
+		const Response : TResponse_Panel_Restart = {
+			...DefaultResponseSuccess
 		};
 
-		const Request : IRequestBody = request.body;
+		const Request : TRequest_Panel_Restart = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.ManagePanel ) ) {
 			SystemLib.LogWarning(
 				"User Request:",
@@ -84,20 +95,11 @@ export default function( Api : core.Express ) {
 		"POST"
 	);
 	Api.post( Url, async( request : Request, response : Response ) => {
-		const Response : IAPIResponseBase = {
-			Auth: false,
-			Success: false,
-			Message: {
-				AlertType: "danger",
-				Message: `Fehler beim verarbeiten der Daten.`,
-				Title: "Fehler!"
-			}
+		const Response : TResponse_Panel_SetConfig = {
+			...DefaultResponseFailed
 		};
 
-		const Request : IRequestBody<{
-			Config? : string;
-			Data? : any;
-		}> = request.body;
+		const Request : TRequest_Panel_SetConfig = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.PanelSettings ) &&
 			Request.Config &&
@@ -127,15 +129,12 @@ export default function( Api : core.Express ) {
 		"GET"
 	);
 	Api.get( Url, async( request : Request, response : Response ) => {
-		const Response : IAPIResponseBase = {
-			Auth: false,
-			Success: true,
+		const Response : TResponse_Panel_GetConfig = {
+			...DefaultResponseSuccess,
 			Data: {}
 		};
 
-		const Request : IRequestBody<{
-			Config : string;
-		}> = request.body;
+		const Request : TRequest_Panel_GetConfig = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.PanelSettings ) &&
 			Request.Config

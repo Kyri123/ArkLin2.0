@@ -34,7 +34,7 @@ import {
 	IListenEvents
 }                                               from "./Shared/Type/Socket";
 import { ISystemUsage }                         from "./Shared/Type/Systeminformation";
-import { IAPIResponseBase }                     from "./Types/API";
+import { IAPIResponseBase }                     from "./Shared/Type/API_Response";
 import CSideHeader                              from "./Components/Elements/MainPage/CSideHeader";
 import CTraffics                                from "./Components/Elements/MainPage/CTraffics";
 import CFoother                                 from "./Components/Elements/MainPage/CFoother";

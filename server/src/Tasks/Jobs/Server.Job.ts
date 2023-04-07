@@ -15,8 +15,8 @@ export default new JobTask(
 		);
 
 		for await ( const ServerData of DB_Instances.find() ) {
-			const Server = new ServerLib( ServerData.Instance );
-			if ( await Server.Init() ) {
+			const Server = await ServerLib.build( ServerData.Instance );
+			if ( Server.IsValid() ) {
 				const Cfg = Server.Get!;
 				const PanelConfig = Cfg.PanelConfig;
 
@@ -35,7 +35,7 @@ export default new JobTask(
 				}
 			}
 
-			if ( !Server.IsMaster && Server.IsInCluster ) {
+			if ( !Server.IsMaster && Server.IsInCluster() ) {
 				const Cluster = Server.GetCluster;
 				const Master = await Server.GetClusterMaster();
 				if ( Master && Cluster ) {

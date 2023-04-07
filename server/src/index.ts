@@ -119,7 +119,7 @@ Api.all( "*", async function( req, res, next ) {
 		return;
 	}
 
-	jwt.verify( Token, GetSecretAppToken(), ( err, user : any ) => {
+	jwt.verify( Token, GetSecretAppToken(), async( err, user : any ) => {
 		if ( err ) {
 			res.json( {
 				Auth: false,
@@ -128,9 +128,22 @@ Api.all( "*", async function( req, res, next ) {
 			return;
 		}
 
-		req.body.UserClass = new UserLib( user );
+		req.body.UserClass = await UserLib.build( user );
 
-		next();
+		if ( req.body.UserClass.IsValid() ) {
+			next();
+			return;
+		}
+
+		res.json( {
+			Auth: false,
+			Success: false,
+			Message: {
+				AlertType: "danger",
+				Message: `Fehler beim verarbeiten der Daten.`,
+				Title: "Fehler!"
+			}
+		} );
 	} );
 } );
 
