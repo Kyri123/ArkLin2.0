@@ -3,10 +3,30 @@ import {
 	IDashboard_BaseConfig,
 	IDebugConfig,
 	ITaskConfig
-}                 from "../Types/Config";
-import path       from "path";
-import fs         from "fs";
-import { SSHLib } from "./SSH.Lib";
+}                        from "../Types/Config";
+import path              from "path";
+import fs                from "fs";
+import { SSHLib }        from "./SSH.Lib";
+import DB_GithubBranches from "../MongoDB/DB_GithubBranches";
+
+export async function GetCurrentBranch() : Promise<[ string, string | undefined ]> {
+	let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
+
+	const CurrentBranch = await DB_GithubBranches.findOne( { name: Branch } );
+	let Sha : string | undefined = undefined;
+	if ( !CurrentBranch ) {
+		ConfigManager.Write<IDashboard_BaseConfig>( "Dashboard_BaseConfig", {
+			...ConfigManager.GetDashboardConifg,
+			PANEL_Branch: "main"
+		} );
+		Branch = "main";
+	}
+	else {
+		Sha = CurrentBranch.sha;
+	}
+
+	return [ Branch, Sha ];
+}
 
 export class ConfigManagerClass {
 	protected readonly Dashboard_BaseConfig : IDashboard_BaseConfig;

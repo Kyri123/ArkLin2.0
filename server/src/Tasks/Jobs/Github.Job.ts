@@ -1,18 +1,18 @@
-import { JobTask }          from "../TaskManager";
+import { JobTask }       from "../TaskManager";
 import {
 	ConfigManager,
+	GetCurrentBranch,
 	SSHManager
-}                           from "../../Lib/ConfigManager.Lib";
-import { Octokit }          from "octokit";
-import DB_GithubBranches    from "../../MongoDB/DB_GithubBranches";
+}                        from "../../Lib/ConfigManager.Lib";
+import { Octokit }       from "octokit";
+import DB_GithubBranches from "../../MongoDB/DB_GithubBranches";
 import {
 	IGithubBranche,
 	IGithubReleases
-}                           from "../../../../src/Shared/Api/github";
-import DB_GithubReleases    from "../../MongoDB/DB_GithubReleases";
-import process              from "process";
-import { GetCurrentBranch } from "../../Lib/System.Lib";
-import { EBashScript }      from "../../Enum/EBashScript";
+}                        from "../../../../src/Shared/Api/github";
+import DB_GithubReleases from "../../MongoDB/DB_GithubReleases";
+import process           from "process";
+import { EBashScript }   from "../../Enum/EBashScript";
 
 const octokit = new Octokit( {
 	auth: ConfigManager.GetDashboardConifg.PANEL_GithubToken,

@@ -1,23 +1,12 @@
-import fs                   from "fs";
-import path                 from "path";
-import * as core            from "express-serve-static-core";
-import {
-	IEmitEvents,
-	IListenEvents
-}                           from "../../src/Shared/Type/Socket";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import { Socket }           from "socket.io";
+import fs                  from "fs";
+import path                from "path";
+import * as core           from "express-serve-static-core";
+import { SystemLib_Class } from "./Lib/System.Lib";
 
-export default function InstallSocketIO() {
-	const Connection = async(
-		socket : Socket<IListenEvents, IEmitEvents, DefaultEventsMap, any>
-	) => {
-		socket.emit( "Connect" );
-	};
-
-	SocketIO.on( "connection", Connection );
+if ( !global.SystemLib ) {
+	global.SystemLib = new SystemLib_Class( [ "Lin" ] );
 }
-
+ 
 export function InstallRoutings( Dir : string, Api : core.Express ) {
 	for ( const File of fs.readdirSync( Dir ) ) {
 		const DirTarget = path.join( Dir, File );

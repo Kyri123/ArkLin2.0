@@ -1,40 +1,15 @@
-import process           from "process";
-import os                from "os";
-import Util              from "util";
-import fs                from "fs";
+import process          from "process";
+import os               from "os";
+import Util             from "util";
+import fs               from "fs";
 import {
 	BashColorString,
 	SystemPlatform
-}                        from "../Types/System.Lib";
-import { InstallAllTE }  from "../TypeExtension/TE_InstallAll";
-import path              from "path";
-import * as console      from "console";
-import * as dotenv       from "dotenv";
-import {
-	IDashboard_BaseConfig,
-	IDebugConfig
-}                        from "../Types/Config";
-import { ConfigManager } from "./ConfigManager.Lib";
-import DB_GithubBranches from "../MongoDB/DB_GithubBranches";
-
-export async function GetCurrentBranch() : Promise<[ string, string | undefined ]> {
-	let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
-
-	const CurrentBranch = await DB_GithubBranches.findOne( { name: Branch } );
-	let Sha : string | undefined = undefined;
-	if ( !CurrentBranch ) {
-		ConfigManager.Write<IDashboard_BaseConfig>( "Dashboard_BaseConfig", {
-			...ConfigManager.GetDashboardConifg,
-			PANEL_Branch: "main"
-		} );
-		Branch = "main";
-	}
-	else {
-		Sha = CurrentBranch.sha;
-	}
-
-	return [ Branch, Sha ];
-}
+}                       from "../Types/System.Lib";
+import { InstallAllTE } from "../TypeExtension/TE_InstallAll";
+import * as console     from "console";
+import * as dotenv      from "dotenv";
+import { IDebugConfig } from "../Types/Config";
 
 export class SystemLib_Class {
 	public readonly IsDevMode : boolean;
@@ -230,21 +205,6 @@ export class SystemLib_Class {
 		return this.Platform === "Test";
 	}
 }
-
-global.__basedir = path.join( __dirname, "../../.." );
-global.__LogDir = path.join( __basedir, "/mount/PanelLogs/" );
-global.__LogFile = path.join(
-	__LogDir,
-	`${ Math.round( new Date().getTime() / 1000 ) }.log`
-);
-global.__configdir = path.join( __basedir, "mount/config" );
-global.__PackageJson = require( path.join( __basedir, "package.json" ) );
-global.__server_dir = path.join( __basedir, "mount/Server" );
-global.__server_arkmanager = path.join( __basedir, "mount/Arkmanager" );
-global.__server_logs = path.join( __basedir, "mount/Logs" );
-global.__server_backups = path.join( __basedir, "mount/Backups" );
-global.__SteamCMD = path.join( __basedir, "mount/steamCMD" );
-global.__git_dir = path.join( __basedir, "mount/Git/" );
 
 if ( !global.SystemLib ) {
 	global.SystemLib = new SystemLib_Class( [ "Lin" ] );

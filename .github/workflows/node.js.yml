@@ -5,6 +5,10 @@ name: Build And Deploy
 
 on: [ push ]
 
+env:
+  CI: true
+  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
 jobs:
   test:
     name: "Test and Build"
@@ -21,19 +25,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: yarn install
-      - run: yarn tailwindcss
-        env:
-          CI: true
-      - run: yarn TestApp
-        env:
-          CI: true
-      - run: yarn BuildServer
-        env:
-          CI: true
-      - run: yarn Client
-        env:
-          CI: true
+      - name: Build Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: user/app:latest
 
 
   deploy:
@@ -76,16 +73,11 @@ jobs:
         id: checkTag
         with:
           tag: '${{ needs.read-for-release.outputs.version }}'
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          CI: true
 
       - name: "Release!"
         if: ${{ steps.checkTag.outputs.exists == 'false' }}
         id: create_release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
           release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"

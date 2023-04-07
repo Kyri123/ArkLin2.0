@@ -1,34 +1,39 @@
+import "./InitDirs";
+import { InstallRoutings } from "./Init";
+import * as path           from "path";
 import "./Lib/System.Lib";
 import "./TypeExtension/TE_InstallAll";
 
-import express                              from "express";
-import * as path                            from "path";
-import * as http                            from "http";
-import { Server }                           from "socket.io";
+import express              from "express";
+import * as http            from "http";
+import {
+	Server,
+	Socket
+}                           from "socket.io";
 import {
 	IEmitEvents,
 	IListenEvents
-}                                           from "../../src/Shared/Type/Socket";
-import InstallSocketIO, { InstallRoutings } from "./Init";
-import * as process                         from "process";
-import fs                                   from "fs";
+}                           from "../../src/Shared/Type/Socket";
+import * as process         from "process";
+import fs                   from "fs";
 import {
 	ConfigManager,
 	SSHManager
-}                                           from "./Lib/ConfigManager.Lib";
+}                           from "./Lib/ConfigManager.Lib";
 import {
 	GetSecretAppToken,
 	UserLib
-}                                           from "./Lib/User.Lib";
-import fetch                                from "node-fetch";
-import * as mongoose                        from "mongoose";
-import AccountKey                           from "./MongoDB/DB_AccountKey";
-import DB_AccountKey                        from "./MongoDB/DB_AccountKey";
-import DB_Accounts                          from "./MongoDB/DB_Accounts";
-import TaskManager                          from "./Tasks/TaskManager";
-import * as jwt                             from "jsonwebtoken";
-import { CreateUrl }                        from "./Lib/PathBuilder.Lib";
-import { RunTest }                          from "./Testing";
+}                           from "./Lib/User.Lib";
+import * as mongoose        from "mongoose";
+import AccountKey           from "./MongoDB/DB_AccountKey";
+import DB_AccountKey        from "./MongoDB/DB_AccountKey";
+import DB_Accounts          from "./MongoDB/DB_Accounts";
+import TaskManager          from "./Tasks/TaskManager";
+import * as jwt             from "jsonwebtoken";
+import { CreateUrl }        from "./Lib/PathBuilder.Lib";
+import { RunTest }          from "./Testing";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import fetch                from "node-fetch";
 
 // Small fix if the cert fails!
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = String( 0 );
@@ -67,7 +72,13 @@ global.SocketIO = new Server<IListenEvents, IEmitEvents>( HttpServer, {
 Api.use( express.json() );
 Api.use( express.static( path.join( __basedir, "build" ) ) );
 
-InstallSocketIO();
+const Connection = async(
+	socket : Socket<IListenEvents, IEmitEvents, DefaultEventsMap, any>
+) => {
+	socket.emit( "Connect" );
+};
+
+SocketIO.on( "connection", Connection );
 
 Api.use( function( req, res, next ) {
 	res.setHeader( "Access-Control-Allow-Origin", "*" );
