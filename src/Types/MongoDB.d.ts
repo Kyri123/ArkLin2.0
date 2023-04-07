@@ -2,8 +2,14 @@ import {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
-}                       from "../Type/ArkSE";
-import { ISystemUsage } from "../Type/Systeminformation";
+}                       from "../Shared/Type/ArkSE";
+import { ISystemUsage } from "../Shared/Type/Systeminformation";
+
+
+export interface IMO_AccountKeys extends IMongoDB {
+	key : string;
+	AsSuperAdmin : boolean;
+}
 
 export interface IMongoDB {
 	_id? : string;

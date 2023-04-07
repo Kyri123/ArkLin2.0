@@ -4,12 +4,12 @@ import {
 }                       from "react";
 import { Modal }        from "react-bootstrap";
 import io, { Socket }   from "socket.io-client";
-import { API_PanelLib } from "../../../Lib/Api/API_Panel.Lib";
-import { SocketIOLib }  from "../../../Lib/Api/SocketIO.Lib";
+import { API_PanelLib } from "../../../../Lib/Api/API_Panel.Lib";
+import { SocketIOLib }  from "../../../../Lib/Api/SocketIO.Lib";
 import {
 	IEmitEvents,
 	IListenEvents
-}                       from "../../../Shared/Type/Socket";
+}                       from "../../../../Shared/Type/Socket";
 import CFormatLog       from "../Server/CFormatLog";
 
 interface IPanelLogProps {

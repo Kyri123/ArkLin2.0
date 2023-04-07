@@ -11,6 +11,7 @@ export enum EChangelogUrl {
 
 export enum EPanelUrl {
 	log = "panel/log",
+	update = "panel/update",
 	restart = "panel/restart",
 	setconfig = "panel/setconfig",
 	getconfig = "panel/getconfig",

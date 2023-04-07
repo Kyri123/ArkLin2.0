@@ -1,9 +1,9 @@
 import React, { createContext }  from "react";
 import { IAPIResponseBase }      from "../Shared/Type/API_Response";
-import { IAcceptActionFunction } from "../Components/Elements/CAcceptAction";
+import { IAcceptActionFunction } from "../Pages/MainApp/PageComponents/General/CAcceptAction";
 
 export default createContext<{
-	DoSetAlert : ( Value : IAPIResponseBase | undefined ) => void;
+	DoSetAlert : ( Value : IAPIResponseBase<true> | undefined ) => void;
 	setAcceptAction : React.Dispatch<
 		React.SetStateAction<IAcceptActionFunction<any>>
 	>;

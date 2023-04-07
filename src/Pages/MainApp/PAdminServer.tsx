@@ -3,11 +3,11 @@ import {
 	useEffect,
 	useState
 }                                      from "react";
-import CServerAdminCard                from "../../Components/Elements/Server/ServerAdminCard";
+import CServerAdminCard                from "./PageComponents/Server/ServerAdminCard";
 import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import { Modal }                       from "react-bootstrap";
-import { LTELoadingButton }            from "../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import CLTEInput                       from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { LTELoadingButton }            from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import CLTEInput                       from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "../../Shared/Default/Server.Default";
 import { API_ServerLib }               from "../../Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "../../Shared/SelectMask/Arkmanager_Command_Update.json";

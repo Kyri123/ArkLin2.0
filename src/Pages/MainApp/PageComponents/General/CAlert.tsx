@@ -6,12 +6,12 @@ import {
 	useState
 }                                from "react";
 import { Alert }                 from "react-bootstrap";
-import { GenerateIconFromColor } from "../../Lib/Conversion.Lib";
-import { IAPIResponseBase }      from "../../Shared/Type/API_Response";
-import { IChildrenBaseProps }    from "../../Types/BaseTypes";
+import { GenerateIconFromColor } from "../../../../Lib/Conversion.Lib";
+import { IAPIResponseBase }      from "../../../../Shared/Type/API_Response";
+import { IChildrenBaseProps }    from "../../../../Types/BaseTypes";
 
 export interface IAlertProps extends IChildrenBaseProps {
-	Data : IAPIResponseBase | undefined;
+	Data : IAPIResponseBase<true> | undefined;
 	OnClear : () => void;
 	Disable? : boolean;
 }

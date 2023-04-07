@@ -9,7 +9,7 @@ import DB_GithubBranches from "../../MongoDB/DB_GithubBranches";
 import {
 	IGithubBranche,
 	IGithubReleases
-}                        from "../../../../src/Shared/Api/github";
+}                        from "../../../../src/Shared/Type/github";
 import DB_GithubReleases from "../../MongoDB/DB_GithubReleases";
 import process           from "process";
 import { EBashScript }   from "../../Enum/EBashScript";

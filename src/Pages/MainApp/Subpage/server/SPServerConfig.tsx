@@ -14,8 +14,8 @@ import {
 	Row
 }                              from "react-bootstrap";
 import Select, { SingleValue } from "react-select";
-import CLTEInput               from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { LTELoadingButton }    from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import CLTEInput               from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { LTELoadingButton }    from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { useToggle }           from "@kyri123/k-reactutils";
 import { FontAwesomeIcon }     from "@fortawesome/react-fontawesome";
 import * as ini                from "ini";

@@ -3,24 +3,24 @@ import {
 	useEffect,
 	useId,
 	useState
-}                           from "react";
-import { EPerm }            from "../../Shared/Enum/User.Enum";
+}                                          from "react";
+import { EPerm }                           from "../../Shared/Enum/User.Enum";
 import {
 	useLocation,
 	useSearchParams
-}                           from "react-router-dom";
-import { API_PanelLib }     from "../../Lib/Api/API_Panel.Lib";
-import { Card }             from "react-bootstrap";
-import CLTEInput            from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { LTELoadingButton } from "../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import StringMapLib         from "../../Lib/StringMap.Lib";
-import usePermissionPage    from "../../Hooks/usePermissionPage";
-import AlertContext         from "../../Context/AlertContext";
-import { ISelectMask }      from "../../Shared/Type/Systeminformation";
-import { API_QueryLib }     from "../../Lib/Api/API_Query.Lib";
-import { EChangelogUrl }    from "../../Shared/Enum/Routing";
-import { IGithubBranche }   from "../../Shared/Api/github";
+}                                          from "react-router-dom";
+import { API_PanelLib }                    from "../../Lib/Api/API_Panel.Lib";
+import { Card }                            from "react-bootstrap";
+import CLTEInput                           from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { LTELoadingButton }                from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }                 from "@fortawesome/react-fontawesome";
+import StringMapLib                        from "../../Lib/StringMap.Lib";
+import usePermissionPage                   from "../../Hooks/usePermissionPage";
+import AlertContext                        from "../../Context/AlertContext";
+import { ISelectMask }                     from "../../Shared/Type/Systeminformation";
+import { API_QueryLib }                    from "../../Lib/Api/API_Query.Lib";
+import { EChangelogUrl }                   from "../../Shared/Enum/Routing";
+import { TResponse_Changelog_GetBranches } from "../../Shared/Type/API_Response";
 
 const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 
@@ -40,7 +40,7 @@ export default function PPanelsettings() {
 			Config = CONFIGS[ 1 ];
 		}
 		API_PanelLib.GetConfig( Config ).then( setConfigData );
-		API_QueryLib.GetFromAPI<IGithubBranche[]>( EChangelogUrl.branches ).then(
+		API_QueryLib.GetFromAPI<TResponse_Changelog_GetBranches>( EChangelogUrl.branches ).then(
 			( Data ) => {
 				if ( Data.Data ) {
 					setBRANCHES(

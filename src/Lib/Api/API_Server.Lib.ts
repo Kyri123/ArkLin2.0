@@ -1,9 +1,18 @@
 import { API_QueryLib }        from "./API_Query.Lib";
+import { IPanelServerConfig }  from "../../Shared/Type/ArkSE";
 import {
-	IFullData,
-	IPanelServerConfig
-}                              from "../../Shared/Type/ArkSE";
-import { IAPIResponseBase }    from "../../Shared/Type/API_Response";
+	IAPIResponseBase,
+	TResponse_Server_Addserver,
+	TResponse_Server_Cancelaction,
+	TResponse_Server_Getallserver,
+	TResponse_Server_Getconfigs,
+	TResponse_Server_Getglobalstate,
+	TResponse_Server_Getlogs,
+	TResponse_Server_Removeserver,
+	TResponse_Server_Sendcommand,
+	TResponse_Server_Setpanelconfig,
+	TResponse_Server_Setserverconfig
+}                              from "../../Shared/Type/API_Response";
 import { EArkmanagerCommands } from "../ServerUtils.Lib";
 import { EServerUrl }          from "../../Shared/Enum/Routing";
 
@@ -12,8 +21,8 @@ export class API_ServerLib {
 		ServerInstance : string,
 		ConfigFile : string,
 		Data : any
-	) : Promise<IAPIResponseBase> {
-		return await API_QueryLib.PostToAPI<Record<string, string>>(
+	) : Promise<TResponse_Server_Setserverconfig> {
+		return await API_QueryLib.PostToAPI<TResponse_Server_Setserverconfig>(
 			EServerUrl.setserverconfig,
 			{
 				ConfigFile: ConfigFile,
@@ -26,8 +35,8 @@ export class API_ServerLib {
 	static async SetPanelConfig(
 		ServerInstance : string,
 		Data : Partial<IPanelServerConfig>
-	) : Promise<IAPIResponseBase> {
-		return await API_QueryLib.PostToAPI<Record<string, string>>(
+	) : Promise<TResponse_Server_Setpanelconfig> {
+		return await API_QueryLib.PostToAPI<TResponse_Server_Setpanelconfig>(
 			EServerUrl.setpanelconfig,
 			{
 				ServerInstance: ServerInstance,
@@ -39,23 +48,23 @@ export class API_ServerLib {
 	static async GetConfigFiles(
 		ServerInstance : string
 	) : Promise<Record<string, string>> {
-		const Resp = await API_QueryLib.PostToAPI<Record<string, string>>(
+		const Resp = await API_QueryLib.PostToAPI<TResponse_Server_Getconfigs>(
 			EServerUrl.getconfigs,
 			{
 				ServerInstance: ServerInstance
 			}
 		);
-		return Resp.Data || {};
+		return Resp.Data as Record<string, string> || {};
 	}
 
 	static async GetConfigFromFile(
 		ServerInstance : string,
 		LogFile : string
 	) : Promise<[ Record<string, any>, string ]> {
-		const Resp = await API_QueryLib.PostToAPI<{
+		const Resp = await API_QueryLib.PostToAPI<IAPIResponseBase<false, {
 			Obj : Record<string, any>;
 			String : string;
-		}>( EServerUrl.getconfigs, {
+		}>>( EServerUrl.getconfigs, {
 			ServerInstance: ServerInstance,
 			LogFile: LogFile
 		} );
@@ -65,28 +74,28 @@ export class API_ServerLib {
 	static async GetLogFiles(
 		ServerInstance : string
 	) : Promise<Record<string, string>> {
-		const Resp = await API_QueryLib.PostToAPI<Record<string, string>>(
+		const Resp = await API_QueryLib.PostToAPI<TResponse_Server_Getlogs>(
 			EServerUrl.getlogs,
 			{
 				ServerInstance: ServerInstance
 			}
 		);
-		return Resp.Data || {};
+		return Resp.Data as Record<string, string> || {};
 	}
 
 	static async GetLogFromFile(
 		ServerInstance : string,
 		LogFile : string
 	) : Promise<string> {
-		const Resp = await API_QueryLib.PostToAPI<string>( EServerUrl.getlogs, {
+		const Resp = await API_QueryLib.PostToAPI<TResponse_Server_Getlogs>( EServerUrl.getlogs, {
 			ServerInstance: ServerInstance,
 			LogFile: LogFile
 		} );
-		return Resp.Data || "";
+		return Resp.Data as string || "";
 	}
 
-	static async CancelAction( ServerInstance : string ) {
-		return await API_QueryLib.PostToAPI<any>( EServerUrl.cancelaction, {
+	static async CancelAction( ServerInstance : string ) : Promise<TResponse_Server_Cancelaction> {
+		return await API_QueryLib.PostToAPI<TResponse_Server_Cancelaction>( EServerUrl.cancelaction, {
 			ServerInstance: ServerInstance
 		} );
 	}
@@ -95,33 +104,34 @@ export class API_ServerLib {
 		ServerInstance : string,
 		Command : EArkmanagerCommands,
 		Parameter : string[]
-	) {
-		return await API_QueryLib.PostToAPI<any>( EServerUrl.sendcommand, {
+	) : Promise<TResponse_Server_Sendcommand> {
+		return await API_QueryLib.PostToAPI<TResponse_Server_Sendcommand>( EServerUrl.sendcommand, {
 			ServerInstance: ServerInstance,
 			Command: Command,
 			Parameter: Parameter
 		} );
 	}
 
-	static async GetAllServer() {
-		return await API_QueryLib.GetFromAPI<IFullData>(
+	static async GetAllServer() : Promise<TResponse_Server_Getallserver> {
+		return await API_QueryLib.GetFromAPI<TResponse_Server_Getallserver>(
 			EServerUrl.getallserver,
 			{}
 		);
 	}
 
 	static async GetGlobalState() : Promise<number[]> {
-		const Data = await API_QueryLib.GetFromAPI<number[]>(
+		const Data = await API_QueryLib.GetFromAPI<TResponse_Server_Getglobalstate>(
 			EServerUrl.getglobalstate,
 			{}
 		);
+
 		return Data.Data ? Data.Data : [ 0, 0, 0 ];
 	}
 
 	static async AddServer(
 		Config : IPanelServerConfig
-	) : Promise<IAPIResponseBase<IPanelServerConfig>> {
-		return await API_QueryLib.PostToAPI<IPanelServerConfig>(
+	) : Promise<TResponse_Server_Addserver> {
+		return await API_QueryLib.PostToAPI<TResponse_Server_Addserver>(
 			EServerUrl.addserver,
 			{
 				Config: Config
@@ -131,8 +141,8 @@ export class API_ServerLib {
 
 	static async RemoveServer(
 		InstanceName : string
-	) : Promise<IAPIResponseBase<IPanelServerConfig>> {
-		return await API_QueryLib.PostToAPI<IPanelServerConfig>(
+	) : Promise<TResponse_Server_Removeserver> {
+		return await API_QueryLib.PostToAPI<TResponse_Server_Removeserver>(
 			EServerUrl.removeserver,
 			{
 				InstanceName: InstanceName

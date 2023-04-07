@@ -11,11 +11,12 @@ import {
 import { EChangelogUrl }          from "../../../src/Shared/Enum/Routing";
 import DB_GithubBranches          from "../MongoDB/DB_GithubBranches";
 import DB_GithubReleases          from "../MongoDB/DB_GithubReleases";
-import { DefaultResponseSuccess } from "../Defaults/ApiRequest.Default";
+import { DefaultResponseSuccess } from "../../../src/Shared/Default/ApiRequest.Default";
 import {
 	TRequest_Changelog_GetBranches,
 	TRequest_Changelog_GetChangelogs
 }                                 from "../../../src/Shared/Type/API_Request";
+import { UserLib }                from "../Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EChangelogUrl.get );
@@ -34,7 +35,7 @@ export default function( Api : core.Express ) {
 			Data: []
 		};
 
-		const Request : TRequest_Changelog_GetChangelogs = request.body;
+		const Request : TRequest_Changelog_GetChangelogs<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.IsValid() ) {
 			Response.Data = await DB_GithubReleases.find();
 		}
@@ -58,7 +59,7 @@ export default function( Api : core.Express ) {
 			Data: []
 		};
 
-		const Request : TRequest_Changelog_GetBranches = request.body;
+		const Request : TRequest_Changelog_GetBranches<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.IsValid() ) {
 			Response.Data = await DB_GithubBranches.find();
 		}

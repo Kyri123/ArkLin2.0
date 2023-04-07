@@ -1,7 +1,7 @@
 import * as mongoose              from "mongoose";
 import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import { ISteamApiMod }           from "../../../src/Shared/Api/SteamAPI";
-import { IMongoDB }               from "../../../src/Shared/Api/MongoDB";
+import { ISteamApiMod }           from "../../../src/Types/SteamAPI";
+import { IMongoDB }               from "../../../src/Types/MongoDB";
 
 const Schema = new mongoose.Schema<ISteamApiMod & IMongoDB>(
 	{

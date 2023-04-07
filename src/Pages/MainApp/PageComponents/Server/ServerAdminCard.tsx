@@ -1,4 +1,4 @@
-import { IServerCardProps }                     from "../../../Types/Server";
+import { IServerCardProps }                     from "../../../../Types/Server";
 import { Link }                                 from "react-router-dom";
 import {
 	useContext,
@@ -9,24 +9,24 @@ import { FontAwesomeIcon }                      from "@fortawesome/react-fontawe
 import {
 	ServerStateToColor,
 	ServerStateToReadableString
-}                                               from "../../../Lib/Conversion.Lib";
-import { useArkServer }                         from "../../../Hooks/useArkServer";
-import CAcceptAction, { IAcceptActionFunction } from "../CAcceptAction";
+}                                               from "../../../../Lib/Conversion.Lib";
+import { useArkServer }                         from "../../../../Hooks/useArkServer";
+import CAcceptAction, { IAcceptActionFunction } from "../General/CAcceptAction";
 import {
 	ButtonGroup,
 	Modal
 }                                               from "react-bootstrap";
-import { EPerm }                                from "../../../Shared/Enum/User.Enum";
-import { GetDefaultPanelServerConfig }          from "../../../Shared/Default/Server.Default";
-import { LTELoadingButton }                     from "../AdminLTE/AdminLTE_Buttons";
-import { API_ServerLib }                        from "../../../Lib/Api/API_Server.Lib";
-import Update_SelectMask                        from "../../../Shared/SelectMask/Arkmanager_Command_Update.json";
-import { IPanelServerConfig }                   from "../../../Shared/Type/ArkSE";
+import { EPerm }                                from "../../../../Shared/Enum/User.Enum";
+import { GetDefaultPanelServerConfig }          from "../../../../Shared/Default/Server.Default";
+import { LTELoadingButton }                     from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { API_ServerLib }                        from "../../../../Lib/Api/API_Server.Lib";
+import Update_SelectMask                        from "../../../../Shared/SelectMask/Arkmanager_Command_Update.json";
+import { IPanelServerConfig }                   from "../../../../Shared/Type/ArkSE";
 import CServerAction                            from "./CServerAction";
-import AlertContext                             from "../../../Context/AlertContext";
-import AccountContext                           from "../../../Context/AccountContext";
-import CLTEInput                                from "../AdminLTE/AdminLTE_Inputs";
-import { ISelectMask }                          from "../../../Shared/Type/Systeminformation";
+import AlertContext                             from "../../../../Context/AlertContext";
+import AccountContext                           from "../../../../Context/AccountContext";
+import CLTEInput                                from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { ISelectMask }                          from "../../../../Shared/Type/Systeminformation";
 
 export default function CServerAdminCard( Props : IServerCardProps ) {
 	const GAlert = useContext( AlertContext );
@@ -166,7 +166,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 										<span className="description-text">AKTION</span> <br/>
 										<ButtonGroup>
 											<LTELoadingButton
-												Disabled={
+												sisabled={
 													!Account.Account.HasPermissionForServer(
 														Server.InstanceName
 													)
@@ -177,7 +177,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 												Aktion
 											</LTELoadingButton>
 											<LTELoadingButton
-												Disabled={
+												sisabled={
 													!Account.Account.HasPermissionForServer(
 														Server.InstanceName
 													)

@@ -1,4 +1,4 @@
-import { IServerCardProps } from "../../../Types/Server";
+import { IServerCardProps } from "../../../../Types/Server";
 import { Link }             from "react-router-dom";
 import {
 	useContext,
@@ -8,14 +8,14 @@ import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import {
 	ServerStateToColor,
 	ServerStateToReadableString
-}                           from "../../../Lib/Conversion.Lib";
-import { useArkServer }     from "../../../Hooks/useArkServer";
+}                           from "../../../../Lib/Conversion.Lib";
+import { useArkServer }     from "../../../../Hooks/useArkServer";
 import { ButtonGroup }      from "react-bootstrap";
-import { LTELoadingButton } from "../AdminLTE/AdminLTE_Buttons";
-import { API_ServerLib }    from "../../../Lib/Api/API_Server.Lib";
+import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
 import CServerAction        from "./CServerAction";
-import AlertContext         from "../../../Context/AlertContext";
-import AccountContext       from "../../../Context/AccountContext";
+import AlertContext         from "../../../../Context/AlertContext";
+import AccountContext       from "../../../../Context/AccountContext";
 
 export default function CServerHead( Props : IServerCardProps ) {
 	const Account = useContext( AccountContext );
@@ -116,7 +116,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 											<h6 className="description-header text-success h-100 align-middle">
 												<ButtonGroup>
 													<LTELoadingButton
-														Disabled={
+														sisabled={
 															!Account.Account.HasPermissionForServer(
 																Server.InstanceName
 															)
@@ -127,7 +127,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 														Aktion
 													</LTELoadingButton>
 													<LTELoadingButton
-														Disabled={
+														sisabled={
 															!Account.Account.HasPermissionForServer(
 																Server.InstanceName
 															)

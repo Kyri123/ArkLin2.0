@@ -21,7 +21,7 @@ import {
 	IMO_Cluster,
 	IMO_Instance,
 	TMO_Instance
-}                              from "../../../src/Shared/Api/MongoDB";
+}                              from "../../../src/Types/MongoDB";
 import { MakeRandomID }        from "./PathBuilder.Lib";
 import DB_Cluster              from "../MongoDB/DB_Cluster";
 import { EBashScript }         from "../Enum/EBashScript";

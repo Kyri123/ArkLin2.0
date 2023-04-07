@@ -23,7 +23,7 @@ import {
 	ServerLib
 }                                      from "../../Lib/Server.Lib";
 import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
-import { IMO_Instance }                from "../../../../src/Shared/Api/MongoDB";
+import { IMO_Instance }                from "../../../../src/Types/MongoDB";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerStateInterval,

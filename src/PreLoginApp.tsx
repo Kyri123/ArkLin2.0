@@ -19,7 +19,7 @@ import {
 	Navigate,
 	useLocation
 }                          from "react-router-dom";
-import { LTERibbon }       from "./Components/Elements/AdminLTE/AdminLTE";
+import { LTERibbon }       from "./Pages/Components/Elements/AdminLTE/AdminLTE";
 import AccountContext      from "./Context/AccountContext";
 import PSignIn             from "./Pages/PreLogin/PSignIn";
 import PSignUp             from "./Pages/PreLogin/PSignUp";

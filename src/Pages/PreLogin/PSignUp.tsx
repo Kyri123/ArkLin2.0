@@ -1,26 +1,25 @@
 import {
 	useRef,
 	useState
-}                               from "react";
-import { IAPIResponseBase }     from "../../Shared/Type/API_Response";
-import { CAlert }               from "../../Components/Elements/CAlert";
-import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
-import { API_AuthLib }          from "../../Lib/Api/API_Auth.Lib";
-import { IAccountInformations } from "../../Shared/Type/User";
-import useAuth                  from "../../Hooks/useAuth";
+}                                    from "react";
+import { TResponse_Auth_IsLoggedIn } from "../../Shared/Type/API_Response";
+import { CAlert }                    from "../MainApp/PageComponents/General/CAlert";
+import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
+import { API_AuthLib }               from "../../Lib/Api/API_Auth.Lib";
+import useAuth                       from "../../Hooks/useAuth";
 import {
 	Col,
 	FloatingLabel,
 	Form,
 	Row
-}                               from "react-bootstrap";
-import { LTELoadingButton }     from "../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                                    from "react-bootstrap";
+import { LTELoadingButton }          from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
 
 export default function PSignUp() {
 	const { SetToken } = useAuth();
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
 	const [ Response, setResponse ] = useState<
-		IAPIResponseBase<IAccountInformations> | undefined
+		TResponse_Auth_IsLoggedIn<true> | undefined
 	>();
 
 	const [ IsSending, setIsSending ] = useState( false );
@@ -33,7 +32,7 @@ export default function PSignUp() {
 
 	const OnReg = async() => {
 		setIsSending( true );
-		let Resp : IAPIResponseBase<IAccountInformations> | undefined = undefined;
+		let Resp : TResponse_Auth_IsLoggedIn<true> | undefined = undefined;
 
 		const target = {
 			user: LoginRef.current?.value || "",

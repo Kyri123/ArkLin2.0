@@ -1,20 +1,21 @@
-import { Modal }                  from "react-bootstrap";
-import { LTELoadingButton }       from "../AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import { Modal }            from "react-bootstrap";
+import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import {
 	useContext,
 	useEffect,
 	useState
-}                                 from "react";
-import CLTEInput, { ISelectMask } from "../AdminLTE/AdminLTE_Inputs";
+}                           from "react";
+import CLTEInput            from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import {
 	EArkmanagerCommands,
 	GetMaskFromCommand
-}                                 from "../../../Lib/ServerUtils.Lib";
-import Select                     from "react-select";
-import { API_ServerLib }          from "../../../Lib/Api/API_Server.Lib";
-import { useArkServer }           from "../../../Hooks/useArkServer";
-import AlertContext               from "../../../Context/AlertContext";
+}                           from "../../../../Lib/ServerUtils.Lib";
+import Select               from "react-select";
+import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
+import { useArkServer }     from "../../../../Hooks/useArkServer";
+import AlertContext         from "../../../../Context/AlertContext";
+import { ISelectMask }      from "../../../../Shared/Type/Systeminformation";
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },
@@ -109,7 +110,7 @@ export default function CServerAction( Props : {
 			<Modal.Footer>
 				<LTELoadingButton
 					onClick={ SendCommand }
-					Disabled={ Selected === null }
+					sisabled={ Selected === null }
 					IsLoading={ IsSending }
 				>
 					<FontAwesomeIcon icon={ "terminal" }/> Ausführen

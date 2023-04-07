@@ -17,17 +17,17 @@ import {
 	useLocation
 }                                               from "react-router-dom";
 import io, { Socket }                           from "socket.io-client";
-import CAcceptAction, { IAcceptActionFunction } from "./Components/Elements/CAcceptAction";
-import { CAlert }                               from "./Components/Elements/CAlert";
-import CLeftNavigation                          from "./Components/Elements/MainPage/CLeftNavigation";
-import CTopNavigation                           from "./Components/Elements/MainPage/CTopNavigation";
+import CAcceptAction, { IAcceptActionFunction } from "./Pages/MainApp/PageComponents/General/CAcceptAction";
+import { CAlert }                               from "./Pages/MainApp/PageComponents/General/CAlert";
+import CLeftNavigation                          from "./Pages/MainApp/PageComponents/Page/CLeftNavigation";
+import CTopNavigation                           from "./Pages/MainApp/PageComponents/Page/CTopNavigation";
 import AccountContext                           from "./Context/AccountContext";
 import AlertContext                             from "./Context/AlertContext";
 import ServerContext                            from "./Context/ServerContext";
 import { API_ServerLib }                        from "./Lib/Api/API_Server.Lib";
 import { API_System }                           from "./Lib/Api/API_System";
 import { SocketIOLib }                          from "./Lib/Api/SocketIO.Lib";
-import { IMO_Instance }                         from "./Shared/Api/MongoDB";
+import { TMO_Instance }                         from "./Types/MongoDB";
 import { DefaultSystemUsage }                   from "./Shared/Default/Server.Default";
 import {
 	IEmitEvents,
@@ -35,9 +35,9 @@ import {
 }                                               from "./Shared/Type/Socket";
 import { ISystemUsage }                         from "./Shared/Type/Systeminformation";
 import { IAPIResponseBase }                     from "./Shared/Type/API_Response";
-import CSideHeader                              from "./Components/Elements/MainPage/CSideHeader";
-import CTraffics                                from "./Components/Elements/MainPage/CTraffics";
-import CFoother                                 from "./Components/Elements/MainPage/CFoother";
+import CSideHeader                              from "./Pages/MainApp/PageComponents/Page/CSideHeader";
+import CTraffics                                from "./Pages/MainApp/PageComponents/Page/CTraffics";
+import CFoother                                 from "./Pages/MainApp/PageComponents/Page/CFoother";
 
 const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
 const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
@@ -58,7 +58,7 @@ const PUsers = React.lazy(
 	() => import("./Pages/MainApp/PUsers")
 );
 const CPanelLog = React.lazy(
-	() => import("./Components/Elements/MainPage/CPanelLog")
+	() => import("./Pages/MainApp/PageComponents/Page/CPanelLog")
 );
 const PHome = React.lazy(
 	() => import("./Pages/MainApp/PHome")
@@ -74,7 +74,7 @@ const SocketIO : Socket<IEmitEvents, IListenEvents> = io(
 export default function MainApp() {
 	const Account = useContext( AccountContext );
 	const Location = useLocation();
-	const [ Alert, setAlert ] = useState<IAPIResponseBase | undefined>( undefined );
+	const [ Alert, setAlert ] = useState<IAPIResponseBase<true> | undefined>( undefined );
 	const [ ShowLog, setShowLog ] = useState( false );
 	const [
 		[ GameServerOnline, GameServerOffline, GameServerTotal ],
@@ -90,7 +90,7 @@ export default function MainApp() {
 		ActionTitle: ""
 	} );
 
-	const [ Instances, setInstances ] = useState<Record<string, IMO_Instance>>( {} );
+	const [ Instances, setInstances ] = useState<Record<string, TMO_Instance>>( {} );
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect( () => {
@@ -113,7 +113,7 @@ export default function MainApp() {
 
 			setGameServerState( GameServerS );
 			setInstances( {
-				...Instance.Data?.InstanceData
+				...Instance.Data
 			} );
 
 			setHasData( true );

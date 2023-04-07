@@ -5,7 +5,7 @@ import {
 	QuerySteamAPI
 }                        from "../../Lib/SteamApi.Lib";
 import DB_SteamAPI_Mods  from "../../MongoDB/DB_SteamAPI_Mods";
-import { ISteamApiMod }  from "../../../../src/Shared/Api/SteamAPI";
+import { ISteamApiMod }  from "../../../../src/Types/SteamAPI";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.DataCleanerInterval,

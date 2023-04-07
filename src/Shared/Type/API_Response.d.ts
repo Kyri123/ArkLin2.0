@@ -4,12 +4,12 @@ import { IAccountInformations } from "./User";
 import {
 	IGithubBranche,
 	IGithubReleases
-}                               from "../Api/github";
-import { ISteamApiMod }         from "../Api/SteamAPI";
-import { TMO_Instance }         from "../Api/MongoDB";
+}                               from "./github";
+import { ISteamApiMod }         from "../../Types/SteamAPI";
+import { TMO_Instance }         from "../../Types/MongoDB";
 import { ISystemUsage }         from "./Systeminformation";
 
-type ResponseBase = {
+type ResponseBase<T = any> = {
 	Success : boolean;
 	Auth : boolean;
 	Data : T;
@@ -20,7 +20,9 @@ type ResponseWithMessage = {
 	Message : IAPIResponseMessage;
 }
 
-export type IAPIResponseBase<MessageOpt extends boolean = false, T = any> = MessageOpt extends false ? ( ResponseBase & ResponseWithMessage ) : ( ResponseBase & Partial<ResponseWithMessage> );
+export type IAPIResponseBase<MessageOpt extends boolean = false, T = any> =
+	ResponseBase<T>
+	& ( MessageOpt extends false ? ResponseWithMessage : Partial<ResponseWithMessage> );
 
 export interface IAPIResponseMessage {
 	Title : string;
@@ -28,9 +30,7 @@ export interface IAPIResponseMessage {
 	AlertType : TLTEColors;
 }
 
-//export type TResponse_X_X = IAPIResponseBase<>;
-
-export type TResponse_AnyData<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, any>;
+export type TResponse_AnyData<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Boolean<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, boolean>;
 
 // ----------------------------------------
@@ -52,6 +52,7 @@ export type TResponse_Changelog_GetBranches<MessageOpt extends boolean = false> 
 // ----------------- Panel ----------------
 // ----------------------------------------
 
+export type TResponse_Panel_Update<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Panel_Log<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, string[]>;
 export type TResponse_Panel_Restart<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Panel_SetConfig<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;

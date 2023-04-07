@@ -5,7 +5,48 @@ on:
     types: [ published ]
 
 jobs:
+  test-docker:
+    name: "Test and Build as Docker"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Build Docker Image
+        continue-on-error: true
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: user/app:latest
+
+
+  test-app:
+    name: "Test and Build as App"
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 18.x, 19.x ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: yarn install
+      - run: yarn tailwindcss
+      - run: yarn BuildServer
+      - run: yarn Client
+
   docker:
+    needs: [ test-app, test-docker ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -1,6 +1,6 @@
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { ISystemUsage }     from "./Systeminformation";
-import { TMO_Instance }     from "../Api/MongoDB";
+import { TMO_Instance }     from "../../Types/MongoDB";
 
 export type TRedisKeys = "Systeminformation" | "Releases";
 

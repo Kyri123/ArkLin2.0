@@ -1,5 +1,5 @@
 import { useId }      from "react";
-import { TLTEColors } from "../../../Shared/Type/AdminLTE";
+import { TLTEColors } from "../../../../Shared/Type/AdminLTE";
 
 export default function CFormatLog( Props : { LogContent : string } ) {
 	const ID = useId();

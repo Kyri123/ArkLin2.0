@@ -7,7 +7,7 @@
     "BuildServer": "tsc --project ./server/tsconfig.json",
     "Server": "ts-node --project ./server/tsconfig.json --files server/src production",
     "ServerDev": "ts-node --project ./server/tsconfig.json --files server/src development",
-    "Client": "tsc && vite build",
+    "Client": "tsc --excludeDirectories 'server' && vite build",
     "Nodemon": "concurrently -m 2 \"nodemon --config nodemon.react.json\" \"nodemon\"",
     "Dev": "yarn tailwindcss && concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
     "TestApp": "eslint src --fix && eslint server --fix",

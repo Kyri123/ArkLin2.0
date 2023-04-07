@@ -12,11 +12,12 @@ import { Md5 }           from "ts-md5";
 import { ConfigManager } from "../Lib/ConfigManager.Lib";
 import {
 	GenerateAccessToken,
-	GetSecretAppToken
+	GetSecretAppToken,
+	UserLib
 }                        from "../Lib/User.Lib";
 import DB_Accounts       from "../MongoDB/DB_Accounts";
 import DB_AccountKey     from "../MongoDB/DB_AccountKey";
-import { IMO_Accounts }  from "../../../src/Shared/Api/MongoDB";
+import { IMO_Accounts }  from "../../../src/Types/MongoDB";
 import * as jwt          from "jsonwebtoken";
 import { EAuthUrl }      from "../../../src/Shared/Enum/Routing";
 import {
@@ -26,7 +27,7 @@ import {
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                        from "../Defaults/ApiRequest.Default";
+}                        from "../../../src/Shared/Default/ApiRequest.Default";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EAuthUrl.check );
@@ -125,7 +126,7 @@ export default function( Api : core.Express ) {
 				JsonWebToken: ""
 			}
 		};
-		const Request : TRequest_Auth_SignUp = request.body;
+		const Request : TRequest_Auth_SignUp<true, UserLib<true>> = request.body;
 
 		if (
 			Request.password &&
@@ -211,7 +212,7 @@ export default function( Api : core.Express ) {
 				JsonWebToken: ""
 			}
 		};
-		const Request : TRequest_Auth_SignIn = request.body;
+		const Request : TRequest_Auth_SignIn<true, UserLib<true>> = request.body;
 
 		if (
 			Request.login &&

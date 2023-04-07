@@ -1,7 +1,7 @@
 import {
-	IMO_Instance,
-	IMongoDB
-} from "../Api/MongoDB";
+	IMongoDB,
+	TMO_Instance
+} from "../../Types/MongoDB";
 
 export type TServerState =
 	| "NotInstalled"
@@ -87,5 +87,5 @@ export interface IPanelServerConfig {
 }
 
 export interface IFullData {
-	InstanceData : Record<string, IMO_Instance>;
+	InstanceData : Record<string, TMO_Instance>;
 }

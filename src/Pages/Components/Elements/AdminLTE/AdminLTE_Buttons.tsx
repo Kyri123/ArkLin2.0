@@ -3,7 +3,7 @@ import { Button }          from "react-bootstrap";
 import {
 	ILTELoadingButton,
 	ILTEToggleButton
-}                          from "../../../Types/AdminLTE";
+}                          from "../../../../Types/AdminLTE";
 import React               from "react";
 
 export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {

@@ -2,7 +2,7 @@ import React, {
 	useContext,
 	useState
 }                          from "react";
-import { IMO_Accounts }    from "../../../../Shared/Api/MongoDB";
+import { IMO_Accounts }    from "../../../../Types/MongoDB";
 import {
 	ButtonGroup,
 	Card,
@@ -12,7 +12,7 @@ import {
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                          from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                          from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { API_User }        from "../../../../Lib/Api/API_User";
 import {

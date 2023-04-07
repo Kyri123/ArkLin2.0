@@ -1,6 +1,6 @@
 import { JobTask }       from "../TaskManager";
 import { ConfigManager } from "../../Lib/ConfigManager.Lib";
-import { IMO_Instance }  from "../../../../src/Shared/Api/MongoDB";
+import { IMO_Instance }  from "../../../../src/Types/MongoDB";
 import DB_Instances      from "../../MongoDB/DB_Instances";
 import { ServerLib }     from "../../Lib/Server.Lib";
 import fs                from "fs";

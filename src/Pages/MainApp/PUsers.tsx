@@ -3,7 +3,6 @@ import {
 	useEffect,
 	useState
 }                           from "react";
-import { IMO_AccountKeys }  from "../../Shared/Api/MariaDB";
 import {
 	ButtonGroup,
 	Card,
@@ -13,14 +12,17 @@ import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                           from "../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                           from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { EPerm }            from "../../Shared/Enum/User.Enum";
 import { API_User }         from "../../Lib/Api/API_User";
-import CPageCounter         from "../../Components/Elements/CPageCounter";
+import CPageCounter         from "./PageComponents/General/CPageCounter";
 import { IAPIResponseBase } from "../../Shared/Type/API_Response";
-import { CAlert }           from "../../Components/Elements/CAlert";
+import { CAlert }           from "./PageComponents/General/CAlert";
 import { useCopy }          from "@kyri123/k-reactutils";
-import { IMO_Accounts }     from "../../Shared/Api/MongoDB";
+import {
+	IMO_AccountKeys,
+	IMO_Accounts
+}                           from "../../Types/MongoDB";
 import usePermissionPage    from "../../Hooks/usePermissionPage";
 import PCUserRow            from "./PageComponents/Users/PCUserRow";
 import AlertContext         from "../../Context/AlertContext";
@@ -212,7 +214,7 @@ export default function PUsers() {
 											<FontAwesomeIcon icon={ "trash-alt" }/>
 										</LTELoadingButton>
 										<LTELoadingButton
-											Disabled={ IsCopied( Key._id ) }
+											sisabled={ IsCopied( Key._id ) }
 											onClick={ () => DoCopy( Key.key, Key._id ) }
 											className={ "btn-sm flat" }
 											IsLoading={ false }

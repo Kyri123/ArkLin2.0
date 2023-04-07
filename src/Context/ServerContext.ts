@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { IMO_Instance }  from "../Shared/Api/MongoDB";
+import { TMO_Instance }  from "../Types/MongoDB";
 
 export default createContext<{
-	InstanceData : Record<string, IMO_Instance>;
+	InstanceData : Record<string, TMO_Instance>;
 	HasData : boolean;
 }>( {
 	InstanceData: {},

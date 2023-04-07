@@ -1,20 +1,21 @@
 import {
 	useEffect,
 	useState
-}                          from "react";
-import { API_QueryLib }    from "../../Lib/Api/API_Query.Lib";
-import { Table }           from "react-bootstrap";
-import { Link }            from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { EChangelogUrl }   from "../../Shared/Enum/Routing";
-import { IGithubReleases } from "../../Shared/Api/github";
+}                                            from "react";
+import { API_QueryLib }                      from "../../Lib/Api/API_Query.Lib";
+import { Table }                             from "react-bootstrap";
+import { Link }                              from "react-router-dom";
+import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesome";
+import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
+import { IGithubReleases }                   from "../../Shared/Type/github";
+import { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PHome() {
 	const [ Data, setData ] = useState<IGithubReleases[]>( [] );
 
 	useEffect( () => {
 		// get Data from API
-		API_QueryLib.GetFromAPI<IGithubReleases[]>( EChangelogUrl.get ).then(
+		API_QueryLib.GetFromAPI<TResponse_Changelog_GetChangelogs>( EChangelogUrl.get ).then(
 			( Response ) => {
 				if ( Response.Data ) {
 					setData( Response.Data );

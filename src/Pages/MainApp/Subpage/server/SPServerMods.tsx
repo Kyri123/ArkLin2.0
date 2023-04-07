@@ -4,27 +4,28 @@ import React, {
 	useId,
 	useRef,
 	useState
-}                           from "react";
-import { useArkServer }     from "../../../../Hooks/useArkServer";
+}                                from "react";
+import { useArkServer }          from "../../../../Hooks/useArkServer";
 import {
 	Card,
 	FormControl,
 	InputGroup,
 	Table
-}                           from "react-bootstrap";
-import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import PCServerModsRow      from "../../PageComponents/Server/PCServerModsRow";
-import io, { Socket }       from "socket.io-client";
+}                                from "react-bootstrap";
+import { LTELoadingButton }      from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
+import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
+import io, { Socket }            from "socket.io-client";
 import {
 	IEmitEvents,
 	IListenEvents
-}                           from "../../../../Shared/Type/Socket";
-import { SocketIOLib }      from "../../../../Lib/Api/SocketIO.Lib";
-import { API_SteamAPILib }  from "../../../../Lib/Api/API_SteamAPI.Lib";
-import { ISteamApiMod }     from "../../../../Shared/Api/SteamAPI";
-import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
-import AlertContext         from "../../../../Context/AlertContext";
+}                                from "../../../../Shared/Type/Socket";
+import { SocketIOLib }           from "../../../../Lib/Api/SocketIO.Lib";
+import { API_SteamAPILib }       from "../../../../Lib/Api/API_SteamAPI.Lib";
+import { ISteamApiMod }          from "../../../../Types/SteamAPI";
+import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
+import AlertContext              from "../../../../Context/AlertContext";
+import { DefaultResponseFailed } from "../../../../Shared/Default/ApiRequest.Default";
 
 interface IProps {
 	InstanceName : string;
@@ -58,8 +59,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 		if ( !isNaN( Id ) ) {
 			if ( Data.ark_GameModIds.includes( Id ) ) {
 				DoSetAlert( {
-					Success: false,
-					Auth: true,
+					...DefaultResponseFailed,
 					Message: {
 						Message: `Die Mod mit der ID ${ Id } existiert bereits.`,
 						Title: "Achtung!",
@@ -91,8 +91,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 		}
 		else {
 			DoSetAlert( {
-				Success: false,
-				Auth: true,
+				...DefaultResponseFailed,
 				Message: {
 					Message: "Die eingabe war keine Nummer oder ein falscher Link!",
 					Title: "Fehler!",
@@ -132,7 +131,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 						Flat
 						IsLoading={ IsSending }
 						variant={ "success" }
-						Disabled={
+						sisabled={
 							InputRef.current !== null && InputRef.current.value === ""
 						}
 						onClick={ () => {

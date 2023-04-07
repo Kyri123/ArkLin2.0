@@ -1,6 +1,6 @@
 import { IServerCardProps }    from "../../../../Types/Server";
 import { Card }                from "react-bootstrap";
-import CFormatLog              from "../../../../Components/Elements/Server/CFormatLog";
+import CFormatLog              from "../../PageComponents/Server/CFormatLog";
 import Select, { SingleValue } from "react-select";
 import { useArkServerLogs }    from "../../../../Hooks/useArkServerLogs";
 

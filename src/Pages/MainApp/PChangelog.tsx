@@ -1,17 +1,18 @@
 import {
 	useEffect,
 	useState
-}                          from "react";
+}                                            from "react";
 import {
 	Link,
 	Navigate,
 	useParams
-}                          from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ReactMarkdown       from "react-markdown";
-import { API_QueryLib }    from "../../Lib/Api/API_Query.Lib";
-import { EChangelogUrl }   from "../../Shared/Enum/Routing";
-import { IGithubReleases } from "../../Shared/Api/github";
+}                                            from "react-router-dom";
+import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesome";
+import ReactMarkdown                         from "react-markdown";
+import { API_QueryLib }                      from "../../Lib/Api/API_Query.Lib";
+import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
+import { IGithubReleases }                   from "../../Shared/Type/github";
+import { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PChangelog() : JSX.Element {
 	const { version } = useParams();
@@ -23,7 +24,7 @@ export default function PChangelog() : JSX.Element {
 
 	useEffect( () => {
 		// get Data from API
-		API_QueryLib.GetFromAPI<any[]>( EChangelogUrl.get ).then( ( Response ) => {
+		API_QueryLib.GetFromAPI<TResponse_Changelog_GetChangelogs>( EChangelogUrl.get ).then( ( Response ) => {
 			if ( Response.Data ) {
 				setData( Response.Data );
 				const Selected = Response.Data.find( ( e ) => e.tag_name === version );

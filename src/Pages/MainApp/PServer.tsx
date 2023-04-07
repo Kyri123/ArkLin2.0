@@ -21,7 +21,7 @@ import {
 	Route,
 	Routes
 }                          from "react-router";
-import CServerHead         from "../../Components/Elements/Server/ServerHead";
+import CServerHead         from "./PageComponents/Server/ServerHead";
 import SPServerConfig      from "./Subpage/server/SPServerConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ServerContext       from "../../Context/ServerContext";

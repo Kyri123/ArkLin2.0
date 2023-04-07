@@ -8,7 +8,7 @@ import {
 	IMO_Accounts,
 	IMO_Instance,
 	TMO_Instance
-}                    from "../../../src/Shared/Api/MongoDB";
+}                    from "../../../src/Types/MongoDB";
 import DB_Instances  from "../MongoDB/DB_Instances";
 import * as crypto   from "crypto";
 import path          from "path";
@@ -115,7 +115,7 @@ export class UserLib<Ready extends boolean = boolean> {
 		const Data : Record<string, TMO_Instance> = {};
 		for await ( const Instance of DB_Instances.find( {} ) ) {
 			if ( this.HasPermissionForServer( Instance.Instance ) ) {
-				const Server = await ServerLib.build( Instance._id );
+				const Server = await ServerLib.build( Instance.Instance );
 				if ( Server.IsValid() ) {
 					Data[ Server.Instance ] = Server.GetWithCluster();
 				}

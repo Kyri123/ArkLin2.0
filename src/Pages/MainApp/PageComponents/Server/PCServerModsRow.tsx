@@ -1,14 +1,15 @@
 import React, {
 	useContext,
 	useState
-}                           from "react";
-import { ISteamApiMod }     from "../../../../Shared/Api/SteamAPI";
-import { useArkServer }     from "../../../../Hooks/useArkServer";
-import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
-import AlertContext         from "../../../../Context/AlertContext";
-import { Link }             from "react-router-dom";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                                from "react";
+import { ISteamApiMod }          from "../../../../Types/SteamAPI";
+import { useArkServer }          from "../../../../Hooks/useArkServer";
+import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
+import AlertContext              from "../../../../Context/AlertContext";
+import { Link }                  from "react-router-dom";
+import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
+import { LTELoadingButton }      from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { DefaultResponseFailed } from "../../../../Shared/Default/ApiRequest.Default";
 
 interface IProps {
 	ModId : number;
@@ -33,8 +34,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 
 		if ( !Data.ark_GameModIds.includes( ModId ) ) {
 			DoSetAlert( {
-				Success: false,
-				Auth: true,
+				...DefaultResponseFailed,
 				Message: {
 					Message: `Die Mod mit der ID ${ ModId } wurde bereits entfernt!`,
 					Title: "Achtung!",
@@ -106,7 +106,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					IsLoading={ IsSendingMove }
 					id="FB_upload"
 					variant={ "gray-dark" }
-					Disabled={ ModIndex - 1 < 0 }
+					sisabled={ ModIndex - 1 < 0 }
 					onClick={ () => MoveMod( -1 ) }
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
@@ -117,7 +117,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					id="FB_upload"
 					variant={ "gray-dark" }
 					onClick={ () => MoveMod( 1 ) }
-					Disabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
+					sisabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-down" }/>

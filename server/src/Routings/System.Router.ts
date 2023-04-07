@@ -7,9 +7,10 @@ import { CreateUrl }                 from "../Lib/PathBuilder.Lib";
 import { TResponse_System_Getusage } from "../../../src/Shared/Type/API_Response";
 import DB_Usage                      from "../MongoDB/DB_Usage";
 import { ESysUrl }                   from "../../../src/Shared/Enum/Routing";
-import { DefaultResponseSuccess }    from "../Defaults/ApiRequest.Default";
+import { DefaultResponseSuccess }    from "../../../src/Shared/Default/ApiRequest.Default";
 import { DefaultSystemUsage }        from "../../../src/Shared/Default/Server.Default";
 import { TRequest_System_Getusage }  from "../../../src/Shared/Type/API_Request";
+import { UserLib }                   from "../Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	const Url = CreateUrl( ESysUrl.usage );
@@ -30,7 +31,7 @@ export default function( Api : core.Express ) {
 			}
 		};
 
-		const Request : TRequest_System_Getusage = request.body;
+		const Request : TRequest_System_Getusage<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.IsValid() ) {
 			const Data = await DB_Usage.findOne();
 			if ( Data ) {

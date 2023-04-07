@@ -1,9 +1,9 @@
-import { INavLinkProps }      from "../../../Types/AdminLTE";
+import { INavLinkProps }      from "../../../../Types/AdminLTE";
 import { useContext }         from "react";
 import { FontAwesomeIcon }    from "@fortawesome/react-fontawesome";
-import { IChildrenBaseProps } from "../../../Types/BaseTypes";
+import { IChildrenBaseProps } from "../../../../Types/BaseTypes";
 import { Link }               from "react-router-dom";
-import AccountContext         from "../../../Context/AccountContext";
+import AccountContext         from "../../../../Context/AccountContext";
 
 export function LTENavLink( Props : INavLinkProps ) {
 	const { Account } = useContext( AccountContext );

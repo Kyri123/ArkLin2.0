@@ -3,7 +3,7 @@ import {
 	GetEnumValue,
 	TPermissions
 }                       from "../Shared/Enum/User.Enum";
-import { IMO_Accounts } from "../Shared/Api/MongoDB";
+import { IMO_Accounts } from "../Types/MongoDB";
 import jwt              from "jwt-decode";
 import { JwtPayload }   from "jsonwebtoken";
 

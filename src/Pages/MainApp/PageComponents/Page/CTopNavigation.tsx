@@ -6,12 +6,12 @@ import {
 import { Dropdown }        from "react-bootstrap";
 import * as Icon           from "react-icons/bs";
 import { Link }            from "react-router-dom";
-import AccountContext      from "../../../Context/AccountContext";
-import ServerContext       from "../../../Context/ServerContext";
-import useAuth             from "../../../Hooks/useAuth";
-import { API_PanelLib }    from "../../../Lib/Api/API_Panel.Lib";
-import { EPerm }           from "../../../Shared/Enum/User.Enum";
-import { ISystemUsage }    from "../../../Shared/Type/Systeminformation";
+import AccountContext      from "../../../../Context/AccountContext";
+import ServerContext       from "../../../../Context/ServerContext";
+import useAuth             from "../../../../Hooks/useAuth";
+import { API_PanelLib }    from "../../../../Lib/Api/API_Panel.Lib";
+import { EPerm }           from "../../../../Shared/Enum/User.Enum";
+import { ISystemUsage }    from "../../../../Shared/Type/Systeminformation";
 import CServerCard         from "../Server/ServerCard";
 
 export default function CTopNavigation( Props : {
@@ -43,69 +43,71 @@ export default function CTopNavigation( Props : {
 					className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start p-2">
 					<div className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
 						<Link onClick={ ToggleSidebar }
-							  to="#"
-							  className="d-block d-md-none link-dark text-decoration-none me-3"
+						      to="#"
+						      className="d-block d-md-none link-dark text-decoration-none me-3"
 						>
 							<FontAwesomeIcon icon={ "bars" } className={ "me-2" }/>
 							Navigation
 						</Link>
-						<div className="dropdown text-end ms-2">
-							<Link
-								to="#"
-								className="d-block link-dark text-decoration-none dropdown-toggle"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-							>
-								<Icon.BsWindowDesktop className={ "me-2" }/>
-								Dashboard
-							</Link>
-
-							<div className="dropdown-menu dropdown-menu-lg dropdown-menu-left">
-								{ Props.SystemUsage.PanelNeedUpdate && (
-									<>
-										<button
-											onClick={ () => {
-											} }
-											className="dropdown-item text-info"
-										>
-											<Icon.BsDownload className={ "pe-2" } size={ 22 }/>
-											<b>{ Props.SystemUsage.NextPanelBuildVersion }</b>{ " " }
-											Installieren
-										</button>
-										<div className="dropdown-divider"></div>
-									</>
-								) }
-								<button
-									onClick={ () => Props.ShowLog( true ) }
-									className="dropdown-item"
-									data-toggle="modal"
-									data-target="#panelControlerLogs"
+						{ Account.HasPermission( EPerm.PanelSettings ) && (
+							<div className="dropdown text-end ms-2">
+								<Link
+									to="#"
+									className="d-block link-dark text-decoration-none dropdown-toggle"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
 								>
-									<Icon.BsClipboard className={ "pe-2" } size={ 22 }/>
-									Panel Log
-								</button>
-								{ Account.HasPermission( EPerm.PanelSettings ) && (
-									<Link
-										to="/paneladmin"
+									<Icon.BsWindowDesktop className={ "me-2" }/>
+									Dashboard { ( Props.SystemUsage.PanelNeedUpdate ) &&
+									<span className="text-green-700">Update verfügbar!</span> }
+								</Link>
+
+								<div className="dropdown-menu dropdown-menu-lg dropdown-menu-left">
+									{ ( Props.SystemUsage.PanelNeedUpdate ) && (
+										<>
+											<button
+												onClick={ API_PanelLib.TriggerUpdate }
+												className="dropdown-item text-info"
+											>
+												<Icon.BsDownload className={ "pe-2" } size={ 22 }/>
+												<b>{ Props.SystemUsage.NextPanelBuildVersion }</b>
+												Update Installieren
+											</button>
+											<div className="dropdown-divider"></div>
+										</>
+									) }
+									<button
+										onClick={ () => Props.ShowLog( true ) }
 										className="dropdown-item"
 										data-toggle="modal"
 										data-target="#panelControlerLogs"
 									>
-										<FontAwesomeIcon icon={ "cogs" } className={ "pe-2" }/>
-										Panel Einstellungen
-									</Link>
-								) }
-								<button
-									onClick={ () => API_PanelLib.Restart() }
-									className="dropdown-item text-bg-danger"
-									data-toggle="modal"
-									data-target="#panelControlerLogs"
-								>
-									<FontAwesomeIcon icon={ "refresh" } className={ "pe-2" }/>
-									Panel Neustarten
-								</button>
+										<Icon.BsClipboard className={ "pe-2" } size={ 22 }/>
+										Panel Log
+									</button>
+									{ Account.HasPermission( EPerm.PanelSettings ) && (
+										<Link
+											to="/paneladmin"
+											className="dropdown-item"
+											data-toggle="modal"
+											data-target="#panelControlerLogs"
+										>
+											<FontAwesomeIcon icon={ "cogs" } className={ "pe-2" }/>
+											Panel Einstellungen
+										</Link>
+									) }
+									<button
+										onClick={ () => API_PanelLib.Restart() }
+										className="dropdown-item text-bg-danger"
+										data-toggle="modal"
+										data-target="#panelControlerLogs"
+									>
+										<FontAwesomeIcon icon={ "refresh" } className={ "pe-2" }/>
+										Panel Neustarten
+									</button>
+								</div>
 							</div>
-						</div>
+						) }
 					</div>
 
 					<div className="dropdown text-end">

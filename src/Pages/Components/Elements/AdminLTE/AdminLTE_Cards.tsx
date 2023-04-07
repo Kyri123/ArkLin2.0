@@ -1,21 +1,21 @@
 /** @format */
 
-import { IStateCardProps }   from "../../../Types/AdminLTE";
+import { IStateCardProps }   from "../../../../Types/AdminLTE";
 import { Card }              from "react-bootstrap";
 import { FunctionComponent } from "react";
 import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
 
 export const CStateCard : FunctionComponent<IStateCardProps> = ( {
-																	 Hide,
-																	 Color,
-																	 Permission,
-																	 BarPercent,
-																	 BarColor,
-																	 Icon,
-																	 Title,
-																	 children,
-																	 ...Props
-																 } ) => {
+	Hide,
+	Color,
+	Permission,
+	BarPercent,
+	BarColor,
+	Icon,
+	Title,
+	children,
+	...Props
+} ) => {
 	if ( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}

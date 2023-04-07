@@ -1,6 +1,6 @@
 import * as mongoose              from "mongoose";
 import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import { IGithubReleases }        from "../../../src/Shared/Api/github";
+import { IGithubReleases }        from "../../../src/Shared/Type/github";
 
 const Schema = new mongoose.Schema<IGithubReleases>( {
 	assets_url: { type: String },

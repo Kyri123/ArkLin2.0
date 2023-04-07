@@ -9,8 +9,8 @@ import {
 	Link,
 	useLocation
 }                     from "react-router-dom";
-import AccountContext from "../../../Context/AccountContext";
-import { EPerm }      from "../../../Shared/Enum/User.Enum";
+import AccountContext from "../../../../Context/AccountContext";
+import { EPerm }      from "../../../../Shared/Enum/User.Enum";
 
 export default function CLeftNavigation() {
 	const { pathname } = useLocation();
@@ -32,7 +32,7 @@ export default function CLeftNavigation() {
 					className="pe-none me-2"
 					width={ 40 }
 				/>
-				<span className="fs-4">Sidebar</span>
+				<span className="fs-4">ArkLin 2.0</span>
 			</Link>
 			<hr/>
 			<Nav as="ul" variant="pills" className={ "mb-auto flex-column nav-pills" }>

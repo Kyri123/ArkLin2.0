@@ -17,13 +17,14 @@ import { EPanelUrl }     from "../../../src/Shared/Enum/Routing";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                        from "../Defaults/ApiRequest.Default";
+}                        from "../../../src/Shared/Default/ApiRequest.Default";
 import {
 	TRequest_Panel_GetConfig,
 	TRequest_Panel_Log,
 	TRequest_Panel_Restart,
 	TRequest_Panel_SetConfig
 }                        from "../../../src/Shared/Type/API_Request";
+import { UserLib }       from "../Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EPanelUrl.log );
@@ -42,7 +43,7 @@ export default function( Api : core.Express ) {
 			Data: []
 		};
 
-		const Request : TRequest_Panel_Log = request.body;
+		const Request : TRequest_Panel_Log<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.PanelLog ) ) {
 			if ( fs.existsSync( __LogFile ) ) {
 				Response.Data = fs
@@ -71,7 +72,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseSuccess
 		};
 
-		const Request : TRequest_Panel_Restart = request.body;
+		const Request : TRequest_Panel_Restart<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.ManagePanel ) ) {
 			SystemLib.LogWarning(
 				"User Request:",
@@ -99,7 +100,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Panel_SetConfig = request.body;
+		const Request : TRequest_Panel_SetConfig<true, UserLib<true>> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.PanelSettings ) &&
 			Request.Config &&
@@ -134,7 +135,7 @@ export default function( Api : core.Express ) {
 			Data: {}
 		};
 
-		const Request : TRequest_Panel_GetConfig = request.body;
+		const Request : TRequest_Panel_GetConfig<true, UserLib<true>> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.PanelSettings ) &&
 			Request.Config

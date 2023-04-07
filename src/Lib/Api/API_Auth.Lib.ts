@@ -19,7 +19,7 @@ export class API_AuthLib {
 	}
 
 	static async TryCreateAnAccount(
-		RequestData : TRequest_Auth_SignUp
+		RequestData : TRequest_Auth_SignUp<false>
 	) : Promise<TResponse_Auth_SignUp> {
 		return await API_QueryLib.PostToAPI<TResponse_Auth_SignUp>(
 			EAuthUrl.signup,
@@ -28,7 +28,7 @@ export class API_AuthLib {
 	}
 
 	static async DoLogin(
-		RequestData : TRequest_Auth_SignIn
+		RequestData : TRequest_Auth_SignIn<false>
 	) : Promise<TResponse_Auth_SignIn> {
 		return await API_QueryLib.PostToAPI<TResponse_Auth_SignIn>(
 			EAuthUrl.signin,

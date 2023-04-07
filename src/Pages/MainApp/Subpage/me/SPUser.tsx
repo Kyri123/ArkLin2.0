@@ -4,11 +4,11 @@ import {
 	useState
 }                           from "react";
 import { Card }             from "react-bootstrap";
-import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import CLTEInput            from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import CLTEInput            from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { API_User }         from "../../../../Lib/Api/API_User";
-import { IMO_Accounts }     from "../../../../Shared/Api/MongoDB";
+import { IMO_Accounts }     from "../../../../Types/MongoDB";
 import AlertContext         from "../../../../Context/AlertContext";
 import AccountContext       from "../../../../Context/AccountContext";
 
@@ -99,7 +99,7 @@ export default function SPUser() {
 			<Card.Footer>
 				<LTELoadingButton
 					onClick={ SaveSettings }
-					Disabled={ DisableSend }
+					sisabled={ DisableSend }
 					IsLoading={ IsSending }
 				>
 					<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }

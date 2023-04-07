@@ -5,8 +5,8 @@ import {
 	useState
 }                            from "react";
 import { ButtonGroup }       from "react-bootstrap";
-import { IPageCounterProps } from "../../Types/PageAddons";
-import { LTELoadingButton }  from "./AdminLTE/AdminLTE_Buttons";
+import { IPageCounterProps } from "../../../../Types/PageAddons";
+import { LTELoadingButton }  from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 
 export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 	const [ Page, setPage ] = useState( 0 );
@@ -39,21 +39,21 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 			<LTELoadingButton
 				onClick={ () => setPage( 0 ) }
 				IsLoading={ false }
-				Disabled={ Page <= 0 }
+				sisabled={ Page <= 0 }
 			>
 				<FontAwesomeIcon icon={ "angle-double-left" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( Page - 1 ) }
 				IsLoading={ false }
-				Disabled={ PageGroups[ Page - 1 ] === undefined }
+				sisabled={ PageGroups[ Page - 1 ] === undefined }
 			>
 				<FontAwesomeIcon icon={ "angle-left" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				IsLoading={ false }
 				Hide={ PageGroups[ Page - 3 ] === undefined }
-				Disabled={ true }
+				sisabled={ true }
 			>
 				...
 			</LTELoadingButton>
@@ -72,7 +72,7 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 			>
 				{ Page - 1 }
 			</LTELoadingButton>
-			<LTELoadingButton IsLoading={ false } Disabled={ true }>
+			<LTELoadingButton IsLoading={ false } sisabled={ true }>
 				{ Page }
 			</LTELoadingButton>
 			<LTELoadingButton
@@ -93,21 +93,21 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 			<LTELoadingButton
 				IsLoading={ false }
 				Hide={ PageGroups[ Page + 3 ] === undefined }
-				Disabled={ true }
+				sisabled={ true }
 			>
 				...
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( Page + 1 ) }
 				IsLoading={ false }
-				Disabled={ PageGroups[ Page + 1 ] === undefined }
+				sisabled={ PageGroups[ Page + 1 ] === undefined }
 			>
 				<FontAwesomeIcon icon={ "angle-right" }/>
 			</LTELoadingButton>
 			<LTELoadingButton
 				onClick={ () => setPage( PageGroups.length - 1 ) }
 				IsLoading={ false }
-				Disabled={ Page === PageGroups.length - 1 }
+				sisabled={ Page === PageGroups.length - 1 }
 			>
 				<FontAwesomeIcon icon={ "angle-double-right" }/>
 			</LTELoadingButton>

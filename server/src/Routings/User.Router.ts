@@ -20,7 +20,7 @@ import {
 import { EPerm }        from "../../../src/Shared/Enum/User.Enum";
 import { UserLib }      from "../Lib/User.Lib";
 import { Md5 }          from "ts-md5";
-import { IMO_Accounts } from "../../../src/Shared/Api/MongoDB";
+import { IMO_Accounts } from "../../../src/Types/MongoDB";
 import DB_Accounts      from "../MongoDB/DB_Accounts";
 import DB_AccountKey    from "../MongoDB/DB_AccountKey";
 import { EUserUrl }     from "../../../src/Shared/Enum/Routing";
@@ -37,7 +37,7 @@ import {
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                       from "../Defaults/ApiRequest.Default";
+}                       from "../../../src/Shared/Default/ApiRequest.Default";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EUserUrl.alluser );
@@ -55,7 +55,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseSuccess
 		};
 
-		const Request : TRequest_User_Alluser = request.body;
+		const Request : TRequest_User_Alluser<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) ) {
 			Response.Data = [];
 			for await ( const Account of DB_Accounts.find() ) {
@@ -83,7 +83,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseSuccess
 		};
 
-		const Request : TRequest_User_Allkeys = request.body;
+		const Request : TRequest_User_Allkeys<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) ) {
 			Response.Data = [];
 			for await ( const AccountKey of DB_AccountKey.find() ) {
@@ -110,7 +110,7 @@ export default function( Api : core.Express ) {
 			Data: {}
 		};
 
-		const Request : TRequest_User_Getallowedservers = request.body;
+		const Request : TRequest_User_Getallowedservers<true, UserLib<true>> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id ) {
 			const User = await UserLib.build( Request.Id );
 			if ( User.IsValid() ) {
@@ -136,7 +136,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Removeaccount = request.body;
+		const Request : TRequest_User_Removeaccount<true, UserLib<true>> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.Id
@@ -169,7 +169,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Addkey = request.body;
+		const Request : TRequest_User_Addkey<true, UserLib<true>> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.rang !== undefined
@@ -205,7 +205,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Removekey = request.body;
+		const Request : TRequest_User_Removekey<true, UserLib<true>> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.Id !== undefined
@@ -237,9 +237,10 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Usereditaccount = request.body;
+		const Request : TRequest_User_Usereditaccount<true, UserLib<true>> = request.body;
 
 		if (
+
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.UserData
 		) {
@@ -289,7 +290,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Edituser = request.body;
+		const Request : TRequest_User_Edituser<true, UserLib<true>> = request.body;
 
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&

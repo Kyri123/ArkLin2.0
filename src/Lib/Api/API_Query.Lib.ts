@@ -1,12 +1,9 @@
-import {
-	IAPIResponseBase,
-	TResponse_NoData
-}                          from "../../Shared/Type/API_Response";
-import { TServerUrls }     from "../../Shared/Enum/Routing";
-import { IAPIRequestBase } from "../../Shared/Type/API_Request";
+import { IAPIResponseBase } from "../../Shared/Type/API_Response";
+import { TServerUrls }      from "../../Shared/Enum/Routing";
+import { IAPIRequestBase }  from "../../Shared/Type/API_Request";
 
 export class API_QueryLib {
-	static async PostToAPI<T extends IAPIResponseBase = TResponse_NoData, D extends IAPIRequestBase = any>(
+	static async PostToAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D extends IAPIRequestBase = any>(
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
@@ -28,7 +25,7 @@ export class API_QueryLib {
 			).catch( ( e ) => console.log( e ) );
 			if ( Resp ) {
 				if ( Resp.ok && Resp.status === 200 ) {
-					const Response = ( await Resp.json() ) as IAPIResponseBase<T>;
+					const Response = ( await Resp.json() ) as IAPIResponseBase<false, T>;
 					Response.Reached = true;
 					return Response as T;
 				}
@@ -50,7 +47,7 @@ export class API_QueryLib {
 		} as T;
 	}
 
-	static async GetFromAPI<T extends IAPIResponseBase = TResponse_NoData, D extends IAPIRequestBase = any>(
+	static async GetFromAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D extends IAPIRequestBase = any>(
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
@@ -80,7 +77,7 @@ export class API_QueryLib {
 		).catch( ( e ) => console.log( e ) );
 		if ( Resp ) {
 			if ( Resp.ok && Resp.status === 200 ) {
-				const Response = ( await Resp.json() ) as IAPIResponseBase<T>;
+				const Response = ( await Resp.json() ) as IAPIResponseBase<false, T>;
 				Response.Reached = true;
 				return Response as T;
 			}

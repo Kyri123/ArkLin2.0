@@ -1,11 +1,11 @@
-import { IServerCardProps }   from "../../../Types/Server";
+import { IServerCardProps }   from "../../../../Types/Server";
 import {
 	useEffect,
 	useRef
 }                             from "react";
-import { useArkServer }       from "../../../Hooks/useArkServer";
+import { useArkServer }       from "../../../../Hooks/useArkServer";
 import { FontAwesomeIcon }    from "@fortawesome/react-fontawesome";
-import { ServerStateToColor } from "../../../Lib/Conversion.Lib";
+import { ServerStateToColor } from "../../../../Lib/Conversion.Lib";
 import { Dropdown }           from "react-bootstrap";
 import { Link }               from "react-router-dom";
 
