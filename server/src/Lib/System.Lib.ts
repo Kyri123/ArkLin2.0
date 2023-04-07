@@ -1,16 +1,40 @@
-import process          from "process";
-import os               from "os";
-import Util             from "util";
-import fs               from "fs";
+import process           from "process";
+import os                from "os";
+import Util              from "util";
+import fs                from "fs";
 import {
 	BashColorString,
 	SystemPlatform
-}                       from "../Types/System.Lib";
-import { InstallAllTE } from "../TypeExtension/TE_InstallAll";
-import path             from "path";
-import * as console     from "console";
-import * as dotenv      from "dotenv";
-import { IDebugConfig } from "../Types/Config";
+}                        from "../Types/System.Lib";
+import { InstallAllTE }  from "../TypeExtension/TE_InstallAll";
+import path              from "path";
+import * as console      from "console";
+import * as dotenv       from "dotenv";
+import {
+	IDashboard_BaseConfig,
+	IDebugConfig
+}                        from "../Types/Config";
+import { ConfigManager } from "./ConfigManager.Lib";
+import DB_GithubBranches from "../MongoDB/DB_GithubBranches";
+
+export async function GetCurrentBranch() : Promise<[ string, string | undefined ]> {
+	let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
+
+	const CurrentBranch = await DB_GithubBranches.findOne( { name: Branch } );
+	let Sha : string | undefined = undefined;
+	if ( !CurrentBranch ) {
+		ConfigManager.Write<IDashboard_BaseConfig>( "Dashboard_BaseConfig", {
+			...ConfigManager.GetDashboardConifg,
+			PANEL_Branch: "main"
+		} );
+		Branch = "main";
+	}
+	else {
+		Sha = CurrentBranch.sha;
+	}
+
+	return [ Branch, Sha ];
+}
 
 export class SystemLib_Class {
 	public readonly IsDevMode : boolean;

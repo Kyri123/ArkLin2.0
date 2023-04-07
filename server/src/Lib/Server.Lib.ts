@@ -23,6 +23,7 @@ import {
 }                              from "../../../src/Shared/Api/MongoDB";
 import { MakeRandomID }        from "./PathBuilder.Lib";
 import DB_Cluster              from "../MongoDB/DB_Cluster";
+import { EBashScript }         from "../Enum/EBashScript";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
@@ -82,7 +83,7 @@ export class ServerLib {
 				Instance: this.Instance
 			} ) )!.toJSON();
 
-			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } )
+			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } );
 			this.Cluster = Cluster ? Cluster.toJSON() : null;
 		}
 		catch ( e ) {
@@ -138,11 +139,7 @@ export class ServerLib {
 
 			SSHManager.ExecCommand(
 				[
-					`${ path.join(
-						process.env.APPEND_BASEDIR,
-						__basedir,
-						"sh/arkmanager.sh"
-					) } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"`
+					`${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"`
 				].join( " " )
 			).then( () => {
 			} );
@@ -394,7 +391,7 @@ export class ServerLib {
 				await this.ModifySubDocument( Key as keyof IMO_Instance, Value );
 			}
 			else {
-				await DB_Instances.findByIdAndUpdate( this.MongoDBData!._id, { [ Key ]: Value } )
+				await DB_Instances.findByIdAndUpdate( this.MongoDBData!._id, { [ Key ]: Value } );
 			}
 		}
 

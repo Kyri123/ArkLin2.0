@@ -1,17 +1,18 @@
-import { JobTask }               from "../TaskManager";
+import { JobTask }          from "../TaskManager";
 import {
 	ConfigManager,
 	SSHManager
-}                                from "../../Lib/ConfigManager.Lib";
-import { Octokit }               from "octokit";
-import DB_GithubBranches         from "../../MongoDB/DB_GithubBranches";
+}                           from "../../Lib/ConfigManager.Lib";
+import { Octokit }          from "octokit";
+import DB_GithubBranches    from "../../MongoDB/DB_GithubBranches";
 import {
 	IGithubBranche,
 	IGithubReleases
-}                                from "../../../../src/Shared/Api/github";
-import DB_GithubReleases         from "../../MongoDB/DB_GithubReleases";
-import process                   from "process";
-import { IDashboard_BaseConfig } from "../../Types/Config";
+}                           from "../../../../src/Shared/Api/github";
+import DB_GithubReleases    from "../../MongoDB/DB_GithubReleases";
+import process              from "process";
+import { GetCurrentBranch } from "../../Lib/System.Lib";
+import { EBashScript }      from "../../Enum/EBashScript";
 
 const octokit = new Octokit( {
 	auth: ConfigManager.GetDashboardConifg.PANEL_GithubToken,
@@ -91,23 +92,10 @@ export default new JobTask(
 				//------------------------------------------------------------------
 				//--------------------   Commit based Update   ---------------------
 				//------------------------------------------------------------------
-				const SHUpdateFile = "~/KAdmin/ArkLin2.0/sh/start.sh";
-				let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
+				const [ Branch, Sha ] = await GetCurrentBranch();
+				const CurrentHash = ConfigManager.GetGitHash;
 
-				if ( ConfigManager.GetDashboardConifg.PANEL_UseCommitAsUpdateIndicator ) {
-					const CurrentBranch = await DB_GithubBranches.findOne( { name: Branch } );
-					let Sha : string | undefined = undefined;
-					if ( !CurrentBranch ) {
-						ConfigManager.Write<IDashboard_BaseConfig>( "Dashboard_BaseConfig", {
-							...ConfigManager.GetDashboardConifg,
-							PANEL_Branch: "main"
-						} );
-						Branch = "main";
-					}
-					else {
-						Sha = CurrentBranch.sha;
-					}
-
+				if ( ConfigManager.GetDashboardConifg.PANEL_UseCommitAsUpdateIndicator && CurrentHash ) {
 					const Commits = await octokit.request( "GET /repos/{owner}/{repo}/commits", {
 						owner: "kyri123",
 						repo: "ArkLin2.0",
@@ -117,33 +105,35 @@ export default new JobTask(
 						sha: Sha || Branch
 					} );
 
-					const CurrentHash = ConfigManager.GetGitHash;
-					if ( CurrentHash ) {
-						const FoundedCommit = Commits.data.find( ( E ) => E.sha.replace( " ", "" ).trim() === CurrentHash.replace( " ", "" ).trim() )
-						if ( !FoundedCommit ) {
+					const FoundedCommit = Commits.data.find( ( E ) => E.sha.replace( " ", "" ).trim() === CurrentHash.replace( " ", "" ).trim() );
+					if ( !FoundedCommit ) {
+						global.__PANNELUPDATE = true;
+					}
+					else {
+						const FoundNewerCommit = Commits.data.find( ( E ) => new Date( E.commit.committer?.date || 0 ) > new Date( FoundedCommit.commit.committer?.date || 0 ) );
+						if ( FoundNewerCommit ) {
 							global.__PANNELUPDATE = true;
 						}
-						else {
-							const FoundNewerCommit = Commits.data.find( ( E ) => new Date( E.commit.committer?.date || 0 ) > new Date( FoundedCommit.commit.committer?.date || 0 ) )
-							if ( FoundNewerCommit ) {
-								global.__PANNELUPDATE = true;
-							}
-						}
 					}
+				}
+				else if ( CurrentHash ) {
+					SystemLib.LogError( "CurrentHash is undefined... Is it a git repo?" );
 				}
 
 				//-------------------------------------------------------------------
 				//--------------------   Release based Update   ---------------------
 				//-------------------------------------------------------------------
 				// We try to find the current branch data if they not exist skip any update.
-				const Current = Releases.data.find(
-					( E ) => E.tag_name === process.env.npm_package_version
-				);
-				if ( Current && ConfigManager.GetDashboardConifg.PANEL_UseCommitAsUpdateIndicator ) {
-					// try to find a newer version
-					const TestNext = Releases.data.find( ( E ) => new Date( E.created_at ).valueOf() > new Date( Current!.created_at ).valueOf() );
-					if ( TestNext ) {
-						global.__PANNELUPDATE = true;
+				if ( !ConfigManager.GetDashboardConifg.PANEL_UseCommitAsUpdateIndicator ) {
+					const Current = Releases.data.find(
+						( E ) => E.tag_name === process.env.npm_package_version
+					);
+					if ( Current ) {
+						// try to find a newer version
+						const TestNext = Releases.data.find( ( E ) => new Date( E.created_at ).valueOf() > new Date( Current!.created_at ).valueOf() );
+						if ( TestNext ) {
+							global.__PANNELUPDATE = true;
+						}
 					}
 				}
 
@@ -154,13 +144,15 @@ export default new JobTask(
 					SystemLib.LogWarning( "[UPDATE] new update!" );
 
 					if ( !ConfigManager.GetDashboardConifg.PANEL_AutomaticUpdate ) {
-						SystemLib.LogWarning( "[UPDATE] Auto Update is disabled and will no trigger!" )
+						SystemLib.LogWarning( "[UPDATE] Auto Update is disabled and will no trigger!" );
 						return;
 					}
+
+					SystemLib.LogWarning( "[UPDATE] Trigger Update:", `${ EBashScript.update } ${ Branch }` );
 					// Start to running the update script. by using screen
 					SSHManager.ExecCommandInScreen(
 						"ArkLinUpdate",
-						`${ SHUpdateFile } ${ Branch }`
+						`${ EBashScript.update } "${ Branch }"`
 					).then( () => {
 					} );
 					return;
