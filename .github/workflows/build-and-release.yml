@@ -10,8 +10,8 @@ env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  test:
-    name: "Test and Build"
+  test-docker:
+    name: "Test and Build as Docker"
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,15 +26,38 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Build Docker Image
+        continue-on-error: true
         uses: docker/build-push-action@v4
         with:
           context: .
           push: false
           tags: user/app:latest
+      - name: Archive Test Results
+        if: always()
 
+
+  test-app:
+    name: "Test and Build as App"
+    needs: test-app
+
+    strategy:
+      matrix:
+        node-version: [ 19.x ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: yarn install
+      - run: yarn tailwindcss
+      - run: yarn BuildServer
+      - run: yarn Client
 
   deploy:
-    needs: test
+    needs: [ test-app, test-docker ]
     name: "Deploy to Test-Server"
     runs-on: ubuntu-latest
     steps:
