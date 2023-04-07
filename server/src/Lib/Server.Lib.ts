@@ -137,6 +137,7 @@ export class ServerLib {
 				ArkmanagerPID: 1
 			} );
 
+			SystemLib.Log( "[CMD] Executing:", `'${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"'` );
 			SSHManager.ExecCommand(
 				[
 					`${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"`
