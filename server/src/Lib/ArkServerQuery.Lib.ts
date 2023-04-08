@@ -1,34 +1,88 @@
 import { ServerLib }     from "./Server.Lib";
 import { Rcon }          from "rcon-client";
 import { IServerStatus } from "../../../src/Shared/Type/ArkSE";
+import * as dgram        from "dgram";
 import Gamedig           from "gamedig";
-import * as console      from "console";
 
-const GamedigQuery = new Gamedig( { listenUdpPort: parseInt( process.env.API_GAMEDIG_UDP || "33333" ) } );
+const GamedigQuery = new Gamedig( { listenUdpPort: 33333 } );
+
+
+const socket = dgram.createSocket( "udp4" );
+socket.bind( parseInt( process.env.API_GAMEDIG_UDP || "33333" ) );
 
 export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServerStatus> {
-	if ( __PublicIP !== "0.0.0.0" ) {
-		try {
-			const QueryResult = await GamedigQuery.query( {
-				type: "arkse",
-				host: __PublicIP,
-				port: Server.Get.ArkmanagerCfg.ark_QueryPort
-			} );
+	return await new Promise<IServerStatus>( ( resolve ) => {
+		GamedigQuery.query( {
+			debug: false,
+			host: __PublicIP,
+			port: Server.Get.ArkmanagerCfg.ark_QueryPort,
+			type: "arkse"
+		} );
+		const Reso : IServerStatus = {
+			Online: false,
+			Players: []
+		};
 
-			return {
-				Online: true,
-				Players: QueryResult.players.map<string>( E => E.name! )
-			};
-		}
-		catch ( e ) {
-			console.error( e );
+		socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff ] ), 27019, "141.95.124.227"/*Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP*/, Err => {
+			if ( Err ) {
+				clearTimeout( Timeout );
+				socket.removeAllListeners();
+				resolve( Reso );
+			}
+
+			socket.once( "message", ( message ) => {
+				Reso.Online = true;
+
+				socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, ...message.slice( 5 ) ] ), 27019, "141.95.124.227"/*Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP*/, Err => {
+					if ( Err ) {
+						clearTimeout( Timeout );
+						socket.removeAllListeners();
+						resolve( Reso );
+					}
+
+					socket.once( "message", ( msg ) => {
+						Reso.Players = parsePlayerList( msg );
+						socket.removeAllListeners();
+						resolve( Reso );
+					} );
+				} );
+			} );
+		} );
+
+		const Timeout = setTimeout( () => {
+			socket.removeAllListeners();
+			resolve( Reso );
+		}, 5000 );
+
+		socket.on( "error", ( err ) => {
+			clearTimeout( Timeout );
+			resolve( Reso );
+		} );
+	} );
+}
+
+function parsePlayerList( buffer : Buffer ) : string[] {
+	let hexData = buffer.toString( "hex" );
+	const nameArray : string[] = [];
+
+	for ( let i = 0; i < hexData.length; i += 2 ) {
+		if ( hexData.slice( i, i + 2 ) === "00" ) {
+			const Buf = Buffer.from( hexData.slice( 0, i ), "hex" );
+			const name = Buf.toString( "utf8" );
+			nameArray.push( name );
+			hexData = hexData.slice( i + 2 );
+			i = -2;
 		}
 	}
 
-	return {
-		Online: false,
-		Players: []
-	};
+	const ClearNameArray : string[] = [];
+	for ( let i = 0; i < nameArray.length; i++ ) {
+		if ( nameArray[ i ].trim() !== "" && !JSON.stringify( nameArray[ i ] ).includes( ",/FF" ) && !JSON.stringify( nameArray[ i ] ).includes( "\\u" ) && !/\uFFFD/g.test( nameArray[ i ] ) ) {
+			ClearNameArray.push( nameArray[ i ] );
+		}
+	}
+
+	return ClearNameArray;
 }
 
 export async function SendCommand(

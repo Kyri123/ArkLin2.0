@@ -18,4 +18,4 @@ echo "Setzte Rechte..."
 chmod 777 -R ./sh
 
 echo "Erstelle Image und starte den Docker Container..."
-docker-compose up -d --no-deps --build kadmin-arklin2
+docker-compose up -d --build
