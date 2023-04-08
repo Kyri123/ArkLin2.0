@@ -2,9 +2,6 @@ import { ServerLib }     from "./Server.Lib";
 import { Rcon }          from "rcon-client";
 import { IServerStatus } from "../../../src/Shared/Type/ArkSE";
 import * as dgram        from "dgram";
-import Gamedig           from "gamedig";
-
-const GamedigQuery = new Gamedig( { listenUdpPort: 33333 } );
 
 
 const socket = dgram.createSocket( "udp4" );
@@ -23,7 +20,7 @@ export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServ
 			Players: []
 		};
 
-		socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff ] ), 27019, "141.95.124.227"/*Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP*/, Err => {
+		socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
 			if ( Err ) {
 				clearTimeout( Timeout );
 				socket.removeAllListeners();
@@ -33,7 +30,7 @@ export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServ
 			socket.once( "message", ( message ) => {
 				Reso.Online = true;
 
-				socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, ...message.slice( 5 ) ] ), 27019, "141.95.124.227"/*Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP*/, Err => {
+				socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, ...message.slice( 5 ) ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
 					if ( Err ) {
 						clearTimeout( Timeout );
 						socket.removeAllListeners();
