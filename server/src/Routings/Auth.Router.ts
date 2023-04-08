@@ -154,7 +154,6 @@ export default function( Api : core.Express ) {
 						$or: [ { username: Request.user }, { mail: Request.email } ]
 					} );
 
-					console.log( AccountCheck );
 					if ( AccountCheck === null ) {
 						const NewAccount = await DB_Accounts.create( {
 							mail: Request.email.replaceAll( " ", "" ),

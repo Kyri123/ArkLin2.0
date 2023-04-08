@@ -92,11 +92,6 @@ Api.use( function( req, res, next ) {
 } );
 
 Api.all( "*", async function( req, res, next ) {
-	// Todo: Remove or uncomment
-	if ( SystemLib.DebugMode() ) {
-		//console.log( "POST:", req.path )
-	}
-
 	req.body = {
 		...req.body,
 		...req.query

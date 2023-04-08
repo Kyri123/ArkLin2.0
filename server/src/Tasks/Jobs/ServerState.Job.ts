@@ -25,7 +25,6 @@ export default new JobTaskCycle<IMO_Instance>(
 	},
 
 	async( CallIndex, Server ) => {
-		console.log( Server?.Instance );
 		SystemLib.DebugLog(
 			"[TASKS] Running Task ", CallIndex,
 			SystemLib.ToBashColor( "Red" ),
