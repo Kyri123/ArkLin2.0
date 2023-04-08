@@ -7,15 +7,15 @@ export class JobTask {
 	public JobName = "";
 	protected Interval = 60000;
 	protected Task : NodeJS.Timer;
-	protected TaskFunction : ( CallCount : number ) => void;
-	private TickCount = 1;
-	private IsRun = false;
-	private RunNextTask = [ false, false ];
+	protected TaskFunction : ( CallCount : number ) => Promise<void>;
+	protected TickCount = 1;
+	protected IsRun = false;
+	protected RunNextTask = [ false, false ];
 
 	constructor(
 		Interval : number,
 		JobName : TTasksRunner,
-		Task : ( CallCount : number ) => void
+		Task : ( CallCount : number ) => Promise<void>
 	) {
 		this.JobName = JobName;
 		this.Interval = Interval;
@@ -24,6 +24,11 @@ export class JobTask {
 		this.Tick().then( () =>
 			SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
 		);
+	}
+
+	public UpdateTickTime( NewTime : number ) {
+		clearInterval( this.Task );
+		this.Task = setInterval( this.Tick.bind( this ), NewTime );
 	}
 
 	public DestroyTask() {
@@ -42,7 +47,7 @@ export class JobTask {
 		}
 	}
 
-	private async Tick() {
+	protected async Tick() {
 		this.IsRun = true;
 		await this.TaskFunction( this.TickCount );
 		this.IsRun = false;
@@ -59,6 +64,59 @@ export class JobTask {
 			this.RunNextTask = [ false, false ];
 			await this.Tick();
 		}
+	}
+}
+
+export class JobTaskCycle<T> extends JobTask {
+	protected GetArrayFunction : ( Self : JobTaskCycle<T> ) => Promise<T[]>;
+	protected TaskFunction : ( CallCount : number, Object? : T ) => Promise<void>;
+	private CurrentIndex = 0;
+	private MaxIndex = -1;
+	private Array : T[] = [];
+
+	protected async Tick() : Promise<void> {
+		try {
+			if ( !this.IsRun ) {
+				this.IsRun = true;
+				if ( this.CurrentIndex >= this.MaxIndex ) {
+					this.Array = await this.GetArrayFunction( this );
+					this.MaxIndex = this.Array.length;
+					this.CurrentIndex = 0;
+				}
+
+				await this.TaskFunction( this.CurrentIndex, this.Array[ this.CurrentIndex ] );
+				this.CurrentIndex++;
+				this.IsRun = false;
+			}
+		}
+		catch ( e ) {
+			this.IsRun = false;
+		}
+	}
+
+	public async ForceTask( ResetTime ) : Promise<void> {
+		if ( ResetTime ) {
+			this.MaxIndex = 9999999;
+		}
+
+		const Arr = await this.GetArrayFunction( this );
+		for ( let i = 0; i < Arr.length; i++ ) {
+			await this.TaskFunction( i, Arr[ i ] );
+		}
+	}
+
+	constructor(
+		JobName : TTasksRunner,
+		GetArrayFunction : ( Self : JobTaskCycle<T> ) => Promise<T[]>,
+		Task : ( CallCount : number, Object? : T ) => Promise<void>
+	) {
+		super( 1000, JobName, Task );
+		this.GetArrayFunction = GetArrayFunction;
+		this.JobName = JobName;
+		this.TaskFunction = Task;
+		this.Tick().then( () =>
+			SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
+		);
 	}
 }
 

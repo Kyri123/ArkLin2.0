@@ -11,7 +11,7 @@
     "Nodemon": "concurrently -m 2 \"nodemon --config nodemon.react.json\" \"nodemon\"",
     "Dev": "yarn tailwindcss && concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
     "TestApp": "eslint src --fix && eslint server --fix",
-    "FullTestApp": "yarn TestApp && yarn BuildServer && yarn Client",
+    "FullTestApp": "yarn tailwindcss && yarn TestApp && yarn BuildServer && yarn Client",
     "tailwindcss": "postcss src/tailwind.css -o src/Css/App-TW.css"
   },
   "babel": {
@@ -27,6 +27,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@kyri123/k-reactutils": "^0.2.7-build.19",
+    "@types/gamedig": "^4.0.1",
     "@uiw/codemirror-theme-gruvbox-dark": "^4.19.11",
     "@uiw/react-codemirror": "^4.19.11",
     "autoprefixer": "^10.4.14",
@@ -37,6 +38,7 @@
     "cra-template-typescript": "1.2.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "gamedig": "^4.0.6",
     "http-proxy-middleware": "^2.0.6",
     "icheck-bootstrap": "^3.0.1",
     "ini": "^3.0.1",

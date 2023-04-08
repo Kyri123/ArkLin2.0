@@ -1,8 +1,19 @@
-import { JobTask }             from "../TaskManager";
-import { ConfigManager }       from "../../Lib/ConfigManager.Lib";
-import DB_Instances            from "../../MongoDB/DB_Instances";
-import { ServerLib }           from "../../Lib/Server.Lib";
-import { EArkmanagerCommands } from "../../../../src/Lib/ServerUtils.Lib";
+import { JobTask }                     from "../TaskManager";
+import { ConfigManager }               from "../../Lib/ConfigManager.Lib";
+import DB_Instances                    from "../../MongoDB/DB_Instances";
+import {
+	CreateServer,
+	ServerLib
+}                                      from "../../Lib/Server.Lib";
+import { EArkmanagerCommands }         from "../../../../src/Lib/ServerUtils.Lib";
+import path                            from "path";
+import { IInstanceData }               from "../../../../src/Shared/Type/ArkSE";
+import fs                              from "fs";
+import {
+	ConfigToJSON,
+	FillWithDefaultValues
+}                                      from "../../Lib/Arkmanager.Lib";
+import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerTasksInterval,
@@ -13,6 +24,34 @@ export default new JobTask(
 			SystemLib.ToBashColor( "Red" ),
 			"Server"
 		);
+
+		// Read and save all Instances
+		const InstancesFolder = path.join( __server_arkmanager, "instances" );
+		const ServerData : Record<string, IInstanceData> = {};
+		for ( const Instance of fs.readdirSync( InstancesFolder ) ) {
+			if ( Instance.endsWith( ".cfg" ) ) {
+				const Server = Instance.replace( ".cfg", "" );
+				const FilePath = path.join(
+					__server_arkmanager,
+					"instances",
+					`${ Instance }`
+				);
+				const ConfigContent = fs.readFileSync( FilePath ).toString();
+				const InstanceData = ConfigToJSON( ConfigContent );
+				ServerData[ Server ] = FillWithDefaultValues( Server, InstanceData );
+
+				ServerData[ Server ].Instance = Server;
+				if ( ( await DB_Instances.exists( { Instance: Server } ) ) !== null ) {
+					const ServerL = await ServerLib.build( Server );
+					if ( ServerL.IsValid() ) {
+						await ServerL.SetServerConfig( "arkmanager.cfg", ServerData[ Server ] );
+					}
+				}
+				else {
+					await CreateServer( GetDefaultPanelServerConfig(), Server );
+				}
+			}
+		}
 
 		for await ( const ServerData of DB_Instances.find() ) {
 			const Server = await ServerLib.build( ServerData.Instance );

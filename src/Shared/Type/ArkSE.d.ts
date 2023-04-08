@@ -14,7 +14,7 @@ export interface IInstanceState extends IMongoDB {
 	State : TServerState;
 	IsListen : boolean;
 	Player : number;
-	OnlinePlayerList : IOnlineUsers[];
+	OnlinePlayerList : string[];
 	ServerVersion : string;
 	ArkmanagerPID : number;
 	ArkserverPID : number;
@@ -70,9 +70,10 @@ export interface IInstanceData extends Record<string, any> {
 	panel_publicip : string;
 }
 
-export interface IOnlineUsers {
-	Username : string;
-	SteamID : number;
+
+export interface IServerStatus {
+	Online : boolean;
+	Players : string[];
 }
 
 export interface IPanelServerConfig {

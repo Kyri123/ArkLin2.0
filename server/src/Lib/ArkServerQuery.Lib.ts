@@ -1,89 +1,34 @@
-import dgram            from "dgram";
-import process          from "process";
-import { ServerLib }    from "./Server.Lib";
-import { Rcon }         from "rcon-client";
-import * as console     from "console";
-import { IOnlineUsers } from "../../../src/Shared/Type/ArkSE";
+import { ServerLib }     from "./Server.Lib";
+import { Rcon }          from "rcon-client";
+import { IServerStatus } from "../../../src/Shared/Type/ArkSE";
+import Gamedig           from "gamedig";
+import * as console      from "console";
 
-const client = dgram.createSocket( "udp4" );
-client.bind( parseInt( process.env.API_GAMEDIG_UDP || "33333" ) + 10 );
-client.on( "error", console.error );
+const GamedigQuery = new Gamedig( { listenUdpPort: parseInt( process.env.API_GAMEDIG_UDP || "33333" ) } );
 
-export async function IsServerOnline(
-	Port : number,
-	Timeout = 5000
-) : Promise<boolean> {
-	return new Promise<boolean>( ( resolve ) => {
-		const OnMessage = ( msg, rinfo ) => {
-			SystemLib.DebugLog( "[UDP] MESSAGE:", rinfo, msg );
-			clearTimeout( TimeoutTimer );
-
-			client.removeListener( "message", OnMessage );
-			client.removeListener( "error", OnError );
-
-			resolve( true );
-		};
-
-		const OnError = ( err ) => {
-			SystemLib.LogError( "[UDP] ERROR:", err );
-		};
-
-		let TimeoutTimer : NodeJS.Timeout | undefined = setTimeout( () => {
-			SystemLib.DebugLog( "[UDP] TIMEOUT!", Port, Timeout );
-			TimeoutTimer = undefined;
-
-			client.removeListener( "message", OnMessage );
-			client.removeListener( "error", OnError );
-
-			resolve( false );
-		}, Timeout );
+export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServerStatus> {
+	if ( __PublicIP !== "0.0.0.0" ) {
 		try {
-			client.on( "message", OnMessage );
-			client.on( "error", OnError );
+			const QueryResult = await GamedigQuery.query( {
+				type: "arkse",
+				host: __PublicIP,
+				port: Server.Get.ArkmanagerCfg.ark_QueryPort
+			} );
 
-			const message = Buffer.from( [
-				255, 255, 255, 255, 84, 83, 111, 117, 114, 99, 101, 32, 69, 110, 103,
-				105, 110, 101, 32, 81, 117, 101, 114, 121, 0
-			] );
-
-			client.send( message, 0, message.length, Port, __PublicIP );
+			return {
+				Online: true,
+				Players: QueryResult.players.map<string>( E => E.name! )
+			};
 		}
 		catch ( e ) {
 			console.error( e );
-			if ( TimeoutTimer ) {
-				clearTimeout( TimeoutTimer );
-			}
-
-			client.removeListener( "message", OnMessage );
-			client.removeListener( "error", OnError );
-
-			resolve( false );
-		}
-	} );
-}
-
-export async function GetOnlinePlayer(
-	Instance : string
-) : Promise<IOnlineUsers[]> {
-	const Return : IOnlineUsers[] = [];
-	const Resp = await SendCommand( Instance, "listplayers" );
-	if (
-		Resp.Successfuly &&
-		Resp.Response.toLowerCase().trim().replaceAll( " ", "" ) !==
-		"noplayersconnected"
-	) {
-		const RawArray = Resp.Response.split( "\n" ).filter(
-			( e ) => e.replaceAll( " ", "" ).trim() !== ""
-		);
-		for ( let Idx = 0; Idx < RawArray.length; ++Idx ) {
-			const [ Username, SteamID ] : any[] = RawArray[ Idx ].split( "," );
-			Return.push( {
-				Username: Username.slice( Idx.toString().length + 2, Username.length ),
-				SteamID: parseInt( SteamID )
-			} );
 		}
 	}
-	return Return;
+
+	return {
+		Online: false,
+		Players: []
+	};
 }
 
 export async function SendCommand(
