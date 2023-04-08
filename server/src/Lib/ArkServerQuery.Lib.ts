@@ -45,7 +45,7 @@ export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServ
 			resolve( Reso );
 		}, 2000 );
 
-		socket.on( "error", ( err ) => {
+		socket.on( "error", () => {
 			clearTimeout( Timeout );
 			resolve( Reso );
 		} );

@@ -42,7 +42,7 @@ export interface IInstanceData extends Record<string, any> {
 	ark_ServerPassword : string;
 	ark_ServerAdminPassword : string;
 	ark_MaxPlayers : number;
-	ark_GameModIds : number | number[];
+	ark_GameModIds : number[];
 	arkwarnminutes : number;
 	Flags : Record<string, string>;
 	Options : Record<string, string>;
