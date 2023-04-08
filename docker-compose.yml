@@ -47,7 +47,7 @@ services:
       - arklin2
 
   mongodb:
-    user: "${DOCKER_UID}:${DOCKER_GID}"
+    # user: "${DOCKER_UID}:${DOCKER_GID}"
     image: mongo
     volumes:
       - './mount/mongodb:/data/db'
