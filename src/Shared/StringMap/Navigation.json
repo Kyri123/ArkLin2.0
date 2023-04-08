@@ -3,8 +3,7 @@
     "benutzer": "Benutzer",
     "API_BaseConfig": "API",
     "Dashboard_BaseConfig": "ArkLin2",
-    "Debug": "Debug",
-    "Tasks": "Aufgaben"
+    "Debug": "Debug"
   },
   "MainPage": {
     "home": "Startseite",
@@ -14,6 +13,9 @@
     "users": "Benutzer Administration",
     "adminserver": "Server Verwaltung",
     "me": "Benutzer Einstellung",
-    "paneladmin": "Panel Einstellungen"
+    "paneladmin": "Panel Einstellungen",
+    "cluster": "Server-Cluster",
+    "konfiguration": "Server-Konfiguration",
+    "mods": "Server-Modifikationen"
   }
 }

@@ -27,8 +27,8 @@ export interface IInstanceData extends Record<string, any> {
 	arkbackupdir : string;
 	arkAutoUpdateOnStart : boolean;
 	arkBackupPreUpdate : boolean;
-	serverMapModId : number;
-	ark_TotalConversionMod : number;
+	serverMapModId : string;
+	ark_TotalConversionMod : string;
 	arkbackupcompress : boolean;
 
 	ark_RCONEnabled : boolean;
@@ -42,7 +42,7 @@ export interface IInstanceData extends Record<string, any> {
 	ark_ServerPassword : string;
 	ark_ServerAdminPassword : string;
 	ark_MaxPlayers : number;
-	ark_GameModIds : number[];
+	ark_GameModIds : number | number[];
 	arkwarnminutes : number;
 	Flags : Record<string, string>;
 	Options : Record<string, string>;

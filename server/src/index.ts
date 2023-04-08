@@ -92,6 +92,7 @@ Api.use( function( req, res, next ) {
 } );
 
 Api.all( "*", async function( req, res, next ) {
+	console.warn( "Request:", req.path );
 	req.body = {
 		...req.body,
 		...req.query

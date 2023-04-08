@@ -78,7 +78,7 @@ export function GetRawInstanceData() : IInstanceData {
 		ark_ServerAdminPassword: "",
 		ark_ServerPassword: "",
 		ark_SessionName: "[ARKLIN2] ArkServer",
-		ark_TotalConversionMod: 0,
+		ark_TotalConversionMod: "",
 		arkbackupcompress: true,
 		arkbackupdir: "",
 		arkserverroot: "",
@@ -87,7 +87,7 @@ export function GetRawInstanceData() : IInstanceData {
 		arkserverexec: "ShooterGame/Binaries/Linux/ShooterGameServer",
 		arkwarnminutes: 0,
 		serverMap: "TheIsland",
-		serverMapModId: 0,
+		serverMapModId: "",
 		panel_publicip: "0.0.0.0"
 	};
 }

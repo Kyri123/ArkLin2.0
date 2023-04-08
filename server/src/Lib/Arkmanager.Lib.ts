@@ -136,7 +136,7 @@ export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
 		ark_ServerAdminPassword: MakeRandomID( 10 ),
 		ark_ServerPassword: "",
 		ark_SessionName: "[ARKLIN2] ArkServer",
-		ark_TotalConversionMod: 0,
+		ark_TotalConversionMod: "",
 		arkbackupcompress: true,
 		arkbackupdir: path.join( __server_backups, Servername ),
 		arkserverroot: path.join( __server_dir, Servername ),
@@ -145,7 +145,7 @@ export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
 		arkserverexec: "ShooterGame/Binaries/Linux/ShooterGameServer",
 		arkwarnminutes: 0,
 		serverMap: "TheIsland",
-		serverMapModId: 0,
+		serverMapModId: "",
 		panel_publicip: "0.0.0.0"
 	};
 }

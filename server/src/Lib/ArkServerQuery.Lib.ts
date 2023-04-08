@@ -9,12 +9,6 @@ socket.bind( parseInt( process.env.API_GAMEDIG_UDP || "33333" ) );
 
 export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServerStatus> {
 	return await new Promise<IServerStatus>( ( resolve ) => {
-		GamedigQuery.query( {
-			debug: false,
-			host: __PublicIP,
-			port: Server.Get.ArkmanagerCfg.ark_QueryPort,
-			type: "arkse"
-		} );
 		const Reso : IServerStatus = {
 			Online: false,
 			Players: []
@@ -49,7 +43,7 @@ export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServ
 		const Timeout = setTimeout( () => {
 			socket.removeAllListeners();
 			resolve( Reso );
-		}, 5000 );
+		}, 2000 );
 
 		socket.on( "error", ( err ) => {
 			clearTimeout( Timeout );

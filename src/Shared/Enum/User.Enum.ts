@@ -4,6 +4,7 @@ export enum EPerm {
 	PanelSettings = "ArkLin einstellen",
 	PanelLog = "ArkLin Log ansehen",
 	ManageServers = "Server Verwalten",
+	ManageCluster = "Cluster Verwalten",
 }
 
 export enum EPerm_Server {

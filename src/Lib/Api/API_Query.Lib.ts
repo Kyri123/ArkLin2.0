@@ -7,6 +7,7 @@ export class API_QueryLib {
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
+		console.warn( "Request POST:", Path, Data );
 		const Token = window.localStorage.getItem( "AuthToken" );
 		const requestOptions : RequestInit = {
 			method: "POST",
@@ -22,7 +23,7 @@ export class API_QueryLib {
 			const Resp : Response | void = await fetch(
 				`/api/v1/${ Path }`,
 				requestOptions
-			).catch( ( e ) => console.log( e ) );
+			).catch( console.error );
 			if ( Resp ) {
 				if ( Resp.ok && Resp.status === 200 ) {
 					const Response = ( await Resp.json() ) as IAPIResponseBase<false, T>;
@@ -32,7 +33,7 @@ export class API_QueryLib {
 			}
 		}
 		catch ( e ) {
-			console.log( e );
+			console.error( e );
 		}
 
 		return {
@@ -51,6 +52,7 @@ export class API_QueryLib {
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
+		console.warn( "Request GET:", Path, Data );
 		const RequestData : string[] = [];
 
 		if ( Data ) {
@@ -74,7 +76,7 @@ export class API_QueryLib {
 		const Resp : Response | void = await fetch(
 			`/api/v1/${ Path }?${ RequestData.join( "&" ) }`,
 			requestOptions
-		).catch( ( e ) => console.log( e ) );
+		).catch( console.error );
 		if ( Resp ) {
 			if ( Resp.ok && Resp.status === 200 ) {
 				const Response = ( await Resp.json() ) as IAPIResponseBase<false, T>;

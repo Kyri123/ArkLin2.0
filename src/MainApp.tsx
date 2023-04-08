@@ -42,6 +42,9 @@ import CFoother                                 from "./Pages/MainApp/PageCompon
 const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
 const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
 
+const PCluster = React.lazy(
+	() => import("./Pages/MainApp/PCluster")
+);
 const PUsersettings = React.lazy(
 	() => import("./Pages/MainApp/PUsersettings")
 );
@@ -211,6 +214,10 @@ export default function MainApp() {
 											<Suspense fallback={ <></> }>
 												<Routes>
 													<Route path="/home" element={ <PHome/> }/>
+													<Route
+														path="/cluster"
+														element={ <PCluster/> }
+													/>
 													<Route
 														path="/version/:version/*"
 														element={ <PChangelog/> }

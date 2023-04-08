@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Nav }        from "react-bootstrap";
 import {
+	BsHddNetwork,
 	BsHouseDoor,
 	BsPeople,
 	BsServer
@@ -46,6 +47,19 @@ export default function CLeftNavigation() {
 						Startseite
 					</Link>
 				</Nav.Item>
+
+				{ Account.HasPermission( EPerm.ManageCluster ) && (
+					<Nav.Item as="li" className="mt-2">
+						<Link
+							to="/cluster"
+							className={ `nav-link ${
+								pathname.endsWith( "/cluster" ) ? "active" : ""
+							} text-white` }>
+							<BsHddNetwork size={ 17 } className={ "me-1" }/>
+							Cluster
+						</Link>
+					</Nav.Item>
+				) }
 
 				{ Account.HasPermission( EPerm.Super ) && (
 					<Nav.Item as="li" className="mt-2">
