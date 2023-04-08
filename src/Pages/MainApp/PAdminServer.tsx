@@ -71,7 +71,6 @@ export default function PAdminServer() {
 							key={ "NEWSERVER" + Key + Idx }
 							Value={ Value }
 							OnValueSet={ ( Val ) => {
-								console.log( Val );
 								const Obj : Record<string, any> = {};
 								Obj[ Key ] = Val;
 								setFormData( {

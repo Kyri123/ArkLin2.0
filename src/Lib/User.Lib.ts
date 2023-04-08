@@ -21,7 +21,6 @@ export default class FrontendUserLib {
 				if ( Decode ) {
 					this.Data = Decode as JwtSession;
 					this.LoggedIn = true;
-					console.log( this.Data );
 					return;
 				}
 			}

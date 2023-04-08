@@ -21,7 +21,6 @@ export default new JobTaskCycle<IMO_Instance>(
 		}
 		Self.UpdateTickTime( ConfigManager.GetTaskConfig.ServerStateInterval / Math.max( Object.values( EmitData ).length, 1 ) );
 		SocketIO.emit( "OnServerUpdated", EmitData );
-		console.log( "OnServerUpdated", Object.keys( EmitData ) );
 		return Object.values( EmitData );
 	},
 

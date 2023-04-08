@@ -253,10 +253,6 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 																		[ Key ]: NewValue
 																	};
 
-																	console.log( {
-																		...SubSection,
-																		[ Key ]: NewValue
-																	} );
 																	Section = {
 																		...Section,
 																		[ SelectedSection?.split( "." )[ 1 ] || "" ]:

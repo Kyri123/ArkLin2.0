@@ -325,7 +325,6 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 
 		if ( Copy && Array.isArray( Copy ) ) {
 			if ( Copy[ Index ] !== undefined ) {
-				console.log( Copy, Value, Index );
 				Copy[ Index ] =
 					Props.Type === "number" ? parseInt( Value.toString() ) : Value;
 				Props.OnValueSet( Copy );
@@ -357,7 +356,6 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 			}
 			// @ts-ignore
 			Copy.push( Props.Type === "number" ? 0 : "" );
-			console.log( Copy );
 			Props.OnValueSet( Copy );
 		}
 	};

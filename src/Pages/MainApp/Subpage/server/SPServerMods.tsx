@@ -54,7 +54,6 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 		}
 		catch ( e ) {
 		}
-		console.log( Id );
 
 		if ( !isNaN( Id ) ) {
 			if ( Data.ark_GameModIds.includes( Id ) ) {

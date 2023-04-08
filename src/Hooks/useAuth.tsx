@@ -3,7 +3,7 @@ import FrontendUserLib     from "../Lib/User.Lib";
 import { useLocalStorage } from "@kyri123/k-reactutils";
 
 export default function useAuth() {
-	const { Storage, SetStorage } = useLocalStorage(
+	const { Storage, SetStorage, ResetStorage } = useLocalStorage(
 		"AuthToken",
 		""
 	);
@@ -12,15 +12,10 @@ export default function useAuth() {
 		return new FrontendUserLib( Storage );
 	}, [ Storage ] );
 
-	const Logout = () => {
-		SetStorage( "" );
-		//window.location.href = "/signin";
-	};
-
 	return {
 		Token: Storage,
 		SetToken: SetStorage,
 		User: UserData,
-		Logout: Logout
+		Logout: ResetStorage
 	};
 }
