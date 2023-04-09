@@ -40,10 +40,6 @@ import fetch                from "node-fetch";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = String( 0 );
 global.__PANNELUPDATE = false;
 
-fetch( "http://api.ipify.org" ).then( async( r ) => {
-	global.__PublicIP = await r.text();
-} );
-
 const Files = fs.readdirSync( __LogDir );
 Files.sort( ( a, b ) => {
 	const A = Number( a.replaceAll( ".log", "" ) );
@@ -154,6 +150,10 @@ mongoose
 		}
 	)
 	.then( async() => {
+		const IPResponse = await fetch( "http://api.ipify.org" );
+		global.__PublicIP = await IPResponse.text();
+		SystemLib.Log( "Public IP: " + global.__PublicIP );
+
 		await SSHManager.Init();
 		// create an account key if no there and no user
 		if (

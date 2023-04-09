@@ -92,7 +92,7 @@ export function JSONtoConfig( Content : Partial<IInstanceData> ) : string {
 }
 
 export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
-	return {
+	const Content = {
 		arkMaxBackupSizeMB: 4096,
 		arkNoPortDecrement: true,
 		arkStartDelay: 0,
@@ -146,17 +146,8 @@ export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
 		arkwarnminutes: 0,
 		serverMap: "TheIsland",
 		serverMapModId: "",
-		panel_publicip: "0.0.0.0"
+		panel_publicip: __PublicIP
 	};
-}
-
-export function FillWithDefaultValues(
-	Servername : string,
-	Content : Partial<IInstanceData>
-) : IInstanceData {
-	if ( global.__PublicIP ) {
-		Content.panel_publicip = __PublicIP;
-	}
 
 	Content.arkbackupdir = path.join(
 		process.env.APPEND_BASEDIR || "/",
@@ -178,6 +169,17 @@ export function FillWithDefaultValues(
 		__server_backups,
 		"Staging"
 	);
+
+	return Content;
+}
+
+export function FillWithDefaultValues(
+	Servername : string,
+	Content : Partial<IInstanceData>
+) : IInstanceData {
+	if ( global.__PublicIP ) {
+		Content.panel_publicip = __PublicIP;
+	}
 
 	try {
 		fs.mkdirSync( path.join( __server_backups, Servername ), { recursive: true } );
