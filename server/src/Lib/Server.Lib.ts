@@ -323,6 +323,8 @@ export class ServerLib<Ready extends boolean> {
 				"[SERVER] Server Removed:",
 				this.MongoDBData?.Instance
 			);
+
+			SocketIO.emit( "OnServerRemoved" );
 		}
 		catch ( e ) {
 			SystemLib.LogError( "[SERVER] RemoveServer:", e );

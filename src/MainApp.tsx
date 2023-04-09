@@ -133,6 +133,7 @@ export default function MainApp() {
 			} ) )
 		);
 
+		SocketIO.on( "OnServerRemoved", GetAllServer );
 		SocketIO.on( "connect", GetAllServer );
 		SocketIO.on( "disconnect", () => setHasData( false ) );
 
@@ -140,6 +141,7 @@ export default function MainApp() {
 			SocketIO.off( "connect" );
 			SocketIO.off( "disconnect" );
 			SocketIO.off( "OnServerUpdated" );
+			SocketIO.off( "OnServerRemoved", GetAllServer );
 			SocketIO.off( "OnServerStateFinished", GetAllServer );
 			SocketIO.off( "OnSystemUpdate" );
 		};

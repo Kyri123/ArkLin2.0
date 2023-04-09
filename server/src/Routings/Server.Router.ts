@@ -200,10 +200,6 @@ export default function( Api : core.Express ) {
 					Message: `Server ${ Request.InstanceName } wurde entfernt.`,
 					Title: "Erfolgreich!"
 				};
-				setTimeout( () => {
-					TaskManager.RunTask( "ServerState", true );
-				}, 1000 );
-				SocketIO.emit( "OnServerSettingsUpdated" );
 			}
 		}
 
