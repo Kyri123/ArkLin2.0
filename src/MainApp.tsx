@@ -125,7 +125,6 @@ export default function MainApp() {
 		GetAllServer().then( () => {
 		} );
 
-		SocketIO.on( "OnServerStateFinished", GetAllServer );
 		SocketIO.on( "OnServerUpdated", ( R ) =>
 			setInstances( ( I ) => ( {
 				...I,
@@ -142,7 +141,6 @@ export default function MainApp() {
 			SocketIO.off( "disconnect" );
 			SocketIO.off( "OnServerUpdated" );
 			SocketIO.off( "OnServerRemoved", GetAllServer );
-			SocketIO.off( "OnServerStateFinished", GetAllServer );
 			SocketIO.off( "OnSystemUpdate" );
 		};
 	}, [] );
