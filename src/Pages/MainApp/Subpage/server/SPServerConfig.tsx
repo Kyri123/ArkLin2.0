@@ -147,7 +147,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 					>
 						<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
 					</LTELoadingButton>
-					<LTELoadingButton Flat onClick={ ToggleTextEditor }>
+					<LTELoadingButton className={ "flat" } onClick={ ToggleTextEditor }>
 						{ " " }
 						{ UseTextEdtior ? "Benutze Editor" : "Benutze Text Editor" }{ " " }
 					</LTELoadingButton>

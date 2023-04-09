@@ -5874,6 +5874,11 @@ rcon-client@^4.2.3:
   dependencies:
     typed-emitter "^0.1.0"
 
+react-app@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-app/-/react-app-1.1.2.tgz#ae608159bdbdb166bc5fcc9c0d97b2219365dc1f"
+  integrity sha512-4MrTmJWu3WDX3upmEyyHGhA15L0qtqJBDMoVZRjd5hrf8lEoX/ja/EOG31eppiyRTWpZGGigCwb2lzsI6ZKDFQ==
+
 react-bootstrap@^2.7.2:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-2.7.2.tgz#100069ea7b4807cccbc5fef1e33bc90283262602"

@@ -1,4 +1,3 @@
-
 /** @format */
 
 import {
@@ -7,6 +6,7 @@ import {
 }                          from "react";
 import ReactDOM            from "react-dom/client";
 
+import "@kyri123/k-javascript-utils/lib/useAddons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "icheck-bootstrap/icheck-bootstrap.min.css";

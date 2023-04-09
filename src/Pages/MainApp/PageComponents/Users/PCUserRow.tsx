@@ -100,17 +100,15 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 							</LTELoadingButton>
 							<LTELoadingButton
 								onClick={ () => setShowServerModal( true ) }
-								className={ "btn-sm" }
+								className={ "btn-sm flat" }
 								IsLoading={ false }
-								Flat
 							>
 								<FontAwesomeIcon icon={ "server" }/>
 							</LTELoadingButton>
 							<LTELoadingButton
 								onClick={ () => setShowPermissionModal( true ) }
-								className={ "btn-sm" }
+								className={ "btn-sm flat" }
 								IsLoading={ false }
-								Flat
 							>
 								<FontAwesomeIcon icon={ "ranking-star" }/>
 							</LTELoadingButton>

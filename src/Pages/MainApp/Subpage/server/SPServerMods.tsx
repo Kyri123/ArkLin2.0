@@ -127,7 +127,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 						ref={ InputRef }
 					></FormControl>
 					<LTELoadingButton
-						Flat
+						className={ "flat" }
 						IsLoading={ IsSending }
 						variant={ "success" }
 						disabled={

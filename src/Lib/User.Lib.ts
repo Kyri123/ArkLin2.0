@@ -25,7 +25,7 @@ export default class FrontendUserLib {
 				}
 			}
 			catch ( e ) {
-				console.warn( e, Token );
+				console.error( e, Token );
 			}
 		}
 		this.Data = { mail: "", password: "", role: 0, servers: [], username: "" };

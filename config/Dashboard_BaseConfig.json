@@ -1,7 +1,7 @@
 {
   "PANEL_Branch": "main",
-  "PANEL_AutomaticUpdate": true,
-  "PANEL_UseCommitAsUpdateIndicator": true,
+  "PANEL_AutomaticUpdate": false,
+  "PANEL_UseCommitAsUpdateIndicator": false,
   "PANEL_GithubToken": "",
   "LOG_MaxLogCount": 25,
   "SSH_Host": "localhost",

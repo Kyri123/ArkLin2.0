@@ -7,7 +7,6 @@ export class API_QueryLib {
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
-		console.warn( "Request POST:", Path, Data );
 		const Token = window.localStorage.getItem( "AuthToken" );
 		const requestOptions : RequestInit = {
 			method: "POST",
@@ -52,7 +51,6 @@ export class API_QueryLib {
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
-		console.warn( "Request GET:", Path, Data );
 		const RequestData : string[] = [];
 
 		if ( Data ) {
