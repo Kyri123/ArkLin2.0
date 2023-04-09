@@ -6,7 +6,6 @@ import {
 	BashColorString,
 	SystemPlatform
 }                       from "../Types/System.Lib";
-import { InstallAllTE } from "../TypeExtension/TE_InstallAll";
 import * as console     from "console";
 import * as dotenv      from "dotenv";
 import { IDebugConfig } from "../Types/Config";
@@ -48,8 +47,7 @@ export class SystemLib_Class {
 		}
 
 		this.SuportedPlatforms = Supported;
-		InstallAllTE();
-		if ( !this.SuportedPlatforms.Contains( this.Platform ) && !this.IsTest() ) {
+		if ( !this.SuportedPlatforms.includes( this.Platform ) && !this.IsTest() ) {
 			this.Platform = "NotSupported";
 		}
 	}
@@ -134,7 +132,7 @@ export class SystemLib_Class {
 		}
 
 		if ( this.DebugMode() ) {
-			data.AddFirst(
+			data.addAtIndex(
 				this.ToBashColor( "Magenta" ) +
 				`[${ new Date().toUTCString() }][DEBUG]\x1B[0m`
 			);
@@ -144,7 +142,7 @@ export class SystemLib_Class {
 	}
 
 	public Log( ...data : any[] ) {
-		data.AddFirst(
+		data.addAtIndex(
 			this.ToBashColor( "Cyan" ) + `[${ new Date().toUTCString() }][LOG]\x1B[0m`
 		);
 		console.log( ...data );
@@ -152,7 +150,7 @@ export class SystemLib_Class {
 	}
 
 	public LogError( ...data : any[] ) {
-		data.AddFirst(
+		data.addAtIndex(
 			this.ToBashColor( "Light Red" ) +
 			`[${ new Date().toUTCString() }][ERROR]\x1B[0m`
 		);
@@ -161,7 +159,7 @@ export class SystemLib_Class {
 	}
 
 	public LogWarning( ...data : any[] ) {
-		data.AddFirst(
+		data.addAtIndex(
 			this.ToBashColor( "Yellow" ) + `[${ new Date().toUTCString() }][WARN]\x1B[0m`
 		);
 		console.warn( ...data );
@@ -169,7 +167,7 @@ export class SystemLib_Class {
 	}
 
 	public LogFatal( ...data : any[] ) {
-		data.AddFirst(
+		data.addAtIndex(
 			this.ToBashColor( "Red" ) + `[${ new Date().toUTCString() }][FATAL]\x1B[0m`
 		);
 		console.error( ...data );
@@ -183,7 +181,7 @@ export class SystemLib_Class {
 		IsFata : boolean,
 		...data : any[]
 	) {
-		data.AddFirst(
+		data.addAtIndex(
 			this.ToBashColor( Color ) + `[${ new Date().toUTCString() }][${ Key }]\x1B[0m`
 		);
 		console.error( ...data );

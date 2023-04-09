@@ -14,8 +14,8 @@ import * as crypto   from "crypto";
 import path          from "path";
 import fs            from "fs";
 import * as jwt      from "jsonwebtoken";
-import { If }        from "../Types/Utils";
 import { ServerLib } from "./Server.Lib";
+import { If }        from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
 
 export function GetSecretAppToken() : string {
 	if ( global.__AppToken && typeof __AppToken === "string" ) {
@@ -61,7 +61,6 @@ export class UserLib<Ready extends boolean = boolean> {
 		return User;
 	}
 
-	public IsValid() : this is UserLib<true>;
 	public IsValid() {
 		return this.UserData !== null;
 	}
@@ -98,13 +97,13 @@ export class UserLib<Ready extends boolean = boolean> {
 			return false;
 		}
 
-		if ( this.UserData.servers.Contains( ServerName ) ) {
-			this.UserData.servers.RemoveAll( ServerName );
+		if ( this.UserData.servers.includes( ServerName ) ) {
+			this.UserData.servers.rm( ServerName, true );
 			DB_Accounts.findByIdAndUpdate( this.UserData._id, this.UserData );
 			return false;
 		}
 
-		this.UserData.servers.AddFirst( ServerName );
+		this.UserData.servers.addAtIndex( ServerName );
 		DB_Accounts.findByIdAndUpdate( this.UserData._id, this.UserData );
 		return true;
 	}

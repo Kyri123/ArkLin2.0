@@ -145,7 +145,7 @@ export class ConfigManagerClass {
 			};
 
 			for ( const Key of Object.keys( Return ) ) {
-				if ( !FallbackKeys.Contains( Key ) ) {
+				if ( !FallbackKeys.includes( Key ) ) {
 					SystemLib.DebugLog(
 						"[CONFIG] Removed Key",
 						SystemLib.ToBashColor( "Red" ),

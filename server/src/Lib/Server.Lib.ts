@@ -25,7 +25,10 @@ import {
 import { MakeRandomID }        from "./PathBuilder.Lib";
 import DB_Cluster              from "../MongoDB/DB_Cluster";
 import { EBashScript }         from "../Enum/EBashScript";
-import { If }                  from "../Types/Utils";
+import {
+	ExplIf,
+	If
+}                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
@@ -61,11 +64,11 @@ export async function CreateServer(
 	return undefined;
 }
 
-export class ServerLib<Ready extends boolean = boolean> {
+export class ServerLib<Ready extends boolean> {
 	public readonly Instance : string;
 	public readonly InstanceConfigFile : string;
-	private MongoDBData : If<Ready, IMO_Instance, null> = null as If<Ready, IMO_Instance, null>;
-	private Cluster : If<Ready, IMO_Cluster, undefined> = undefined as If<Ready, IMO_Cluster, undefined>;
+	private MongoDBData : ExplIf<Ready, IMO_Instance | null, null> = null as ExplIf<Ready, IMO_Instance>;
+	private Cluster : ExplIf<Ready, IMO_Cluster | null, undefined> = undefined as ExplIf<Ready, IMO_Cluster, undefined>;
 
 	private constructor( ServerInstance : string ) {
 		this.Instance = ServerInstance;
@@ -94,10 +97,10 @@ export class ServerLib<Ready extends boolean = boolean> {
 		try {
 			this.MongoDBData = ( await DB_Instances.findOne( {
 				Instance: this.Instance
-			} ) )!.toJSON() as If<Ready, IMO_Instance>;
+			} ) )!.toJSON() as ExplIf<Ready, IMO_Instance>;
 
 			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } );
-			this.Cluster = ( Cluster ? Cluster.toJSON() : null ) as If<Ready, IMO_Cluster, undefined>;
+			this.Cluster = ( Cluster ? Cluster.toJSON() : null ) as ExplIf<Ready, IMO_Cluster, undefined>;
 		}
 		catch ( e ) {
 		}
@@ -112,14 +115,14 @@ export class ServerLib<Ready extends boolean = boolean> {
 	/*
 	 * @return {IMO_Cluster | null} return null if not in a cluster
 	 */
-	public get GetCluster() : If<Ready, IMO_Cluster, undefined> {
+	public get GetCluster() : ExplIf<Ready, IMO_Cluster | null, undefined> {
 		return this.Cluster;
 	}
 
 	/*
 	 * @return {ServerLib | undefined} return undefined if not in a cluster
 	 */
-	public async GetClusterMaster() : Promise<ServerLib | undefined> {
+	public async GetClusterMaster() : Promise<ServerLib<true> | undefined> {
 		if ( !this.IsValid() ) {
 			return undefined;
 		}
@@ -131,9 +134,11 @@ export class ServerLib<Ready extends boolean = boolean> {
 		else if ( this.IsInCluster() ) {
 			const Cluster = this.GetCluster!;
 			const MasterServer = await ServerLib.build( Cluster.Master );
-			if ( await MasterServer.Init() && MasterServer.IsMaster ) {
-				// we only want to return a init master to we make sure it's the master and it's valid
-				return MasterServer;
+			if ( MasterServer.IsValid() ) {
+				if ( MasterServer.IsInCluster() && MasterServer.IsMaster ) {
+					// we only want to return a init master to we make sure it's the master and it's valid
+					return MasterServer;
+				}
 			}
 		}
 		return undefined;
@@ -185,7 +190,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 	) : Promise<boolean> {
 		const State = await this.GetState();
 		if ( State.ArkmanagerPID === 0 ) {
-			Params.AddFirst( "--dots" );
+			Params.addAtIndex( "--dots" );
 			fs.mkdirSync( path.join( __server_dir, this.Instance ), { recursive: true } );
 			fs.mkdirSync( path.join( __server_logs, this.Instance ), {
 				recursive: true

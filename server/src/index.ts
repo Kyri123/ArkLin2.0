@@ -1,9 +1,8 @@
+import "@kyri123/k-javascript-utils/lib/useAddons";
 import "./InitDirs";
-import { InstallRoutings } from "./Init";
-import * as path           from "path";
+import { InstallRoutings }  from "./Init";
+import * as path            from "path";
 import "./Lib/System.Lib";
-import "./TypeExtension/TE_InstallAll";
-
 import express              from "express";
 import * as http            from "http";
 import {
@@ -34,6 +33,8 @@ import { CreateUrl }        from "./Lib/PathBuilder.Lib";
 import { RunTest }          from "./Testing";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import fetch                from "node-fetch";
+
+"asdasd".contains( "asd" );
 
 // Small fix if the cert fails!
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = String( 0 );
