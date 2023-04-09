@@ -10,6 +10,7 @@ import {
 import path                    from "path";
 import fs                      from "fs";
 import {
+	FillWithDefaultValues,
 	GetDefaultInstanceData,
 	JSONtoConfig
 }                              from "./Arkmanager.Lib";
@@ -32,7 +33,8 @@ import {
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
-	InstanceName? : string
+	InstanceName? : string,
+	DefaultConfig? : Partial<IInstanceData>
 ) : Promise<ServerLib<true> | undefined> {
 	const InstanceID = InstanceName || MakeRandomID( 20, true );
 	const ConfigFile = path.join(
@@ -42,7 +44,11 @@ export async function CreateServer(
 	);
 
 	if ( ( await DB_Instances.exists( { Instance: InstanceID } ) ) === null ) {
-		const Config : IInstanceData = GetDefaultInstanceData( InstanceID );
+		let Config : IInstanceData = {
+			...GetDefaultInstanceData( InstanceID ),
+			...DefaultConfig
+		};
+		Config = FillWithDefaultValues( InstanceID, PanelConfig );
 		fs.writeFileSync( ConfigFile, JSONtoConfig( Config ) );
 		await DB_Instances.create( {
 			Instance: InstanceID,
