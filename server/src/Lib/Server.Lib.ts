@@ -48,7 +48,7 @@ export async function CreateServer(
 			...GetDefaultInstanceData( InstanceID ),
 			...DefaultConfig
 		};
-		Config = FillWithDefaultValues( InstanceID, PanelConfig );
+		Config = FillWithDefaultValues( InstanceID, Config );
 		fs.writeFileSync( ConfigFile, JSONtoConfig( Config ) );
 		await DB_Instances.create( {
 			Instance: InstanceID,
