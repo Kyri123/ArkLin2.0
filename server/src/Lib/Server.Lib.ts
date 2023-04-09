@@ -70,7 +70,7 @@ export async function CreateServer(
 	return undefined;
 }
 
-export class ServerLib<Ready extends boolean> {
+export class ServerLib<Ready extends boolean = boolean> {
 	public readonly Instance : string;
 	public readonly InstanceConfigFile : string;
 	private MongoDBData : ExplIf<Ready, IMO_Instance | null, null> = null as ExplIf<Ready, IMO_Instance>;
@@ -178,7 +178,7 @@ export class ServerLib<Ready extends boolean> {
 		return undefined as If<Ready, TMO_Instance, undefined>;
 	}
 
-	public IsValid() : this is ServerLib<true>;
+	public IsValid() : this is ServerLib<true>
 	public IsValid() : boolean {
 		return fs.existsSync( this.InstanceConfigFile ) && this.MongoDBData !== null;
 	}

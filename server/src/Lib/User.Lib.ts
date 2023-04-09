@@ -47,7 +47,7 @@ export class UserLib<Ready extends boolean = boolean> {
 	private constructor() {
 	}
 
-	static async build( JsonWebToken : string | IMO_Instance ) : Promise<UserLib> {
+	static async build( JsonWebToken : string | IMO_Instance ) {
 		const User = new UserLib();
 		try {
 			const UserData = await DB_Accounts.findOne( { _id: ( JsonWebToken as IMO_Instance )._id || JsonWebToken } );
@@ -61,7 +61,7 @@ export class UserLib<Ready extends boolean = boolean> {
 		return User;
 	}
 
-	public IsValid() {
+	public IsValid() : this is UserLib<true> {
 		return this.UserData !== null;
 	}
 
