@@ -50,7 +50,7 @@ services:
     user: "${DOCKER_UID}:${DOCKER_GID}"
     image: mongo
     volumes:
-      - './mount/mongodb:/data/db'
+      - '../mount/mongodb:/data/db'
     environment:
       MONGO_INITDB_DATABASE: arklin2
       MONGO_INITDB_ROOT_USERNAME: kadmin
