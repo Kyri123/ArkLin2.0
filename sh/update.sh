@@ -4,23 +4,18 @@ if [ "$(whoami)" != "steam" ]; then
 fi
 
 BRANCH="$1"
+echo "useBranch: $BRANCH"
 
 export DOCKER_UID=$(id -u)
 export DOCKER_GID=$(id -g)
 
 cd ~/KAdmin/ArkLin2.0
-docker compose down
 
-git stash
-git pull https://github.com/Kyri123/ArkLin2.0.git $BRANCH
+git fetch --all
+git reset --hard origin/$BRANCH
 
 echo "Setzte Rechte..."
 chmod 777 -R ./sh
-chmod 777 -R ./mount/config
-chmod 777 ./mount/Server
-chmod 777 ./mount/Backups
-chmod 777 -R ./mount/PanelLogs
-chmod 777 -R /etc/arkmanager/
 
-chmod 777 -R ./sh
-./sh/start.sh
+echo "Erstelle Image und starte den Docker Container..."
+docker-compose up -d --build

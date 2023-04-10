@@ -1,97 +1,100 @@
-import dgram            from "dgram";
-import process          from "process";
-import { ServerLib }    from "./Server.Lib";
-import { Rcon }         from "rcon-client";
-import * as console     from "console";
-import { IOnlineUsers } from "../../../src/Shared/Type/ArkSE";
+import { ServerLib }     from "./Server.Lib";
+import { Rcon }          from "rcon-client";
+import { IServerStatus } from "../../../src/Shared/Type/ArkSE";
+import * as dgram        from "dgram";
 
 
-const client = dgram.createSocket( "udp4" );
-client.bind( parseInt( process.env.API_GAMEDIG_UDP || "33333" ) + 10 );
-client.on( "error", console.error );
+const socket = dgram.createSocket( "udp4" );
+socket.bind( parseInt( process.env.API_GAMEDIG_UDP || "33333" ) );
 
-export async function IsServerOnline( Port : number, Timeout = 5000 ) : Promise<boolean> {
-	return new Promise<boolean>( resolve => {
-		const OnMessage = ( msg, rinfo ) => {
-			SystemLib.DebugLog( "[UDP] MESSAGE:", rinfo, msg );
-			clearTimeout( TimeoutTimer );
-
-			client.removeListener( "message", OnMessage );
-			client.removeListener( "error", OnError );
-
-			resolve( true );
+export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServerStatus> {
+	return await new Promise<IServerStatus>( ( resolve ) => {
+		const Reso : IServerStatus = {
+			Online: false,
+			Players: []
 		};
 
-		const OnError = ( err ) => {
-			SystemLib.LogError( "[UDP] ERROR:", err );
-		};
-
-		let TimeoutTimer : NodeJS.Timeout | undefined = setTimeout( () => {
-			SystemLib.DebugLog( "[UDP] TIMEOUT!", Port, Timeout );
-			TimeoutTimer = undefined;
-
-			client.removeListener( "message", OnMessage );
-			client.removeListener( "error", OnError );
-
-			resolve( false );
-		}, Timeout )
-		try {
-			client.on( "message", OnMessage );
-			client.on( 'error', OnError );
-
-			const message = Buffer.from( [
-				255, 255, 255, 255, 84, 83, 111,
-				117, 114, 99, 101, 32, 69, 110,
-				103, 105, 110, 101, 32, 81, 117,
-				101, 114, 121, 0
-			] );
-
-			client.send( message, 0, message.length, Port, __PublicIP );
-		}
-		catch ( e ) {
-			console.error( e );
-			if ( TimeoutTimer ) {
-				clearTimeout( TimeoutTimer );
+		socket.send( Buffer.from( [ 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
+			if ( Err ) {
+				clearTimeout( Timeout );
+				socket.removeAllListeners();
+				resolve( Reso );
 			}
 
-			client.removeListener( "message", OnMessage );
-			client.removeListener( "error", OnError );
+			socket.once( "message", ( message ) => {
+				Reso.Online = true;
 
-			resolve( false );
-		}
+				socket.send( Buffer.from( [ 0xff, 0xff, 0xff, 0xff, 0x55, ...message.slice( 5 ) ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
+					if ( Err ) {
+						clearTimeout( Timeout );
+						socket.removeAllListeners();
+						resolve( Reso );
+					}
+
+					socket.once( "message", ( msg ) => {
+						Reso.Players = parsePlayerList( msg );
+						socket.removeAllListeners();
+						resolve( Reso );
+					} );
+				} );
+			} );
+		} );
+
+		const Timeout = setTimeout( () => {
+			socket.removeAllListeners();
+			resolve( Reso );
+		}, 2000 );
+
+		socket.on( "error", () => {
+			clearTimeout( Timeout );
+			resolve( Reso );
+		} );
 	} );
 }
 
-export async function GetOnlinePlayer( Instance : string ) : Promise<IOnlineUsers[]> {
-	const Return : IOnlineUsers[] = [];
-	const Resp = await SendCommand( Instance, "listplayers" );
-	if ( Resp.Successfuly && Resp.Response.toLowerCase().trim().replaceAll( " ", "" ) !== "noplayersconnected" ) {
-		const RawArray = Resp.Response.split( "\n" ).filter( e => e.replaceAll( " ", "" ).trim() !== "" );
-		for ( let Idx = 0; Idx < RawArray.length; ++Idx ) {
-			const [ Username, SteamID ] : any[] = RawArray[ Idx ].split( "," );
-			Return.push( {
-				Username: Username.slice( Idx.toString().length + 2, Username.length ),
-				SteamID: parseInt( SteamID )
-			} );
+function parsePlayerList( buffer : Buffer ) : string[] {
+	let hexData = buffer.toString( "hex" );
+	const nameArray : string[] = [];
+
+	for ( let i = 0; i < hexData.length; i += 2 ) {
+		if ( hexData.slice( i, i + 2 ) === "00" ) {
+			const Buf = Buffer.from( hexData.slice( 0, i ), "hex" );
+			const name = Buf.toString( "utf8" );
+			nameArray.push( name );
+			hexData = hexData.slice( i + 2 );
+			i = -2;
 		}
 	}
-	return Return;
+
+	const ClearNameArray : string[] = [];
+	for ( let i = 0; i < nameArray.length; i++ ) {
+		if ( nameArray[ i ].trim() !== "" && !JSON.stringify( nameArray[ i ] ).includes( ",/FF" ) && !JSON.stringify( nameArray[ i ] ).includes( "\\u" ) && !/\uFFFD/g.test( nameArray[ i ] ) ) {
+			ClearNameArray.push( nameArray[ i ] );
+		}
+	}
+
+	return ClearNameArray;
 }
 
-export async function SendCommand( Instance : string, Command : string ) : Promise<{ Response : string, Successfuly : boolean }> {
+export async function SendCommand(
+	Instance : string,
+	Command : string
+) : Promise<{ Response : string; Successfuly : boolean }> {
 	const Response = {
 		Response: "Server ist nicht vorhanden!",
 		Successfuly: false
 	};
-	const Server = new ServerLib( Instance );
-	if ( await Server.Init() && global.__PublicIP ) {
+	const Server = await ServerLib.build( Instance );
+	if ( Server.IsValid() && global.__PublicIP ) {
 		const Config = Server.GetConfig();
 		const State = await Server.GetState();
 		if ( Config.ark_RCONPort && Config.ark_RCONEnabled && State.IsListen ) {
 			try {
 				const rcon = await Rcon.connect( {
-					host: __PublicIP, port: Config.ark_RCONPort, password: Config.ark_ServerAdminPassword
-				} )
+					host: __PublicIP,
+					port: Config.ark_RCONPort,
+					password: Config.ark_ServerAdminPassword
+				} );
 
 				Response.Response = await rcon.send( Command );
 				Response.Successfuly = true;

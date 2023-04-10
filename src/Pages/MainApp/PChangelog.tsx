@@ -1,41 +1,43 @@
 import {
 	useEffect,
 	useState
-}                          from "react";
+}                                            from "react";
 import {
 	Link,
 	Navigate,
 	useParams
-}                          from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ReactMarkdown       from "react-markdown";
-import { API_QueryLib }    from "../../Lib/Api/API_Query.Lib";
-import { EChangelogUrl }   from "../../Shared/Enum/Routing";
-import { IGithubReleases } from "../../Shared/Api/github";
+}                                            from "react-router-dom";
+import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesome";
+import ReactMarkdown                         from "react-markdown";
+import { API_QueryLib }                      from "../../Lib/Api/API_Query.Lib";
+import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
+import { IGithubReleases }                   from "../../Shared/Type/github";
+import { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PChangelog() : JSX.Element {
 	const { version } = useParams();
 	const [ Data, setData ] = useState<IGithubReleases[]>( [] );
-	const [ Selected, setSelected ] = useState<IGithubReleases | undefined>( undefined );
+	const [ Selected, setSelected ] = useState<IGithubReleases | undefined>(
+		undefined
+	);
 	const [ LoadFromAPI, setLoadFromAPI ] = useState( true );
 
 	useEffect( () => {
 		// get Data from API
-		API_QueryLib.GetFromAPI<any[]>( EChangelogUrl.get )
-			.then( Response => {
-				if ( Response.Data ) {
-					setData( Response.Data );
-					const Selected = Response.Data.find( e => e.tag_name === version );
-					if ( Selected ) {
-						setSelected( Selected );
-					}
-					setLoadFromAPI( false );
+		API_QueryLib.GetFromAPI<TResponse_Changelog_GetChangelogs>( EChangelogUrl.get ).then( ( Response ) => {
+			if ( Response.Data ) {
+				setData( Response.Data );
+				const Selected = Response.Data.find( ( e ) => e.tag_name === version );
+				if ( Selected ) {
+					setSelected( Selected );
 				}
-			} )
+				setLoadFromAPI( false );
+			}
+		} );
 	}, [ version ] );
 
 	if ( LoadFromAPI ) {
-		return ( <></> )
+		return <></>;
 	}
 
 	if ( !Selected ) {
@@ -51,16 +53,28 @@ export default function PChangelog() : JSX.Element {
 				</h3>
 				<ul className="nav nav-pills ml-auto p-2">
 					<li className="nav-item dropdown">
-							<span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
-								  aria-expanded="false">
-								{ Selected.tag_name } <span className="caret"></span>
-							</span>
-						<div className="dropdown-menu dropdown-menu-right" data-boundary="scrollParent">
-							{ ( Data.map( ( V, I ) => (
-								<Link to={ "/changelog/" + V.tag_name }
-									  className={ `dropdown-item ${ V.tag_name === version ? "active" : "" }` }
-									  key={ "CHANGELOGSEL" + I }>{ V.name }</Link>
-							) ) ) }
+            <span
+	            className="nav-link dropdown-toggle"
+	            data-bs-toggle="dropdown"
+	            aria-expanded="false"
+            >
+              { Selected.tag_name } <span className="caret"></span>
+            </span>
+						<div
+							className="dropdown-menu dropdown-menu-right"
+							data-boundary="scrollParent"
+						>
+							{ Data.map( ( V, I ) => (
+								<Link
+									to={ "/version/" + V.tag_name }
+									className={ `dropdown-item ${
+										V.tag_name === version ? "active" : ""
+									}` }
+									key={ "CHANGELOGSEL" + I }
+								>
+									{ V.name }
+								</Link>
+							) ) }
 						</div>
 					</li>
 				</ul>
@@ -71,9 +85,10 @@ export default function PChangelog() : JSX.Element {
 			</div>
 
 			<div className="card-footer pb-0">
-				<ReactMarkdown>{ new Date( Selected.created_at ).toLocaleString() }</ReactMarkdown>
+				<ReactMarkdown>
+					{ new Date( Selected.created_at ).toLocaleString() }
+				</ReactMarkdown>
 			</div>
-
 		</div>
 	);
 }

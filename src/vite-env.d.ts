@@ -1,1 +1,3 @@
+/** @format */
+
 /// <referencetypes="vite/client" />

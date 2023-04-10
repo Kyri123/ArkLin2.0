@@ -1,22 +1,38 @@
-import { API_QueryLib }         from "./API_Query.Lib";
+import { API_QueryLib } from "./API_Query.Lib";
 import {
-	ISignInRequest,
-	ISignUpRequest
-}                               from "../../Shared/Api/Auth.Request";
-import { IAPIResponseBase }     from "../../Types/API";
-import { IAccountInformations } from "../../Shared/Type/User";
-import { EAuthUrl }             from "../../Shared/Enum/Routing";
+	TResponse_Auth_IsLoggedIn,
+	TResponse_Auth_SignIn,
+	TResponse_Auth_SignUp
+}                       from "../../Shared/Type/API_Response";
+import { EAuthUrl }     from "../../Shared/Enum/Routing";
+import {
+	TRequest_Auth_SignIn,
+	TRequest_Auth_SignUp
+}                       from "../../Shared/Type/API_Request";
 
 export class API_AuthLib {
-	static async IsLoggedIn() : Promise<IAPIResponseBase<IAccountInformations>> {
-		return await API_QueryLib.PostToAPI<IAccountInformations>( EAuthUrl.check, {} );
+	static async IsLoggedIn() : Promise<TResponse_Auth_IsLoggedIn> {
+		return await API_QueryLib.PostToAPI<TResponse_Auth_IsLoggedIn>(
+			EAuthUrl.check,
+			{}
+		);
 	}
 
-	static async TryCreateAnAccount( RequestData : ISignUpRequest ) : Promise<IAPIResponseBase<IAccountInformations>> {
-		return await API_QueryLib.PostToAPI<IAccountInformations>( EAuthUrl.signup, RequestData );
+	static async TryCreateAnAccount(
+		RequestData : TRequest_Auth_SignUp<false>
+	) : Promise<TResponse_Auth_SignUp> {
+		return await API_QueryLib.PostToAPI<TResponse_Auth_SignUp>(
+			EAuthUrl.signup,
+			RequestData
+		);
 	}
 
-	static async DoLogin( RequestData : ISignInRequest ) : Promise<IAPIResponseBase<IAccountInformations>> {
-		return await API_QueryLib.PostToAPI<IAccountInformations>( EAuthUrl.signin, RequestData );
+	static async DoLogin(
+		RequestData : TRequest_Auth_SignIn<false>
+	) : Promise<TResponse_Auth_SignIn> {
+		return await API_QueryLib.PostToAPI<TResponse_Auth_SignIn>(
+			EAuthUrl.signin,
+			RequestData
+		);
 	}
 }

@@ -1,6 +1,6 @@
 export type SystemPlatform = "Win" | "Lin" | "NotSupported" | "Test";
 export type BashColorString =
-	"Default"
+	| "Default"
 	| "Red"
 	| "Black"
 	| "Green"

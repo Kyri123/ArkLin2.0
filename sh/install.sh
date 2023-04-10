@@ -4,14 +4,19 @@ if [ "$(whoami)" != "steam" ]; then
 fi
 
 BRANCH="$1"
+echo "useBranch: $BRANCH"
 
 cd ~
 
 echo "Create Folder and Clone ArkLIN2..."
 mkdir KAdmin
 cd KAdmin
-git clone https://github.com/Kyri123/ArkLin2.0.git $BRANCH
+rm -R ArkLin2.0 -f
+git clone https://github.com/Kyri123/ArkLin2.0.git
 cd ArkLin2.0
+
+git fetch --all
+git reset --hard origin/$BRANCH
 
 export DOCKER_UID="$(id -u)"
 export DOCKER_GID="$(id -g)"
@@ -22,10 +27,10 @@ docker compose down
 
 echo "Setzte Rechte..."
 chmod 777 -R ./sh
-chmod 777 -R ./mount/config
-chmod 777 ./mount/Server
-chmod 777 ./mount/Backups
-chmod 777 -R ./mount/PanelLogs
+chmod 777 -R ../mount/config
+chmod 777 ../mount/Server
+chmod 777 ../mount/Backups
+chmod 777 -R ../mount/PanelLogs
 chmod 777 -R /etc/arkmanager/
 
 echo "Bitte Konfiguriere nun die .json in ./mount/config/"

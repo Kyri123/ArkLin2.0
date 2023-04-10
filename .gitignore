@@ -1,5 +1,6 @@
 # IDE
 .idea
+.vscode
 
 # APP
 app/json/serverinfo
@@ -95,3 +96,6 @@ mount
 Logs
 .env.development
 buildserver
+
+src/Css/App-TWbuild.css
+src/Css/App-TWbuild.min.css

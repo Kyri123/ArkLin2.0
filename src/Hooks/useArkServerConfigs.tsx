@@ -6,34 +6,45 @@ import { API_ServerLib } from "../Lib/Api/API_Server.Lib";
 
 export interface IArkServerConfigsHook {
 	ConfigFiles : Record<string, string>;
-	ConfigContentAsString : string,
+	ConfigContentAsString : string;
 	ConfigContent : Record<string, any>;
 	CurrentFile : string;
 	RequestConfigContent : ( ConfigFile : string ) => void;
 	Init : boolean;
 }
 
-export function useArkServerConfigs( InstanceName : string ) : IArkServerConfigsHook {
-	const [ ConfigFiles, setConfigFiles ] = useState<Record<string, string>>( () => ( {} ) );
-	const [ ConfigContent, setConfigContent ] = useState<Record<string, any>>( () => ( {} ) );
-	const [ ConfigContentAsString, setConfigContentAsString ] = useState<string>( () => "" );
+export function useArkServerConfigs(
+	InstanceName : string
+) : IArkServerConfigsHook {
+	const [ ConfigFiles, setConfigFiles ] = useState<Record<string, string>>(
+		() => ( {} )
+	);
+	const [ ConfigContent, setConfigContent ] = useState<Record<string, any>>(
+		() => ( {} )
+	);
+	const [ ConfigContentAsString, setConfigContentAsString ] = useState<string>(
+		() => ""
+	);
 	const [ ReqConfigFile, setReqConfigFile ] = useState( () => "" );
 	const [ Init, setInit ] = useState( () => false );
 
 	useEffect( () => {
 		const GetConfigFiles = async() => {
 			setConfigFiles( await API_ServerLib.GetConfigFiles( InstanceName ) );
-			const [ Obj, AsString ] = await API_ServerLib.GetConfigFromFile( InstanceName, ReqConfigFile );
+			const [ Obj, AsString ] = await API_ServerLib.GetConfigFromFile(
+				InstanceName,
+				ReqConfigFile
+			);
 			setConfigContent( Obj );
 			setConfigContentAsString( AsString );
 			setInit( true );
-		}
+		};
 
 		GetConfigFiles();
-	}, [ InstanceName, ReqConfigFile ] )
+	}, [ InstanceName, ReqConfigFile ] );
 
 	useEffect( () => {
-		API_ServerLib.GetConfigFiles( InstanceName ).then( Data => {
+		API_ServerLib.GetConfigFiles( InstanceName ).then( ( Data ) => {
 			if ( Data[ "panel.txt" ] ) {
 				setReqConfigFile( Data[ "panel.txt" ] );
 				return;
@@ -42,8 +53,8 @@ export function useArkServerConfigs( InstanceName : string ) : IArkServerConfigs
 			if ( First ) {
 				setReqConfigFile( First );
 			}
-		} )
-	}, [ InstanceName ] )
+		} );
+	}, [ InstanceName ] );
 
 	return {
 		RequestConfigContent: setReqConfigFile,
@@ -52,5 +63,5 @@ export function useArkServerConfigs( InstanceName : string ) : IArkServerConfigs
 		ConfigFiles,
 		Init,
 		CurrentFile: ReqConfigFile
-	}
+	};
 }

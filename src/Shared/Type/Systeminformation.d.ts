@@ -12,8 +12,8 @@ export interface ISystemUsage {
 }
 
 export interface ISelectMask {
-	Value : string,
-	Text : string,
-	PreAndSuffix : "'" | '"' | "";
-	HasValue? : boolean,
+	Value : string;
+	Text : string;
+	PreAndSuffix : "'" | "\"" | "";
+	HasValue? : boolean;
 }

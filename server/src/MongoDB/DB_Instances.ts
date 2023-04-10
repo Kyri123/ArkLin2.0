@@ -1,11 +1,17 @@
 import * as mongoose              from "mongoose";
-import { IMO_Instance }           from "../../../src/Shared/Api/MongoDB";
+import { IMO_Instance }           from "../../../src/Types/MongoDB";
 import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
 
 const Schema = new mongoose.Schema<IMO_Instance>( {
 	Instance: { type: String, required: true, unique: true },
+	LastAutoBackup: { type: Number, required: false },
+	LastAutoUpdate: { type: Number, required: false },
 
-	ArkmanagerCfg: { type: mongoose.Schema.Types.Mixed, required: true, strict: false },
+	ArkmanagerCfg: {
+		type: mongoose.Schema.Types.Mixed,
+		required: true,
+		strict: false
+	},
 
 	State: {
 		type: {
@@ -15,8 +21,9 @@ const Schema = new mongoose.Schema<IMO_Instance>( {
 			OnlinePlayerList: { type: [] },
 			ServerVersion: { type: String },
 			ArkmanagerPID: { type: Number, required: true },
-			ArkserverPID: { type: Number, required: true },
-		}, required: true
+			ArkserverPID: { type: Number, required: true }
+		},
+		required: true
 	},
 
 	PanelConfig: {
@@ -27,15 +34,18 @@ const Schema = new mongoose.Schema<IMO_Instance>( {
 			AutoUpdateParameters: { type: [ String ], required: true },
 			AutoUpdateEnabled: { type: Boolean, required: true },
 			AutoUpdateInterval: { type: Number, required: true }
-		}, required: true
+		},
+		required: true
 	},
 
 	ServerMap: {
 		type: {
 			BG: { type: String, required: true },
 			LOGO: { type: String, required: true }
-		}, required: false, default: { BG: "", LOGO: "", }
-	},
+		},
+		required: false,
+		default: { BG: "", LOGO: "" }
+	}
 } );
 
 Plugin_MongoDB_findOne( Schema );

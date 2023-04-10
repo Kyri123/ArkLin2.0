@@ -1,8 +1,8 @@
 import React, {
 	useContext,
 	useState
-}                          from 'react';
-import { IMO_Accounts }    from "../../../../Shared/Api/MongoDB";
+}                          from "react";
+import { IMO_Accounts }    from "../../../../Types/MongoDB";
 import {
 	ButtonGroup,
 	Card,
@@ -12,7 +12,7 @@ import {
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                          from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                          from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { API_User }        from "../../../../Lib/Api/API_User";
 import {
@@ -24,16 +24,20 @@ import ServerContext       from "../../../../Context/ServerContext";
 import AccountContext      from "../../../../Context/AccountContext";
 
 interface IProps {
-	User : IMO_Accounts,
+	User : IMO_Accounts;
 	Remove : ( Id : string, IsKey : boolean ) => void;
-	UpdateUsers : () => void
+	UpdateUsers : () => void;
 }
 
-const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUsers } ) => {
+const PCUserRow : React.FunctionComponent<IProps> = ( {
+	User,
+	Remove,
+	UpdateUsers
+} ) => {
 	const { setAcceptAction, DoSetAlert } = useContext( AlertContext );
 	const { InstanceData } = useContext( ServerContext );
 	const { Account } = useContext( AccountContext );
-	const [ Form, setForm ] = useState( () => User )
+	const [ Form, setForm ] = useState( () => User );
 	const [ IsSending, setIsSending ] = useState( false );
 	const [ ShowServerModal, setShowServerModal ] = useState( false );
 	const [ ShowPermissionModal, setShowPermissionModal ] = useState( false );
@@ -41,32 +45,35 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 
 	const SetAllowedServer = async() => {
 		setIsSending( true );
-		const Result = await API_User.EditUser( User._id!, { servers: Form.servers } );
+		const Result = await API_User.EditUser( User._id!, {
+			servers: Form.servers
+		} );
 		DoSetAlert( Result );
 		if ( Result.Success ) {
 			UpdateUsers();
 		}
 		setShowServerModal( false );
 		setIsSending( false );
-	}
+	};
 
 	const SetPermissions = async() => {
 		setIsSending( true );
-		const Result = await API_User.EditUser( User._id!, { permissions: Form.permissions } );
+		const Result = await API_User.EditUser( User._id!, {
+			permissions: Form.permissions
+		} );
 		DoSetAlert( Result );
 		if ( Result.Success ) {
 			UpdateUsers();
 		}
 		setShowPermissionModal( false );
 		setIsSending( false );
-	}
+	};
 
 	const RemoveMiddleware = async( Id : string ) => {
 		setIsSending( true );
 		await Remove( Id, false );
 		setIsSending( false );
-	}
-
+	};
 
 	return (
 		<>
@@ -75,29 +82,48 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 				<td>{ User.username }</td>
 				<td>{ User.mail }</td>
 				<td>
-					{ Account.GetDBInformation()._id !== User._id &&
+					{ Account.GetDBInformation()._id !== User._id && (
 						<ButtonGroup>
-							<LTELoadingButton onClick={ () => setAcceptAction( {
-								Payload: RemoveMiddleware,
-								PayloadArgs: [ User._id ],
-								ActionTitle: `Möchtest du den Benutzer ${ User.username } wirklich löschen?`
-							} ) } className={ "btn-sm" } IsLoading={ IsSending } BtnColor="danger" Flat><FontAwesomeIcon
-								icon={ "trash-alt" }/></LTELoadingButton>
-							<LTELoadingButton onClick={ () => setShowServerModal( true ) } className={ "btn-sm" }
-											  IsLoading={ false } Flat><FontAwesomeIcon
-								icon={ "server" }/></LTELoadingButton>
-							<LTELoadingButton onClick={ () => setShowPermissionModal( true ) } className={ "btn-sm" }
-											  IsLoading={ false } Flat><FontAwesomeIcon
-								icon={ "ranking-star" }/></LTELoadingButton>
+							<LTELoadingButton
+								onClick={ () =>
+									setAcceptAction( {
+										Payload: RemoveMiddleware,
+										PayloadArgs: [ User._id ],
+										ActionTitle: `Möchtest du den Benutzer ${ User.username } wirklich löschen?`
+									} )
+								}
+								className={ "btn-sm flat" }
+								IsLoading={ IsSending }
+								variant="danger"
+							>
+								<FontAwesomeIcon icon={ "trash-alt" }/>
+							</LTELoadingButton>
+							<LTELoadingButton
+								onClick={ () => setShowServerModal( true ) }
+								className={ "btn-sm flat" }
+								IsLoading={ false }
+							>
+								<FontAwesomeIcon icon={ "server" }/>
+							</LTELoadingButton>
+							<LTELoadingButton
+								onClick={ () => setShowPermissionModal( true ) }
+								className={ "btn-sm flat" }
+								IsLoading={ false }
+							>
+								<FontAwesomeIcon icon={ "ranking-star" }/>
+							</LTELoadingButton>
 						</ButtonGroup>
-					}
+					) }
 				</td>
 			</tr>
 
-
-			<Modal size="xl" show={ ShowPermissionModal } onHide={ () => {
-				setShowPermissionModal( false );
-			} }>
+			<Modal
+				size="xl"
+				show={ ShowPermissionModal }
+				onHide={ () => {
+					setShowPermissionModal( false );
+				} }
+			>
 				<Modal.Header closeButton>
 					<Modal.Title id="example-modal-sizes-title-sm">
 						Account Keys
@@ -106,18 +132,25 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 				<Modal.Body className={ "p-0" }>
 					<Nav variant="tabs" defaultActiveKey="/home">
 						<Nav.Item>
-							<Nav.Link onClick={ () => setSelectedPermission( EPerm ) }>Haupt Rechte</Nav.Link>
+							<Nav.Link onClick={ () => setSelectedPermission( EPerm ) }>
+								Haupt Rechte
+							</Nav.Link>
 						</Nav.Item>
-						{ ( !Form.permissions?.includes( "Super" ) ) &&
+						{ !Form.permissions?.includes( "Super" ) && (
 							<Nav.Item>
-								<Nav.Link onClick={ () => setSelectedPermission( EPerm_Server ) }>Server
-									Rechte</Nav.Link>
+								<Nav.Link onClick={ () => setSelectedPermission( EPerm_Server ) }>
+									Server Rechte
+								</Nav.Link>
 							</Nav.Item>
-						}
+						) }
 					</Nav>
 					<table className={ "p-3 table m-0 table-striped" }>
 						<tbody>
-						{ Object.entries( !Form.permissions?.includes( "Super" ) ? SelectedPermission : EPerm ).map( ( [ Key, Text ] ) => {
+						{ Object.entries(
+							!Form.permissions?.includes( "Super" )
+								? SelectedPermission
+								: EPerm
+						).map( ( [ Key, Text ] ) => {
 							if ( Form.permissions?.includes( "Super" ) && "Super" !== Key ) {
 								return undefined;
 							}
@@ -125,25 +158,31 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 							return (
 								<tr key={ Key }>
 									<td className={ "p-0" } style={ { width: 0 } }>
-										<LTEToggleButton className={ " w-100 h-100 btn-flat " }
-														 Value={ Form.permissions?.includes( Key ) || false }
-														 OnToggle={ Value => setForm( Current => {
-															 let Permissions = [ ...Current.permissions! ];
-															 if ( Value ) {
-																 Permissions.push( Key )
-															 }
-															 else {
-																 Permissions = Permissions.filter( E => E !== Key );
-															 }
-															 return {
-																 ...Current,
-																 permissions: Permissions
-															 }
-														 } ) }/>
+										<LTEToggleButton
+											className={ " w-100 h-100 flat " }
+											Value={ Form.permissions?.includes( Key ) || false }
+											OnToggle={ ( Value : boolean ) =>
+												setForm( ( Current ) => {
+													let Permissions = [ ...Current.permissions! ];
+													if ( Value ) {
+														Permissions.push( Key );
+													}
+													else {
+														Permissions = Permissions.filter(
+															( E ) => E !== Key
+														);
+													}
+													return {
+														...Current,
+														permissions: Permissions
+													};
+												} )
+											}
+										/>
 									</td>
 									<td className={ "p-2" }>{ Text as string }</td>
 								</tr>
-							)
+							);
 						} ) }
 						</tbody>
 					</table>
@@ -152,12 +191,19 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 					<Card className={ "m-0" }>
 						<div className="input-group">
 							<div className="input-group-append">
-								<LTELoadingButton onClick={ SetPermissions } className={ "btn-sm" }
-												  IsLoading={ IsSending } BtnColor="success" Flat>
+								<LTELoadingButton
+									onClick={ SetPermissions }
+									className={ "btn-sm flat" }
+									IsLoading={ IsSending }
+									variant="success"
+								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
 								</LTELoadingButton>
-								<LTELoadingButton onClick={ () => setShowPermissionModal( false ) }
-												  className={ "btn-sm" } BtnColor="danger" Flat>
+								<LTELoadingButton
+									onClick={ () => setShowPermissionModal( false ) }
+									className={ "btn-sm flat" }
+									variant="danger"
+								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 								</LTELoadingButton>
 							</div>
@@ -166,10 +212,13 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 				</Modal.Footer>
 			</Modal>
 
-
-			<Modal size="lg" show={ ShowServerModal } onHide={ () => {
-				setShowServerModal( false );
-			} }>
+			<Modal
+				size="lg"
+				show={ ShowServerModal }
+				onHide={ () => {
+					setShowServerModal( false );
+				} }
+			>
 				<Modal.Header closeButton>
 					<Modal.Title id="example-modal-sizes-title-sm">
 						Account Keys
@@ -185,29 +234,34 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 						</tr>
 						</thead>
 						<tbody>
-
 						{ Object.entries( InstanceData ).map( ( [ Instance, InstanceData ] ) => {
 							return (
 								<tr key={ "SERV" + Instance }>
 									<td style={ { width: 0 } } className="p-2">
 										<ButtonGroup>
-											<LTEToggleButton Value={ Form.servers.includes( Instance ) }
-															 OnToggle={ V => setForm( Current => {
-																 const Cur = { ...Current };
-																 if ( V ) {
-																	 Cur.servers.push( Instance );
-																 }
-																 else {
-																	 Cur.servers = Cur.servers.filter( ( E : string ) => E !== Instance )
-																 }
-																 return Cur
-															 } ) }/>
+											<LTEToggleButton
+												Value={ Form.servers.includes( Instance ) }
+												OnToggle={ ( V : boolean ) =>
+													setForm( ( Current ) => {
+														const Cur = { ...Current };
+														if ( V ) {
+															Cur.servers.push( Instance );
+														}
+														else {
+															Cur.servers = Cur.servers.filter(
+																( E : string ) => E !== Instance
+															);
+														}
+														return Cur;
+													} )
+												}
+											/>
 										</ButtonGroup>
 									</td>
 									<td>{ Instance }</td>
 									<td>{ InstanceData.ArkmanagerCfg.ark_SessionName }</td>
 								</tr>
-							)
+							);
 						} ) }
 						</tbody>
 					</table>
@@ -216,12 +270,19 @@ const PCUserRow : React.FunctionComponent<IProps> = ( { User, Remove, UpdateUser
 					<Card className={ "m-0" }>
 						<div className="input-group">
 							<div className="input-group-append">
-								<LTELoadingButton onClick={ SetAllowedServer } className={ "btn-sm" }
-												  IsLoading={ IsSending } BtnColor="success" Flat>
+								<LTELoadingButton
+									onClick={ SetAllowedServer }
+									className={ "btn-sm flat" }
+									IsLoading={ IsSending }
+									variant="success"
+								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
 								</LTELoadingButton>
-								<LTELoadingButton onClick={ () => setShowServerModal( false ) } className={ "btn-sm" }
-												  BtnColor="danger" Flat>
+								<LTELoadingButton
+									onClick={ () => setShowServerModal( false ) }
+									className={ "btn-sm flat" }
+									variant="danger"
+								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 								</LTELoadingButton>
 							</div>

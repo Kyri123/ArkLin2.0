@@ -1,6 +1,11 @@
-import { HTMLAttributes } from "react";
-import { TLTEColors }     from "../Shared/Type/AdminLTE";
-import { TPermissions }   from "../Shared/Enum/User.Enum";
+/** @format */
+
+import {
+	HTMLAttributes,
+	PropsWithChildren
+}                       from "react";
+import { TPermissions } from "../Shared/Enum/User.Enum";
+import { TLTEColors }   from "../Shared/Type/AdminLTE";
 
 export interface IAdminLTEBase extends IChildrenBaseProps {
 	Color? : TLTEColors;
@@ -19,5 +24,10 @@ export interface IChildrenBasePropsT<T> extends HTMLAttributes<T> {
 export interface IChildrenBaseProps extends HTMLAttributes<HTMLDivElement> {
 	ref? : any;
 	Permission? : TPermissions;
+	Hide? : boolean;
+}
+
+export interface IPropsWithPermission extends PropsWithChildren {
+	Permission? : boolean;
 	Hide? : boolean;
 }

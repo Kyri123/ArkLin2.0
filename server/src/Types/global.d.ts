@@ -6,7 +6,7 @@ import {
 	IEmitEvents,
 	IListenEvents
 }                             from "../../../src/Shared/Type/Socket";
-import "./Types"
+import "./Types";
 import { SystemLib_Class }    from "../Lib/System.Lib";
 import { ConfigManagerClass } from "../Lib/ConfigManager.Lib";
 import { TaskManagerClass }   from "../Tasks/TaskManager";
@@ -14,8 +14,11 @@ import { SSHLib }             from "../Lib/SSH.Lib";
 
 export declare global {
 	var Api : core.Express;
-	var HttpServer : http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
-	var SocketIO : Server<IListenEvents, IEmitEvents, DefaultEventsMap, any>
+	var HttpServer : http.Server<
+		typeof http.IncomingMessage,
+		typeof http.ServerResponse
+	>;
+	var SocketIO : Server<IListenEvents, IEmitEvents, DefaultEventsMap, any>;
 	//var RedisClient : RedisClientType<RedisModules, RedisFunctions, RedisScripts>;
 	var TManager : TaskManagerClass;
 	var CManager : ConfigManagerClass;
@@ -28,6 +31,7 @@ export declare global {
 	var __LogFile : string;
 	var __LogDir : string;
 	var __server_dir : string;
+	var __cluster_dir : string;
 	var __git_dir : string;
 	var __server_arkmanager : string;
 	var __server_logs : string;
@@ -38,7 +42,7 @@ export declare global {
 
 	namespace NodeJS {
 		interface ProcessEnv {
-			NODE_ENV : 'development' | 'production' | string;
+			NODE_ENV : "development" | "production" | string;
 			MONGODB_PORT : string;
 			MONGODB_HOST : string;
 			MONGODB_USER : string;
@@ -56,57 +60,5 @@ export declare global {
 			API_EXPRESS_HTTP_PORT : string;
 			APPEND_BASEDIR : string;
 		}
-	}
-
-	interface Array<T> {
-		RemoveByIndex( Idx : number ) : Array<T>;
-
-		IsValidIndex( Idx : number ) : boolean;
-
-		/**
-		 * Add a new element to the array AT the index
-		 * @param Idx Index where we want to add
-		 * @param Content Content of the new Array Element
-		 * @constructor
-		 */
-		AddFirst( Content : T ) : Array<T>;
-
-		/**
-		 * Add a new element to the array AT the index
-		 * @param Idx Index where we want to add
-		 * @param Content Content of the new Array Element
-		 * @constructor
-		 */
-		AddAtIndex( Idx : number, Content : T ) : Array<T>;
-
-		/**
-		 * Add a new element to the array BEFORE the index
-		 * @param Idx Index where we want to add
-		 * @param Content Content of the new Array Element
-		 * @constructor
-		 */
-		AddBeforeIndex( Idx : number, Content : T ) : Array<T>;
-
-		/**
-		 * Add a new element to the array AFTER the index
-		 * @param Idx Index where we want to add
-		 * @param Content Content of the new Array Element
-		 * @constructor
-		 */
-		AddAfterIndex( Idx : number, Content : T ) : Array<T>;
-
-		RemoveFirst( Content : T ) : boolean;
-
-		RemoveAll( Content : T ) : boolean;
-
-		Contains( Content : T ) : boolean;
-
-		FindIndexOf( Content : T ) : number;
-
-		IsEmpty() : boolean;
-
-		Empty() : void;
-
-		Append( OtherArray : T[] ) : void;
 	}
 }

@@ -1,26 +1,33 @@
-import React, {
+/** @format */
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
 	Suspense,
 	useContext
-}                          from 'react';
+}                          from "react";
+import {
+	Col,
+	Modal,
+	Row
+}                          from "react-bootstrap";
+import {
+	Route,
+	Routes
+}                          from "react-router";
 import {
 	Link,
 	Navigate,
 	useLocation
 }                          from "react-router-dom";
-import {
-	Route,
-	Routes
-}                          from 'react-router';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LTERibbon }       from "./Components/Elements/AdminLTE/AdminLTE";
+import { LTERibbon }       from "./Pages/Components/Elements/AdminLTE/AdminLTE";
 import AccountContext      from "./Context/AccountContext";
-
-const PSignIn = React.lazy( () => import("./Pages/PreLogin/PSignIn") );
-const PSignUp = React.lazy( () => import("./Pages/PreLogin/PSignUp") );
+import PSignIn             from "./Pages/PreLogin/PSignIn";
+import PSignUp             from "./Pages/PreLogin/PSignUp";
 
 function PreLoginApp() {
 	const Location = useLocation();
 	const Account = useContext( AccountContext );
+	const IsLogin = Location.pathname.includes( "signin" );
 
 	if ( Account.Account.IsLoggedIn() ) {
 		window.location.href = "/home";
@@ -28,53 +35,78 @@ function PreLoginApp() {
 	}
 
 	return (
-		<main className="register-page bg-image" style={ {
-			backgroundImage: "url('/img/backgrounds/bg.jpg')",
-			backgroundSize: "cover",
-			backgroundColor: "rgba(11, 19, 26, 1)",
-			backgroundPosition: "center",
-			backgroundRepeat: "no-repeat"
-		} }>
+		<div
+			className="register-page bg-image"
+			style={ {
+				backgroundImage: "url('/img/backgrounds/bg.jpg')",
+				backgroundSize: "cover",
+				backgroundColor: "rgba(11, 19, 26, 1)",
+				backgroundPosition: "center",
+				backgroundRepeat: "no-repeat",
+				height: "100%",
+				width: "100%"
+			} }
+		>
 			<Suspense fallback={ <></> }>
-				<div className="register-box">
-					<div className="card register-logo bg-white border border-dark mb-2" style={ { height: 60 } }>
-						<div className="d-flex justify-content-start social_icon ps-2">
-							<Link to="https://discord.gg/uXxsqXD" target="_blank" className="pe-1 ps-1 pt-1"
-								  style={ { fontSize: 30 } }>
-								<FontAwesomeIcon icon={ [ "fab", "discord" ] }/>
-							</Link>
-							<Link to="https://github.com/Kyri123/ArkLin2.0/" target="_blank" className="ps-1 pt-1"
-								  style={ { fontSize: 30 } }>
-								<FontAwesomeIcon icon={ [ "fab", "github" ] }/>
-							</Link>
-							<span className="ps-5">
-									<b>ArkLIN2</b>
-								</span>
-						</div>
-						<LTERibbon>
-							Alpha
-						</LTERibbon>
-					</div>
-
-					<div className="card border border-dark">
-						<div className="card-body register-card-body">
-							<Routes>
-								<Route path="/signin" element={ <PSignIn/> }/>
-								<Route path="/signup" element={ <PSignUp/> }/>
-								<Route path={ "*" } element={ <Navigate replace to="/signin"/> }/>
-							</Routes>
-						</div>
-
-						<p className="p-0 m-0">
-							<Link to={ Location.pathname.includes( "/signin" ) ? "/signup" : "/signin" }
-								  className="text-center btn btn-sm btn-dark" style={ { width: "100%" } }>
-								{ Location.pathname.includes( "/signin" ) ? "Account Erstellen" : "Einloggen" }
-							</Link>
-						</p>
-					</div>
-				</div>
+				<Modal
+					onHide={ () => {
+					} }
+					show={ true }
+					centered
+					backdrop={ false }
+					contentClassName={ "rounded-4" }
+				>
+					<Modal.Header className={ "p-3 pb-2 border-bottom-0" }>
+						<h1 className="fw-bold mb-0 fs-2 p-2 text-center w-100">
+							KAdmin ArkLin 2.0
+						</h1>
+						<LTERibbon>Alpha</LTERibbon>
+					</Modal.Header>
+					<Modal.Body className={ "p-3 pt-0" }>
+						<Routes>
+							<Route path="/signin" element={ <PSignIn/> }/>
+							<Route path="/signup" element={ <PSignUp/> }/>
+							<Route path={ "*" } element={ <Navigate replace to="/signin"/> }/>
+						</Routes>
+						<hr className="my-4"/>
+						<Row>
+							<Col span={ 6 }>
+								<Link
+									to="https://discord.gg/uXxsqXD"
+									target="_blank"
+									className={ "btn btn-dark w-100 mb-2 rounded-3" }
+								>
+									<FontAwesomeIcon
+										icon={ [ "fab", "discord" ] }
+										className={ "pe-2" }
+									/>
+									Discord
+								</Link>
+							</Col>
+							<Col span={ 6 }>
+								<Link
+									to="https://github.com/Kyri123/ArkLin2.0/"
+									target="_blank"
+									className={ "btn btn-dark w-100 mb-2 rounded-3" }
+								>
+									<FontAwesomeIcon
+										icon={ [ "fab", "github" ] }
+										className={ "pe-2" }
+									/>
+									Github
+								</Link>
+							</Col>
+						</Row>
+						<Link
+							to={ IsLogin ? "/signup" : "/signin" }
+							className="w-100 py-2 mb-2 mt-2 btn btn-primary rounded-3"
+						>
+							{ IsLogin ? "Account Erstellen" : "Einloggen" }
+						</Link>
+					</Modal.Body>
+				</Modal>
 			</Suspense>
-		</main>
+		</div>
 	);
 }
 

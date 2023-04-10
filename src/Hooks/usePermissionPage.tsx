@@ -12,5 +12,5 @@ export default function usePermissionPage( Permission : TPermissions ) {
 		if ( !Account.HasPermission( Permission ) ) {
 			window.location.href = "/home/401";
 		}
-	}, [ Account, Permission ] )
+	}, [ Account, Permission ] );
 }

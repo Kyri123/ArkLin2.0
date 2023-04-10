@@ -6,10 +6,8 @@ import {
 	BashColorString,
 	SystemPlatform
 }                       from "../Types/System.Lib";
-import { InstallAllTE } from "../TypeExtension/TE_InstallAll";
-import path             from "path";
 import * as console     from "console";
-import * as dotenv      from 'dotenv'
+import * as dotenv      from "dotenv";
 import { IDebugConfig } from "../Types/Config";
 
 export class SystemLib_Class {
@@ -24,8 +22,16 @@ export class SystemLib_Class {
 
 	constructor( Supported : SystemPlatform[] ) {
 		this.IsDevMode = process.argv[ 2 ] === "true";
-		this.UseDebug = process.argv[ 2 ] === "true" || process.argv[ 2 ] === "Debug" || process.argv[ 2 ] === "development";
-		this.Platform = os.platform() === 'linux' ? "Lin" : os.platform() === 'win32' ? "Win" : "NotSupported";
+		this.UseDebug =
+			process.argv[ 2 ] === "true" ||
+			process.argv[ 2 ] === "Debug" ||
+			process.argv[ 2 ] === "development";
+		this.Platform =
+			os.platform() === "linux"
+				? "Lin"
+				: os.platform() === "win32"
+					? "Win"
+					: "NotSupported";
 
 		this.DebugLog( "[SYSTEM] Try to load:", ".env" );
 		dotenv.config();
@@ -41,8 +47,7 @@ export class SystemLib_Class {
 		}
 
 		this.SuportedPlatforms = Supported;
-		InstallAllTE();
-		if ( !this.SuportedPlatforms.Contains( this.Platform ) && !this.IsTest() ) {
+		if ( !this.SuportedPlatforms.includes( this.Platform ) && !this.IsTest() ) {
 			this.Platform = "NotSupported";
 		}
 	}
@@ -59,42 +64,45 @@ export class SystemLib_Class {
 	public ToBashColor( String : BashColorString ) {
 		switch ( String ) {
 			case "Black":
-				return '\x1B[30m';
+				return "\x1B[30m";
 			case "Cyan":
-				return '\x1B[36m';
+				return "\x1B[36m";
 			case "Dark Gray":
-				return '\x1B[90m';
+				return "\x1B[90m";
 			case "Light Cyan":
-				return '\x1B[96m';
+				return "\x1B[96m";
 			case "Light Gray":
-				return '\x1B[37m';
+				return "\x1B[37m";
 			case "Light Green":
-				return '\x1B[32m';
+				return "\x1B[32m";
 			case "Light Magenta":
-				return '\x1B[35m';
+				return "\x1B[35m";
 			case "Light Red":
-				return '\x1B[91m';
+				return "\x1B[91m";
 			case "Light Yellow":
-				return '\x1B[93m';
+				return "\x1B[93m";
 			case "Red":
-				return '\x1B[31m';
+				return "\x1B[31m";
 			case "Green":
-				return '\x1B[32m';
+				return "\x1B[32m";
 			case "Yellow":
-				return '\x1B[33m';
+				return "\x1B[33m";
 			case "Blue":
-				return '\x1B[34m';
+				return "\x1B[34m";
 			case "Magenta":
-				return '\x1B[35m';
+				return "\x1B[35m";
 			case "White":
-				return '\x1B[97m';
+				return "\x1B[97m";
 			default:
-				return '\x1B[39m';
+				return "\x1B[39m";
 		}
 	}
 
 	public ClearANSI( Log : string ) : string {
-		return Log.replaceAll( /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, "" );
+		return Log.replaceAll(
+			/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+			""
+		);
 	}
 
 	public WriteStringToLog( ...Log : any[] ) : void {
@@ -108,7 +116,10 @@ export class SystemLib_Class {
 		fs.writeFileSync( __LogFile, this.ClearANSI( CurrentLog ) );
 
 		if ( global.SocketIO ) {
-			SocketIO.emit( "OnPanelLogUpdated", this.ClearANSI( CurrentLog ).split( "\n" ).reverse() );
+			SocketIO.emit(
+				"OnPanelLogUpdated",
+				this.ClearANSI( CurrentLog ).split( "\n" ).reverse()
+			);
 		}
 	}
 
@@ -121,39 +132,58 @@ export class SystemLib_Class {
 		}
 
 		if ( this.DebugMode() ) {
-			data.AddFirst( this.ToBashColor( "Magenta" ) + `[${ new Date().toUTCString() }][DEBUG]\x1B[0m` );
+			data.addAtIndex(
+				this.ToBashColor( "Magenta" ) +
+				`[${ new Date().toUTCString() }][DEBUG]\x1B[0m`
+			);
 			console.log( ...data );
 			this.WriteStringToLog( ...data );
 		}
 	}
 
 	public Log( ...data : any[] ) {
-		data.AddFirst( this.ToBashColor( "Cyan" ) + `[${ new Date().toUTCString() }][LOG]\x1B[0m` );
+		data.addAtIndex(
+			this.ToBashColor( "Cyan" ) + `[${ new Date().toUTCString() }][LOG]\x1B[0m`
+		);
 		console.log( ...data );
 		this.WriteStringToLog( ...data );
 	}
 
 	public LogError( ...data : any[] ) {
-		data.AddFirst( this.ToBashColor( "Light Red" ) + `[${ new Date().toUTCString() }][ERROR]\x1B[0m` );
+		data.addAtIndex(
+			this.ToBashColor( "Light Red" ) +
+			`[${ new Date().toUTCString() }][ERROR]\x1B[0m`
+		);
 		console.error( ...data );
 		this.WriteStringToLog( ...data );
 	}
 
 	public LogWarning( ...data : any[] ) {
-		data.AddFirst( this.ToBashColor( "Yellow" ) + `[${ new Date().toUTCString() }][WARN]\x1B[0m` );
+		data.addAtIndex(
+			this.ToBashColor( "Yellow" ) + `[${ new Date().toUTCString() }][WARN]\x1B[0m`
+		);
 		console.warn( ...data );
 		this.WriteStringToLog( ...data );
 	}
 
 	public LogFatal( ...data : any[] ) {
-		data.AddFirst( this.ToBashColor( "Red" ) + `[${ new Date().toUTCString() }][FATAL]\x1B[0m` );
+		data.addAtIndex(
+			this.ToBashColor( "Red" ) + `[${ new Date().toUTCString() }][FATAL]\x1B[0m`
+		);
 		console.error( ...data );
 		this.WriteStringToLog( ...data );
 		process.exit();
 	}
 
-	public CustomLog( Color : BashColorString, Key : string, IsFata : boolean, ...data : any[] ) {
-		data.AddFirst( this.ToBashColor( Color ) + `[${ new Date().toUTCString() }][${ Key }]\x1B[0m` );
+	public CustomLog(
+		Color : BashColorString,
+		Key : string,
+		IsFata : boolean,
+		...data : any[]
+	) {
+		data.addAtIndex(
+			this.ToBashColor( Color ) + `[${ new Date().toUTCString() }][${ Key }]\x1B[0m`
+		);
 		console.error( ...data );
 		this.WriteStringToLog( ...data );
 		if ( IsFata ) {
@@ -174,21 +204,6 @@ export class SystemLib_Class {
 	}
 }
 
-
-global.__basedir = path.join( __dirname, "../../.." );
-global.__LogDir = path.join( __basedir, "/mount/PanelLogs/" );
-global.__LogFile = path.join( __LogDir, `${ Math.round( new Date().getTime() / 1000 ) }.log` );
-global.__configdir = path.join( __basedir, "mount/config" );
-global.__PackageJson = require( path.join( __basedir, "package.json" ) );
-global.__server_dir = path.join( __basedir, "mount/Server" );
-global.__server_arkmanager = path.join( __basedir, "mount/Arkmanager" );
-global.__server_logs = path.join( __basedir, "mount/Logs" );
-global.__server_backups = path.join( __basedir, "mount/Backups" );
-global.__SteamCMD = path.join( __basedir, "mount/steamCMD" );
-global.__git_dir = path.join( __basedir, "mount/Git/" );
-
 if ( !global.SystemLib ) {
-	global.SystemLib = new SystemLib_Class( [
-		"Lin"
-	] );
+	global.SystemLib = new SystemLib_Class( [ "Lin" ] );
 }

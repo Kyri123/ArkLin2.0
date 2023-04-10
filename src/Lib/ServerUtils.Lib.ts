@@ -1,8 +1,8 @@
-import Arkmanager_Command_Checkmodupdate from "../Shared/SelectMask/Arkmanager_Command_Checkmodupdate.json"
-import Arkmanager_Command_Restart        from "../Shared/SelectMask/Arkmanager_Command_Restart.json"
-import Arkmanager_Command_Stop           from "../Shared/SelectMask/Arkmanager_Command_Stop.json"
-import Arkmanager_Command_Update         from "../Shared/SelectMask/Arkmanager_Command_Update.json"
-import Arkmanager_Command_Start          from "../Shared/SelectMask/Arkmanager_Command_Start.json"
+import Arkmanager_Command_Checkmodupdate from "../Shared/SelectMask/Arkmanager_Command_Checkmodupdate.json";
+import Arkmanager_Command_Restart        from "../Shared/SelectMask/Arkmanager_Command_Restart.json";
+import Arkmanager_Command_Stop           from "../Shared/SelectMask/Arkmanager_Command_Stop.json";
+import Arkmanager_Command_Update         from "../Shared/SelectMask/Arkmanager_Command_Update.json";
+import Arkmanager_Command_Start          from "../Shared/SelectMask/Arkmanager_Command_Start.json";
 import { ISelectMask }                   from "../Shared/Type/Systeminformation";
 
 export enum EArkmanagerCommands {
@@ -21,10 +21,12 @@ export enum EArkmanagerCommands {
 	saveworld = "saveworld",
 	status = "status",
 	printconfig = "printconfig",
-	getpid = "getpid"
+	getpid = "getpid",
 }
 
-export function GetMaskFromCommand( Command : EArkmanagerCommands ) : ISelectMask[] {
+export function GetMaskFromCommand(
+	Command : EArkmanagerCommands
+) : ISelectMask[] {
 	switch ( Command ) {
 		case EArkmanagerCommands.start:
 			return Arkmanager_Command_Start as ISelectMask[];

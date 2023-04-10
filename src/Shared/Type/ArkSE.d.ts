@@ -1,15 +1,20 @@
 import {
-	IMO_Instance,
-	IMongoDB
-} from "../Api/MongoDB";
+	IMongoDB,
+	TMO_Instance
+} from "../../Types/MongoDB";
 
-export type TServerState = "NotInstalled" | "Offline" | "Online" | "ActionInProgress" | "Running";
+export type TServerState =
+	| "NotInstalled"
+	| "Offline"
+	| "Online"
+	| "ActionInProgress"
+	| "Running";
 
 export interface IInstanceState extends IMongoDB {
 	State : TServerState;
 	IsListen : boolean;
 	Player : number;
-	OnlinePlayerList : IOnlineUsers[];
+	OnlinePlayerList : string[];
 	ServerVersion : string;
 	ArkmanagerPID : number;
 	ArkserverPID : number;
@@ -22,8 +27,8 @@ export interface IInstanceData extends Record<string, any> {
 	arkbackupdir : string;
 	arkAutoUpdateOnStart : boolean;
 	arkBackupPreUpdate : boolean;
-	serverMapModId : number;
-	ark_TotalConversionMod : number;
+	serverMapModId : string;
+	ark_TotalConversionMod : string;
 	arkbackupcompress : boolean;
 
 	ark_RCONEnabled : boolean;
@@ -65,22 +70,23 @@ export interface IInstanceData extends Record<string, any> {
 	panel_publicip : string;
 }
 
-export interface IOnlineUsers {
-	Username : string;
-	SteamID : number
+
+export interface IServerStatus {
+	Online : boolean;
+	Players : string[];
 }
 
 export interface IPanelServerConfig {
 	BackupEnabled : boolean;
 	MaxBackupfolderSize : number;
 	BackupInterval : number;
-	AutoUpdateParameters : string[],
+	AutoUpdateParameters : string[];
 	AutoUpdateEnabled : boolean;
 	AutoUpdateInterval : number;
-	_id? : string
-	__v? : number
+	_id? : string;
+	__v? : number;
 }
 
 export interface IFullData {
-	InstanceData : Record<string, IMO_Instance>;
+	InstanceData : Record<string, TMO_Instance>;
 }

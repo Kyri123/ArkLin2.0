@@ -1,6 +1,6 @@
 import * as mongoose              from "mongoose";
 import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import { IGithubBranche }         from "../../../src/Shared/Api/github";
+import { IGithubBranche }         from "../../../src/Shared/Type/github";
 
 const Schema = new mongoose.Schema<IGithubBranche>( {
 	name: { type: String, unique: true },

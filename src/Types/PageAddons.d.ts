@@ -1,3 +1,5 @@
+/** @format */
+
 import { IChildrenBaseProps } from "./BaseTypes";
 
 export interface IPageCounterProps<T> extends IChildrenBaseProps {
