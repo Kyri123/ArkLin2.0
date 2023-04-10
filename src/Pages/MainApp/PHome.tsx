@@ -43,7 +43,6 @@ export default function PHome() {
 					<tr key={ "VERSION" + Index }>
 						<td>{ Row.name }</td>
 						<td align="center">
-<<<<<<< HEAD
 							{ new Date( Row.created_at ).toLocaleString() }
 						</td>
 						<td align="center">
@@ -53,12 +52,6 @@ export default function PHome() {
 							<Link target="_blank" className="ps-2" to={ Row.html_url }>
 								<FontAwesomeIcon size="xl" icon={ [ "fab", "github-square" ] }/>
 							</Link>
-=======
-							<Link to={ "/changelog/" + Row.tag_name }><FontAwesomeIcon size="xl"
-																					   icon={ "book" }/></Link>
-							<Link target="_blank" className="ps-2" to={ Row.html_url }><FontAwesomeIcon size="xl"
-																										icon={ [ "fab", "github-square" ] }/></Link>
->>>>>>> 8780452fd21bfa846f65ecc62c2620d4ec41f236
 						</td>
 					</tr>
 				) ) }
