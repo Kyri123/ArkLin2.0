@@ -414,7 +414,7 @@ export default function( Api : core.Express ) {
 						Title: "Erfolgreich!"
 					};
 
-					SocketIO.emit( "OnServerUpdated", { [ Server.Instance ]: Server.Get! } );
+					Server.EmitUpdate();
 				}
 			}
 		}

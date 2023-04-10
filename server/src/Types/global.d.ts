@@ -31,6 +31,7 @@ export declare global {
 	var __LogFile : string;
 	var __LogDir : string;
 	var __server_dir : string;
+	var __cluster_dir : string;
 	var __git_dir : string;
 	var __server_arkmanager : string;
 	var __server_logs : string;

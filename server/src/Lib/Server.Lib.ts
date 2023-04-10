@@ -23,20 +23,20 @@ import {
 	IMO_Instance,
 	TMO_Instance
 }                              from "../../../src/Types/MongoDB";
-import { MakeRandomID }        from "./PathBuilder.Lib";
 import DB_Cluster              from "../MongoDB/DB_Cluster";
 import { EBashScript }         from "../Enum/EBashScript";
 import {
 	ExplIf,
 	If
 }                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import { MakeRandomString }    from "@kyri123/k-javascript-utils";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
 	InstanceName? : string,
 	DefaultConfig? : Partial<IInstanceData>
 ) : Promise<ServerLib<true> | undefined> {
-	const InstanceID = InstanceName || MakeRandomID( 20, true );
+	const InstanceID = InstanceName || MakeRandomString( 20, "-" );
 	const ConfigFile = path.join(
 		__server_arkmanager,
 		"instances",
