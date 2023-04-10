@@ -12,7 +12,7 @@
     "Dev": "yarn tailwindcss && concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
     "TestApp": "eslint src --fix && eslint server --fix",
     "FullTestApp": "yarn tailwindcss && yarn TestApp && yarn BuildServer && yarn Client",
-    "tailwindcss": "postcss src/tailwind.css -o src/Css/App-TW.css"
+    "tailwindcss": "postcss src/index.css -o src/Css/App-TW.css"
   },
   "babel": {
     "presets": [
