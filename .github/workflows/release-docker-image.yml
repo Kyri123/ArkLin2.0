@@ -3,6 +3,12 @@ name: Publish Docker image
 on:
   release:
     types: [ published ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
 
 jobs:
   push_to_registry:
