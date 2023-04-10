@@ -27,7 +27,10 @@ import ServerContext                            from "./Context/ServerContext";
 import { API_ServerLib }                        from "./Lib/Api/API_Server.Lib";
 import { API_System }                           from "./Lib/Api/API_System";
 import { SocketIOLib }                          from "./Lib/Api/SocketIO.Lib";
-import { TMO_Instance }                         from "./Types/MongoDB";
+import {
+	IMO_Cluster,
+	TMO_Instance
+}                                               from "./Types/MongoDB";
 import { DefaultSystemUsage }                   from "./Shared/Default/Server.Default";
 import {
 	IEmitEvents,
@@ -38,6 +41,7 @@ import { IAPIResponseBase }                     from "./Shared/Type/API_Response
 import CSideHeader                              from "./Pages/MainApp/PageComponents/Page/CSideHeader";
 import CTraffics                                from "./Pages/MainApp/PageComponents/Page/CTraffics";
 import CFoother                                 from "./Pages/MainApp/PageComponents/Page/CFoother";
+import { API_ClusterLib }                       from "./Lib/Api/API_Cluster.Lib";
 
 const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
 const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
@@ -94,6 +98,7 @@ export default function MainApp() {
 	} );
 
 	const [ Instances, setInstances ] = useState<Record<string, TMO_Instance>>( {} );
+	const [ Clusters, setClusters ] = useState<Record<string, IMO_Cluster>>( {} );
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect( () => {
@@ -109,17 +114,19 @@ export default function MainApp() {
 		} );
 
 		const GetAllServer = async() => {
-			const [ GameServerS, Instance ] = await Promise.all( [
+			const [ GameServerS, Instance, Clusters ] = await Promise.all( [
 				API_ServerLib.GetGlobalState(),
-				API_ServerLib.GetAllServer()
+				API_ServerLib.GetAllServer(),
+				API_ClusterLib.GetCluster()
 			] );
 
-			setGameServerState( GameServerS );
-			setInstances( {
+			setClusters( () => Clusters );
+			setGameServerState( () => GameServerS );
+			setInstances( () => ( {
 				...Instance.Data
-			} );
+			} ) );
 
-			setHasData( true );
+			setHasData( () => true );
 		};
 
 		GetAllServer().then( () => {
@@ -132,11 +139,21 @@ export default function MainApp() {
 			} ) )
 		);
 
+		SocketIO.on( "OnClusterUpdated", ( R ) =>
+			setClusters( ( I ) => ( {
+				...I,
+				...R
+			} ) )
+		);
+
+		SocketIO.on( "OnClusterRemoved", GetAllServer );
 		SocketIO.on( "OnServerRemoved", GetAllServer );
 		SocketIO.on( "connect", GetAllServer );
 		SocketIO.on( "disconnect", () => setHasData( false ) );
 
 		return () => {
+			SocketIO.off( "OnClusterRemoved", GetAllServer );
+			SocketIO.off( "OnClusterUpdated" );
 			SocketIO.off( "connect" );
 			SocketIO.off( "disconnect" );
 			SocketIO.off( "OnServerUpdated" );
@@ -175,7 +192,7 @@ export default function MainApp() {
 				} }
 			>
 				<ServerContext.Provider
-					value={ { InstanceData: Instances, HasData: HasData } }
+					value={ { InstanceData: Instances, HasData: HasData, ClusterData: Clusters } }
 				>
 					<Suspense fallback={ <></> }>
 						<main className="d-flex flex-nowrap w-100">

@@ -1,6 +1,7 @@
 import React, {
 	useContext,
 	useEffect,
+	useRef,
 	useState
 }                              from "react";
 import { useArkServerConfigs } from "../../../../Hooks/useArkServerConfigs";
@@ -49,24 +50,55 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 	const [ TextEdtiorContent, setTextEdtiorContent ] = useState( "" );
 	const [ JsonError, setJsonError ] = useState( "" );
 	const [ IsSending, setIsSending ] = useState( false );
+	const codeMirrorRef = useRef<string>( "" );
 
 	useEffect( () => {
-		setTextEdtiorContent( () =>
-			CurrentFile.toLowerCase() === "arkmanager.cfg"
-				? JSON.stringify( ConfigContent, null, 4 )
-				: ini.stringify( ConfigContent )
-		);
+		codeMirrorRef.current = IsArkmanagerCfg()
+			? JSON.stringify( ConfigContent, null, 4 )
+			: ini.stringify( ConfigContent );
+		setTextEdtiorContent( () => codeMirrorRef.current );
 		setFormIni( () => ConfigContent );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ ConfigContent, CurrentFile ] );
 
 	useEffect( () => {
-		setTextEdtiorContent( () =>
-			IsArkmanagerCfg()
+		if ( UseTextEdtior ) {
+			codeMirrorRef.current = IsArkmanagerCfg()
 				? JSON.stringify( FormIni, null, 4 )
-				: ini.stringify( FormIni )
-		);
+				: ini.stringify( FormIni );
+			setTextEdtiorContent( codeMirrorRef.current );
+		}
+		else {
+			setFormIni( IsArkmanagerCfg()
+				? JSON.parse( codeMirrorRef.current )
+				: ini.parse( codeMirrorRef.current ) );
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ UseTextEdtior ] );
+
+	useEffect( () => {
+		const Interval = setInterval( () => {
+			if ( IsArkmanagerCfg() && UseTextEdtior ) {
+				try {
+					if ( IsArkmanagerCfg() ) {
+						JSON.parse( codeMirrorRef.current );
+					}
+					else {
+						ini.decode( codeMirrorRef.current );
+					}
+					setJsonError( "" );
+				}
+				catch ( e ) {
+					setJsonError( ( e as Error ).message );
+				}
+			}
+			else {
+				setJsonError( "" );
+			}
+		}, 1000 );
+		return () => clearInterval( Interval );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ UseTextEdtior, ConfigContent, CurrentFile ] );
 
 	const GetOptions = () => {
 		const Return : { value : string; label : string }[] = [];
@@ -107,12 +139,15 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 	const SaveConfig = async() => {
 		setIsSending( true );
 
-		const Response = await API_ServerLib.SetServerConfig(
-			InstanceName,
-			CurrentFile,
-			FormIni
-		);
-		DoSetAlert( Response );
+		if ( CurrentFile ) {
+			const Response = await API_ServerLib.SetServerConfig(
+				InstanceName,
+				CurrentFile.split( "/" ).pop()!,
+				FormIni
+			);
+
+			DoSetAlert( Response );
+		}
 
 		setIsSending( false );
 	};
@@ -132,7 +167,10 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 								value: CurrentFile || "",
 								label: CurrentFile.split( "/" ).pop() || ""
 							} }
-							onChange={ SetOption }
+							onChange={ E => {
+								SetOption( E );
+								setFormIni( {} );
+							} }
 						/>
 					</div>
 				</div>
@@ -182,19 +220,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 							className={ "h-100" }
 							value={ TextEdtiorContent }
 							extensions={ [ json() ] }
-							onChange={ ( value ) => {
-								setTextEdtiorContent( value );
-								try {
-									const Ini = IsArkmanagerCfg()
-										? JSON.parse( value )
-										: ini.decode( value );
-									setFormIni( Ini );
-									setJsonError( "" );
-								}
-								catch ( e ) {
-									setJsonError( ( e as Error ).message );
-								}
-							} }
+							onChange={ ( value ) => codeMirrorRef.current = value }
 						/>
 					</Card.Body>
 				</>

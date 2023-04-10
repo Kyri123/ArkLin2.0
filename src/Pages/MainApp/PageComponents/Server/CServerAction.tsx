@@ -19,6 +19,7 @@ import { ISelectMask }      from "../../../../Shared/Type/Systeminformation";
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },
+	{ value: EArkmanagerCommands.start, label: "Server Starten" },
 	{ value: EArkmanagerCommands.update, label: "Updaten" },
 	{ value: EArkmanagerCommands.restart, label: "Neustarten" },
 	{ value: EArkmanagerCommands.backup, label: "Backup Erstellen" },

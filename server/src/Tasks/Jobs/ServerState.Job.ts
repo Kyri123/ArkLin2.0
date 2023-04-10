@@ -26,7 +26,6 @@ export default new JobTaskCycle<IMO_Instance>(
 			}
 		}
 		Self.UpdateTickTime( ConfigManager.GetTaskConfig.ServerStateInterval / Math.max( Object.values( EmitData ).length, 1 ) );
-		SocketIO.emit( "OnServerUpdated", EmitData );
 		return Object.values( EmitData );
 	},
 
@@ -159,6 +158,7 @@ export default new JobTaskCycle<IMO_Instance>(
 					? Background
 					: `/img/maps/TheIsland.jpg`
 			} );
+			ServerL.EmitUpdate();
 		}
 	}
 );

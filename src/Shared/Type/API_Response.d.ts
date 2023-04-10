@@ -108,7 +108,6 @@ export type TResponse_User_Usereditaccount<MessageOpt extends boolean = false> =
 // ---------------- User ------------------
 // ----------------------------------------
 
-export type TResponse_Cluster_AllServerWithoutCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, TMO_Instance[]>;
 export type TResponse_Cluster_GetClusters<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, IMO_Cluster>>;
 export type TResponse_Cluster_CreateCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Cluster_RemoveCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;

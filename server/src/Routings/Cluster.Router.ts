@@ -5,7 +5,6 @@ import {
 }                         from "express-serve-static-core";
 import { CreateUrlV2 }    from "../Lib/PathBuilder.Lib";
 import {
-	TResponse_Cluster_AllServerWithoutCluster,
 	TResponse_Cluster_CreateCluster,
 	TResponse_Cluster_GetClusters,
 	TResponse_Cluster_RemoveCluster,
@@ -16,7 +15,6 @@ import { EPerm }          from "../../../src/Shared/Enum/User.Enum";
 import { UserLib }        from "../Lib/User.Lib";
 import { EClusterApiUrl } from "../../../src/Shared/Enum/Routing";
 import {
-	TRequest_Cluster_AllServerWithoutCluster,
 	TRequest_Cluster_CreateCluster,
 	TRequest_Cluster_RemoveCluster,
 	TRequest_Cluster_SendCommandToCluster,
@@ -31,11 +29,25 @@ import DB_Instances       from "../MongoDB/DB_Instances";
 import { ServerLib }      from "../Lib/Server.Lib";
 import DB_Cluster         from "../MongoDB/DB_Cluster";
 import { EmitClusters }   from "../Lib/SocketIO.Lib";
-import { IMO_Instance }   from "../../../src/Types/MongoDB";
+import {
+	IMO_Cluster,
+	IMO_Instance
+}                         from "../../../src/Types/MongoDB";
+
+const ValidateCluster = ( ClusterData : Partial<IMO_Cluster> ) : boolean => {
+	if ( ClusterData.Master && ClusterData.DisplayName && ClusterData.Instances ) {
+		return ClusterData.Master.length >= 4 && ClusterData.Instances.length >= 1 && ClusterData.Master !== "";
+	}
+	return false;
+};
 
 export default function( Api : core.Express ) {
 	let [ Url, Perm ] = CreateUrlV2( EClusterApiUrl.getclusters, "GET", undefined );
-	Api.get( Url, ( { ...args } ) => AuthMiddleware( Perm, args, {} ), async( request : Request, response : Response ) => {
+	Api.get( Url, ( req, res, next ) => AuthMiddleware( Perm, {
+		req,
+		res,
+		next
+	}, {} ), async( request : Request, response : Response ) => {
 		const Response : TResponse_Cluster_GetClusters = {
 			...DefaultResponseSuccess,
 			Data: {}
@@ -43,35 +55,19 @@ export default function( Api : core.Express ) {
 
 		//const Request : TRequest_Cluster_GetClusters<true, UserLib<true>> = request.body;
 
-		for await ( const Cluster of DB_Cluster.find() ) {
+		for await ( const Cluster of DB_Cluster.find( {} ) ) {
 			Response.Data[ Cluster._id ] = Cluster.toJSON();
 		}
 
 		response.json( Response );
 	} );
 
-	[ Url, Perm ] = CreateUrlV2( EClusterApiUrl.getserverwithoutcluster, "GET", EPerm.ManageCluster );
-	Api.get( Url, ( { ...args } ) => AuthMiddleware( Perm, args, [] ), async( request : Request, response : Response ) => {
-		const Response : TResponse_Cluster_AllServerWithoutCluster = {
-			...DefaultResponseSuccess,
-			Data: []
-		};
-
-		const Request : TRequest_Cluster_AllServerWithoutCluster<true, UserLib<true>> = request.body;
-
-		for await ( const Server of DB_Instances.find() ) {
-			const ServerData = await ServerLib.build( Server.Instance );
-
-			if ( ServerData.IsInCluster() && Request.UserClass.HasPermissionForServer( Server.Instance ) ) {
-				Response.Data.push( ServerData.GetWithCluster() );
-			}
-		}
-
-		response.json( Response );
-	} );
-
 	[ Url, Perm ] = CreateUrlV2( EClusterApiUrl.createcluster, "POST", EPerm.ManageCluster );
-	Api.post( Url, ( { ...args } ) => AuthMiddleware( Perm, args ), async( request : Request, response : Response ) => {
+	Api.post( Url, ( req, res, next ) => AuthMiddleware( Perm, {
+		req,
+		res,
+		next
+	} ), async( request : Request, response : Response ) => {
 		const Response : TResponse_Cluster_CreateCluster = {
 			...DefaultResponseFailed
 		};
@@ -86,7 +82,7 @@ export default function( Api : core.Express ) {
 					response.json( Response );
 					return;
 				}
-				else {
+				else if ( ValidateCluster( Request.Config ) ) {
 					try {
 						delete Request.Config._id;
 						const NewCluster = await DB_Cluster.create( Request.Config );
@@ -105,13 +101,18 @@ export default function( Api : core.Express ) {
 					}
 				}
 			}
-			response.json( Response );
 		}
+
+		response.json( Response );
 	} );
 
 
 	[ Url, Perm ] = CreateUrlV2( EClusterApiUrl.setcluster, "POST", EPerm.ManageCluster );
-	Api.post( Url, ( { ...args } ) => AuthMiddleware( Perm, args ), async( request : Request, response : Response ) => {
+	Api.post( Url, ( req, res, next ) => AuthMiddleware( Perm, {
+		req,
+		res,
+		next
+	} ), async( request : Request, response : Response ) => {
 		const Response : TResponse_Cluster_SetCluster = {
 			...DefaultResponseFailed
 		};
@@ -127,7 +128,7 @@ export default function( Api : core.Express ) {
 					response.json( Response );
 					return;
 				}
-				else {
+				else if ( ValidateCluster( Request.Config ) ) {
 					try {
 						delete Request.Config._id;
 						const UpdatedCluster = await DB_Cluster.findByIdAndUpdate( Request.Id, Request.Config, { new: true } );
@@ -146,13 +147,18 @@ export default function( Api : core.Express ) {
 					}
 				}
 			}
-			response.json( Response );
 		}
+
+		response.json( Response );
 	} );
 
 
 	[ Url, Perm ] = CreateUrlV2( EClusterApiUrl.removecluster, "POST", EPerm.ManageCluster );
-	Api.post( Url, ( { ...args } ) => AuthMiddleware( Perm, args ), async( request : Request, response : Response ) => {
+	Api.post( Url, ( req, res, next ) => AuthMiddleware( Perm, {
+		req,
+		res,
+		next
+	} ), async( request : Request, response : Response ) => {
 		const Response : TResponse_Cluster_RemoveCluster = {
 			...DefaultResponseFailed
 		};
@@ -173,12 +179,17 @@ export default function( Api : core.Express ) {
 				console.error( e );
 			}
 		}
+
 		response.json( Response );
 	} );
 
 
 	[ Url, Perm ] = CreateUrlV2( EClusterApiUrl.sendcommandtocluster, "POST", EPerm.ManageCluster );
-	Api.post( Url, ( { ...args } ) => AuthMiddleware( Perm, args ), async( request : Request, response : Response ) => {
+	Api.post( Url, ( req, res, next ) => AuthMiddleware( Perm, {
+		req,
+		res,
+		next
+	} ), async( request : Request, response : Response ) => {
 		const Response : TResponse_Cluster_SendCommandToCluster = {
 			...DefaultResponseFailed
 		};
@@ -208,6 +219,7 @@ export default function( Api : core.Express ) {
 				console.error( e );
 			}
 		}
+
 		response.json( Response );
 	} );
 }

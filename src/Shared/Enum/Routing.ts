@@ -51,7 +51,6 @@ export enum ESteamApiUrl {
 
 export enum EClusterApiUrl {
 	getclusters = "cluster/getclusters",
-	getserverwithoutcluster = "cluster/getserverwithoutcluster",
 	setcluster = "cluster/setcluster",
 	createcluster = "cluster/createcluster",
 	removecluster = "cluster/removecluster",

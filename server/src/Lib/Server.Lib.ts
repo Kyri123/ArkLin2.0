@@ -451,8 +451,10 @@ export class ServerLib<Ready extends boolean = boolean> {
 				"ShooterGame/Saved/Config/LinuxServer",
 				File
 			);
+
 			if ( fs.existsSync( ConfigFile ) ) {
 				fs.writeFileSync( ConfigFile, ini.stringify( Content ) );
+				return true;
 			}
 		}
 		return false;

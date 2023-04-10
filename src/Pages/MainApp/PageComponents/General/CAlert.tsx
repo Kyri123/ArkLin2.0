@@ -31,7 +31,7 @@ export function CAlert( Props : IAlertProps ) {
 	}
 
 	return (
-		<Alert variant={ Props.Data.Message.AlertType }>
+		<Alert variant={ Props.Data.Message.AlertType } dismissible onClose={ Props.OnClear }>
 			<h5>
 				<FontAwesomeIcon
 					icon={ GenerateIconFromColor( Props.Data.Message.AlertType ) }

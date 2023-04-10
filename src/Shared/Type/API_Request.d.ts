@@ -141,7 +141,6 @@ export type TRequest_User_Usereditaccount<UseUser extends boolean = true, UserTy
 // ---------------- Cluster ----------------
 // -----------------------------------------
 
-export type TRequest_Cluster_AllServerWithoutCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<unknown, UseUser, UserType>;
 export type TRequest_Cluster_CreateCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<{ Config : IMO_Cluster }, UseUser, UserType>;
 export type TRequest_Cluster_GetClusters<UseUser extends boolean = true, UserType = any> = IRequestBody<unknown, UseUser, UserType>;
 export type TRequest_Cluster_RemoveCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<{ Id : string }, UseUser, UserType>;
