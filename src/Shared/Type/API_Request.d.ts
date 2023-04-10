@@ -1,6 +1,9 @@
 import { IPanelServerConfig }  from "./ArkSE";
 import { EArkmanagerCommands } from "../../Lib/ServerUtils.Lib";
-import { IMO_Accounts }        from "../../Types/MongoDB";
+import {
+	IMO_Accounts,
+	IMO_Cluster
+}                              from "../../Types/MongoDB";
 
 export type RequestWithUser<T = any> = {
 	UserClass : T;
@@ -15,6 +18,7 @@ export type IRequestBody<T = Record<string, any>, Y extends boolean = true, User
 	& IAPIRequestBase
 	& ( Y extends true ? RequestWithUser<UserType> : Partial<RequestWithUser<UserType>> );
 
+export type TRequest_Unknown<UseUser extends boolean = true, UserType = any> = IRequestBody<unknown, UseUser, UserType>;
 
 // ----------------------------------------
 // ----------------- Auth -----------------
@@ -132,3 +136,14 @@ export type TRequest_User_Usereditaccount<UseUser extends boolean = true, UserTy
 	UserData : IMO_Accounts;
 	Passwd : string[];
 }, UseUser, UserType>;
+
+// -----------------------------------------
+// ---------------- Cluster ----------------
+// -----------------------------------------
+
+export type TRequest_Cluster_AllServerWithoutCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<unknown, UseUser, UserType>;
+export type TRequest_Cluster_CreateCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<{ Config : IMO_Cluster }, UseUser, UserType>;
+export type TRequest_Cluster_GetClusters<UseUser extends boolean = true, UserType = any> = IRequestBody<unknown, UseUser, UserType>;
+export type TRequest_Cluster_RemoveCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<{ Id : string }, UseUser, UserType>;
+export type TRequest_Cluster_SetCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<{ Id : string, Config : IMO_Cluster }, UseUser, UserType>;
+export type TRequest_Cluster_SendCommandToCluster<UseUser extends boolean = true, UserType = any> = IRequestBody<{ Id : string, Command : EArkmanagerCommands, Parameter : string[] }, UseUser, UserType>;

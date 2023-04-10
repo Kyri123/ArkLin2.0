@@ -95,24 +95,21 @@ export default new JobTask(
 				}
 			}
 			else {
-				const Cluster = Server.GetCluster;
-				if ( Cluster ) {
-					const CurrentConfig = Server.GetConfig();
+				const CurrentConfig = ( Server as ServerLib<true> ).GetConfig();
 
-					delete CurrentConfig[ "NoTransferFromFiltering" ];
-					delete CurrentConfig[ "NoTributeDownloads" ];
-					delete CurrentConfig[ "PreventDownloadDinos" ];
-					delete CurrentConfig[ "PreventDownloadItems" ];
-					delete CurrentConfig[ "PreventDownloadSurvivors" ];
-					delete CurrentConfig[ "PreventUploadDinos" ];
-					delete CurrentConfig[ "PreventUploadSurvivors" ];
-					delete CurrentConfig[ "PreventUploadItems" ];
-					delete CurrentConfig[ "arkopt_clusterid" ];
-					delete CurrentConfig[ "arkopt_ClusterDirOverride" ];
+				delete CurrentConfig[ "NoTransferFromFiltering" ];
+				delete CurrentConfig[ "NoTributeDownloads" ];
+				delete CurrentConfig[ "PreventDownloadDinos" ];
+				delete CurrentConfig[ "PreventDownloadItems" ];
+				delete CurrentConfig[ "PreventDownloadSurvivors" ];
+				delete CurrentConfig[ "PreventUploadDinos" ];
+				delete CurrentConfig[ "PreventUploadSurvivors" ];
+				delete CurrentConfig[ "PreventUploadItems" ];
+				delete CurrentConfig[ "arkopt_clusterid" ];
+				delete CurrentConfig[ "arkopt_ClusterDirOverride" ];
 
-					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
-					continue;
-				}
+				await ( Server as ServerLib<true> ).SetServerConfig( "arkmanager.cfg", CurrentConfig );
+				continue;
 			}
 
 			if ( !Server.IsMaster && Server.IsInCluster() ) {

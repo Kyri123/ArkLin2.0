@@ -114,7 +114,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return this.IsValid();
 	}
 
-	public IsInCluster() : boolean {
+	public IsInCluster() : this is ServerLib<true> {
 		return this.Cluster !== null && this.IsValid();
 	}
 
