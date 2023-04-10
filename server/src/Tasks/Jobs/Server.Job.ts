@@ -88,8 +88,8 @@ export default new JobTask(
 					CurrentConfig[ "PreventUploadDinos" ] = Cluster.PreventUploadDinos;
 					CurrentConfig[ "PreventUploadSurvivors" ] = Cluster.PreventUploadSurvivors;
 					CurrentConfig[ "PreventUploadItems" ] = Cluster.PreventUploadItems;
-					CurrentConfig[ "arkopt_clusterid" ] = Cluster._id;
-					CurrentConfig[ "arkopt_ClusterDirOverride" ] = ToRealDir( __cluster_dir );
+					CurrentConfig.Options[ "clusterid" ] = Cluster._id!;
+					CurrentConfig.Options[ "ClusterDirOverride" ] = ToRealDir( __cluster_dir );
 
 					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
 				}
@@ -105,12 +105,13 @@ export default new JobTask(
 				delete CurrentConfig[ "PreventUploadDinos" ];
 				delete CurrentConfig[ "PreventUploadSurvivors" ];
 				delete CurrentConfig[ "PreventUploadItems" ];
-				delete CurrentConfig[ "arkopt_clusterid" ];
-				delete CurrentConfig[ "arkopt_ClusterDirOverride" ];
+				delete CurrentConfig.Options[ "clusterid" ];
+				delete CurrentConfig.Options[ "ClusterDirOverride" ];
 
 				await ( Server as ServerLib<true> ).SetServerConfig( "arkmanager.cfg", CurrentConfig );
 				continue;
 			}
+
 
 			if ( !Server.IsMaster && Server.IsInCluster() ) {
 				const Cluster = Server.GetCluster;
@@ -118,14 +119,14 @@ export default new JobTask(
 				if ( Master && Cluster ) {
 					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
 						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
-							const MasterContent = Master.GetConfigContent( Filename );
-							await Server.SetServerConfig( Path, MasterContent );
+							const MasterContent = Master.GetConfigContent( Path );
+							await Server.SetServerConfig( Filename, MasterContent );
 						}
 					}
 
 					const CurrentConfig = Server.GetConfig();
 					const CurrentMasterConfig = Master.GetConfig();
-					for ( const Setting of Cluster.SyncSettings ) {
+					for ( const Setting of Cluster.SyncInis ) {
 						if ( CurrentMasterConfig[ Setting ] ) {
 							CurrentConfig[ Setting ] = CurrentMasterConfig[ Setting ];
 						}
@@ -135,6 +136,7 @@ export default new JobTask(
 					}
 
 					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
+					Server.EmitUpdate();
 				}
 			}
 		}

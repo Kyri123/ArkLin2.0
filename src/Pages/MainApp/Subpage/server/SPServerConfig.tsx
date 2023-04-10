@@ -140,10 +140,14 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 		setIsSending( true );
 
 		if ( CurrentFile ) {
+			const SendResult = IsArkmanagerCfg() ?
+				( UseTextEdtior ? JSON.parse( codeMirrorRef.current ) : FormIni ) :
+				( UseTextEdtior ? ini.parse( codeMirrorRef.current ) : FormIni );
+
 			const Response = await API_ServerLib.SetServerConfig(
 				InstanceName,
 				CurrentFile.split( "/" ).pop()!,
-				FormIni
+				SendResult
 			);
 
 			DoSetAlert( Response );

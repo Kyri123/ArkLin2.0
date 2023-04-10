@@ -156,8 +156,8 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 
 		const Cluster = this.GetCluster;
-		if ( Cluster && this.IsValid() ) {
-			return Cluster.Master === this.MongoDBData?._id;
+		if ( Cluster ) {
+			return Cluster.Master === this.Instance;
 		}
 		return false;
 	}
