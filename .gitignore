@@ -97,4 +97,5 @@ Logs
 .env.development
 buildserver
 
-src/Css/App-TW.css
+src/Css/App-TWbuild.css
+src/Css/App-TWbuild.min.css
