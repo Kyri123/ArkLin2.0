@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
       - run: yarn tailwindcss
       - run: yarn BuildServer
       - run: yarn Client
