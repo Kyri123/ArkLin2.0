@@ -53,6 +53,7 @@ export default function PChangelog() : JSX.Element {
 				</h3>
 				<ul className="nav nav-pills ml-auto p-2">
 					<li className="nav-item dropdown">
+<<<<<<< HEAD
             <span
 	            className="nav-link dropdown-toggle"
 	            data-bs-toggle="dropdown"
@@ -75,6 +76,18 @@ export default function PChangelog() : JSX.Element {
 									{ V.name }
 								</Link>
 							) ) }
+=======
+							<span className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+								  aria-expanded="false">
+								{ Selected.tag_name } <span className="caret"></span>
+							</span>
+						<div className="dropdown-menu dropdown-menu-right" data-boundary="scrollParent">
+							{ ( Data.map( ( V, I ) => (
+								<Link to={ "/changelog/" + V.tag_name }
+									  className={ `dropdown-item ${ V.tag_name === version ? "active" : "" }` }
+									  key={ "CHANGELOGSEL" + I }>{ V.name }</Link>
+							) ) ) }
+>>>>>>> 8780452fd21bfa846f65ecc62c2620d4ec41f236
 						</div>
 					</li>
 				</ul>

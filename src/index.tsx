@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /** @format */
 
 import {
@@ -8,6 +9,23 @@ import ReactDOM            from "react-dom/client";
 
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+=======
+import {
+	useEffect,
+	useState
+}                          from 'react';
+import ReactDOM            from 'react-dom/client';
+import reportWebVitals     from './reportWebVitals';
+
+import 'icheck-bootstrap/icheck-bootstrap.min.css'
+//import "bootstrap/dist/css/bootstrap.min.css"
+import "admin-lte/dist/css/adminlte.min.css"
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import './Css/App.css'
+import { API_AuthLib }     from "./Lib/Api/API_Auth.Lib";
+import { BrowserRouter }   from "react-router-dom";
+import { Modal }           from "react-bootstrap";
+>>>>>>> 8780452fd21bfa846f65ecc62c2620d4ec41f236
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "icheck-bootstrap/icheck-bootstrap.min.css";
 import { Modal }           from "react-bootstrap";
@@ -18,9 +36,15 @@ import "./Css/App.css";
 import "./Css/Ribbon.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import useAuth             from "./Hooks/useAuth";
+<<<<<<< HEAD
 import { API_AuthLib }     from "./Lib/Api/API_Auth.Lib";
 import MainApp             from "./MainApp";
 import PreLoginApp         from "./PreLoginApp";
+=======
+import AccountContext      from './Context/AccountContext';
+import PreLoginApp         from "./PreLoginApp";
+import MainApp             from "./MainApp";
+>>>>>>> 8780452fd21bfa846f65ecc62c2620d4ec41f236
 
 const root = ReactDOM.createRoot(
 	document.getElementById( "root" ) as HTMLElement
@@ -100,6 +124,7 @@ function IndexApp() {
 
 	return (
 		<>
+<<<<<<< HEAD
 
 			<AccountContext.Provider
 				value={ {
@@ -108,6 +133,15 @@ function IndexApp() {
 			>
 				{ WasChecked && !User.IsLoggedIn() ? <PreLoginApp/> : <MainApp/> }
 
+=======
+			<AccountContext.Provider value={ {
+				Account: User
+			} }>
+				{ ( WasChecked && !User.IsLoggedIn() ) ?
+					<PreLoginApp/> :
+					<MainApp/>
+				}
+>>>>>>> 8780452fd21bfa846f65ecc62c2620d4ec41f236
 			</AccountContext.Provider>
 		</>
 	);
