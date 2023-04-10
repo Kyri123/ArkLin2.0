@@ -14,6 +14,7 @@ import {
 	FillWithDefaultValues
 }                                      from "../../Lib/Arkmanager.Lib";
 import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
+import { ToRealDir }                   from "../../Lib/PathBuilder.Lib";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerTasksInterval,
@@ -74,16 +75,68 @@ export default new JobTask(
 				}
 			}
 
+			if ( Server.IsInCluster() ) {
+				const Cluster = Server.GetCluster;
+				if ( Cluster ) {
+					const CurrentConfig = Server.GetConfig();
+
+					CurrentConfig[ "NoTransferFromFiltering" ] = Cluster.NoTransferFromFiltering;
+					CurrentConfig[ "NoTributeDownloads" ] = Cluster.NoTributeDownloads;
+					CurrentConfig[ "PreventDownloadDinos" ] = Cluster.PreventDownloadDinos;
+					CurrentConfig[ "PreventDownloadItems" ] = Cluster.PreventDownloadItems;
+					CurrentConfig[ "PreventDownloadSurvivors" ] = Cluster.PreventDownloadSurvivors;
+					CurrentConfig[ "PreventUploadDinos" ] = Cluster.PreventUploadDinos;
+					CurrentConfig[ "PreventUploadSurvivors" ] = Cluster.PreventUploadSurvivors;
+					CurrentConfig[ "PreventUploadItems" ] = Cluster.PreventUploadItems;
+					CurrentConfig.Options[ "clusterid" ] = Cluster._id!;
+					CurrentConfig.Options[ "ClusterDirOverride" ] = ToRealDir( __cluster_dir );
+
+					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
+				}
+			}
+			else {
+				const CurrentConfig = ( Server as ServerLib<true> ).GetConfig();
+
+				delete CurrentConfig[ "NoTransferFromFiltering" ];
+				delete CurrentConfig[ "NoTributeDownloads" ];
+				delete CurrentConfig[ "PreventDownloadDinos" ];
+				delete CurrentConfig[ "PreventDownloadItems" ];
+				delete CurrentConfig[ "PreventDownloadSurvivors" ];
+				delete CurrentConfig[ "PreventUploadDinos" ];
+				delete CurrentConfig[ "PreventUploadSurvivors" ];
+				delete CurrentConfig[ "PreventUploadItems" ];
+				delete CurrentConfig.Options[ "clusterid" ];
+				delete CurrentConfig.Options[ "ClusterDirOverride" ];
+
+				await ( Server as ServerLib<true> ).SetServerConfig( "arkmanager.cfg", CurrentConfig );
+				continue;
+			}
+
+
 			if ( !Server.IsMaster && Server.IsInCluster() ) {
 				const Cluster = Server.GetCluster;
 				const Master = await Server.GetClusterMaster();
 				if ( Master && Cluster ) {
 					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
 						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
-							const MasterContent = Master.GetConfigContent( Filename );
-							await Server.SetServerConfig( Path, MasterContent );
+							const MasterContent = Master.GetConfigContent( Path );
+							await Server.SetServerConfig( Filename, MasterContent );
 						}
 					}
+
+					const CurrentConfig = Server.GetConfig();
+					const CurrentMasterConfig = Master.GetConfig();
+					for ( const Setting of Cluster.SyncInis ) {
+						if ( CurrentMasterConfig[ Setting ] ) {
+							CurrentConfig[ Setting ] = CurrentMasterConfig[ Setting ];
+						}
+						else if ( CurrentConfig[ Setting ] ) {
+							delete CurrentConfig[ Setting ];
+						}
+					}
+
+					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
+					Server.EmitUpdate();
 				}
 			}
 		}

@@ -11,6 +11,7 @@ export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
 	IsLoading,
 	Hide,
 	LoadingIcon,
+	ForceDisable,
 	...Props
 } ) => {
 	if ( Hide || ( Permission !== undefined && !Permission ) ) {
@@ -18,7 +19,7 @@ export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
 	}
 
 	return (
-		<Button { ...Props } disabled={ IsLoading }>
+		<Button { ...Props } disabled={ IsLoading || ForceDisable }>
 			{ Props.IsLoading ? (
 				<FontAwesomeIcon icon={ LoadingIcon || "spinner" } spin={ true }/>
 			) : (

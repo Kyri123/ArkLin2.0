@@ -49,6 +49,14 @@ export enum ESteamApiUrl {
 	getmods = "steamapi/getmods",
 }
 
+export enum EClusterApiUrl {
+	getclusters = "cluster/getclusters",
+	setcluster = "cluster/setcluster",
+	createcluster = "cluster/createcluster",
+	removecluster = "cluster/removecluster",
+	sendcommandtocluster = "cluster/sendcommandtocluster",
+}
+
 export type TServerUrls =
 	| EAuthUrl
 	| EChangelogUrl
@@ -57,4 +65,5 @@ export type TServerUrls =
 	| EServerUrl
 	| EUserUrl
 	| ESteamApiUrl
+	| EClusterApiUrl
 	| "";

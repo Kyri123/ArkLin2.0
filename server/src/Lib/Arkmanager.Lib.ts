@@ -1,8 +1,8 @@
-import { IInstanceData } from "../../../src/Shared/Type/ArkSE";
-import path              from "path";
-import { MakeRandomID }  from "./PathBuilder.Lib";
-import fs                from "fs";
-import process           from "process";
+import { IInstanceData }    from "../../../src/Shared/Type/ArkSE";
+import path                 from "path";
+import fs                   from "fs";
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import { ToRealDir }        from "./PathBuilder.Lib";
 
 export function ConfigToJSON( Content : string ) : Partial<IInstanceData> {
 	const InstanceData : Partial<IInstanceData> = {
@@ -133,42 +133,21 @@ export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
 		ark_QueryPort: 27015,
 		ark_RCONEnabled: true,
 		ark_RCONPort: 32330,
-		ark_ServerAdminPassword: MakeRandomID( 10 ),
+		ark_ServerAdminPassword: MakeRandomString( 10, "-" ),
 		ark_ServerPassword: "",
 		ark_SessionName: "[ARKLIN2] ArkServer",
 		ark_TotalConversionMod: "",
 		arkbackupcompress: true,
-		arkbackupdir: path.join( __server_backups, Servername ),
-		arkserverroot: path.join( __server_dir, Servername ),
-		logdir: path.join( __server_logs, Servername ),
-		arkStagingDir: path.join( __server_backups, "Staging" ),
+		arkbackupdir: ToRealDir( path.join( __server_backups, Servername ) ),
+		arkserverroot: ToRealDir( path.join( __server_dir, Servername ) ),
+		logdir: ToRealDir( path.join( __server_logs, Servername ) ),
+		arkStagingDir: ToRealDir( path.join( __server_backups, "Staging" ) ),
 		arkserverexec: "ShooterGame/Binaries/Linux/ShooterGameServer",
 		arkwarnminutes: 0,
 		serverMap: "TheIsland",
 		serverMapModId: "",
 		panel_publicip: __PublicIP
 	};
-
-	Content.arkbackupdir = path.join(
-		process.env.APPEND_BASEDIR || "/",
-		__server_backups,
-		Servername
-	);
-	Content.arkserverroot = path.join(
-		process.env.APPEND_BASEDIR || "/",
-		__server_dir,
-		Servername
-	);
-	Content.logdir = path.join(
-		process.env.APPEND_BASEDIR || "/",
-		__server_logs,
-		Servername
-	);
-	Content.arkStagingDir = path.join(
-		process.env.APPEND_BASEDIR || "/",
-		__server_backups,
-		"Staging"
-	);
 
 	return Content;
 }
@@ -182,6 +161,7 @@ export function FillWithDefaultValues(
 	}
 
 	try {
+		fs.mkdirSync( path.join( __server_dir, Servername ), { recursive: true } );
 		fs.mkdirSync( path.join( __server_backups, Servername ), { recursive: true } );
 		fs.mkdirSync( path.join( __server_logs, Servername ), { recursive: true } );
 	}
@@ -190,6 +170,10 @@ export function FillWithDefaultValues(
 
 	return {
 		...GetDefaultInstanceData( Servername ),
-		...Content
+		...Content,
+		arkbackupdir: ToRealDir( path.join( __server_backups, Servername ) ),
+		arkserverroot: ToRealDir( path.join( __server_dir, Servername ) ),
+		logdir: ToRealDir( path.join( __server_logs, Servername ) ),
+		arkStagingDir: ToRealDir( path.join( __server_backups, "Staging" ) )
 	};
 }

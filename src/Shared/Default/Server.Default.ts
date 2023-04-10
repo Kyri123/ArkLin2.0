@@ -1,9 +1,26 @@
+import { IMO_Cluster }  from "../../Types/MongoDB";
 import {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
 }                       from "../Type/ArkSE";
 import { ISystemUsage } from "../Type/Systeminformation";
+
+export const DefaultCluster : IMO_Cluster = {
+	DisplayName: "",
+	Instances: [],
+	Master: "",
+	NoTransferFromFiltering: false,
+	NoTributeDownloads: false,
+	PreventDownloadDinos: false,
+	PreventDownloadItems: false,
+	PreventDownloadSurvivors: false,
+	PreventUploadDinos: false,
+	PreventUploadItems: false,
+	PreventUploadSurvivors: false,
+	SyncInis: [],
+	SyncSettings: []
+};
 
 export function DefaultInstanceState() : IInstanceState {
 	return structuredClone<IInstanceState>( {

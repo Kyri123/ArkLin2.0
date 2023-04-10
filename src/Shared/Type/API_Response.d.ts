@@ -6,7 +6,10 @@ import {
 	IGithubReleases
 }                               from "./github";
 import { ISteamApiMod }         from "../../Types/SteamAPI";
-import { TMO_Instance }         from "../../Types/MongoDB";
+import {
+	IMO_Cluster,
+	TMO_Instance
+}                               from "../../Types/MongoDB";
 import { ISystemUsage }         from "./Systeminformation";
 
 type ResponseBase<T = any> = {
@@ -100,3 +103,13 @@ export type TResponse_User_Addkey<MessageOpt extends boolean = false> = IAPIResp
 export type TResponse_User_Removekey<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_User_Edituser<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_User_Usereditaccount<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
+
+// ----------------------------------------
+// ---------------- User ------------------
+// ----------------------------------------
+
+export type TResponse_Cluster_GetClusters<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, IMO_Cluster>>;
+export type TResponse_Cluster_CreateCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
+export type TResponse_Cluster_RemoveCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
+export type TResponse_Cluster_SetCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
+export type TResponse_Cluster_SendCommandToCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;

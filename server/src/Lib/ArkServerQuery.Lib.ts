@@ -14,7 +14,7 @@ export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServ
 			Players: []
 		};
 
-		socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
+		socket.send( Buffer.from( [ 0xff, 0xff, 0xff, 0xff, 0x55, 0xff, 0xff, 0xff, 0xff ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
 			if ( Err ) {
 				clearTimeout( Timeout );
 				socket.removeAllListeners();
@@ -24,7 +24,7 @@ export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServ
 			socket.once( "message", ( message ) => {
 				Reso.Online = true;
 
-				socket.send( new Buffer( [ 0xff, 0xff, 0xff, 0xff, 0x55, ...message.slice( 5 ) ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
+				socket.send( Buffer.from( [ 0xff, 0xff, 0xff, 0xff, 0x55, ...message.slice( 5 ) ] ), Server.Get.ArkmanagerCfg.ark_QueryPort, __PublicIP, Err => {
 					if ( Err ) {
 						clearTimeout( Timeout );
 						socket.removeAllListeners();

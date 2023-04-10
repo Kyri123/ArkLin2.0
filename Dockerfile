@@ -3,11 +3,12 @@ FROM node:alpine
 WORKDIR ./
 
 # Copy main configs
-COPY package*.json ./
-COPY tsconfig*.json ./
+COPY *.lock ./
 COPY .env.production ./
 COPY *.html ./
 COPY *.ts ./
+COPY *.json ./
+COPY *.js ./
 
 # Copy source folder
 COPY ./src ./src
@@ -17,7 +18,7 @@ COPY src/Shared ./Shared
 COPY ./config ./config
 
 # create main files
-RUN yarn install
+RUN yarn install --frozen-lockfile
 RUN yarn tailwindcss
 RUN yarn BuildServer
 RUN yarn Client

@@ -23,20 +23,20 @@ import {
 	IMO_Instance,
 	TMO_Instance
 }                              from "../../../src/Types/MongoDB";
-import { MakeRandomID }        from "./PathBuilder.Lib";
 import DB_Cluster              from "../MongoDB/DB_Cluster";
 import { EBashScript }         from "../Enum/EBashScript";
 import {
 	ExplIf,
 	If
 }                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import { MakeRandomString }    from "@kyri123/k-javascript-utils";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
 	InstanceName? : string,
 	DefaultConfig? : Partial<IInstanceData>
 ) : Promise<ServerLib<true> | undefined> {
-	const InstanceID = InstanceName || MakeRandomID( 20, true );
+	const InstanceID = InstanceName || MakeRandomString( 20, "-" );
 	const ConfigFile = path.join(
 		__server_arkmanager,
 		"instances",
@@ -114,7 +114,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return this.IsValid();
 	}
 
-	public IsInCluster() : boolean {
+	public IsInCluster() : this is ServerLib<true> {
 		return this.Cluster !== null && this.IsValid();
 	}
 
@@ -156,8 +156,8 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 
 		const Cluster = this.GetCluster;
-		if ( Cluster && this.IsValid() ) {
-			return Cluster.Master === this.MongoDBData?._id;
+		if ( Cluster ) {
+			return Cluster.Master === this.Instance;
 		}
 		return false;
 	}
@@ -451,8 +451,10 @@ export class ServerLib<Ready extends boolean = boolean> {
 				"ShooterGame/Saved/Config/LinuxServer",
 				File
 			);
+
 			if ( fs.existsSync( ConfigFile ) ) {
 				fs.writeFileSync( ConfigFile, ini.stringify( Content ) );
+				return true;
 			}
 		}
 		return false;

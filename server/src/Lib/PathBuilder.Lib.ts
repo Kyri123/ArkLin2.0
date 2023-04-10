@@ -1,5 +1,7 @@
-import * as process    from "process";
-import { TServerUrls } from "../../../src/Shared/Enum/Routing";
+import * as process     from "process";
+import { TServerUrls }  from "../../../src/Shared/Enum/Routing";
+import path             from "path";
+import { TPermissions } from "../../../src/Shared/Enum/User.Enum";
 
 export function CreateUrl( Url : TServerUrls ) : string {
 	if ( process.env.API_BASE_URL ) {
@@ -11,21 +13,27 @@ export function CreateUrl( Url : TServerUrls ) : string {
 	return `/api/v1/${ Url }`;
 }
 
-export function MakeRandomID( length : number, useSplitter = false ) {
-	let result = "";
-	const characters =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	const charactersLength = characters.length;
-	let counter = 0;
-	while ( counter < length ) {
-		result += characters.charAt( Math.floor( Math.random() * charactersLength ) );
-		if ( useSplitter && counter % 5 === 4 ) {
-			result += "-";
+export function CreateUrlV2( Url : TServerUrls, As : "GET" | "POST", Perm? : TPermissions ) : [ string, TPermissions | undefined ] {
+	let EndUrl = `/api/v1/${ Url }`;
+	if ( process.env.API_BASE_URL ) {
+		if ( !process.env.API_BASE_URL.endsWith( "/" ) ) {
+			process.env.API_BASE_URL += "/";
 		}
-		counter += 1;
+		EndUrl = `${ process.env.API_BASE_URL }${ Url }`;
 	}
-	if ( result.endsWith( "-" ) ) {
-		return result.slice( 0, result.length - 1 );
-	}
-	return result;
+
+	SystemLib.Log(
+		"Install Router",
+		SystemLib.ToBashColor( "Red" ),
+		EndUrl,
+		SystemLib.ToBashColor( "Default" ),
+		"|  Mode:",
+		SystemLib.ToBashColor( "Red" ),
+		As
+	);
+	return [ EndUrl, Perm ];
+}
+
+export function ToRealDir( Dir : string ) : string {
+	return path.join( process.env.APPEND_BASEDIR, Dir );
 }

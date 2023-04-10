@@ -8,19 +8,24 @@ import path               from "path";
 import { IInstanceState } from "../../../../src/Shared/Type/ArkSE";
 import DB_Instances       from "../../MongoDB/DB_Instances";
 import { ServerLib }      from "../../Lib/Server.Lib";
-import { IMO_Instance }   from "../../../../src/Types/MongoDB";
+import {
+	IMO_Instance,
+	TMO_Instance
+}                         from "../../../../src/Types/MongoDB";
 import { QueryArkServer } from "../../Lib/ArkServerQuery.Lib";
 
 export default new JobTaskCycle<IMO_Instance>(
 	"ServerState",
 
 	async( Self ) => {
-		const EmitData : Record<string, IMO_Instance> = {};
+		const EmitData : Record<string, TMO_Instance> = {};
 		for await ( const Server of DB_Instances.find<IMO_Instance>() ) {
-			EmitData[ Server.Instance ] = Server;
+			const ServerClass = await ServerLib.build( Server.Instance );
+			if ( ServerClass.IsValid() ) {
+				EmitData[ Server.Instance ] = ServerClass.GetWithCluster();
+			}
 		}
 		Self.UpdateTickTime( ConfigManager.GetTaskConfig.ServerStateInterval / Math.max( Object.values( EmitData ).length, 1 ) );
-		SocketIO.emit( "OnServerUpdated", EmitData );
 		return Object.values( EmitData );
 	},
 
@@ -153,6 +158,7 @@ export default new JobTaskCycle<IMO_Instance>(
 					? Background
 					: `/img/maps/TheIsland.jpg`
 			} );
+			ServerL.EmitUpdate();
 		}
 	}
 );

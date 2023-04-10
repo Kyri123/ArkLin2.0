@@ -42,6 +42,7 @@ export interface INavLinkProps extends IChildrenBaseProps {
 export type ILTELoadingButton = IPropsWithPermission &
 	Button.ButtonProps & {
 	IsLoading? : boolean;
+	ForceDisable? : boolean;
 	LoadingIcon? : IconProp;
 };
 
