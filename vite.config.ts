@@ -12,7 +12,7 @@ export default defineConfig( {
 	},
 	server: {
 		watch: {
-			usePolling: false
+			usePolling: true
 		},
 		proxy: {
 			"/api": {

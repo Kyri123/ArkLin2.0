@@ -3,6 +3,7 @@
   "PANEL_AutomaticUpdate": false,
   "PANEL_UseCommitAsUpdateIndicator": false,
   "PANEL_GithubToken": "",
+  "PANEL_ArkServerIp": "",
   "LOG_MaxLogCount": 25,
   "SSH_Host": "localhost",
   "SSH_User": "steam",
