@@ -18,6 +18,8 @@ cd ArkLin2.0
 git fetch --all
 git reset --hard origin/$BRANCH
 
+mv docker-compose.yml.example docker-compose.yml
+
 export DOCKER_UID="$(id -u)"
 export DOCKER_GID="$(id -g)"
 
@@ -25,12 +27,6 @@ echo "Start Docker..."
 docker compose up -d --build
 docker compose down
 
-echo "Setzte Rechte..."
-chmod 777 -R ./sh
-chmod 777 -R ../mount/config
-chmod 777 ../mount/Server
-chmod 777 ../mount/Backups
-chmod 777 -R ../mount/PanelLogs
-chmod 777 -R /etc/arkmanager/
+./sh/folder.sh
 
 echo "Bitte Konfiguriere nun die .json in ./mount/config/"

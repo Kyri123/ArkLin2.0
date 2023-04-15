@@ -17,6 +17,7 @@ export interface IDashboard_BaseConfig {
 	PANEL_AutomaticUpdate : boolean;
 	PANEL_UseCommitAsUpdateIndicator : boolean;
 	PANEL_GithubToken : string;
+	PANEL_ArkServerIp : string;
 	LOG_MaxLogCount : number;
 	SSH_Host : string;
 	SSH_User : string;

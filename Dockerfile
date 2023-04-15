@@ -4,7 +4,6 @@ WORKDIR ./
 
 # Copy main configs
 COPY *.lock ./
-COPY .env.production ./
 COPY *.html ./
 COPY *.ts ./
 COPY *.json ./
