@@ -150,9 +150,14 @@ mongoose
 		}
 	)
 	.then( async() => {
-		const IPResponse = await fetch( "http://api.ipify.org" );
-		global.__PublicIP = await IPResponse.text();
-		SystemLib.Log( "Public IP: " + global.__PublicIP );
+		if ( ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs() !== "" ) {
+			global.__PublicIP = ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs();
+		}
+		else {
+			const IPResponse = await fetch( "http://api.ipify.org" );
+			global.__PublicIP = ( await IPResponse.text() ).clearWs();
+			SystemLib.Log( "Public IP: " + global.__PublicIP );
+		}
 
 		await SSHManager.Init();
 		// create an account key if no there and no user

@@ -30,6 +30,23 @@ Webbasiertes Admin Panel für Ark-Gameserver basierend auf [Arkmanager](https://
 * Starte das Panel (als steam user) mit `~/KAdmin/ArkLin2.0/sh/start.sh`
 * Docker compose wird automatisch das image erstellen und alle nötigen zusätze erstellen
 
+## Konfiguration
+
+### `docker-compose.yml`
+
+* volumes sind alle links zum Host. sollte hier ein Pfad abweichen (steam z.B. dann ändere dies hier) (host:docker)
+* environment kann geändert werden wenn der Installationspfad sich ändern oder eine andere MONGODB verwendet werden soll
+* ports sind die ports die nach außen gehen um sich mit dem Dashboard zu verbinden
+
+### `/Kadmin/mount/config`
+
+Dieser Ordner beinhaltet alle konfigurationen NICHT `/Kadmin/ArkLin2.0/config`!!!
+
+* `API_BaseConfig.json` dies beinhaltet alle API relevanten Konfiguration
+* `Dashboard_BaseConfig.json` dies beinhaltet alle Server relevanten Konfiguration
+* `Debug.json` dies beinhaltet alle Debug relevanten Konfiguration
+* `Tasks.json` dies beinhaltet alle Task relevanten Konfiguration (aufgaben die Zyklisch abgearbeitet werden)
+
 ## Update
 
 `~/KAdmin/ArkLin2.0/sh/update.sh main` (statt main kann auch eine andere branch verwendet werden!)

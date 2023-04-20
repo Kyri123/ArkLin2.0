@@ -96,12 +96,12 @@ export class JobTaskCycle<T> extends JobTask {
 
 	public async ForceTask( ResetTime ) : Promise<void> {
 		if ( ResetTime ) {
-			this.MaxIndex = 9999999;
+			this.MaxIndex = ( await this.GetArrayFunction( this ) ).length;
 		}
 
-		const Arr = await this.GetArrayFunction( this );
-		for ( let i = 0; i < Arr.length; i++ ) {
-			await this.TaskFunction( i, Arr[ i ] );
+		this.Array = await this.GetArrayFunction( this );
+		for ( let i = 0; i < this.Array.length; i++ ) {
+			await this.TaskFunction( i, this.Array[ i ] );
 		}
 	}
 

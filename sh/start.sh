@@ -11,13 +11,7 @@ export DOCKER_GID="$(id -g)"
 echo "Stoppe Docker..."
 docker compose down
 
-echo "Setzte Rechte..."
-chmod 777 -R ./sh
-chmod 777 -R ../mount/config
-chmod 777 ../mount/Server
-chmod 777 ../mount/Backups
-chmod 777 -R ../mount/PanelLogs
-chmod 777 -R /etc/arkmanager/
+./sh/folder.sh
 
 echo "Starte Docker..."
 docker compose up -d --build
