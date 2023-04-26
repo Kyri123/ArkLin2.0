@@ -1,12 +1,12 @@
 cd ~/KAdmin/ArkLin2.0
 
 echo "Erstelle Ordner..."
-mkdir -p ../mount/config
-mkdir -p ../mount/Server
-mkdir -p ../mount/Backups
-mkdir -p ../mount/PanelLogs
-mkdir -p ../mount/Logs
-mkdir -p ../mount/mongodb
+mkdir -p -v ../mount/config
+mkdir -p -v ../mount/Server
+mkdir -p -v ../mount/Backups
+mkdir -p -v ../mount/PanelLogs
+mkdir -p -v ../mount/Logs
+mkdir -p -v ../mount/mongodb
 
 echo "Setzte Rechte..."
 chmod 777 -R ./sh
