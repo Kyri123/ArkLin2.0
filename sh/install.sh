@@ -12,7 +12,11 @@ echo "Create Folder and Clone ArkLIN2..."
 mkdir KAdmin
 cd KAdmin
 rm -R ArkLin2.0 -f
-git clone https://github.com/Kyri123/ArkLin2.0.git
+git clone https://github.com/Kyri123/ArkLin2.0.git ArkLin2.0
+
+echo "Create mount folder on steam user"
+./sh/folder.sh
+
 cd ArkLin2.0
 
 git fetch --all
@@ -27,6 +31,5 @@ echo "Start Docker..."
 docker compose up -d --build
 docker compose down
 
-./sh/folder.sh
 
-echo "Bitte Konfiguriere nun die .json in ./mount/config/"
+echo "Bitte Konfiguriere nun die .json in ~/Kadmin/mount/config/"
