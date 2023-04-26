@@ -1,35 +1,35 @@
-import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import { MakeRandomString }    from "@kyri123/k-javascript-utils";
 import {
 	ExplIf,
 	If
-} from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
-import fs from "fs";
-import * as ini from "ini";
-import path from "path";
+}                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import fs                      from "fs";
+import * as ini                from "ini";
+import path                    from "path";
 import { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
 import {
 	DefaultInstanceState,
 	GetDefaultPanelServerConfig
-} from "../../../src/Shared/Default/Server.Default";
+}                              from "../../../src/Shared/Default/Server.Default";
 import {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
-} from "../../../src/Shared/Type/ArkSE";
+}                              from "../../../src/Shared/Type/ArkSE";
 import {
 	IMO_Cluster,
 	IMO_Instance,
 	TMO_Instance
-} from "../../../src/Types/MongoDB";
-import { EBashScript } from "../Enum/EBashScript";
-import DB_Cluster from "../MongoDB/DB_Cluster";
-import DB_Instances from "../MongoDB/DB_Instances";
+}                              from "../../../src/Types/MongoDB";
+import { EBashScript }         from "../Enum/EBashScript";
+import DB_Cluster              from "../MongoDB/DB_Cluster";
+import DB_Instances            from "../MongoDB/DB_Instances";
 import {
 	FillWithDefaultValues,
 	GetDefaultInstanceData,
 	JSONtoConfig
-} from "./Arkmanager.Lib";
-import { SSHManager } from "./ConfigManager.Lib";
+}                              from "./Arkmanager.Lib";
+import { SSHManager }          from "./ConfigManager.Lib";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
@@ -439,8 +439,18 @@ export class ServerLib<Ready extends boolean = boolean> {
 		Content : string
 	) : boolean {
 		try {
-			fs.readFileSync( path.join( File ), "utf-8" ).toString();
-			return true;
+			if ( File !== "arkmanager.cfg" ) {
+
+				const ConfigFile = path.join(
+					__server_dir,
+					this.Instance,
+					"ShooterGame/Saved/Config/LinuxServer",
+					File
+				);
+
+				fs.writeFileSync( ConfigFile, Content );
+				return true;
+			}
 		}
 		catch ( e ) {
 		}

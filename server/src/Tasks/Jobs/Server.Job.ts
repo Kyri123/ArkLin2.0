@@ -1,20 +1,20 @@
-import fs from "fs";
-import path from "path";
-import { EArkmanagerCommands } from "../../../../src/Lib/ServerUtils.Lib";
+import fs                              from "fs";
+import path                            from "path";
+import { EArkmanagerCommands }         from "../../../../src/Lib/ServerUtils.Lib";
 import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
-import { IInstanceData } from "../../../../src/Shared/Type/ArkSE";
+import { IInstanceData }               from "../../../../src/Shared/Type/ArkSE";
 import {
 	ConfigToJSON,
 	FillWithDefaultValues
-} from "../../Lib/Arkmanager.Lib";
-import { ConfigManager } from "../../Lib/ConfigManager.Lib";
-import { ToRealDir } from "../../Lib/PathBuilder.Lib";
+}                                      from "../../Lib/Arkmanager.Lib";
+import { ConfigManager }               from "../../Lib/ConfigManager.Lib";
+import { ToRealDir }                   from "../../Lib/PathBuilder.Lib";
 import {
 	CreateServer,
 	ServerLib
-} from "../../Lib/Server.Lib";
-import DB_Instances from "../../MongoDB/DB_Instances";
-import { JobTask } from "../TaskManager";
+}                                      from "../../Lib/Server.Lib";
+import DB_Instances                    from "../../MongoDB/DB_Instances";
+import { JobTask }                     from "../TaskManager";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerTasksInterval,
@@ -120,7 +120,7 @@ export default new JobTask(
 					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
 						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
 							const MasterContent = Master.GetConfigContentRaw( Path );
-							await Server.SetServerConfigRaw( Filename, MasterContent );
+							Server.SetServerConfigRaw( Filename, MasterContent );
 						}
 					}
 
