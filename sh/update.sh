@@ -11,6 +11,7 @@ export DOCKER_UID=$(id -u)
 export DOCKER_GID=$(id -g)
 
 cd ~/KAdmin/ArkLin2.0
+chmod 777 -R ./sh
 
 if [ "$FORCE" == "TRUE" ]; then
   rm docker-compose.yml
