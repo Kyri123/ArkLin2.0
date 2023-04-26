@@ -1,8 +1,8 @@
 {
   "name": "KAdmin-ArkLIN2",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
-  "license": "MIT",
+  "license": "MIT", 
   "scripts": {
     "BuildServer": "tsc --project ./server/tsconfig.json",
     "Server": "ts-node --project ./server/tsconfig.json --files server/src production",

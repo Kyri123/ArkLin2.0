@@ -1,35 +1,35 @@
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import {
+	ExplIf,
+	If
+} from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import fs from "fs";
+import * as ini from "ini";
+import path from "path";
+import { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
+import {
+	DefaultInstanceState,
+	GetDefaultPanelServerConfig
+} from "../../../src/Shared/Default/Server.Default";
 import {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
-}                              from "../../../src/Shared/Type/ArkSE";
-import {
-	DefaultInstanceState,
-	GetDefaultPanelServerConfig
-}                              from "../../../src/Shared/Default/Server.Default";
-import path                    from "path";
-import fs                      from "fs";
-import {
-	FillWithDefaultValues,
-	GetDefaultInstanceData,
-	JSONtoConfig
-}                              from "./Arkmanager.Lib";
-import { SSHManager }          from "./ConfigManager.Lib";
-import DB_Instances            from "../MongoDB/DB_Instances";
-import { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
-import * as ini                from "ini";
+} from "../../../src/Shared/Type/ArkSE";
 import {
 	IMO_Cluster,
 	IMO_Instance,
 	TMO_Instance
-}                              from "../../../src/Types/MongoDB";
-import DB_Cluster              from "../MongoDB/DB_Cluster";
-import { EBashScript }         from "../Enum/EBashScript";
+} from "../../../src/Types/MongoDB";
+import { EBashScript } from "../Enum/EBashScript";
+import DB_Cluster from "../MongoDB/DB_Cluster";
+import DB_Instances from "../MongoDB/DB_Instances";
 import {
-	ExplIf,
-	If
-}                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
-import { MakeRandomString }    from "@kyri123/k-javascript-utils";
+	FillWithDefaultValues,
+	GetDefaultInstanceData,
+	JSONtoConfig
+} from "./Arkmanager.Lib";
+import { SSHManager } from "./ConfigManager.Lib";
 
 export async function CreateServer(
 	PanelConfig : IPanelServerConfig,
@@ -432,6 +432,20 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 
 		return "";
+	}
+
+	SetServerConfigRaw(
+		File : string | "arkmanager.cfg",
+		Content : string
+	) : boolean {
+		try {
+			fs.readFileSync( path.join( File ), "utf-8" ).toString();
+			return true;
+		}
+		catch ( e ) {
+		}
+
+		return false;
 	}
 
 	async SetServerConfig(

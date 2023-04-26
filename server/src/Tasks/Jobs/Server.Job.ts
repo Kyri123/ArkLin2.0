@@ -1,20 +1,20 @@
-import { JobTask }                     from "../TaskManager";
-import { ConfigManager }               from "../../Lib/ConfigManager.Lib";
-import DB_Instances                    from "../../MongoDB/DB_Instances";
-import {
-	CreateServer,
-	ServerLib
-}                                      from "../../Lib/Server.Lib";
-import { EArkmanagerCommands }         from "../../../../src/Lib/ServerUtils.Lib";
-import path                            from "path";
-import { IInstanceData }               from "../../../../src/Shared/Type/ArkSE";
-import fs                              from "fs";
+import fs from "fs";
+import path from "path";
+import { EArkmanagerCommands } from "../../../../src/Lib/ServerUtils.Lib";
+import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
+import { IInstanceData } from "../../../../src/Shared/Type/ArkSE";
 import {
 	ConfigToJSON,
 	FillWithDefaultValues
-}                                      from "../../Lib/Arkmanager.Lib";
-import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
-import { ToRealDir }                   from "../../Lib/PathBuilder.Lib";
+} from "../../Lib/Arkmanager.Lib";
+import { ConfigManager } from "../../Lib/ConfigManager.Lib";
+import { ToRealDir } from "../../Lib/PathBuilder.Lib";
+import {
+	CreateServer,
+	ServerLib
+} from "../../Lib/Server.Lib";
+import DB_Instances from "../../MongoDB/DB_Instances";
+import { JobTask } from "../TaskManager";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerTasksInterval,
@@ -119,8 +119,8 @@ export default new JobTask(
 				if ( Master && Cluster ) {
 					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
 						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
-							const MasterContent = Master.GetConfigContent( Path );
-							await Server.SetServerConfig( Filename, MasterContent );
+							const MasterContent = Master.GetConfigContentRaw( Path );
+							await Server.SetServerConfigRaw( Filename, MasterContent );
 						}
 					}
 
