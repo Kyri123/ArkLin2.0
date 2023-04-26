@@ -23,4 +23,4 @@ git reset --hard origin/$BRANCH
 ./sh/folder.sh
 
 echo "Erstelle Image und starte den Docker Container..."
-docker-compose up -d --build
+docker compose up -d --build
