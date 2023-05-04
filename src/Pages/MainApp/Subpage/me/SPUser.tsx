@@ -8,7 +8,7 @@ import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import CLTEInput            from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { API_User }         from "../../../../Lib/Api/API_User";
-import type { IMO_Accounts }     from "../../../../Types/MongoDB";
+import type { UserAccount } from "../../../../Types/MongoDB";
 import AlertContext         from "../../../../Context/AlertContext";
 import AccountContext       from "../../../../Context/AccountContext";
 
@@ -16,7 +16,7 @@ export default function SPUser() {
 	const Account = useContext( AccountContext );
 	const GAlert = useContext( AlertContext );
 	const [ IsSending, setIsSending ] = useState( false );
-	const [ Form, setForm ] = useState<IMO_Accounts>( {
+	const [ Form, setForm ] = useState<UserAccount>( {
 		...Account.Account.GetDBInformation()
 	} );
 	const [ [ NewPassword, NewPasswordAgain ], setNewPassword ] = useState( [ "", "" ] );

@@ -1,27 +1,20 @@
-import type {
-	TPermissions
-} from "../Shared/Enum/User.Enum";
-import {
-	EPerm,
-	GetEnumValue
-}                       from "../Shared/Enum/User.Enum";
-import type { IMO_Accounts } from "../Types/MongoDB";
-import jwt              from "jwt-decode";
-import type { JwtPayload }   from "jsonwebtoken";
+import type { TPermissions }      from "@shared/Enum/User.Enum";
+import { EPerm }                  from "@shared/Enum/User.Enum";
+import jwt                        from "jwt-decode";
+import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
 
-export type JwtSession = IMO_Accounts & JwtPayload;
-export default class FrontendUserLib {
+export default class User {
 	private Token : string;
-	private readonly Data : JwtSession;
+	private readonly Data : ClientUserAccount;
 	private readonly LoggedIn : boolean;
 
 	constructor( Token : string ) {
 		this.Token = Token;
 		if ( Token !== "" ) {
 			try {
-				const Decode = jwt<JwtSession>( Token );
+				const Decode = jwt<ClientUserAccount>( Token );
 				if ( Decode ) {
-					this.Data = Decode as JwtSession;
+					this.Data = Decode as ClientUserAccount;
 					this.LoggedIn = true;
 					return;
 				}
@@ -30,25 +23,29 @@ export default class FrontendUserLib {
 				console.error( e, Token );
 			}
 		}
-		this.Data = { mail: "", password: "", role: 0, servers: [], username: "" };
+		this.Data = { _id: "", created_at: 0, permissions: [], updated_at: 0, mail: "", servers: [], username: "" };
 		this.LoggedIn = false;
 	}
 
-	GetDBInformation() : JwtSession {
+	GetDBInformation() : ClientUserAccount {
+		return this.Data;
+	}
+
+	get Get() : ClientUserAccount {
 		return this.Data;
 	}
 
 	public HasPermission( Permission : TPermissions ) : boolean {
 		return (
-			this.Data?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) ||
-			this.Data?.permissions?.includes( GetEnumValue( EPerm, Permission ) ) ||
+			this.Data?.permissions?.includes( EPerm.Super ) ||
+			this.Data?.permissions?.includes( Permission ) ||
 			false
 		);
 	}
 
 	public HasPermissionForServer( ServerName : string ) : boolean {
 		return (
-			this.Data?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) ||
+			this.Data?.permissions?.includes( EPerm.Super ) ||
 			this.Data?.servers?.includes( ServerName ) ||
 			false
 		);

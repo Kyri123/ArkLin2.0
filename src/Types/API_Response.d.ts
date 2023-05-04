@@ -2,15 +2,15 @@
 import type { TLTEColors }           from "./AdminLTE";
 import type { IAccountInformations } from "./User";
 import type {
-	IGithubBranche,
-	IGithubReleases
-}                               from "./github";
+	GithubBranche,
+	GithubReleases
+}                                    from "./github";
 import type { ISteamApiMod }         from "../../Types/SteamAPI";
 import type {
-	IMO_Cluster,
-	TMO_Instance
-}                               from "../../Types/MongoDB";
-import type { ISystemUsage }         from "./Systeminformation";
+	Cluster,
+	Instance
+}                                    from "../../Types/MongoDB";
+import type { SystemUsage }          from "./Systeminformation";
 
 type ResponseBase<T = any> = {
 	Success : boolean;
@@ -48,8 +48,8 @@ export type TResponse_Auth_IsLoggedIn<MessageOpt extends boolean = false> = TRes
 // ------------- Changelog ----------------
 // ----------------------------------------
 
-export type TResponse_Changelog_GetChangelogs<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, IGithubReleases[]>;
-export type TResponse_Changelog_GetBranches<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, IGithubBranche[]>;
+export type TResponse_Changelog_GetChangelogs<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, GithubReleases[]>;
+export type TResponse_Changelog_GetBranches<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, GithubBranche[]>;
 
 // ----------------------------------------
 // ----------------- Panel ----------------
@@ -77,7 +77,7 @@ export type TResponse_Server_Addserver<MessageOpt extends boolean = false> = IAP
 export type TResponse_Server_Setpanelconfig<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Server_Setserverconfig<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Server_Getglobalstate<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, number[]>;
-export type TResponse_Server_Getallserver<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, TMO_Instance>>;
+export type TResponse_Server_Getallserver<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, Instance>>;
 
 // ------------------------------------------
 // ---------------- SteamAPI ----------------
@@ -89,7 +89,7 @@ export type TResponse_SteamApi_Getmods<MessageOpt extends boolean = false> = IAP
 // ---------------- System ----------------
 // ----------------------------------------
 
-export type TResponse_System_Getusage<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, ISystemUsage>;
+export type TResponse_System_Getusage<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, SystemUsage>;
 
 // ----------------------------------------
 // ---------------- User ------------------
@@ -97,7 +97,7 @@ export type TResponse_System_Getusage<MessageOpt extends boolean = false> = IAPI
 
 export type TResponse_User_Alluser<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_User_Allkeys<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
-export type TResponse_User_Getallowedservers<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, TMO_Instance>>;
+export type TResponse_User_Getallowedservers<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, Instance>>;
 export type TResponse_User_Removeaccount<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_User_Addkey<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_User_Removekey<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
@@ -108,7 +108,7 @@ export type TResponse_User_Usereditaccount<MessageOpt extends boolean = false> =
 // ---------------- User ------------------
 // ----------------------------------------
 
-export type TResponse_Cluster_GetClusters<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, IMO_Cluster>>;
+export type TResponse_Cluster_GetClusters<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt, Record<string, Cluster>>;
 export type TResponse_Cluster_CreateCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Cluster_RemoveCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
 export type TResponse_Cluster_SetCluster<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;

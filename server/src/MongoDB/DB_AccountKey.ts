@@ -1,14 +1,15 @@
 import * as mongoose      from "mongoose";
 import type { MongoBase } from "@app/Types/MongoDB";
 
-const AccountKeysSchema = new mongoose.Schema( {
+const AccountKeySchema = new mongoose.Schema( {
 	key: { type: String, unique: true, index: true, require: true },
 	asSuperAdmin: { type: Boolean, default: false, require: true },
-	isAdminReset: { type: Boolean, default: false, require: false }
+	isPasswordReset: { type: Boolean, default: false, require: false },
+	userId: { type: String, unique: false, require: false }
 } );
 
-export type AccountKeys = mongoose.InferSchemaType<typeof AccountKeysSchema> & MongoBase
+export type AccountKey = mongoose.InferSchemaType<typeof AccountKeySchema> & MongoBase
 
 
-export default mongoose.model<AccountKeys>( "accountkey", AccountKeysSchema );
-export { AccountKeysSchema };
+export default mongoose.model<AccountKey>( "accountkey", AccountKeySchema );
+export { AccountKeySchema };

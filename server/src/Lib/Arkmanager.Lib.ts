@@ -1,11 +1,11 @@
-import type { IInstanceData }    from "../../../src/Shared/Type/ArkSE";
 import path                 from "path";
 import fs                   from "fs";
 import { MakeRandomString } from "@kyri123/k-javascript-utils";
 import { ToRealDir }        from "./PathBuilder.Lib";
+import type { InstanceData }     from "@app/Types/ArkSE";
 
-export function ConfigToJSON( Content : string ) : Partial<IInstanceData> {
-	const InstanceData : Partial<IInstanceData> = {
+export function ConfigToJSON( Content : string ) : Partial<InstanceData> {
+	const InstanceData : Partial<InstanceData> = {
 		Flags: {},
 		Options: {}
 	};
@@ -56,7 +56,7 @@ export function ConfigToJSON( Content : string ) : Partial<IInstanceData> {
 	return InstanceData;
 }
 
-export function JSONtoConfig( Content : Partial<IInstanceData> ) : string {
+export function JSONtoConfig( Content : Partial<InstanceData> ) : string {
 	const Lines : string[] = [];
 
 	if ( !Content.Options ) {
@@ -91,7 +91,7 @@ export function JSONtoConfig( Content : Partial<IInstanceData> ) : string {
 	return Lines.join( "\n" );
 }
 
-export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
+export function GetDefaultInstanceData( Servername : string ) : InstanceData {
 	const Content = {
 		arkMaxBackupSizeMB: 4096,
 		arkNoPortDecrement: true,
@@ -154,8 +154,8 @@ export function GetDefaultInstanceData( Servername : string ) : IInstanceData {
 
 export function FillWithDefaultValues(
 	Servername : string,
-	Content : Partial<IInstanceData>
-) : IInstanceData {
+	Content : Partial<InstanceData>
+) : InstanceData {
 	if ( global.__PublicIP ) {
 		Content.panel_publicip = __PublicIP;
 	}

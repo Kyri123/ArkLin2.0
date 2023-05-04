@@ -1,4 +1,4 @@
-export interface ISystemUsage {
+export interface SystemUsage {
 	CPU : number;
 	MemMax : number;
 	MemUsed : number;

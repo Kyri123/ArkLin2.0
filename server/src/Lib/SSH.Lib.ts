@@ -2,10 +2,8 @@ import type {
 	SSHExecCommandOptions,
 	SSHExecCommandResponse,
 	SSHExecOptions
-} from "node-ssh";
-import {
-	NodeSSH
 }                        from "node-ssh";
+import { NodeSSH }       from "node-ssh";
 import { ConfigManager } from "./ConfigManager.Lib";
 
 export class SSHLib {
@@ -23,12 +21,12 @@ export class SSHLib {
 		} )
 			.then( () => {
 				this.HasInit = true;
-				SystemLib.Log(
+				SystemLib.Log( "ssh",
 					"Connected to SSH as",
 					ConfigManager.GetDashboardConifg.SSH_User
 				);
 			} )
-			.catch( ( e ) => SystemLib.LogFatal( "cannot connect to SSH:", e ) );
+			.catch( ( e ) => SystemLib.LogFatal( "ssh", "cannot connect to SSH:", e ) );
 	}
 
 	GetConnection() : NodeSSH {
@@ -49,10 +47,10 @@ export class SSHLib {
 			( e ) => {
 				this.CrashCount++;
 				if ( this.CrashCount >= 10 ) {
-					SystemLib.LogFatal( `[SSH] Error ${ this.CrashCount } / 10:`, e );
+					SystemLib.LogFatal( `SSH", "Error ${ this.CrashCount } / 10:`, e );
 				}
 				else {
-					SystemLib.LogError( `[SSH] Error ${ this.CrashCount } / 10:`, e );
+					SystemLib.LogError( `SSH", "Error ${ this.CrashCount } / 10:`, e );
 				}
 			}
 		);

@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose      from "mongoose";
 import type { MongoBase } from "@app/Types/MongoDB";
 
 const UsageSchema = new mongoose.Schema( {
@@ -10,9 +10,10 @@ const UsageSchema = new mongoose.Schema( {
 	PanelNeedUpdate: { type: Boolean, required: true },
 	PanelVersionName: { type: String, required: true },
 	PanelBuildVersion: { type: String, required: true },
-	NextPanelBuildVersion: { type: String }
+	NextPanelBuildVersion: { type: String },
+	UpdateIsRunning: { type: Boolean }
 } );
 
 
-export type Usage = mongoose.InferSchemaType<typeof UsageSchema> & MongoBase
-export default mongoose.model<Usage>( "usage", UsageSchema );
+export type SystemUsage = mongoose.InferSchemaType<typeof UsageSchema> & MongoBase
+export default mongoose.model<SystemUsage>( "usage", UsageSchema );

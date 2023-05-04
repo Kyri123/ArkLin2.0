@@ -1,33 +1,33 @@
-import type { IServerCardProps }                     from "../../../../Types/Server";
-import { Link }                                 from "react-router-dom";
+import type { IServerCardProps }       from "../../../../Types/Server";
+import { Link }                        from "react-router-dom";
 import {
 	useContext,
 	useEffect,
 	useState
-}                                               from "react";
-import { FontAwesomeIcon }                      from "@fortawesome/react-fontawesome";
+}                                      from "react";
+import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import {
 	ServerStateToColor,
 	ServerStateToReadableString
-}                                               from "../../../../Lib/Conversion.Lib";
-import { useArkServer }                         from "../../../../Hooks/useArkServer";
-import type { IAcceptActionFunction } from "../General/CAcceptAction";
-import CAcceptAction from "../General/CAcceptAction";
+}                                      from "../../../../Lib/Conversion.Lib";
+import { useArkServer }                from "../../../../Hooks/useArkServer";
+import type { IAcceptActionFunction }  from "../General/CAcceptAction";
+import CAcceptAction                   from "../General/CAcceptAction";
 import {
 	ButtonGroup,
 	Modal
-}                                               from "react-bootstrap";
-import { EPerm }                                from "../../../../Shared/Enum/User.Enum";
-import { GetDefaultPanelServerConfig }          from "../../../../Shared/Default/Server.Default";
-import { LTELoadingButton }                     from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { API_ServerLib }                        from "../../../../Lib/Api/API_Server.Lib";
-import Update_SelectMask                        from "../../../../Shared/SelectMask/Arkmanager_Command_Update.json";
-import type { IPanelServerConfig }                   from "../../../../Shared/Type/ArkSE";
-import CServerAction                            from "./CServerAction";
-import AlertContext                             from "../../../../Context/AlertContext";
-import AccountContext                           from "../../../../Context/AccountContext";
-import CLTEInput                                from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import type { ISelectMask }                          from "../../../../Shared/Type/Systeminformation";
+}                                      from "react-bootstrap";
+import { EPerm }                       from "../../../../Shared/Enum/User.Enum";
+import { GetDefaultPanelServerConfig } from "../../../../Shared/Default/Server.Default";
+import { LTELoadingButton }            from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { API_ServerLib }               from "../../../../Lib/Api/API_Server.Lib";
+import Update_SelectMask               from "../../../../Shared/SelectMask/Arkmanager_Command_Update.json";
+import type { PanelServerConfig }      from "../../../../Shared/Type/ArkSE";
+import CServerAction                   from "./CServerAction";
+import AlertContext                    from "../../../../Context/AlertContext";
+import AccountContext                  from "../../../../Context/AccountContext";
+import CLTEInput                       from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import type { ISelectMask }            from "../../../../Shared/Type/Systeminformation";
 
 export default function CServerAdminCard( Props : IServerCardProps ) {
 	const GAlert = useContext( AlertContext );
@@ -55,7 +55,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 	};
 
 	const SavePanelConfig = async() => {
-		const CopyForm : IPanelServerConfig = structuredClone( FormData );
+		const CopyForm : PanelServerConfig = structuredClone( FormData );
 		CopyForm.AutoUpdateParameters = CopyForm.AutoUpdateParameters.filter(
 			( e ) => e.replaceAll( " ", "" ).trim() !== ""
 		);

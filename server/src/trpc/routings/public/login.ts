@@ -1,32 +1,45 @@
-import { z }             from "zod";
-import { TRPCError }     from "@trpc/server";
+import { z }                from "zod";
+import { TRPCError }        from "@trpc/server";
 import {
 	handleTRCPErr,
 	publicProcedure
-}                        from "@server/trpc/trpc";
-import DB_UserAccount    from "@server/MongoDB/DB_UserAccount";
-import { CreateSession } from "@server/Lib/Session.Lib";
+}                           from "@server/trpc/trpc";
+import DB_Accounts          from "@server/MongoDB/DB_Accounts";
+import { CreateSession }    from "@server/Lib/User.Lib";
+import DB_AccountKey        from "@server/MongoDB/DB_AccountKey";
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
 
 export const public_login = publicProcedure.input( z.object( {
 	login: z.string().min( 6, { message: "Username is to short." } ),
 	password: z.string().min( 8, { message: "Password is to short." } ),
 	stayLoggedIn: z.boolean()
-} ) ).mutation<{
-	token : string;
-	message : string;
-}>( async( { input } ) => {
+} ) ).mutation( async( { input } ) => {
 	const { login, password, stayLoggedIn } = input;
 
 	try {
 		if ( password.length >= 8 && login.length >= 6 ) {
-			const userDocument = await DB_UserAccount.findOne( {
+			const userDocument = await DB_Accounts.findOne( {
 				$or: [
 					{ email: login },
 					{ username: login }
 				]
 			} );
 			if ( userDocument ) {
-				if ( userDocument.validPassword( password ) ) {
+				if ( userDocument.salt === undefined ) {
+					const token = await DB_AccountKey.create( {
+						key: MakeRandomString( 25, "-" ),
+						asSuperAdmin: false,
+						isPasswordReset: true,
+						userId: userDocument._id
+					} );
+					if ( token ) {
+						return {
+							passwordResetToken: token.key,
+							message: `Login successfully, Welcome ${ userDocument.username }`
+						};
+					}
+				}
+				else if ( userDocument.validPassword( password ) ) {
 					const token = await CreateSession( userDocument.toJSON(), stayLoggedIn );
 					if ( token ) {
 						return { token, message: `Login successfully, Welcome ${ userDocument.username }` };

@@ -7,30 +7,25 @@ import express                   from "express";
 import * as http                 from "http";
 import type { Socket }           from "socket.io";
 import { Server }                from "socket.io";
-import type {
-	IEmitEvents,
-	IListenEvents
-}                                from "../../src/Shared/Type/Socket";
 import * as process              from "process";
 import fs                        from "fs";
 import {
 	ConfigManager,
 	SSHManager
 }                                from "./Lib/ConfigManager.Lib";
-import {
-	GetSecretAppToken,
-	UserLib
-}                                from "./Lib/User.Lib";
 import * as mongoose             from "mongoose";
 import AccountKey                from "./MongoDB/DB_AccountKey";
 import DB_AccountKey             from "./MongoDB/DB_AccountKey";
 import DB_Accounts               from "./MongoDB/DB_Accounts";
 import TaskManager               from "./Tasks/TaskManager";
-import * as jwt                  from "jsonwebtoken";
-import { CreateUrl }             from "./Lib/PathBuilder.Lib";
 import { RunTest }               from "./Testing";
 import type { DefaultEventsMap } from "socket.io/dist/typed-events";
 import fetch                     from "node-fetch";
+import { BC }                    from "@server/Lib/System.Lib";
+import type {
+	IEmitEvents,
+	IListenEvents
+}                                from "@app/Types/Socket";
 
 "asdasd".contains( "asd" );
 
@@ -46,9 +41,9 @@ Files.sort( ( a, b ) => {
 } );
 Files.splice( 0, ConfigManager.GetDashboardConifg.LOG_MaxLogCount );
 for ( const LogFile of Files ) {
-	SystemLib.LogWarning(
+	SystemLib.LogWarning( "log",
 		"Remove Logfile because its over the limit:",
-		SystemLib.ToBashColor( "Red" ),
+		BC( "Red" ),
 		LogFile
 	);
 	fs.rmSync( path.join( __LogDir, LogFile ) );
@@ -86,57 +81,6 @@ Api.use( function( req, res, next ) {
 	next();
 } );
 
-Api.all( "*", async function( req, res, next ) {
-	req.body = {
-		...req.body,
-		...req.query
-	};
-
-	if ( !req.path.includes( CreateUrl( "" ) ) ) {
-		res.sendFile( path.join( __dirname, "../..", "build", "index.html" ) );
-		return;
-	}
-
-	if ( req.path.includes( "/auth/" ) ) {
-		next();
-		return;
-	}
-
-	const AuthHeader = req.headers[ "authorization" ];
-	const Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" );
-
-	if ( Token == null ) {
-		return;
-	}
-
-	jwt.verify( Token, GetSecretAppToken(), async( err, user : any ) => {
-		if ( err ) {
-			res.json( {
-				Auth: false,
-				Success: true
-			} );
-			return;
-		}
-
-		req.body.UserClass = await UserLib.build( user );
-
-		if ( req.body.UserClass.IsValid() ) {
-			next();
-			return;
-		}
-
-		res.json( {
-			Auth: false,
-			Success: false,
-			Message: {
-				AlertType: "danger",
-				Message: `Fehler beim verarbeiten der Daten.`,
-				Title: "Fehler!"
-			}
-		} );
-	} );
-} );
-
 InstallRoutings( path.join( __dirname, "Routings" ), Api );
 
 mongoose
@@ -154,7 +98,7 @@ mongoose
 		else {
 			const IPResponse = await fetch( "http://api.ipify.org" );
 			global.__PublicIP = ( await IPResponse.text() ).clearWs();
-			SystemLib.Log( "Public IP: " + global.__PublicIP );
+			SystemLib.Log( "ip", "Public IP: " + global.__PublicIP );
 		}
 
 		await SSHManager.Init();
@@ -168,7 +112,7 @@ mongoose
 				asSuperAdmin: true
 			} );
 			SystemLib.Log(
-				"[DB] Create default AccountKey:" + SystemLib.ToBashColor( "Red" ),
+				"DB", "Create default AccountKey:" + SystemLib.ToBashColor( "Red" ),
 				"KAdmin-ArkLIN2"
 			);
 		}
@@ -176,13 +120,13 @@ mongoose
 		// start Tasks
 		await TaskManager.Init();
 		SystemLib.Log(
-			`[TASKS] All Jobs init (Total: ${ Object.keys( TaskManager.Jobs ).length })`
+			"TASKS", `All Jobs init (Total: ${ Object.keys( TaskManager.Jobs ).length })`
 		);
 
-		SystemLib.Log( "[DB] Connected... Start API and SOCKETIO" );
+		SystemLib.Log( "DB", "Connected... Start API and SOCKETIO" );
 		HttpServer.listen( process.env.API_EXPRESS_HTTP_PORT, () =>
 			SystemLib.Log(
-				"[API/SOCKETIO] API listen on port",
+				"API/SOCKETIO", "API listen on port",
 				process.env.API_EXPRESS_HTTP_PORT
 			)
 		);

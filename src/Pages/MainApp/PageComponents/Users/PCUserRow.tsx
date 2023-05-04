@@ -1,31 +1,31 @@
-import type React from "react";
+import type React           from "react";
 import {
 	useContext,
 	useState
-}                          from "react";
-import type { IMO_Accounts }    from "../../../../Types/MongoDB";
+}                           from "react";
+import type { UserAccount } from "../../../../Types/MongoDB";
 import {
 	ButtonGroup,
 	Card,
 	Modal,
 	Nav
-}                          from "react-bootstrap";
+}                           from "react-bootstrap";
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                          from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { API_User }        from "../../../../Lib/Api/API_User";
+}                           from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+import { API_User }         from "../../../../Lib/Api/API_User";
 import {
 	EPerm,
 	EPerm_Server
-}                          from "../../../../Shared/Enum/User.Enum";
-import AlertContext        from "../../../../Context/AlertContext";
-import ServerContext       from "../../../../Context/ServerContext";
-import AccountContext      from "../../../../Context/AccountContext";
+}                           from "../../../../Shared/Enum/User.Enum";
+import AlertContext         from "../../../../Context/AlertContext";
+import ServerContext        from "../../../../Context/ServerContext";
+import AccountContext       from "../../../../Context/AccountContext";
 
 interface IProps {
-	User : IMO_Accounts;
+	User : UserAccount;
 	Remove : ( Id : string, IsKey : boolean ) => void;
 	UpdateUsers : () => void;
 }

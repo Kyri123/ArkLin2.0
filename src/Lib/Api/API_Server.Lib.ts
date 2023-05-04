@@ -1,5 +1,5 @@
-import { API_QueryLib }        from "./API_Query.Lib";
-import type { IPanelServerConfig }  from "../../Shared/Type/ArkSE";
+import { API_QueryLib }             from "./API_Query.Lib";
+import type { PanelServerConfig }   from "../../Shared/Type/ArkSE";
 import type {
 	IAPIResponseBase,
 	TResponse_Server_Addserver,
@@ -12,9 +12,9 @@ import type {
 	TResponse_Server_Sendcommand,
 	TResponse_Server_Setpanelconfig,
 	TResponse_Server_Setserverconfig
-}                              from "../../Shared/Type/API_Response";
+}                                   from "../../Shared/Type/API_Response";
 import type { EArkmanagerCommands } from "../ServerUtils.Lib";
-import { EServerUrl }          from "../../Shared/Enum/Routing";
+import { EServerUrl }               from "../../Shared/Enum/Routing";
 
 export class API_ServerLib {
 	static async SetServerConfig(
@@ -34,7 +34,7 @@ export class API_ServerLib {
 
 	static async SetPanelConfig(
 		ServerInstance : string,
-		Data : Partial<IPanelServerConfig>
+		Data : Partial<PanelServerConfig>
 	) : Promise<TResponse_Server_Setpanelconfig> {
 		return await API_QueryLib.PostToAPI<TResponse_Server_Setpanelconfig>(
 			EServerUrl.setpanelconfig,
@@ -129,7 +129,7 @@ export class API_ServerLib {
 	}
 
 	static async AddServer(
-		Config : IPanelServerConfig
+		Config : PanelServerConfig
 	) : Promise<TResponse_Server_Addserver> {
 		return await API_QueryLib.PostToAPI<TResponse_Server_Addserver>(
 			EServerUrl.addserver,

@@ -1,21 +1,21 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import {
 	useContext,
 	useId
-}                          from "react";
-import { Dropdown }        from "react-bootstrap";
-import * as Icon           from "react-icons/bs";
-import { Link }            from "react-router-dom";
-import AccountContext      from "../../../../Context/AccountContext";
-import ServerContext       from "../../../../Context/ServerContext";
-import useAuth             from "../../../../Hooks/useAuth";
-import { API_PanelLib }    from "../../../../Lib/Api/API_Panel.Lib";
-import { EPerm }           from "../../../../Shared/Enum/User.Enum";
-import type { ISystemUsage }    from "../../../../Shared/Type/Systeminformation";
-import CServerCard         from "../Server/ServerCard";
+}                           from "react";
+import { Dropdown }         from "react-bootstrap";
+import * as Icon            from "react-icons/bs";
+import { Link }             from "react-router-dom";
+import AccountContext       from "../../../../Context/AccountContext";
+import ServerContext        from "../../../../Context/ServerContext";
+import useAuth              from "../../../../Hooks/useAuth";
+import { API_PanelLib }     from "../../../../Lib/Api/API_Panel.Lib";
+import { EPerm }            from "../../../../Shared/Enum/User.Enum";
+import type { SystemUsage } from "../../../../Shared/Type/Systeminformation";
+import CServerCard          from "../Server/ServerCard";
 
 export default function CTopNavigation( Props : {
-	SystemUsage : ISystemUsage;
+	SystemUsage : SystemUsage;
 	ServerState : [ number, number ];
 	ShowLog : ( Value : boolean ) => void;
 } ) {

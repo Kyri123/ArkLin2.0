@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { ISystemUsage }    from "../../../../Shared/Type/Systeminformation";
-import { Link }            from "react-router-dom";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+import type { SystemUsage } from "../../../../Shared/Type/Systeminformation";
+import { Link }             from "react-router-dom";
 
-export default function CFoother( Props : { SystemUsage : ISystemUsage } ) {
+export default function CFoother( Props : { SystemUsage : SystemUsage } ) {
 	return (
 		<>
 			<div className="bottom-0">

@@ -3,10 +3,9 @@ import type {
 	Request,
 	Response
 }                                from "express";
-import type { TPermissions }     from "../../../src/Shared/Enum/User.Enum";
-import type { TRequest_Unknown } from "../../../src/Shared/Type/API_Request";
-import type { UserLib }          from "@server/Lib/User.Lib";
-import { DefaultResponseFailed } from "../../../src/Shared/Default/ApiRequest.Default";
+import type { TPermissions }     from "@shared/Enum/User.Enum";
+import type { TRequest_Unknown } from "@app/Types/API_Request";
+import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
 
 export type TMiddlewares = any & {
 	req : Request,
@@ -21,9 +20,9 @@ export function AuthMiddleware( Permission : TPermissions | undefined, Args : TM
 		return;
 	}
 
-	const Req : TRequest_Unknown<true, UserLib> = req.body;
+	const Req : TRequest_Unknown<true> = req.body;
 
-	if ( Req.UserClass.IsValid() && Req.UserClass.HasPermission( Permission ) ) {
+	if ( Req.UserClass.IsLoggedIn() && Req.UserClass.HasPermission( Permission ) ) {
 		next();
 		return;
 	}

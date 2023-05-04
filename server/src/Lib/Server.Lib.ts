@@ -1,40 +1,37 @@
-import { MakeRandomString }    from "@kyri123/k-javascript-utils";
+import { MakeRandomString }         from "@kyri123/k-javascript-utils";
 import type {
 	ExplIf,
 	If
-}                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
-import fs                      from "fs";
-import * as ini                from "ini";
-import path                    from "path";
-import type { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
+}                                   from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import fs                           from "fs";
+import * as ini                     from "ini";
+import path                         from "path";
+import type { EArkmanagerCommands } from "@app/Lib/ServerUtils.Lib";
 import {
 	DefaultInstanceState,
 	GetDefaultPanelServerConfig
-}                              from "../../../src/Shared/Default/Server.Default";
-import type {
-	IInstanceData,
-	IInstanceState,
-	IPanelServerConfig
-}                              from "../../../src/Shared/Type/ArkSE";
-import type {
-	IMO_Cluster,
-	IMO_Instance,
-	TMO_Instance
-}                              from "../../../src/Types/MongoDB";
-import { EBashScript }         from "../Enum/EBashScript";
-import DB_Cluster              from "../MongoDB/DB_Cluster";
-import DB_Instances            from "../MongoDB/DB_Instances";
+}                                   from "@shared/Default/Server.Default";
+import { EBashScript }              from "../Enum/EBashScript";
+import type { Cluster }             from "@server/MongoDB/DB_Cluster";
+import DB_Cluster                   from "@server/MongoDB/DB_Cluster";
+import type { Instance }            from "@server/MongoDB/DB_Instances";
+import DB_Instances                 from "@server/MongoDB/DB_Instances";
 import {
 	FillWithDefaultValues,
 	GetDefaultInstanceData,
 	JSONtoConfig
-}                              from "./Arkmanager.Lib";
-import { SSHManager }          from "./ConfigManager.Lib";
+}                                   from "./Arkmanager.Lib";
+import { SSHManager }               from "./ConfigManager.Lib";
+import type {
+	InstanceData,
+	InstanceState,
+	PanelServerConfig
+}                                   from "@app/Types/ArkSE";
 
 export async function CreateServer(
-	PanelConfig : IPanelServerConfig,
+	PanelConfig : PanelServerConfig,
 	InstanceName? : string,
-	DefaultConfig? : Partial<IInstanceData>
+	DefaultConfig? : Partial<InstanceData>
 ) : Promise<ServerLib<true> | undefined> {
 	const InstanceID = InstanceName || MakeRandomString( 20, "-" );
 	const ConfigFile = path.join(
@@ -44,7 +41,7 @@ export async function CreateServer(
 	);
 
 	if ( ( await DB_Instances.exists( { Instance: InstanceID } ) ) === null ) {
-		let Config : IInstanceData = {
+		let Config : InstanceData = {
 			...GetDefaultInstanceData( InstanceID ),
 			...DefaultConfig
 		};
@@ -73,8 +70,8 @@ export async function CreateServer(
 export class ServerLib<Ready extends boolean = boolean> {
 	public readonly Instance : string;
 	public readonly InstanceConfigFile : string;
-	private MongoDBData : ExplIf<Ready, IMO_Instance | null, null> = null as ExplIf<Ready, IMO_Instance>;
-	private Cluster : ExplIf<Ready, IMO_Cluster | null, undefined> = undefined as ExplIf<Ready, IMO_Cluster, undefined>;
+	private MongoDBData : ExplIf<Ready, Instance | null, null> = null as ExplIf<Ready, Instance>;
+	private cluster : ExplIf<Ready, Cluster | null, undefined> = undefined as ExplIf<Ready, Cluster, undefined>;
 
 	private constructor( ServerInstance : string ) {
 		this.Instance = ServerInstance;
@@ -85,7 +82,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		);
 	}
 
-	static async build( ServerInstance : string ) {
+	static async build( ServerInstance : string ) : Promise<ServerLib<true>> {
 		const Server = new ServerLib( ServerInstance );
 		try {
 			await Server.Init();
@@ -95,7 +92,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return Server;
 	}
 
-	get Get() : If<Ready, TMO_Instance, undefined> {
+	get Get() : If<Ready, Instance, undefined> {
 		return this.GetWithCluster();
 	}
 
@@ -103,10 +100,10 @@ export class ServerLib<Ready extends boolean = boolean> {
 		try {
 			this.MongoDBData = ( await DB_Instances.findOne( {
 				Instance: this.Instance
-			} ) )!.toJSON() as ExplIf<Ready, IMO_Instance>;
+			} ) )!.toJSON() as ExplIf<Ready, Instance>;
 
 			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } );
-			this.Cluster = ( Cluster ? Cluster.toJSON() : null ) as ExplIf<Ready, IMO_Cluster, undefined>;
+			this.cluster = ( Cluster ? Cluster.toJSON() : null ) as ExplIf<Ready, Cluster, undefined>;
 		}
 		catch ( e ) {
 		}
@@ -115,14 +112,14 @@ export class ServerLib<Ready extends boolean = boolean> {
 	}
 
 	public IsInCluster() : this is ServerLib<true> {
-		return this.Cluster !== null && this.IsValid();
+		return this.cluster !== null && this.IsValid();
 	}
 
 	/*
-	 * @return {IMO_Cluster | null} return null if not in a cluster
+	 * @return {Cluster | null} return null if not in a cluster
 	 */
-	public get GetCluster() : ExplIf<Ready, IMO_Cluster | null, undefined> {
-		return this.Cluster;
+	public get GetCluster() : ExplIf<Ready, Cluster | null, undefined> {
+		return this.cluster;
 	}
 
 	/*
@@ -164,26 +161,25 @@ export class ServerLib<Ready extends boolean = boolean> {
 
 	public EmitUpdate() {
 		if ( this.IsValid() ) {
-			SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: this.GetWithCluster() as TMO_Instance } );
+			SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: this.GetWithCluster() as Instance } );
 		}
 	}
 
-	public GetWithCluster() : If<Ready, TMO_Instance, undefined> {
+	public GetWithCluster() : If<Ready, Instance, undefined> {
 		if ( this.IsValid() ) {
 			return ( {
 				...this.MongoDBData,
 				Cluster: this.GetCluster
-			} as TMO_Instance ) as If<Ready, TMO_Instance, undefined>;
+			} as Instance ) as If<Ready, Instance, undefined>;
 		}
-		return undefined as If<Ready, TMO_Instance, undefined>;
+		return undefined as If<Ready, Instance, undefined>;
 	}
 
-	public IsValid() : this is ServerLib<true>
-	public IsValid() : boolean {
+	public IsValid() : this is ServerLib<true> {
 		return fs.existsSync( this.InstanceConfigFile ) && this.MongoDBData !== null;
 	}
 
-	GetConfig() : IInstanceData {
+	GetConfig() : InstanceData {
 		if ( !this.IsValid() ) {
 			return GetDefaultInstanceData( this.Instance );
 		}
@@ -211,7 +207,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 				ArkmanagerPID: 1
 			} );
 
-			SystemLib.Log( "[CMD] Executing:", `'${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"'` );
+			SystemLib.Log( "CMD", "Executing:", `'${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"'` );
 			SSHManager.ExecCommand(
 				[
 					`${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"`
@@ -226,7 +222,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return false;
 	}
 
-	GetPanelConfig() : IPanelServerConfig {
+	GetPanelConfig() : PanelServerConfig {
 		if ( this.IsValid() && this.MongoDBData ) {
 			return {
 				...GetDefaultPanelServerConfig(),
@@ -237,7 +233,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 	}
 
 	async ModifySubDocument(
-		SubDocumentKey : keyof IMO_Instance,
+		SubDocumentKey : keyof Instance,
 		Data : Partial<any>,
 		Overwrite = true
 	) {
@@ -253,6 +249,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 				// Overwrite is faster as the for loop
 				else {
 					Data._id = Document[ SubDocumentKey ]._id;
+					// @ts-ignore
 					Document[ SubDocumentKey ] = Data;
 					Document.markModified( `${ SubDocumentKey }` );
 				}
@@ -263,7 +260,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 	}
 
-	async SetPanelConfig( Config : Partial<IPanelServerConfig> ) {
+	async SetPanelConfig( Config : Partial<PanelServerConfig> ) {
 		if ( await this.Init() ) {
 			await this.ModifySubDocument( "PanelConfig", Config );
 			return this.MongoDBData !== null;
@@ -271,9 +268,9 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return true;
 	}
 
-	async SetServerState( State : Partial<IInstanceState>, MapData? : any ) {
+	async SetServerState( State : Partial<InstanceState>, MapData? : any ) {
 		if ( await this.Init() ) {
-			const NewState : Partial<IInstanceState> = {
+			const NewState : Partial<InstanceState> = {
 				...this.MongoDBData?.State,
 				...State
 			};
@@ -320,7 +317,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 
 			DB_Instances.findByIdAndRemove( this.MongoDBData?._id );
 			SystemLib.LogWarning(
-				"[SERVER] Server Removed:",
+				"SERVER", "Server Removed:",
 				this.MongoDBData?.Instance
 			);
 
@@ -331,7 +328,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 	}
 
-	GetState() : IInstanceState {
+	GetState() : InstanceState {
 		if ( this.IsValid() && this.MongoDBData ) {
 			return {
 				...DefaultInstanceState(),
@@ -484,14 +481,14 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return false;
 	}
 
-	public async Update( Data : Partial<IMO_Instance> ) {
+	public async Update( Data : Partial<Instance> ) {
 		if ( !this.IsValid() ) {
 			return;
 		}
 
 		for ( const [ Key, Value ] of Object.entries( Data ) ) {
 			if ( typeof Value === "object" ) {
-				await this.ModifySubDocument( Key as keyof IMO_Instance, Value );
+				await this.ModifySubDocument( Key as keyof Instance, Value );
 			}
 			else {
 				await DB_Instances.findByIdAndUpdate( this.MongoDBData!._id, { [ Key ]: Value } );

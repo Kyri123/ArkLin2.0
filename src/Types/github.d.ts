@@ -1,11 +1,11 @@
-export interface IGithubBranche {
+export interface GithubBranche {
 	name : string;
 	sha : string;
 	url : string;
 	protected : boolean;
 }
 
-export interface IGithubReleases {
+export interface GithubReleases {
 	url : string;
 	assets_url : string;
 	upload_url : string;

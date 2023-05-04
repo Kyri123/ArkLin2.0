@@ -5,14 +5,15 @@ import {
 	SSHManager
 }                        from "@server/Lib/ConfigManager.Lib";
 import { Octokit }       from "octokit";
-import DB_GithubBranches from "../../MongoDB/DB_GithubBranches";
-import type {
-	IGithubBranche,
-	IGithubReleases
-}                        from "../../../../src/Shared/Type/github";
-import DB_GithubReleases from "../../MongoDB/DB_GithubReleases";
+import DB_GithubBranches from "@server/MongoDB/DB_GithubBranches";
+import DB_GithubReleases from "@server/MongoDB/DB_GithubReleases";
 import process           from "process";
 import { EBashScript }   from "../../Enum/EBashScript";
+import { BC }            from "@server/Lib/System.Lib";
+import type {
+	GithubBranche,
+	GithubReleases
+}                        from "@app/Types/github";
 
 const octokit = new Octokit( {
 	auth: ConfigManager.GetDashboardConifg.PANEL_GithubToken,
@@ -24,8 +25,8 @@ export default new JobTask(
 	"Github",
 	async() => {
 		SystemLib.DebugLog(
-			"[TASKS] Running Task",
-			SystemLib.ToBashColor( "Red" ),
+			"TASKS ", "Running Task",
+			BC( "Red" ),
 			"Github"
 		);
 
@@ -55,7 +56,7 @@ export default new JobTask(
 			if ( Branches.data.length > 0 ) {
 				await DB_GithubBranches.deleteMany( {} );
 				await DB_GithubBranches.create(
-					Branches.data.map<IGithubBranche>( ( E ) => ( {
+					Branches.data.map<GithubBranche>( ( E ) => ( {
 						name: E.name,
 						sha: E.commit?.sha || "",
 						url: E.commit?.url || "",
@@ -67,7 +68,7 @@ export default new JobTask(
 			if ( Releases.data.length > 0 ) {
 				await DB_GithubReleases.deleteMany( {} );
 				await DB_GithubReleases.create(
-					Releases.data.map<IGithubReleases>( ( E ) => ( {
+					Releases.data.map<GithubReleases>( ( E ) => ( {
 						assets_url: E.assets_url,
 						body: E.body!,
 						created_at: E.created_at,

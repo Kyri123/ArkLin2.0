@@ -1,9 +1,9 @@
-import type * as core        from "express-serve-static-core";
+import type * as core       from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                            from "express-serve-static-core";
-import { CreateUrl }         from "@server/Lib/PathBuilder.Lib";
+}                           from "express-serve-static-core";
+import { CreateUrl }        from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_User_Addkey,
 	TResponse_User_Allkeys,
@@ -13,14 +13,13 @@ import type {
 	TResponse_User_Removeaccount,
 	TResponse_User_Removekey,
 	TResponse_User_Usereditaccount
-}                            from "../../../src/Shared/Type/API_Response";
-import { EPerm }             from "../../../src/Shared/Enum/User.Enum";
-import { UserLib }           from "@server/Lib/User.Lib";
-import { Md5 }               from "ts-md5";
-import type { IMO_Accounts } from "../../../src/Types/MongoDB";
-import DB_Accounts           from "../MongoDB/DB_Accounts";
-import DB_AccountKey         from "../MongoDB/DB_AccountKey";
-import { EUserUrl }          from "../../../src/Shared/Enum/Routing";
+}                           from "@app/Types/API_Response";
+import { EPerm }            from "@shared/Enum/User.Enum";
+import { Md5 }              from "ts-md5";
+import type { UserAccount } from "../MongoDB/DB_Accounts";
+import DB_Accounts          from "../MongoDB/DB_Accounts";
+import DB_AccountKey        from "../MongoDB/DB_AccountKey";
+import { EUserUrl }         from "@shared/Enum/Routing";
 import type {
 	TRequest_User_Addkey,
 	TRequest_User_Allkeys,
@@ -30,34 +29,25 @@ import type {
 	TRequest_User_Removeaccount,
 	TRequest_User_Removekey,
 	TRequest_User_Usereditaccount
-}                            from "../../../src/Shared/Type/API_Request";
+}                           from "@app/Types/API_Request";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                            from "../../../src/Shared/Default/ApiRequest.Default";
-import { MakeRandomString }  from "@kyri123/k-javascript-utils";
+}                           from "@shared/Default/ApiRequest.Default";
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EUserUrl.alluser );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"GET"
-	);
 	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Alluser = {
 			...DefaultResponseSuccess
 		};
 
-		const Request : TRequest_User_Alluser<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Alluser<true> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) ) {
 			Response.Data = [];
 			for await ( const Account of DB_Accounts.find() ) {
-				const Part : Partial<IMO_Accounts> = Account;
+				const Part : Partial<UserAccount> = Account;
 				delete Part.password;
 				Response.Data.push( Part );
 			}
@@ -67,21 +57,12 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.allkeys );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"GET"
-	);
 	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Allkeys = {
 			...DefaultResponseSuccess
 		};
 
-		const Request : TRequest_User_Allkeys<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Allkeys<true> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) ) {
 			Response.Data = [];
 			for await ( const AccountKey of DB_AccountKey.find() ) {
@@ -93,24 +74,15 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.getallowedservers );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Getallowedservers = {
 			...DefaultResponseSuccess,
 			Data: {}
 		};
 
-		const Request : TRequest_User_Getallowedservers<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Getallowedservers<true> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id ) {
-			const User = await UserLib.build( Request.Id );
+			const User = await User.build( Request.Id );
 			if ( User.IsValid() ) {
 				Response.Data = await User.GetAllServerWithPermission();
 			}
@@ -120,21 +92,12 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.removeaccount );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Removeaccount = {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Removeaccount<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Removeaccount<true> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.Id
@@ -153,21 +116,12 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.addkey );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Addkey = {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Addkey<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Addkey<true> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.rang !== undefined
@@ -189,21 +143,12 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.removekey );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Removekey = {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Removekey<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Removekey<true> = request.body;
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&
 			Request.Id !== undefined
@@ -221,21 +166,12 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.usereditaccount );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Usereditaccount = {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Usereditaccount<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Usereditaccount<true> = request.body;
 
 		if (
 
@@ -274,21 +210,12 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EUserUrl.edituser );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_User_Edituser = {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_User_Edituser<true, UserLib<true>> = request.body;
+		const Request : TRequest_User_Edituser<true> = request.body;
 
 		if (
 			Request.UserClass.HasPermission( EPerm.Super ) &&

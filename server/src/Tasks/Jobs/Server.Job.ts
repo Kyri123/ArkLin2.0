@@ -1,8 +1,7 @@
 import fs                              from "fs";
 import path                            from "path";
-import { EArkmanagerCommands }         from "../../../../src/Lib/ServerUtils.Lib";
-import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
-import type { IInstanceData }          from "../../../../src/Shared/Type/ArkSE";
+import { EArkmanagerCommands }         from "@app/Lib/ServerUtils.Lib";
+import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import {
 	ConfigToJSON,
 	FillWithDefaultValues
@@ -13,22 +12,24 @@ import {
 	CreateServer,
 	ServerLib
 }                                      from "@server/Lib/Server.Lib";
-import DB_Instances                    from "../../MongoDB/DB_Instances";
+import DB_Instances                    from "@server/MongoDB/DB_Instances";
 import { JobTask }                     from "../TaskManager";
+import { BC }                          from "@server/Lib/System.Lib";
+import type { InstanceData }                from "@app/Types/ArkSE";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerTasksInterval,
 	"Server",
 	async() => {
 		SystemLib.DebugLog(
-			"[TASKS] Running Task",
-			SystemLib.ToBashColor( "Red" ),
+			"TASKS", "Running Task",
+			BC( "Red" ),
 			"Server"
 		);
 
 		// Read and save all Instances
 		const InstancesFolder = path.join( __server_arkmanager, "instances" );
-		const ServerData : Record<string, IInstanceData> = {};
+		const ServerData : Record<string, InstanceData> = {};
 		for ( const Instance of fs.readdirSync( InstancesFolder ) ) {
 			if ( Instance.endsWith( ".cfg" ) ) {
 				const Server = Instance.replace( ".cfg", "" );

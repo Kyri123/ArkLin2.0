@@ -1,12 +1,12 @@
-import type { IMO_Cluster }  from "../../Types/MongoDB";
+import type { Cluster }     from "../../Types/MongoDB";
 import type {
-	IInstanceData,
-	IInstanceState,
-	IPanelServerConfig
-}                       from "../Type/ArkSE";
-import type { ISystemUsage } from "../Type/Systeminformation";
+	InstanceData,
+	InstanceState,
+	PanelServerConfig
+}                           from "../Type/ArkSE";
+import type { SystemUsage } from "../Type/Systeminformation";
 
-export const DefaultCluster : IMO_Cluster = {
+export const DefaultCluster : Cluster = {
 	DisplayName: "",
 	Instances: [],
 	Master: "",
@@ -22,8 +22,8 @@ export const DefaultCluster : IMO_Cluster = {
 	SyncSettings: []
 };
 
-export function DefaultInstanceState() : IInstanceState {
-	return structuredClone<IInstanceState>( {
+export function DefaultInstanceState() : InstanceState {
+	return structuredClone<InstanceState>( {
 		IsListen: false,
 		State: "NotInstalled",
 		Player: 0,
@@ -34,8 +34,8 @@ export function DefaultInstanceState() : IInstanceState {
 	} );
 }
 
-export function DefaultSystemUsage() : ISystemUsage {
-	return structuredClone<ISystemUsage>( {
+export function DefaultSystemUsage() : SystemUsage {
+	return structuredClone<SystemUsage>( {
 		UpdateIsRunning: false,
 		PanelBuildVersion: "",
 		PanelVersionName: "",
@@ -49,7 +49,7 @@ export function DefaultSystemUsage() : ISystemUsage {
 	} );
 }
 
-export function GetRawInstanceData() : IInstanceData {
+export function GetRawInstanceData() : InstanceData {
 	return {
 		arkMaxBackupSizeMB: 4096,
 		arkNoPortDecrement: true,
@@ -109,8 +109,8 @@ export function GetRawInstanceData() : IInstanceData {
 	};
 }
 
-export function GetDefaultPanelServerConfig() : IPanelServerConfig {
-	return structuredClone<IPanelServerConfig>( {
+export function GetDefaultPanelServerConfig() : PanelServerConfig {
+	return structuredClone<PanelServerConfig>( {
 		AutoUpdateEnabled: false,
 		AutoUpdateInterval: 1800000,
 		AutoUpdateParameters: [],

@@ -1,14 +1,14 @@
-import bytes            from "bytes";
-import type { ISystemUsage } from "../../../../Shared/Type/Systeminformation";
-import { CStateCard }   from "../../../Components/Elements/AdminLTE/AdminLTE_Cards";
+import bytes                from "bytes";
+import type { SystemUsage } from "../../../../Shared/Type/Systeminformation";
+import { CStateCard }       from "../../../Components/Elements/AdminLTE/AdminLTE_Cards";
 import {
 	Col,
 	Row
-}                       from "react-bootstrap";
+}                           from "react-bootstrap";
 
 export default function CTraffics( Props : {
 	ServerState : [ number, number, number ];
-	SystemUsage : ISystemUsage;
+	SystemUsage : SystemUsage;
 } ) {
 	return (
 		<Row className="mb-3" id="traffics">

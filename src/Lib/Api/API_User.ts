@@ -10,15 +10,15 @@ import type {
 	TResponse_User_Usereditaccount
 }                       from "../../Shared/Type/API_Response";
 import type {
-	IMO_AccountKeys,
-	IMO_Accounts,
-	TMO_Instance
+	IMO_AccountKey,
+	Instance,
+	UserAccount
 }                       from "../../Types/MongoDB";
 import { EUserUrl }     from "../../Shared/Enum/Routing";
 
 export class API_User {
 	static async UserSettings_EditAccount(
-		UserData : IMO_Accounts,
+		UserData : UserAccount,
 		PasswordInput : string[]
 	) : Promise<TResponse_User_Usereditaccount> {
 		return await API_QueryLib.PostToAPI<TResponse_User_Usereditaccount>(
@@ -32,7 +32,7 @@ export class API_User {
 
 	static async GetAllowedServer(
 		UserID : string
-	) : Promise<Record<string, TMO_Instance>> {
+	) : Promise<Record<string, Instance>> {
 		const Data = await API_QueryLib.PostToAPI<TResponse_User_Getallowedservers>(
 			EUserUrl.getallowedservers,
 			{
@@ -45,14 +45,14 @@ export class API_User {
 		return {};
 	}
 
-	static async EditUser( UserID : string, Data : Partial<IMO_Accounts> ) : Promise<TResponse_User_Edituser> {
+	static async EditUser( UserID : string, Data : Partial<UserAccount> ) : Promise<TResponse_User_Edituser> {
 		return await API_QueryLib.PostToAPI<TResponse_User_Edituser>( EUserUrl.edituser, {
 			UserID: UserID,
 			User: Data
 		} );
 	}
 
-	static async GetAllUsers( Default : IMO_Accounts ) : Promise<IMO_Accounts[]> {
+	static async GetAllUsers( Default : UserAccount ) : Promise<UserAccount[]> {
 		const Data = await API_QueryLib.GetFromAPI<TResponse_User_Alluser>(
 			EUserUrl.alluser
 		);
@@ -62,7 +62,7 @@ export class API_User {
 		return [ Default ];
 	}
 
-	static async GetAllKeys() : Promise<IMO_AccountKeys[]> {
+	static async GetAllKeys() : Promise<IMO_AccountKey[]> {
 		const Data = await API_QueryLib.GetFromAPI<TResponse_User_Allkeys>(
 			EUserUrl.allkeys
 		);

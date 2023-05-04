@@ -1,10 +1,10 @@
-import * as mongoose from "mongoose";
+import * as mongoose      from "mongoose";
 import type { MongoBase } from "../../../src/Types/MongoDB";
 import type {
-	IInstanceData,
-	IInstanceState,
-	IPanelServerConfig
-}                    from "@app/Types/ArkSE";
+	InstanceData,
+	InstanceState,
+	PanelServerConfig
+}                         from "@app/Types/ArkSE";
 
 const InstanceSchema = new mongoose.Schema( {
 	Instance: { type: String, required: true, unique: true },
@@ -54,9 +54,9 @@ const InstanceSchema = new mongoose.Schema( {
 
 
 interface InstanceInterface extends mongoose.InferSchemaType<typeof InstanceSchema> {
-	ArkmanagerCfg : IInstanceData & Record<string, any>;
-	State : IInstanceState;
-	PanelConfig : IPanelServerConfig;
+	ArkmanagerCfg : InstanceData & Record<string, any>;
+	State : InstanceState;
+	PanelConfig : PanelServerConfig;
 }
 
 export type Instance = InstanceInterface & MongoBase

@@ -4,17 +4,18 @@ import {
 	GetAllModIds,
 	QuerySteamAPI
 }                            from "@server/Lib/SteamApi.Lib";
-import DB_SteamAPI_Mods      from "../../MongoDB/DB_SteamAPI_Mods";
-import type { ISteamApiMod } from "../../../../src/Types/SteamAPI";
+import DB_SteamAPI_Mods      from "@server/MongoDB/DB_SteamAPI_Mods";
+import type { ISteamApiMod } from "@app/Types/SteamAPI";
+import { BC }                from "@server/Lib/System.Lib";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.DataCleanerInterval,
 	"SteamAPI",
 	async() => {
 		// Clear old Sessions
-		SystemLib.DebugLog(
-			"[TASKS] Running Task",
-			SystemLib.ToBashColor( "Red" ),
+		SystemLib.DebugLog( "tasks",
+			" Running Task",
+			BC( "Red" ),
 			"SteamAPI"
 		);
 
@@ -41,7 +42,7 @@ export default new JobTask(
 			}
 
 			SystemLib.Log(
-				`[SteamAPI] Updated Mods from API ( Total: ${ ResultObject.response.publishedfiledetails.length } )`
+				`SteamAPI`, ` Updated Mods from API ( Total: ${ ResultObject.response.publishedfiledetails.length } )`
 			);
 			SocketIO.emit( "SteamApiUpdated" );
 		}

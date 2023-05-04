@@ -1,16 +1,17 @@
-import { JobTask }           from "../TaskManager";
-import * as Si               from "systeminformation";
-import type { ISystemUsage } from "../../../../src/Shared/Type/Systeminformation";
-import { ConfigManager }     from "@server/Lib/ConfigManager.Lib";
-import DB_Usage              from "../../MongoDB/DB_Usage";
+import { JobTask }          from "../TaskManager";
+import * as Si              from "systeminformation";
+import { ConfigManager }    from "@server/Lib/ConfigManager.Lib";
+import DB_Usage             from "@server/MongoDB/DB_Usage";
+import { BC }               from "@server/Lib/System.Lib";
+import type { SystemUsage } from "@app/Types/Systeminformation";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.SystemInformationInterval,
 	"Systeminformation",
 	async() => {
 		SystemLib.DebugLog(
-			"[TASKS] Running Task",
-			SystemLib.ToBashColor( "Red" ),
+			"TASKS", "Running Task",
+			BC( "Red" ),
 			"Systeminformation"
 		);
 
@@ -18,9 +19,9 @@ export default new JobTask(
 		const DISK = await Si.fsSize();
 		const MEM = await Si.mem();
 
-		const Usage = ( await DB_Usage.findOne<ISystemUsage>() ) || ( {} as any );
+		const Usage = ( await DB_Usage.findOne<SystemUsage>() ) || ( {} as any );
 
-		const NewUsage : ISystemUsage = {
+		const NewUsage : SystemUsage = {
 			UpdateIsRunning: false,
 			NextPanelBuildVersion: Usage.NextPanelBuildVersion || "",
 			PanelBuildVersion: process.env.npm_package_version,

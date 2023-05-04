@@ -1,8 +1,8 @@
 import * as trpc             from "@trpc/server";
 import { TRPCError }         from "@trpc/server";
 import type * as trpcExpress from "@trpc/server/adapters/express";
-import type { User }         from "@shared/Class/User.Class";
-import { transformer }       from "@shared/transformer";
+import type User             from "@app/Lib/User.Lib";
+import superjson             from "superjson";
 
 export function handleTRCPErr( e : unknown ) {
 	if ( e instanceof TRPCError ) {
@@ -10,7 +10,7 @@ export function handleTRCPErr( e : unknown ) {
 	}
 	else if ( e instanceof Error ) {
 		SystemLib.LogError( "tRCP", e.message );
-		throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
+		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
 	}
 }
 
@@ -31,7 +31,7 @@ export const createContext = async( {
 };
 
 const t = trpc.initTRPC.context<Context>().create( {
-	transformer,
+	transformer: superjson,
 	isDev: SystemLib.IsDevMode
 } );
 

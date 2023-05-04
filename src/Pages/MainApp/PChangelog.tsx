@@ -1,23 +1,23 @@
 import {
 	useEffect,
 	useState
-}                                            from "react";
+}                                                 from "react";
 import {
 	Link,
 	Navigate,
 	useParams
-}                                            from "react-router-dom";
-import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesome";
-import ReactMarkdown                         from "react-markdown";
-import { API_QueryLib }                      from "../../Lib/Api/API_Query.Lib";
-import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
-import type { IGithubReleases }                   from "../../Shared/Type/github";
+}                                                 from "react-router-dom";
+import { FontAwesomeIcon }                        from "@fortawesome/react-fontawesome";
+import ReactMarkdown                              from "react-markdown";
+import { API_QueryLib }                           from "../../Lib/Api/API_Query.Lib";
+import { EChangelogUrl }                          from "../../Shared/Enum/Routing";
+import type { GithubReleases }                    from "../../Shared/Type/github";
 import type { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PChangelog() : JSX.Element {
 	const { version } = useParams();
-	const [ Data, setData ] = useState<IGithubReleases[]>( [] );
-	const [ Selected, setSelected ] = useState<IGithubReleases | undefined>(
+	const [ Data, setData ] = useState<GithubReleases[]>( [] );
+	const [ Selected, setSelected ] = useState<GithubReleases | undefined>(
 		undefined
 	);
 	const [ LoadFromAPI, setLoadFromAPI ] = useState( true );

@@ -3,9 +3,9 @@ import {
 	useEffect,
 	useMemo,
 	useState
-}                       from "react";
-import ServerContext    from "../Context/ServerContext";
-import type { TMO_Instance } from "../Types/MongoDB";
+}                        from "react";
+import ServerContext     from "../Context/ServerContext";
+import type { Instance } from "../Types/MongoDB";
 
 export function useCluster( InstanceName : string ) {
 	const { ClusterData, InstanceData } = useContext( ServerContext );
@@ -15,8 +15,8 @@ export function useCluster( InstanceName : string ) {
 		setCluster( () => ClusterData[ InstanceName ] );
 	}, [ InstanceName, ClusterData ] );
 
-	const Servers = useMemo( () : Record<string, TMO_Instance> => {
-		const Return : Record<string, TMO_Instance> = {};
+	const Servers = useMemo( () : Record<string, Instance> => {
+		const Return : Record<string, Instance> = {};
 		if ( Cluster !== undefined ) {
 			for ( const Instance of Cluster.Instances ) {
 				if ( InstanceData[ Instance ] ) {
@@ -27,7 +27,7 @@ export function useCluster( InstanceName : string ) {
 		return Return;
 	}, [ Cluster, InstanceData ] );
 
-	const MasterServer = useMemo( () : [ string, TMO_Instance ] | undefined => {
+	const MasterServer = useMemo( () : [ string, Instance ] | undefined => {
 		if ( Cluster !== undefined ) {
 			if ( Servers[ Cluster.Master ] ) {
 				return [ Cluster.Master, Servers[ Cluster.Master ] ];

@@ -1,49 +1,49 @@
 /** @format */
 
-import { FontAwesomeIcon }                      from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon }            from "@fortawesome/react-fontawesome";
 import React, {
 	Suspense,
 	useContext,
 	useEffect,
 	useState
-}                                               from "react";
-import { Modal }                                from "react-bootstrap";
+}                                     from "react";
+import { Modal }                      from "react-bootstrap";
 import {
 	Route,
 	Routes
-}                                               from "react-router";
+}                                     from "react-router";
 import {
 	Navigate,
 	useLocation
-}                                               from "react-router-dom";
-import type { Socket } from "socket.io-client";
-import io                           from "socket.io-client";
+}                                     from "react-router-dom";
+import type { Socket }                from "socket.io-client";
+import io                             from "socket.io-client";
 import type { IAcceptActionFunction } from "./Pages/MainApp/PageComponents/General/CAcceptAction";
-import CAcceptAction from "./Pages/MainApp/PageComponents/General/CAcceptAction";
-import { CAlert }                               from "./Pages/MainApp/PageComponents/General/CAlert";
-import CLeftNavigation                          from "./Pages/MainApp/PageComponents/Page/CLeftNavigation";
-import CTopNavigation                           from "./Pages/MainApp/PageComponents/Page/CTopNavigation";
-import AccountContext                           from "./Context/AccountContext";
-import AlertContext                             from "./Context/AlertContext";
-import ServerContext                            from "./Context/ServerContext";
-import { API_ServerLib }                        from "./Lib/Api/API_Server.Lib";
-import { API_System }                           from "./Lib/Api/API_System";
-import { SocketIOLib }                          from "./Lib/Api/SocketIO.Lib";
+import CAcceptAction                  from "./Pages/MainApp/PageComponents/General/CAcceptAction";
+import { CAlert }                     from "./Pages/MainApp/PageComponents/General/CAlert";
+import CLeftNavigation                from "./Pages/MainApp/PageComponents/Page/CLeftNavigation";
+import CTopNavigation                 from "./Pages/MainApp/PageComponents/Page/CTopNavigation";
+import AccountContext                 from "./Context/AccountContext";
+import AlertContext                   from "./Context/AlertContext";
+import ServerContext                  from "./Context/ServerContext";
+import { API_ServerLib }              from "./Lib/Api/API_Server.Lib";
+import { API_System }                 from "./Lib/Api/API_System";
+import { SocketIOLib }                from "./Lib/Api/SocketIO.Lib";
 import type {
-	IMO_Cluster,
-	TMO_Instance
-}                                               from "./Types/MongoDB";
-import { DefaultSystemUsage }                   from "./Shared/Default/Server.Default";
+	Cluster,
+	Instance
+}                                     from "./Types/MongoDB";
+import { DefaultSystemUsage }         from "./Shared/Default/Server.Default";
 import type {
 	IEmitEvents,
 	IListenEvents
-}                                               from "./Shared/Type/Socket";
-import type { ISystemUsage }                         from "./Shared/Type/Systeminformation";
-import type { IAPIResponseBase }                     from "./Shared/Type/API_Response";
-import CSideHeader                              from "./Pages/MainApp/PageComponents/Page/CSideHeader";
-import CTraffics                                from "./Pages/MainApp/PageComponents/Page/CTraffics";
-import CFoother                                 from "./Pages/MainApp/PageComponents/Page/CFoother";
-import { API_ClusterLib }                       from "./Lib/Api/API_Cluster.Lib";
+}                                     from "./Shared/Type/Socket";
+import type { SystemUsage }           from "./Shared/Type/Systeminformation";
+import type { IAPIResponseBase }      from "./Shared/Type/API_Response";
+import CSideHeader                    from "./Pages/MainApp/PageComponents/Page/CSideHeader";
+import CTraffics                      from "./Pages/MainApp/PageComponents/Page/CTraffics";
+import CFoother                       from "./Pages/MainApp/PageComponents/Page/CFoother";
+import { API_ClusterLib }             from "./Lib/Api/API_Cluster.Lib";
 
 const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
 const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
@@ -89,7 +89,7 @@ export default function MainApp() {
 		[ GameServerOnline, GameServerOffline, GameServerTotal ],
 		setGameServerState
 	] = useState<number[]>( [ 0, 0, 0 ] );
-	const [ SystemUsage, setSystemUsage ] = useState<ISystemUsage>(
+	const [ SystemUsage, setSystemUsage ] = useState<SystemUsage>(
 		DefaultSystemUsage()
 	);
 	const [ HasData, setHasData ] = useState( false );
@@ -99,8 +99,8 @@ export default function MainApp() {
 		ActionTitle: ""
 	} );
 
-	const [ Instances, setInstances ] = useState<Record<string, TMO_Instance>>( {} );
-	const [ Clusters, setClusters ] = useState<Record<string, IMO_Cluster>>( {} );
+	const [ Instances, setInstances ] = useState<Record<string, Instance>>( {} );
+	const [ Clusters, setClusters ] = useState<Record<string, Cluster>>( {} );
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect( () => {

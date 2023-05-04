@@ -20,8 +20,8 @@ import type { IAPIResponseBase } from "../../Shared/Type/API_Response";
 import { CAlert }                from "./PageComponents/General/CAlert";
 import { useCopy }               from "@kyri123/k-reactutils";
 import type {
-	IMO_AccountKeys,
-	IMO_Accounts
+	IMO_AccountKey,
+	UserAccount
 }                                from "../../Types/MongoDB";
 import usePermissionPage         from "../../Hooks/usePermissionPage";
 import PCUserRow                 from "./PageComponents/Users/PCUserRow";
@@ -51,11 +51,11 @@ export default function PUsers() {
 		undefined
 	);
 
-	const [ UserData, setUserData ] = useState<IMO_Accounts[]>( [] );
-	const [ ShowUserData, setShowUserData ] = useState<IMO_Accounts[]>( [] );
+	const [ UserData, setUserData ] = useState<UserAccount[]>( [] );
+	const [ ShowUserData, setShowUserData ] = useState<UserAccount[]>( [] );
 
-	const [ AccountKeys, setAccountKeys ] = useState<IMO_AccountKeys[]>( [] );
-	const [ ShowAccountKeys, setShowAccountKeys ] = useState<IMO_AccountKeys[]>( [] );
+	const [ AccountKey, setAccountKey ] = useState<IMO_AccountKey[]>( [] );
+	const [ ShowAccountKey, setShowAccountKey ] = useState<IMO_AccountKey[]>( [] );
 
 	const [ DoCopy, IsCopied ] = useCopy<string>( undefined );
 
@@ -63,8 +63,8 @@ export default function PUsers() {
 		setUserData( await API_User.GetAllUsers( Account.Account.GetDBInformation() ) );
 	};
 
-	const ReadAccountKeys = async() => {
-		setAccountKeys( await API_User.GetAllKeys() );
+	const ReadAccountKey = async() => {
+		setAccountKey( await API_User.GetAllKeys() );
 	};
 
 	const Remove = async( Id : string, IsKey = false ) => {
@@ -80,7 +80,7 @@ export default function PUsers() {
 			? await API_User.RemoveKey( Id )
 			: await API_User.RemoveAccount( Id );
 		if ( Response.Success && IsKey ) {
-			await ReadAccountKeys();
+			await ReadAccountKey();
 		}
 		else if ( Response.Success ) {
 			await ReadUserData();
@@ -104,7 +104,7 @@ export default function PUsers() {
 
 	useEffect( () => {
 		ReadUserData();
-		ReadAccountKeys();
+		ReadAccountKey();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
@@ -117,7 +117,7 @@ export default function PUsers() {
 		const Response = await API_User.AddKey( KeyAsAdmin );
 		if ( Response.Success ) {
 			setKeyAsAdmin( false );
-			await ReadAccountKeys();
+			await ReadAccountKey();
 		}
 		setKeyAlert( Response );
 
@@ -156,7 +156,7 @@ export default function PUsers() {
 				) ) }
 				</tbody>
 			</table>
-			<CPageCounter<IMO_Accounts>
+			<CPageCounter<UserAccount>
 				PerPage={ 20 }
 				OnSetPage={ setShowUserData }
 				Data={ UserData }
@@ -190,7 +190,7 @@ export default function PUsers() {
 						</tr>
 						</thead>
 						<tbody>
-						{ ShowAccountKeys.map( ( Key, Index ) => (
+						{ ShowAccountKey.map( ( Key, Index ) => (
 							<tr key={ "KEY" + Index }>
 								<td>{ Key.key }</td>
 								<td>{ Key.asSuperAdmin ? "Super Admin" : "Member" }</td>
@@ -232,10 +232,10 @@ export default function PUsers() {
 					</table>
 				</Modal.Body>
 				<Modal.Footer>
-					<CPageCounter<IMO_AccountKeys>
+					<CPageCounter<IMO_AccountKey>
 						PerPage={ 8 }
-						OnSetPage={ setShowAccountKeys }
-						Data={ AccountKeys }
+						OnSetPage={ setShowAccountKey }
+						Data={ AccountKey }
 					/>
 					<Card className={ "m-0" }>
 						<div className="input-group">

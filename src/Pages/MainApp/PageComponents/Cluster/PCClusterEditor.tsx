@@ -1,36 +1,35 @@
-import type {
-	FunctionComponent} from "react";
+import type { FunctionComponent } from "react";
 import {
 	useContext,
 	useEffect,
 	useMemo,
 	useState
-}                           from "react";
+}                                 from "react";
 import {
 	FormControl,
 	InputGroup,
 	Modal
-}                           from "react-bootstrap";
-import { useCluster }       from "../../../../Hooks/useCluster";
-import type { IMO_Cluster }      from "../../../../Types/MongoDB";
-import { DefaultCluster }   from "../../../../Shared/Default/Server.Default";
+}                                 from "react-bootstrap";
+import { useCluster }             from "../../../../Hooks/useCluster";
+import type { Cluster }           from "../../../../Types/MongoDB";
+import { DefaultCluster }         from "../../../../Shared/Default/Server.Default";
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                           from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+}                                 from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import type {
 	MultiValue,
 	SingleValue
-} from "react-select";
-import Select                           from "react-select";
-import ServerContext        from "../../../../Context/ServerContext";
-import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
-import type { IInstanceData }    from "../../../../Shared/Type/ArkSE";
-import { CAlert }           from "../General/CAlert";
-import type { IAPIResponseBase } from "../../../../Shared/Type/API_Response";
-import { API_ClusterLib }   from "../../../../Lib/Api/API_Cluster.Lib";
-import AlertContext         from "../../../../Context/AlertContext";
+}                                 from "react-select";
+import Select                     from "react-select";
+import ServerContext              from "../../../../Context/ServerContext";
+import { API_ServerLib }          from "../../../../Lib/Api/API_Server.Lib";
+import type { InstanceData }      from "../../../../Shared/Type/ArkSE";
+import { CAlert }                 from "../General/CAlert";
+import type { IAPIResponseBase }  from "../../../../Shared/Type/API_Response";
+import { API_ClusterLib }         from "../../../../Lib/Api/API_Cluster.Lib";
+import AlertContext               from "../../../../Context/AlertContext";
 
 interface IPCClusterElementProps {
 	ClusterID : string | undefined;
@@ -43,11 +42,11 @@ export interface ISelectOption<T = string> {
 	disabled? : boolean;
 }
 
-const DisabledOptions : ( keyof IInstanceData )[] = [
+const DisabledOptions : ( keyof InstanceData )[] = [
 	"arkserverexec", "logdir", "arkserverroot", "arkbackupdir", "arkStagingDir", "Instance"
 ];
 
-const RemovedOptions : ( keyof IInstanceData )[] = [
+const RemovedOptions : ( keyof InstanceData )[] = [
 	"_id", "__v", "panel_publicip", "ark_Port", "ark_QueryPort", "ark_RCONPort"
 ];
 
@@ -55,7 +54,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const { DoSetAlert } = useContext( AlertContext );
 	const { InstanceData } = useContext( ServerContext );
 	const { Cluster, IsValid } = useCluster( ClusterID || "" );
-	const [ Form, setForm ] = useState<IMO_Cluster>( { ...DefaultCluster } );
+	const [ Form, setForm ] = useState<Cluster>( { ...DefaultCluster } );
 	const [ IsSending, setIsSending ] = useState<boolean>( false );
 
 	const [ SelectedServer, setSelectedServer ] = useState<MultiValue<ISelectOption<string>>>( [] );
@@ -139,7 +138,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const Save = async() => {
 		setIsSending( true );
 
-		const RequestData : IMO_Cluster = {
+		const RequestData : Cluster = {
 			...Form,
 			Master: SelectedMaster?.value || "",
 			Instances: SelectedServer.map( Instance => Instance.value ),

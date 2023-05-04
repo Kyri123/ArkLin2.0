@@ -1,17 +1,17 @@
 import {
 	useEffect,
 	useState
-}                                            from "react";
-import { API_QueryLib }                      from "../../Lib/Api/API_Query.Lib";
-import { Table }                             from "react-bootstrap";
-import { Link }                              from "react-router-dom";
-import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesome";
-import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
-import type { IGithubReleases }                   from "../../Shared/Type/github";
+}                                                 from "react";
+import { API_QueryLib }                           from "../../Lib/Api/API_Query.Lib";
+import { Table }                                  from "react-bootstrap";
+import { Link }                                   from "react-router-dom";
+import { FontAwesomeIcon }                        from "@fortawesome/react-fontawesome";
+import { EChangelogUrl }                          from "../../Shared/Enum/Routing";
+import type { GithubReleases }                    from "../../Shared/Type/github";
 import type { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PHome() {
-	const [ Data, setData ] = useState<IGithubReleases[]>( [] );
+	const [ Data, setData ] = useState<GithubReleases[]>( [] );
 
 	useEffect( () => {
 		// get Data from API

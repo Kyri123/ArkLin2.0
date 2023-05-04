@@ -1,12 +1,12 @@
 import { createContext } from "react";
 import type {
-	IMO_Cluster,
-	TMO_Instance
+	Cluster,
+	Instance
 }                        from "../Types/MongoDB";
 
 export default createContext<{
-	ClusterData : Record<string, IMO_Cluster>;
-	InstanceData : Record<string, TMO_Instance>;
+	ClusterData : Record<string, Cluster>;
+	InstanceData : Record<string, Instance>;
 	HasData : boolean;
 }>( {
 	InstanceData: {},

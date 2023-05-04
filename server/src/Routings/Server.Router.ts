@@ -1,9 +1,9 @@
-import type * as core        from "express-serve-static-core";
+import type * as core                 from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                            from "express-serve-static-core";
-import { CreateUrl }         from "@server/Lib/PathBuilder.Lib";
+}                                     from "express-serve-static-core";
+import { CreateUrl }                  from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Server_Addserver,
 	TResponse_Server_Cancelaction,
@@ -15,15 +15,15 @@ import type {
 	TResponse_Server_Sendcommand,
 	TResponse_Server_Setpanelconfig,
 	TResponse_Server_Setserverconfig
-}                            from "../../../src/Shared/Type/API_Response";
+}                                     from "@app/Types/API_Response";
 import {
 	CreateServer,
 	ServerLib
-}                            from "@server/Lib/Server.Lib";
-import { EPerm }             from "../../../src/Shared/Enum/User.Enum";
-import TaskManager           from "../Tasks/TaskManager";
-import { SSHManager }        from "@server/Lib/ConfigManager.Lib";
-import { EServerUrl }        from "../../../src/Shared/Enum/Routing";
+}                                     from "@server/Lib/Server.Lib";
+import { EPerm }                      from "@shared/Enum/User.Enum";
+import TaskManager                    from "../Tasks/TaskManager";
+import { SSHManager }                 from "@server/Lib/ConfigManager.Lib";
+import { EServerUrl }                 from "@shared/Enum/Routing";
 import type {
 	TRequest_Server_Addserver,
 	TRequest_Server_Cancelaction,
@@ -35,58 +35,40 @@ import type {
 	TRequest_Server_Sendcommand,
 	TRequest_Server_Setpanelconfig,
 	TRequest_Server_Setserverconfig
-}                            from "../../../src/Shared/Type/API_Request";
+}                                     from "@app/Types/API_Request";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                            from "../../../src/Shared/Default/ApiRequest.Default";
-import type { TMO_Instance } from "../../../src/Types/MongoDB";
-import type { UserLib }      from "@server/Lib/User.Lib";
+}                                     from "@shared/Default/ApiRequest.Default";
+import { GetAllServerWithPermission } from "@server/Lib/User.Lib";
+import type { Instance }                   from "@server/MongoDB/DB_Instances";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EServerUrl.getallserver );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"GET"
-	);
 	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Getallserver = {
 			...DefaultResponseSuccess,
 			Data: {}
 		};
 
-		const Request : TRequest_Server_Getallserver<true, UserLib<true>> = request.body;
-		Response.Data = await Request.UserClass.GetAllServerWithPermission();
+		const Request : TRequest_Server_Getallserver<true> = request.body;
+		Response.Data = await GetAllServerWithPermission( Request.UserClass );
 
 		response.json( Response );
 	} );
 
 	Url = CreateUrl( EServerUrl.getglobalstate );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"GET"
-	);
 	Api.get( Url, async( request : Request, response : Response ) => {
 			const Response : TResponse_Server_Getglobalstate = {
 				...DefaultResponseSuccess,
 				Data: []
 			};
 
-			const Request : TRequest_Server_Getglobalstate<true, UserLib<true>> = request.body;
-			if ( Request.UserClass.IsValid() ) {
+			const Request : TRequest_Server_Getglobalstate<true> = request.body;
+			if ( Request.UserClass.IsLoggedIn() ) {
 				let [ Online, Offline, Total ] = [ 0, 0, 0 ];
 				for ( const InstanceData of Object.values(
-					await Request.UserClass.GetAllServerWithPermission() as Record<string, TMO_Instance>
+					await GetAllServerWithPermission( Request.UserClass ) as Record<string, Instance>
 				) ) {
 					Total++;
 					if ( InstanceData.State.IsListen ) {
@@ -117,7 +99,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Server_Setpanelconfig<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Setpanelconfig<true> = request.body;
 
 		if ( Request.ServerInstance && Request.Config && Request.UserClass.HasPermissionForServer( Request.ServerInstance ) ) {
 			const Server = await ServerLib.build( Request.ServerInstance );
@@ -152,7 +134,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Server_Addserver<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Addserver<true> = request.body;
 		if ( Request.Config && Request.UserClass.HasPermission( EPerm.ManageServers ) ) {
 			const Server = await CreateServer( Request.Config );
 			if ( Server ) {
@@ -185,7 +167,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Server_Removeserver<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Removeserver<true> = request.body;
 
 		if (
 			Request.UserClass.HasPermission( EPerm.ManageServers ) &&
@@ -221,7 +203,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Server_Sendcommand<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Sendcommand<true> = request.body;
 
 		if ( Request.Command && Request.ServerInstance && Request.Parameter ) {
 			if (
@@ -269,7 +251,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Server_Cancelaction<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Cancelaction<true> = request.body;
 
 		if ( Request.ServerInstance ) {
 			if ( Request.UserClass.HasPermissionForServer( Request.ServerInstance ) ) {
@@ -316,7 +298,7 @@ export default function( Api : core.Express ) {
 			Data: ""
 		};
 
-		const Request : TRequest_Server_Getlogs<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Getlogs<true> = request.body;
 
 		if (
 			Request.ServerInstance &&
@@ -352,7 +334,7 @@ export default function( Api : core.Express ) {
 			Data: {}
 		};
 
-		const Request : TRequest_Server_Getconfigs<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Getconfigs<true> = request.body;
 
 		if (
 			Request.ServerInstance &&
@@ -391,7 +373,7 @@ export default function( Api : core.Express ) {
 			...DefaultResponseFailed
 		};
 
-		const Request : TRequest_Server_Setserverconfig<true, UserLib<true>> = request.body;
+		const Request : TRequest_Server_Setserverconfig<true> = request.body;
 
 		if (
 			Request.UserClass.HasPermission( EPerm.ManageServers ) &&

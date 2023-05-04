@@ -7,22 +7,22 @@ import { CreateUrl }              from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Changelog_GetBranches,
 	TResponse_Changelog_GetChangelogs
-}                                 from "../../../src/Shared/Type/API_Response";
-import { EChangelogUrl }          from "../../../src/Shared/Enum/Routing";
+}                                 from "@app/Types/API_Response";
+import { EChangelogUrl }          from "@shared/Enum/Routing";
 import DB_GithubBranches          from "../MongoDB/DB_GithubBranches";
 import DB_GithubReleases          from "../MongoDB/DB_GithubReleases";
-import { DefaultResponseSuccess } from "../../../src/Shared/Default/ApiRequest.Default";
+import { DefaultResponseSuccess } from "@shared/Default/ApiRequest.Default";
 import type {
 	TRequest_Changelog_GetBranches,
 	TRequest_Changelog_GetChangelogs
-}                                 from "../../../src/Shared/Type/API_Request";
-import type { UserLib }           from "@server/Lib/User.Lib";
+}                                 from "@app/Types/API_Request";
+import { BC }                     from "@server/Lib/System.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EChangelogUrl.get );
-	SystemLib.Log(
+	SystemLib.Log( "router",
 		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
+		BC( "Red" ),
 		Url,
 		SystemLib.ToBashColor( "Default" ),
 		"| Mode:",
@@ -35,8 +35,8 @@ export default function( Api : core.Express ) {
 			Data: []
 		};
 
-		const Request : TRequest_Changelog_GetChangelogs<true, UserLib<true>> = request.body;
-		if ( Request.UserClass.IsValid() ) {
+		const Request : TRequest_Changelog_GetChangelogs<true> = request.body;
+		if ( Request.UserClass.IsLoggedIn() ) {
 			Response.Data = await DB_GithubReleases.find();
 		}
 
@@ -59,8 +59,8 @@ export default function( Api : core.Express ) {
 			Data: []
 		};
 
-		const Request : TRequest_Changelog_GetBranches<true, UserLib<true>> = request.body;
-		if ( Request.UserClass.IsValid() ) {
+		const Request : TRequest_Changelog_GetBranches<true> = request.body;
+		if ( Request.UserClass.IsLoggedIn() ) {
 			Response.Data = await DB_GithubBranches.find();
 		}
 

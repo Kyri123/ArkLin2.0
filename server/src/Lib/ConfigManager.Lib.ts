@@ -7,7 +7,7 @@ import type {
 import path              from "path";
 import fs                from "fs";
 import { SSHLib }        from "./SSH.Lib";
-import DB_GithubBranches from "../MongoDB/DB_GithubBranches";
+import DB_GithubBranches from "@server/MongoDB/DB_GithubBranches";
 
 export async function GetCurrentBranch() : Promise<[ string, string | undefined ]> {
 	let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
@@ -37,7 +37,6 @@ export class ConfigManagerClass {
 
 	constructor() {
 		this.DebugConfig = this.ReadConfigWithFallback<IDebugConfig>( "Debug.json" );
-		SystemLib.SetDebugConfig( this.DebugConfig );
 
 		this.Dashboard_BaseConfig =
 			this.ReadConfigWithFallback<IDashboard_BaseConfig>(
@@ -93,7 +92,7 @@ export class ConfigManagerClass {
 				return true;
 			}
 			catch ( e ) {
-				SystemLib.LogError( "[CONFIG]", e );
+				SystemLib.LogError( "CONFIG", e );
 			}
 		}
 		return false;

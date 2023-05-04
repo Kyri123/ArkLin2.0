@@ -1,6 +1,6 @@
 import type {
-	MongoBase,
-	TMO_Instance
+	Instance,
+	MongoBase
 } from "../../Types/MongoDB";
 
 export type TServerState =
@@ -10,7 +10,7 @@ export type TServerState =
 	| "ActionInProgress"
 	| "Running";
 
-export interface IInstanceState extends MongoBase {
+export interface InstanceState extends MongoBase {
 	State : TServerState;
 	IsListen : boolean;
 	Player : number;
@@ -20,7 +20,7 @@ export interface IInstanceState extends MongoBase {
 	ArkserverPID : number;
 }
 
-export interface IInstanceData extends Record<string, any> {
+export interface InstanceData extends Record<string, any> {
 	arkserverroot : string;
 	arkserverexec : string;
 	logdir : string;
@@ -71,12 +71,12 @@ export interface IInstanceData extends Record<string, any> {
 }
 
 
-export interface IServerStatus {
+export interface ServerStatus {
 	Online : boolean;
 	Players : string[];
 }
 
-export interface IPanelServerConfig {
+export interface PanelServerConfig {
 	BackupEnabled : boolean;
 	MaxBackupfolderSize : number;
 	BackupInterval : number;
@@ -88,5 +88,5 @@ export interface IPanelServerConfig {
 }
 
 export interface IFullData {
-	InstanceData : Record<string, TMO_Instance>;
+	InstanceData : Record<string, Instance>;
 }

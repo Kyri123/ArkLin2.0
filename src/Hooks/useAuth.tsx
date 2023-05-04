@@ -1,5 +1,5 @@
 import { useMemo }         from "react";
-import FrontendUserLib     from "../Lib/User.Lib";
+import User                from "../Lib/User.Lib";
 import { useLocalStorage } from "@kyri123/k-reactutils";
 
 export default function useAuth() {
@@ -8,8 +8,8 @@ export default function useAuth() {
 		""
 	);
 
-	const UserData = useMemo<FrontendUserLib>( () => {
-		return new FrontendUserLib( Storage );
+	const UserData = useMemo<User>( () => {
+		return new User( Storage );
 	}, [ Storage ] );
 
 	return {

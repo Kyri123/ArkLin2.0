@@ -1,9 +1,3 @@
-export enum EAuthUrl {
-	check = "auth/check",
-	signup = "auth/signup",
-	signin = "auth/signin",
-}
-
 export enum EChangelogUrl {
 	get = "changelog/get",
 	branches = "changelog/branches",
@@ -58,7 +52,6 @@ export enum EClusterApiUrl {
 }
 
 export type TServerUrls =
-	| EAuthUrl
 	| EChangelogUrl
 	| EPanelUrl
 	| ESysUrl

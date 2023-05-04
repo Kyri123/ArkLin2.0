@@ -5,7 +5,7 @@ import type * as http              from "http";
 import type {
 	IEmitEvents,
 	IListenEvents
-}                                  from "../../../src/Shared/Type/Socket";
+}                                  from "@app/Types/Socket";
 import "./Types";
 import type { SystemLib_Class }    from "@server/Lib/System.Lib";
 import type { ConfigManagerClass } from "@server/Lib/ConfigManager.Lib";
