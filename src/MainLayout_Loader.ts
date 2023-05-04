@@ -25,9 +25,9 @@ const loader : LoaderFunction = async( { request } ) => {
 	if ( !hasAuth && ( !Url.pathname.startsWith( "/auth" ) && !Url.pathname.startsWith( "/error" ) ) ) {
 		return redirect( "/auth/login" );
 	}
-
-	if ( hasAuth && ( Url.pathname.startsWith( "/auth" ) || Url.pathname === "/" ) ) {
-		return redirect( "/home" );
+ 
+	if ( hasAuth && ( !Url.pathname.startsWith( "/auth" ) || !Url.pathname.startsWith( "/error" ) ) ) {
+		return redirect( "/app" );
 	}
 
 	return json<AuthLoaderProps>( { hasAuth } );

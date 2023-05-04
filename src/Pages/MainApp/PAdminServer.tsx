@@ -13,7 +13,7 @@ import { API_ServerLib }               from "@app/Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerContext                   from "../../Context/ServerContext";
 import AlertContext                    from "../../Context/AlertContext";
-import type { ISelectMask }                 from "@app/Types/Systeminformation";
+import type { ISelectMask }            from "@app/Types/Systeminformation";
 
 export default function PAdminServer() {
 	const { InstanceData } = useContext( ServerContext );
@@ -43,10 +43,10 @@ export default function PAdminServer() {
 
 				<span className="col-lg-6 col-xl-4 mt-3">
           <div
-	          onClick={ () => setShowNewServer( true ) }
-	          className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100 rounded-0"
-	          style={ { fontSize: 75, height: 450, cursor: "pointer" } }
-          >
+			  onClick={ () => setShowNewServer( true ) }
+			  className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100 rounded-0"
+			  style={ { fontSize: 75, height: 450, cursor: "pointer" } }
+		  >
             <FontAwesomeIcon icon={ "plus" }/>
           </div>
         </span>

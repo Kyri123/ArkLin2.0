@@ -130,16 +130,16 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 						</div>
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
               <span
-	              onClick={ () =>
-		              setAcceptAction( {
-			              Payload: RemoveServer,
-			              PayloadArgs: [],
-			              ActionTitle: `Server [${ Props.InstanceName }] - ${ Server.Data.ark_SessionName } wirklich löschen?`
-		              } )
-	              }
-	              className="w-100 ps-5 rounded-0 text-white btn btn-danger"
-	              data-toggle="modal"
-              >
+				  onClick={ () =>
+					  setAcceptAction( {
+						  Payload: RemoveServer,
+						  PayloadArgs: [],
+						  ActionTitle: `Server [${ Props.InstanceName }] - ${ Server.Data.ark_SessionName } wirklich löschen?`
+					  } )
+				  }
+				  className="w-100 ps-5 rounded-0 text-white btn btn-danger"
+				  data-toggle="modal"
+			  >
                 <FontAwesomeIcon icon={ "trash-alt" }/>
               </span>
 						</div>

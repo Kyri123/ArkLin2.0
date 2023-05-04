@@ -12,7 +12,7 @@ const rootRouter = createBrowserRouter( [
 			// start auth --------------------------------
 			{
 				path: "/auth/",
-				lazy: async() => await import("@page/auth/AuthLayout"),
+				lazy: async() => await import("@page/auth/Layout"),
 				children: [
 					{
 						path: "/auth/login",
@@ -26,13 +26,33 @@ const rootRouter = createBrowserRouter( [
 						path: "/auth/reset/:token",
 						lazy: async() => await import("@page/auth/reset/[token]"),
 						loader: async( { request, params } ) => {
-							const { loader } = await import( "@page/auth/reset/[token]_loader" );
+							const { loader } = await import( "@page/auth/loader/[token]" );
 							return loader( { request, params } );
 						}
 					}
 				]
 			},
 			// end auth ----------------------------------
+
+
+			// start App --------------------------------
+			{
+				path: "/app/",
+				lazy: async() => await import("@page/app/Layout"),
+				children: [
+					{
+						index: true,
+						lazy: async() => await import("@page/app/Index"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/app/loader/index" );
+							return loader( { request, params } );
+						}
+					}
+				]
+			},
+			// end App ----------------------------------
+
+
 			{
 				index: true,
 				element: <></>

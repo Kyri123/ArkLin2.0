@@ -1,20 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "react-bootstrap";
+import { Button }          from "react-bootstrap";
 import type {
 	ILTELoadingButton,
 	ILTEToggleButton
-}                 from "@app/Types/AdminLTE";
-import type React from "react";
+}                          from "@app/Types/AdminLTE";
+import type React          from "react";
 
 
 export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
-	Permission,
-	IsLoading,
-	Hide,
-	LoadingIcon,
-	ForceDisable,
-	...Props
-} ) => {
+																				   Permission,
+																				   IsLoading,
+																				   Hide,
+																				   LoadingIcon,
+																				   ForceDisable,
+																				   ...Props
+																			   } ) => {
 	if ( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}

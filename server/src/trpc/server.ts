@@ -9,13 +9,15 @@ import {
 import { MW_Auth }              from "@server/trpc/middleware";
 import { BC }                   from "@server/Lib/System.Lib";
 import { public_resetPassword } from "@server/trpc/routings/public/resetPassword";
+import { public_github }        from "@server/trpc/routings/public/github";
 
 
 const publicRouter = router( {
 	validate: public_validate,
 	login: public_login,
 	register: public_createAccount,
-	password: public_resetPassword
+	password: public_resetPassword,
+	github: public_github
 } );
 const authRouter = router( {} );
 

@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link }            from "react-router-dom";
-import { FC }              from "react";
+import type { FC }              from "react";
 
-const Component: FC = () => {
+const Component : FC = () => {
 	return (
 		<div className="error-page pt-5 mt-5">
 			<h2 className="headline text-danger"> 403</h2>
@@ -23,4 +23,4 @@ const Component: FC = () => {
 	);
 }
 
-export {Component}
+export { Component }

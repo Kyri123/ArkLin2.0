@@ -20,11 +20,11 @@ interface IProps {
 }
 
 const PCServerModsRow : React.FunctionComponent<IProps> = ( {
-	ModId,
-	ModData,
-	InstanceName,
-	ModIndex
-} ) => {
+																ModId,
+																ModData,
+																InstanceName,
+																ModIndex
+															} ) => {
 	const { DoSetAlert } = useContext( AlertContext );
 	const { Data, TempModify } = useArkServer( InstanceName );
 	const [ IsSending, setIsSending ] = useState( false );
@@ -148,8 +148,8 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					| Letzes Update:{ " " }
 					<b>
             { ModData
-	            ? new Date( ModData.time_updated ).toLocaleString()
-	            : "??.??.???? ??:??:??" }
+				? new Date( ModData.time_updated ).toLocaleString()
+				: "??.??.???? ??:??:??" }
           </b>
         </span>
 			</td>

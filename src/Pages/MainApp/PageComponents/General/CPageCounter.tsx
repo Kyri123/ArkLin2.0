@@ -1,10 +1,10 @@
-import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import {
 	useEffect,
 	useMemo,
 	useState
-}                            from "react";
-import { ButtonGroup }       from "react-bootstrap";
+}                                 from "react";
+import { ButtonGroup }            from "react-bootstrap";
 import type { IPageCounterProps } from "../../../../Types/PageAddons";
 import { LTELoadingButton }       from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 
