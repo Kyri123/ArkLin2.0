@@ -15,8 +15,8 @@ import {
 }                     from "path";
 
 const reactchunk = [ "react", "react-router-dom", "react-dom" ];
-const bootstrap = [ "react-bootstrap", "bootstrap" ];
-const icons = [ "react-icons" ];
+const bootstrap = [ "react-bootstrap", "bootstrap", "icheck-bootstrap" ];
+const icons = [ "react-icons", "@fortawesome/fontawesome-svg-core", "@fortawesome/react-fontawesome" ];
 const addons = [ "react-markdown", "react-select", "lodash" ];
 const sweetalert = [ "sweetalert2", "sweetalert2-react-content" ];
 
