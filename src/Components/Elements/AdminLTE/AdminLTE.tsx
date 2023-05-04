@@ -1,4 +1,4 @@
-import type { IAdminLTEBase } from "../../../../Types/BaseTypes";
+import type { IAdminLTEBase } from "../../../Types/BaseTypes";
 
 export function LTERibbon( Props : IAdminLTEBase ) {
 	if ( Props.Hide ) {

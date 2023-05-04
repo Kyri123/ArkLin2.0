@@ -45,8 +45,8 @@ import CTraffics                      from "./Pages/MainApp/PageComponents/Page/
 import CFoother                       from "./Pages/MainApp/PageComponents/Page/CFoother";
 import { API_ClusterLib }             from "./Lib/Api/API_Cluster.Lib";
 
-const P403 = React.lazy( () => import("./Pages/ErrorPages/P403") );
-const P404 = React.lazy( () => import("./Pages/ErrorPages/P404") );
+const P403 = React.lazy( () => import("@page/error/[statusCode]") );
+const P404 = React.lazy( () => import("./Pages/error/P404") );
 
 const PCluster = React.lazy(
 	() => import("./Pages/MainApp/PCluster")

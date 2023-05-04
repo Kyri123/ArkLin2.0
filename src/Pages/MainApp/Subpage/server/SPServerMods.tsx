@@ -12,9 +12,9 @@ import {
 	FormControl,
 	InputGroup,
 	Table
-}                                from "react-bootstrap";
-import { LTELoadingButton }      from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
+}                           from "react-bootstrap";
+import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
 import type { Socket }           from "socket.io-client";
 import io                        from "socket.io-client";

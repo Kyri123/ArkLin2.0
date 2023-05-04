@@ -44,7 +44,7 @@
         "./src/Hooks/*"
       ],
       "@comp/*": [
-        "./src/Pages/Components/*"
+        "./src/Components/*"
       ],
       "@context/*": [
         "./src/Context/*"

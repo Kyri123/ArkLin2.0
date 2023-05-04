@@ -19,14 +19,14 @@ import {
 }                                      from "react-bootstrap";
 import { EPerm }                       from "@shared/Enum/User.Enum";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import { LTELoadingButton }            from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { LTELoadingButton }            from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { API_ServerLib }               from "../../../../Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import type { PanelServerConfig }      from "@shared/Type/ArkSE";
 import CServerAction                   from "./CServerAction";
 import AlertContext                    from "@context/AlertContext";
 import AccountContext                  from "@context/AccountContext";
-import CLTEInput                       from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import CLTEInput                       from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import type { ISelectMask }            from "@shared/Type/Systeminformation";
 
 export default function CServerAdminCard( Props : IServerCardProps ) {

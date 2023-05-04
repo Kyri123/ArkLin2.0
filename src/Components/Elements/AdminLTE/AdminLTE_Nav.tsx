@@ -1,7 +1,7 @@
-import type { INavLinkProps }      from "../../../../Types/AdminLTE";
+import type { INavLinkProps }      from "../../../Types/AdminLTE";
 import { useContext }              from "react";
 import { FontAwesomeIcon }         from "@fortawesome/react-fontawesome";
-import type { IChildrenBaseProps } from "../../../../Types/BaseTypes";
+import type { IChildrenBaseProps } from "../../../Types/BaseTypes";
 import { Link }                    from "react-router-dom";
 import AccountContext              from "@context/AccountContext";
 

@@ -1,7 +1,7 @@
 import type { IChildrenBaseProps } from "../../../../Types/BaseTypes";
-import { Modal }              from "react-bootstrap";
-import { LTELoadingButton }   from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }    from "@fortawesome/react-fontawesome";
+import { Modal }            from "react-bootstrap";
+import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 
 export interface IAcceptActionFunction<
 	F extends ( ...args : any[] ) => void = ( ...args : any[] ) => void

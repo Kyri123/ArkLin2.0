@@ -1,6 +1,6 @@
 import bytes                from "bytes";
 import type { SystemUsage } from "@shared/Type/Systeminformation";
-import { CStateCard }       from "../../../Components/Elements/AdminLTE/AdminLTE_Cards";
+import { CStateCard }       from "../../../../Components/Elements/AdminLTE/AdminLTE_Cards";
 import {
 	Col,
 	Row

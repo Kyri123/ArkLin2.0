@@ -5,9 +5,9 @@ import {
 }                                 from "react";
 import { Card }                   from "react-bootstrap";
 import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
-import CLTEInput                  from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { API_User }               from "@app/Lib/Api/API_User";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CLTEInput           from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { API_User }        from "@app/Lib/Api/API_User";
 import AlertContext               from "@context/AlertContext";
 import AccountContext             from "@context/AccountContext";
 import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";

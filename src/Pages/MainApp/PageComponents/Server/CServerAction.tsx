@@ -1,12 +1,12 @@
 import { Modal }            from "react-bootstrap";
-import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import {
 	useContext,
 	useEffect,
 	useState
 }                           from "react";
-import CLTEInput            from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import CLTEInput            from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import {
 	EArkmanagerCommands,
 	GetMaskFromCommand

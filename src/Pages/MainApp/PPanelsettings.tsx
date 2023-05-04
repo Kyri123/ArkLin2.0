@@ -10,9 +10,9 @@ import {
 	useSearchParams
 }                                               from "react-router-dom";
 import { API_PanelLib }                         from "@app/Lib/Api/API_Panel.Lib";
-import { Card }                                 from "react-bootstrap";
-import CLTEInput                                from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { LTELoadingButton }                     from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { Card }             from "react-bootstrap";
+import CLTEInput            from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { LTELoadingButton } from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }                      from "@fortawesome/react-fontawesome";
 import StringMapLib                             from "../../Lib/StringMap.Lib";
 import usePermissionPage                        from "../../Hooks/usePermissionPage";

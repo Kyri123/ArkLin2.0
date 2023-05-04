@@ -12,12 +12,12 @@ import {
 }                                 from "react-bootstrap";
 import { useCluster }             from "../../../../Hooks/useCluster";
 import type { Cluster }           from "../../../../Types/MongoDB";
-import { DefaultCluster }         from "@shared/Default/Server.Default";
+import { DefaultCluster }  from "@shared/Default/Server.Default";
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                                 from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+}                          from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type {
 	MultiValue,
 	SingleValue

@@ -9,12 +9,12 @@ import {
 	Card,
 	Modal,
 	Nav
-}                           from "react-bootstrap";
+}                          from "react-bootstrap";
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                           from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+}                          from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { API_User }         from "../../../../Lib/Api/API_User";
 import {
 	EPerm,
