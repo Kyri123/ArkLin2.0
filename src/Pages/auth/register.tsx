@@ -1,3 +1,4 @@
+import type { FunctionComponent }         from "react";
 import {
 	useRef,
 	useState
@@ -13,8 +14,18 @@ import {
 	Row
 }                                         from "react-bootstrap";
 import { LTELoadingButton }               from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import {
+	Link,
+	useNavigate
+}                                         from "react-router-dom";
+import {
+	fireSwalFromApi,
+	tRPC_handleError,
+	tRPC_Public
+}                                         from "@app/Lib/tRPC";
 
-export default function PSignUp() {
+const Component : FunctionComponent = () => {
+	const navigate = useNavigate();
 	const { SetToken } = useAuth();
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
 	const [ Response, setResponse ] = useState<
@@ -31,7 +42,7 @@ export default function PSignUp() {
 
 	const OnReg = async() => {
 		setIsSending( true );
-		let Resp : TResponse_Auth_IsLoggedIn<true> | undefined = undefined;
+		const Resp : TResponse_Auth_IsLoggedIn<true> | undefined = undefined;
 
 		const target = {
 			user: LoginRef.current?.value || "",
@@ -51,19 +62,17 @@ export default function PSignUp() {
 		] );
 
 		if ( !InputState.find( ( e ) => e ) ) {
-			Resp = await API_AuthLib.TryCreateAnAccount( {
-				user: target.user,
-				accountkey: target.accountkey,
+			const Response = await tRPC_Public.register.mutate( {
+				username: target.user,
+				email: target.email,
 				password: target.password,
-				passwordagain: target.passwordagain,
-				email: target.email
-			} );
+				key: target.accountkey
+			} ).catch( tRPC_handleError );
 
-			if ( Resp ) {
-				if ( Resp.Auth && Resp.Data ) {
-					SetToken( Resp.Data.JsonWebToken );
-					window.location.href = "/home";
-				}
+			if ( Response ) {
+				fireSwalFromApi( Response.message, true );
+				SetToken( Response.sessionToken );
+				navigate( 0 );
 			}
 		}
 
@@ -129,6 +138,12 @@ export default function PSignUp() {
 					</LTELoadingButton>
 				</Col>
 			</Row>
+
+			<hr className="my-4"/>
+			<Link className="w-100 mb-3 rounded-3 btn btn-dark" to={ "/auth/login" }>Einloggen</Link>
 		</>
 	);
-}
+};
+
+
+export { Component };

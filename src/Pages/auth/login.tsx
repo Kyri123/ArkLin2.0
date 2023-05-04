@@ -1,28 +1,33 @@
+import type { FunctionComponent } from "react";
 import {
 	useRef,
 	useState
-}                                         from "react";
-import { CAlert }                         from "../MainApp/PageComponents/General/CAlert";
-import { FontAwesomeIcon }                from "@fortawesome/react-fontawesome";
-import type { TResponse_Auth_IsLoggedIn } from "@app/Types/API_Response";
-import { API_AuthLib }                    from "../../Lib/Api/API_Auth.Lib";
-import { CLTECheckbox }                   from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import useAuth                            from "../../Hooks/useAuth";
+}                                 from "react";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import { CLTECheckbox }           from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
+import useAuth                    from "@hooks/useAuth";
 import {
 	Col,
 	FloatingLabel,
 	Form,
 	Row
-}                                         from "react-bootstrap";
-import { LTELoadingButton }               from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                                 from "react-bootstrap";
+import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import {
+	Link,
+	useNavigate
+}                                 from "react-router-dom";
+import {
+	fireSwalFromApi,
+	tRPC_handleError,
+	tRPC_Public
+}                                 from "@app/Lib/tRPC";
 
-export default function PSignIn() {
+const Component : FunctionComponent = () => {
+	const navigate = useNavigate();
 	const { SetToken } = useAuth();
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
-	const [ Response, setResponse ] = useState<
-		TResponse_Auth_IsLoggedIn<true> | undefined
-	>();
-	const [ StayLoggedIn, setStayLoggedIn ] = useState( false );
+	const [ stayLoggedIn, setStayLoggedIn ] = useState( false );
 	const [ IsSending, setIsSending ] = useState( false );
 
 	const LoginRef = useRef<HTMLInputElement>( null );
@@ -38,40 +43,33 @@ export default function PSignIn() {
 
 		setInputState( [ target.login.trim() === "", target.password.trim() === "" ] );
 
-		const Response = await API_AuthLib.DoLogin( {
+		const Response = await tRPC_Public.login.mutate( {
 			login: target.login,
 			password: target.password,
-			stayloggedin: StayLoggedIn
-		} );
-
-		if ( Response.Data && Response.Auth ) {
-			SetToken( Response.Data.JsonWebToken );
-			window.location.href = "/home";
+			stayLoggedIn
+		} ).catch( tRPC_handleError );
+ 
+		if ( Response ) {
+			if ( Response.passwordResetToken ) {
+				fireSwalFromApi( Response.message, true );
+				navigate( `/auth/reset/${ Response.passwordResetToken }` );
+			}
+			else if ( Response.token ) {
+				fireSwalFromApi( Response.message, true );
+				SetToken( Response.token );
+				navigate( 0 );
+			}
+			setInputState( [ false, false ] );
 		}
 		else {
 			setInputState( [ true, true ] );
 		}
 
-		setResponse( Response );
 		setIsSending( false );
 	};
 
 	return (
 		<>
-			<CAlert
-				OnClear={ () => {
-					if ( Response ) {
-						const Copy : TResponse_Auth_IsLoggedIn<true> | undefined =
-							structuredClone( Response );
-						if ( Copy ) {
-							Copy.Message = undefined;
-							setResponse( Copy );
-						}
-					}
-				} }
-				Data={ Response }
-			/>
-
 			<FloatingLabel
 				controlId="login"
 				label="E-Mail / Benutzername"
@@ -90,7 +88,7 @@ export default function PSignIn() {
 
 			<Row>
 				<Col span={ 6 }>
-					<CLTECheckbox OnValueChanges={ setStayLoggedIn } Checked={ StayLoggedIn }>
+					<CLTECheckbox OnValueChanges={ setStayLoggedIn } Checked={ stayLoggedIn }>
 						Eingeloggt bleiben
 					</CLTECheckbox>
 				</Col>
@@ -106,6 +104,12 @@ export default function PSignIn() {
 					</LTELoadingButton>
 				</Col>
 			</Row>
+
+			<hr className="my-4"/>
+			<Link className="w-100 mb-3 rounded-3 btn btn-dark" to={ "/auth/register" }>Account Erstellen</Link>
 		</>
 	);
-}
+};
+
+
+export { Component };

@@ -1,29 +1,45 @@
-import {
-	createBrowserRouter,
-	createRoutesFromElements,
-	Navigate,
-	Route
-}            from "react-router-dom";
-import React from "react";
+import { createBrowserRouter } from "react-router-dom";
 
-const rootRouter = createBrowserRouter( createRoutesFromElements(
-	<>
-		<Route path="/" loader={ async( { request, params } ) => {
+const rootRouter = createBrowserRouter( [
+	{
+		path: "/",
+		lazy: async() => await import("@app/MainLayout"),
+		loader: async( { request, params } ) => {
 			const { loader } = await import( "@app/MainLayout_Loader" );
 			return loader( { request, params } );
-		} } lazy={ async() => await import("@app/MainLayout") }>
-			<Route path="/auth/login" element={ <></> }/>
-			<Route path="/auth/reset/:token" element={ <></> }/>
-			<Route path="/auth/register" element={ <></> }/>
-
-			<Route index element={ <></> }/>
- 
-			<Route path="error/:statusCode" element={ <></> }/>
-		</Route>
-
-		<Route path="*" element={ <Navigate to={ "error/404" }/> }/>
-	</>
-) );
+		},
+		children: [
+			// start auth --------------------------------
+			{
+				path: "/auth/",
+				lazy: async() => await import("@page/auth/AuthLayout"),
+				children: [
+					{
+						path: "/auth/login",
+						lazy: async() => await import("@page/auth/login")
+					},
+					{
+						path: "/auth/register",
+						lazy: async() => await import("@page/auth/register")
+					},
+					{
+						path: "/auth/reset/:token",
+						lazy: async() => await import("@page/auth/reset/[token]")
+					}
+				]
+			},
+			// end auth ----------------------------------
+			{
+				index: true,
+				element: <></>
+			},
+			{
+				path: "/error/:statusCode",
+				element: <></>
+			}
+		]
+	}
+] );
 
 export {
 	rootRouter

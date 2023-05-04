@@ -35,7 +35,7 @@ export const public_login = publicProcedure.input( z.object( {
 					if ( token ) {
 						return {
 							passwordResetToken: token.key,
-							message: `Login successfully, Welcome ${ userDocument.username }`
+							message: `Es wurde ein altes Password Format gefunden. Bitte gebe ein neues Passwort ein.`
 						};
 					}
 				}
@@ -44,18 +44,13 @@ export const public_login = publicProcedure.input( z.object( {
 					if ( token ) {
 						return { token, message: `Login successfully, Welcome ${ userDocument.username }` };
 					}
-					throw new TRPCError( {
-						message: "Something goes wrong while creating token.",
-						code: "INTERNAL_SERVER_ERROR"
-					} );
 				}
-				throw new TRPCError( { message: "password is incorrect.", code: "BAD_REQUEST" } );
 			}
-			throw new TRPCError( { message: "password is incorrect.", code: "BAD_REQUEST" } );
+			throw new TRPCError( { message: "Password ist falsch!", code: "BAD_REQUEST" } );
 		}
 	}
 	catch ( e ) {
 		handleTRCPErr( e );
 	}
-	throw new TRPCError( { message: "password or login is to short.", code: "BAD_REQUEST" } );
+	throw new TRPCError( { message: "Etwas ist schiefgegangen", code: "BAD_REQUEST" } );
 } );

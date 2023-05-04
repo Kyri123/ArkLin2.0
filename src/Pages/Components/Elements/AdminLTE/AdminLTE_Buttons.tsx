@@ -3,8 +3,9 @@ import { Button }          from "react-bootstrap";
 import type {
 	ILTELoadingButton,
 	ILTEToggleButton
-}                          from "../../../../Types/AdminLTE";
-import type React               from "react";
+}                          from "@app/Types/AdminLTE";
+import type React          from "react";
+
 
 export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
 	Permission,

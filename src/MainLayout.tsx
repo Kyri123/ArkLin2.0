@@ -1,9 +1,9 @@
 import type { FunctionComponent } from "react";
+import { Outlet }                 from "react-router-dom";
 
 const Component : FunctionComponent = () => {
-
 	return (
-		<>213</>
+		<Outlet/>
 	);
 };
 

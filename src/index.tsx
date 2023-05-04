@@ -1,6 +1,6 @@
 /** @format */
 
-import ReactDOM       from "react-dom/client";
+import ReactDOM           from "react-dom/client";
 
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -9,12 +9,9 @@ import "@style/index.css";
 import "@style/Ribbon.scss";
 import "@style/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-	Navigate,
-	RouterProvider
-}                     from "react-router-dom";
-import { rootRouter } from "@app/Router";
-import { StrictMode } from "react";
+import { RouterProvider } from "react-router-dom";
+import { rootRouter }     from "@app/Router";
+import { StrictMode }     from "react";
 
 const root = ReactDOM.createRoot(
 	document.getElementById( "root" ) as HTMLElement
@@ -22,7 +19,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<StrictMode>
-		<RouterProvider router={ rootRouter } fallbackElement={ <Navigate to={ "/error/404" }/> }/>
+		<RouterProvider router={ rootRouter } fallbackElement={ <></> }/>
 	</StrictMode>
 );
 

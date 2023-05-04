@@ -26,7 +26,7 @@ export const public_resetPassword = publicProcedure.input( z.object( {
 			if ( userDocument ) {
 				userDocument.setPassword( password );
 				if ( await userDocument.save() ) {
-					await token.deleteOne();
+					await DB_AccountKey.deleteMany( { userId: token.userId } );
 					const sessionToken = await CreateSession( userDocument.toJSON() );
 					if ( sessionToken ) {
 						return {
