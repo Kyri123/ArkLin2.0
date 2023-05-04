@@ -3,8 +3,8 @@ import type { Server }             from "socket.io";
 import type { DefaultEventsMap }   from "socket.io/dist/typed-events";
 import type * as http              from "http";
 import type {
-	IEmitEvents,
-	IListenEvents
+	EmitEvents,
+	ListenEvents
 }                                  from "@app/Types/Socket";
 import "./Types";
 import type { SystemLib_Class }    from "@server/Lib/System.Lib";
@@ -18,7 +18,7 @@ export declare global {
 		typeof http.IncomingMessage,
 		typeof http.ServerResponse
 	>;
-	var SocketIO : Server<IListenEvents, IEmitEvents, DefaultEventsMap, any>;
+	var SocketIO : Server<ListenEvents, EmitEvents, DefaultEventsMap, any>;
 	//var RedisClient : RedisClientType<RedisModules, RedisFunctions, RedisScripts>;
 	var TManager : TaskManagerClass;
 	var CManager : ConfigManagerClass;

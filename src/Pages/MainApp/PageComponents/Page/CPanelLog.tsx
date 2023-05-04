@@ -8,8 +8,8 @@ import io               from "socket.io-client";
 import { API_PanelLib } from "../../../../Lib/Api/API_Panel.Lib";
 import { SocketIOLib }  from "../../../../Lib/Api/SocketIO.Lib";
 import type {
-	IEmitEvents,
-	IListenEvents
+	EmitEvents,
+	ListenEvents
 }                       from "@shared/Type/Socket";
 import CFormatLog       from "../Server/CFormatLog";
 
@@ -18,7 +18,7 @@ interface IPanelLogProps {
 	OnHide : () => void;
 }
 
-const SocketIO : Socket<IEmitEvents, IListenEvents> = io(
+const SocketIO : Socket<EmitEvents, ListenEvents> = io(
 	SocketIOLib.GetSpocketHost()
 );
 export default function CPanelLog( Props : IPanelLogProps ) {

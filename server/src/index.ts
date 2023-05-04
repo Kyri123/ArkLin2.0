@@ -23,8 +23,8 @@ import type { DefaultEventsMap } from "socket.io/dist/typed-events";
 import fetch                     from "node-fetch";
 import { BC }                    from "@server/Lib/System.Lib";
 import type {
-	IEmitEvents,
-	IListenEvents
+	EmitEvents,
+	ListenEvents
 }                                from "@app/Types/Socket";
 
 "asdasd".contains( "asd" );
@@ -51,7 +51,7 @@ for ( const LogFile of Files ) {
 
 global.Api = express();
 global.HttpServer = http.createServer( Api );
-global.SocketIO = new Server<IListenEvents, IEmitEvents>( HttpServer, {
+global.SocketIO = new Server<ListenEvents, EmitEvents>( HttpServer, {
 	cors: {
 		origin: "*",
 		methods: [ "GET", "POST" ]
@@ -63,7 +63,7 @@ Api.use( express.json() );
 Api.use( express.static( path.join( __basedir, "build" ) ) );
 
 const Connection = async(
-	socket : Socket<IListenEvents, IEmitEvents, DefaultEventsMap, any>
+	socket : Socket<ListenEvents, EmitEvents, DefaultEventsMap, any>
 ) => {
 	socket.emit( "Connect" );
 };

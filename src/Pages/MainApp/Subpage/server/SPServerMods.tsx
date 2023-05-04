@@ -19,8 +19,8 @@ import PCServerModsRow           from "../../PageComponents/Server/PCServerModsR
 import type { Socket }           from "socket.io-client";
 import io                        from "socket.io-client";
 import type {
-	IEmitEvents,
-	IListenEvents
+	EmitEvents,
+	ListenEvents
 }                                from "@shared/Type/Socket";
 import { SocketIOLib }           from "../../../../Lib/Api/SocketIO.Lib";
 import { API_SteamAPILib }       from "../../../../Lib/Api/API_SteamAPI.Lib";
@@ -33,7 +33,7 @@ interface IProps {
 	InstanceName : string;
 }
 
-const SocketIO : Socket<IEmitEvents, IListenEvents> = io(
+const SocketIO : Socket<EmitEvents, ListenEvents> = io(
 	SocketIOLib.GetSpocketHost()
 );
 const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {

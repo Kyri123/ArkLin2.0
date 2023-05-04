@@ -1,13 +1,9 @@
 import type { DefaultEventsMap } from "socket.io/dist/typed-events";
-import type { SystemUsage }      from "./Systeminformation";
-import type {
-	Cluster,
-	Instance
-}                                from "../../Types/MongoDB";
+import type { SystemUsage }           from "@server/MongoDB/DB_Usage";
+import type { Instance }              from "@server/MongoDB/DB_Instances";
+import type { Cluster }               from "@server/MongoDB/DB_Cluster";
 
-export type TRedisKeys = "Systeminformation" | "Releases";
-
-interface IEmitEvents extends DefaultEventsMap {
+interface EmitEvents extends DefaultEventsMap {
 	Connect : () => void;
 	OnSystemUpdate : ( Usage : SystemUsage ) => void;
 	OnPanelLogUpdated : ( Log : string[] ) => void;
@@ -18,4 +14,4 @@ interface IEmitEvents extends DefaultEventsMap {
 	SteamApiUpdated : () => void;
 }
 
-type IListenEvents = DefaultEventsMap;
+type ListenEvents = DefaultEventsMap;
