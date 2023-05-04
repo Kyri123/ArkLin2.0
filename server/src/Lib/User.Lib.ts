@@ -56,7 +56,7 @@ export async function GetAllServerWithPermission( user : User ) {
 	const arr = user.HasPermission( EPerm.ManagePanel ) ? await DB_Instances.find<Instance>( {} ) : await DB_Instances.find<Instance>( { servers: user.Get.servers } );
 	const result : Record<string, Instance> = {};
 	for ( const instance of arr ) {
-		result[ instance._id ] = instance;
+		result[ instance._id! ] = instance;
 	}
 	return result;
 }

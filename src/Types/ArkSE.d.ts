@@ -1,24 +1,7 @@
-import type {
-	Instance,
-	MongoBase
-} from "../../Types/MongoDB";
+import type { Instance }  from "@server/MongoDB/DB_Instances";
+import type { MongoBase } from "@app/Types/MongoDB";
 
-export type TServerState =
-	| "NotInstalled"
-	| "Offline"
-	| "Online"
-	| "ActionInProgress"
-	| "Running";
-
-export interface InstanceState extends MongoBase {
-	State : TServerState;
-	IsListen : boolean;
-	Player : number;
-	OnlinePlayerList : string[];
-	ServerVersion : string;
-	ArkmanagerPID : number;
-	ArkserverPID : number;
-}
+export type InstanceState = Instance[ "State" ] & Partial<MongoBase>
 
 export interface InstanceData extends Record<string, any> {
 	arkserverroot : string;
@@ -70,23 +53,9 @@ export interface InstanceData extends Record<string, any> {
 	panel_publicip : string;
 }
 
-
 export interface ServerStatus {
 	Online : boolean;
 	Players : string[];
 }
 
-export interface PanelServerConfig {
-	BackupEnabled : boolean;
-	MaxBackupfolderSize : number;
-	BackupInterval : number;
-	AutoUpdateParameters : string[];
-	AutoUpdateEnabled : boolean;
-	AutoUpdateInterval : number;
-	_id? : string;
-	__v? : number;
-}
-
-export interface IFullData {
-	InstanceData : Record<string, Instance>;
-}
+export type PanelServerConfig = Instance[ "PanelConfig" ] & Partial<MongoBase>

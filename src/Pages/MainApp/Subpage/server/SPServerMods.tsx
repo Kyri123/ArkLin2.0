@@ -26,7 +26,7 @@ import { SocketIOLib }           from "../../../../Lib/Api/SocketIO.Lib";
 import { API_SteamAPILib }       from "../../../../Lib/Api/API_SteamAPI.Lib";
 import type { ISteamApiMod }     from "../../../../Types/SteamAPI";
 import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
-import AlertContext              from "../../../../Context/AlertContext";
+import AlertContext              from "@context/AlertContext";
 import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
 
 interface IProps {

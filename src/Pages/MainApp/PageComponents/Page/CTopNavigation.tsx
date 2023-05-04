@@ -6,8 +6,8 @@ import {
 import { Dropdown }         from "react-bootstrap";
 import * as Icon            from "react-icons/bs";
 import { Link }             from "react-router-dom";
-import AccountContext       from "../../../../Context/AccountContext";
-import ServerContext        from "../../../../Context/ServerContext";
+import AccountContext       from "@context/AccountContext";
+import ServerContext        from "@context/ServerContext";
 import useAuth              from "../../../../Hooks/useAuth";
 import { API_PanelLib }     from "../../../../Lib/Api/API_Panel.Lib";
 import { EPerm }            from "@shared/Enum/User.Enum";

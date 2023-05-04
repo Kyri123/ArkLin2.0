@@ -14,7 +14,7 @@ import {
 import Select               from "react-select";
 import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
 import { useArkServer }     from "../../../../Hooks/useArkServer";
-import AlertContext         from "../../../../Context/AlertContext";
+import AlertContext         from "@context/AlertContext";
 import type { ISelectMask } from "@shared/Type/Systeminformation";
 
 const options = [

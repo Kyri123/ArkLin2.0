@@ -1,20 +1,17 @@
-import type {
-	FunctionComponent} from "react";
-import {
-	useContext
-}                           from "react";
+import type { FunctionComponent } from "react";
+import { useContext }             from "react";
 import {
 	Button,
 	ButtonGroup,
 	Card,
 	Col,
 	Table
-}                           from "react-bootstrap";
-import { useCluster }       from "../../../../Hooks/useCluster";
-import { useArkServer }     from "../../../../Hooks/useArkServer";
-import { MakeRandomString } from "@kyri123/k-javascript-utils";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import AlertContext         from "../../../../Context/AlertContext";
+}                                 from "react-bootstrap";
+import { useCluster }             from "../../../../Hooks/useCluster";
+import { useArkServer }           from "../../../../Hooks/useArkServer";
+import { MakeRandomString }       from "@kyri123/k-javascript-utils";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import AlertContext               from "@context/AlertContext";
 
 interface IPCServerClusterRow {
 	ServerName : string;

@@ -1,35 +1,35 @@
-import type * as core             from "express-serve-static-core";
+import type * as core     from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                                 from "express-serve-static-core";
-import { CreateUrlV2 }            from "@server/Lib/PathBuilder.Lib";
+}                         from "express-serve-static-core";
+import { CreateUrlV2 }    from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Cluster_CreateCluster,
 	TResponse_Cluster_GetClusters,
 	TResponse_Cluster_RemoveCluster,
 	TResponse_Cluster_SendCommandToCluster,
 	TResponse_Cluster_SetCluster
-}                                 from "@app/Types/API_Response";
-import { EPerm }                  from "../../../src/Shared/Enum/User.Enum";
-import { EClusterApiUrl }         from "../../../src/Shared/Enum/Routing";
+}                         from "@app/Types/API_Response";
+import { EPerm }          from "@shared/Enum/User.Enum";
+import { EClusterApiUrl } from "@shared/Enum/Routing";
 import type {
 	TRequest_Cluster_CreateCluster,
 	TRequest_Cluster_RemoveCluster,
 	TRequest_Cluster_SendCommandToCluster,
 	TRequest_Cluster_SetCluster
-}                                 from "@app/Types/API_Request";
+}                         from "@app/Types/API_Request";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                                 from "../../../src/Shared/Default/ApiRequest.Default";
-import { AuthMiddleware }         from "../Middleware/Auth.Middleware";
-import type { Instance } from "../MongoDB/DB_Instances";
-import DB_Instances from "../MongoDB/DB_Instances";
-import { ServerLib }              from "@server/Lib/Server.Lib";
-import type { Cluster }           from "../MongoDB/DB_Cluster";
-import DB_Cluster                 from "../MongoDB/DB_Cluster";
-import { EmitClusters }           from "@server/Lib/SocketIO.Lib";
+}                         from "@shared/Default/ApiRequest.Default";
+import { AuthMiddleware } from "../Middleware/Auth.Middleware";
+import type { Instance }  from "../MongoDB/DB_Instances";
+import DB_Instances       from "../MongoDB/DB_Instances";
+import { ServerLib }      from "@server/Lib/Server.Lib";
+import type { Cluster }   from "../MongoDB/DB_Cluster";
+import DB_Cluster         from "../MongoDB/DB_Cluster";
+import { EmitClusters }   from "@server/Lib/SocketIO.Lib";
 
 const ValidateCluster = ( ClusterData : Partial<Cluster> ) : boolean => {
 	if ( ClusterData.Master && ClusterData.DisplayName && ClusterData.Instances ) {

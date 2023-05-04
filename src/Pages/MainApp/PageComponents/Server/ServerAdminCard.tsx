@@ -24,8 +24,8 @@ import { API_ServerLib }               from "../../../../Lib/Api/API_Server.Lib"
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import type { PanelServerConfig }      from "@shared/Type/ArkSE";
 import CServerAction                   from "./CServerAction";
-import AlertContext                    from "../../../../Context/AlertContext";
-import AccountContext                  from "../../../../Context/AccountContext";
+import AlertContext                    from "@context/AlertContext";
+import AccountContext                  from "@context/AccountContext";
 import CLTEInput                       from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import type { ISelectMask }            from "@shared/Type/Systeminformation";
 

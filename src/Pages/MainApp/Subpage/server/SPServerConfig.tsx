@@ -1,4 +1,4 @@
-import type React from "react";
+import type React              from "react";
 import {
 	useContext,
 	useEffect,
@@ -15,8 +15,8 @@ import {
 	Nav,
 	Row
 }                              from "react-bootstrap";
-import type { SingleValue } from "react-select";
-import Select from "react-select";
+import type { SingleValue }    from "react-select";
+import Select                  from "react-select";
 import CLTEInput               from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { LTELoadingButton }    from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { useToggle }           from "@kyri123/k-reactutils";
@@ -29,7 +29,7 @@ import {
 	gruvboxDarkInit
 }                              from "@uiw/codemirror-theme-gruvbox-dark";
 import { API_ServerLib }       from "../../../../Lib/Api/API_Server.Lib";
-import AlertContext            from "../../../../Context/AlertContext";
+import AlertContext            from "@context/AlertContext";
 
 interface IProps {
 	InstanceName : string;

@@ -1,4 +1,4 @@
-import { useArkServer }    from "../../Hooks/useArkServer";
+import { useArkServer }    from "@hooks/useArkServer";
 import {
 	Link,
 	Navigate,

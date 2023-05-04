@@ -1,4 +1,4 @@
-import { API_QueryLib } from "./API_Query.Lib";
+import { API_QueryLib }    from "./API_Query.Lib";
 import type {
 	TResponse_User_Addkey,
 	TResponse_User_Allkeys,
@@ -8,13 +8,14 @@ import type {
 	TResponse_User_Removeaccount,
 	TResponse_User_Removekey,
 	TResponse_User_Usereditaccount
-}                       from "@shared/Type/API_Response";
+}                          from "@app/Types/API_Response";
+import { EUserUrl }        from "@shared/Enum/Routing";
 import type {
-	IMO_AccountKey,
-	Instance,
+	ClientUserAccount,
 	UserAccount
-}                       from "../../Types/MongoDB";
-import { EUserUrl }     from "@shared/Enum/Routing";
+}                          from "@server/MongoDB/DB_Accounts";
+import type { AccountKey } from "@server/MongoDB/DB_AccountKey";
+import type { Instance }   from "@server/MongoDB/DB_Instances";
 
 export class API_User {
 	static async UserSettings_EditAccount(
@@ -52,7 +53,7 @@ export class API_User {
 		} );
 	}
 
-	static async GetAllUsers( Default : UserAccount ) : Promise<UserAccount[]> {
+	static async GetAllUsers( Default : ClientUserAccount ) : Promise<ClientUserAccount[]> {
 		const Data = await API_QueryLib.GetFromAPI<TResponse_User_Alluser>(
 			EUserUrl.alluser
 		);
@@ -62,7 +63,7 @@ export class API_User {
 		return [ Default ];
 	}
 
-	static async GetAllKeys() : Promise<IMO_AccountKey[]> {
+	static async GetAllKeys() : Promise<AccountKey[]> {
 		const Data = await API_QueryLib.GetFromAPI<TResponse_User_Allkeys>(
 			EUserUrl.allkeys
 		);

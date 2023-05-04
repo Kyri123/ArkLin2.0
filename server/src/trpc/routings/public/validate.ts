@@ -7,6 +7,7 @@ import {
 import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
 import DB_Accounts                from "@server/MongoDB/DB_Accounts";
 import DB_SessionToken            from "@server/MongoDB/DB_SessionToken";
+import { TRPCError }              from "@trpc/server";
 
 export const public_validate =
 	router( {
@@ -26,5 +27,18 @@ export const public_validate =
 			catch ( e ) {
 			}
 			return { tokenValid: false };
+		} ),
+
+		test: publicProcedure.query( async( { input } ) => {
+			try {
+				throw new TRPCError( {
+					message: "Token konnte nicht erstellt werden.",
+					code: "INTERNAL_SERVER_ERROR"
+				} );
+			}
+			catch ( e ) {
+				console.log( e );
+			}
+			return { test: true };
 		} )
 	} );

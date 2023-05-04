@@ -23,13 +23,13 @@ import type {
 	SingleValue
 }                                 from "react-select";
 import Select                     from "react-select";
-import ServerContext              from "../../../../Context/ServerContext";
+import ServerContext              from "@context/ServerContext";
 import { API_ServerLib }          from "../../../../Lib/Api/API_Server.Lib";
 import type { InstanceData }      from "@shared/Type/ArkSE";
 import { CAlert }                 from "../General/CAlert";
-import type { IAPIResponseBase }  from "@shared/Type/API_Response";
+import type { IAPIResponseBase }  from "@app/Types/API_Response";
 import { API_ClusterLib }         from "../../../../Lib/Api/API_Cluster.Lib";
-import AlertContext               from "../../../../Context/AlertContext";
+import AlertContext               from "@context/AlertContext";
 
 interface IPCClusterElementProps {
 	ClusterID : string | undefined;

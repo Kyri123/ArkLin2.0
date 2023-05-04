@@ -268,7 +268,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return true;
 	}
 
-	async SetServerState( State : Partial<InstanceState>, MapData? : any ) {
+	async SeEServerState( State : Partial<InstanceState>, MapData? : any ) {
 		if ( await this.Init() ) {
 			const NewState : Partial<InstanceState> = {
 				...this.MongoDBData?.State,

@@ -2,22 +2,22 @@ import {
 	useContext,
 	useEffect,
 	useState
-}                           from "react";
-import { Card }             from "react-bootstrap";
-import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import CLTEInput            from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { API_User }         from "../../../../Lib/Api/API_User";
-import type { UserAccount } from "../../../../Types/MongoDB";
-import AlertContext         from "../../../../Context/AlertContext";
-import AccountContext       from "../../../../Context/AccountContext";
+}                                 from "react";
+import { Card }                   from "react-bootstrap";
+import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import CLTEInput                  from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import { API_User }               from "@app/Lib/Api/API_User";
+import AlertContext               from "@context/AlertContext";
+import AccountContext             from "@context/AccountContext";
+import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
 
 export default function SPUser() {
 	const Account = useContext( AccountContext );
 	const GAlert = useContext( AlertContext );
 	const [ IsSending, setIsSending ] = useState( false );
-	const [ Form, setForm ] = useState<UserAccount>( {
-		...Account.Account.GetDBInformation()
+	const [ Form, setForm ] = useState<ClientUserAccount>( {
+		...Account.Account.Get
 	} );
 	const [ [ NewPassword, NewPasswordAgain ], setNewPassword ] = useState( [ "", "" ] );
 	const [ DisableSend, setDisableSend ] = useState( false );

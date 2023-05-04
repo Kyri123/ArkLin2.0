@@ -101,6 +101,7 @@ mongoose
 			SystemLib.Log( "ip", "Public IP: " + global.__PublicIP );
 		}
 
+		await import( "@server/trpc/server" );
 		await SSHManager.Init();
 		// create an account key if no there and no user
 		if (

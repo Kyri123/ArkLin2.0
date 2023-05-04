@@ -4,7 +4,7 @@ import path                  from "path";
 import type { TPermissions } from "@shared/Enum/User.Enum";
 import { BC }                from "@server/Lib/System.Lib";
 
-export function CreateUrl( Url : TServerUrls ) : string {
+export function CreateUrl( Url : TServerUrls | string ) : string {
 	if ( process.env.API_BASE_URL ) {
 		if ( !process.env.API_BASE_URL.endsWith( "/" ) ) {
 			process.env.API_BASE_URL += "/";
@@ -24,7 +24,7 @@ export function CreateUrl( Url : TServerUrls ) : string {
 	return `/api/v1/${ Url }`;
 }
 
-export function CreateUrlV2( Url : TServerUrls, As : "GET" | "POST", Perm? : TPermissions ) : [ string, TPermissions | undefined ] {
+export function CreateUrlV2( Url : TServerUrls | string, As : "GET" | "POST", Perm? : TPermissions ) : [ string, TPermissions | undefined ] {
 	let EndUrl = `/api/v1/${ Url }`;
 	if ( process.env.API_BASE_URL ) {
 		if ( !process.env.API_BASE_URL.endsWith( "/" ) ) {

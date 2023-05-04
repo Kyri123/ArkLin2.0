@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "node",
-    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
     "removeComments": false,
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,6 +20,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
     "typeRoots": [
       "src/Shared/Type"
     ],

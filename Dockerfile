@@ -17,10 +17,8 @@ COPY src/Shared ./Shared
 COPY ./config ./config
 
 # create main files
-RUN yarn install --frozen-lockfile
-RUN yarn tailwindcss
-RUN yarn BuildServer
-RUN yarn Client
+RUN yarn install
+RUN yarn build
 
 EXPOSE 28080:28080
 EXPOSE 28100:28100/udp

@@ -1,8 +1,6 @@
 import { createContext } from "react";
-import type {
-	Cluster,
-	Instance
-}                        from "../Types/MongoDB";
+import type { Cluster }       from "@server/MongoDB/DB_Cluster";
+import type { Instance }      from "@server/MongoDB/DB_Instances";
 
 export default createContext<{
 	ClusterData : Record<string, Cluster>;

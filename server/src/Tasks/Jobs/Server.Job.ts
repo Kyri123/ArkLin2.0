@@ -15,7 +15,8 @@ import {
 import DB_Instances                    from "@server/MongoDB/DB_Instances";
 import { JobTask }                     from "../TaskManager";
 import { BC }                          from "@server/Lib/System.Lib";
-import type { InstanceData }                from "@app/Types/ArkSE";
+import type { InstanceData }           from "@app/Types/ArkSE";
+import { EServerState }                from "@shared/Enum/EServerState";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.ServerTasksInterval,
@@ -61,14 +62,14 @@ export default new JobTask(
 				const Cfg = Server.Get!;
 				const PanelConfig = Cfg.PanelConfig;
 
-				if ( PanelConfig.AutoUpdateEnabled && ( ( Cfg.LastAutoUpdate || 0 ) + PanelConfig.AutoUpdateInterval ) <= Date.now() && Cfg.State.State !== "ActionInProgress" ) {
+				if ( PanelConfig.AutoUpdateEnabled && ( ( Cfg.LastAutoUpdate || 0 ) + PanelConfig.AutoUpdateInterval ) <= Date.now() && Cfg.State.State !== EServerState.actionInProgress ) {
 					await Server.ExecuteCommand( EArkmanagerCommands.update, PanelConfig.AutoUpdateParameters );
 					await Server.Update( {
 						LastAutoUpdate: Date.now()
 					} );
 				}
 
-				if ( PanelConfig.BackupEnabled && ( ( Cfg.LastAutoBackup || 0 ) + PanelConfig.BackupInterval ) <= Date.now() && Cfg.State.State !== "ActionInProgress" ) {
+				if ( PanelConfig.BackupEnabled && ( ( Cfg.LastAutoBackup || 0 ) + PanelConfig.BackupInterval ) <= Date.now() && Cfg.State.State !== EServerState.actionInProgress ) {
 					await Server.ExecuteCommand( EArkmanagerCommands.backup );
 					await Server.Update( {
 						LastAutoBackup: Date.now()

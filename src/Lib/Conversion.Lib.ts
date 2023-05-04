@@ -1,8 +1,7 @@
-import type { TLTEColors }   from "@shared/Type/AdminLTE";
-import type { IconProp }     from "@fortawesome/fontawesome-svg-core";
-import type { TServerState } from "@shared/Type/ArkSE";
+import type { TLTEColors } from "@app/Types/AdminLTE";
+import { EServerState }    from "@shared/Enum/EServerState";
 
-export function GenerateIconFromColor( Type : TLTEColors ) : IconProp {
+export function GenerateIconFromColor( Type : TLTEColors ) : any {
 	switch ( Type ) {
 		case "danger":
 			break;
@@ -48,28 +47,28 @@ export function GenerateIconFromColor( Type : TLTEColors ) : IconProp {
 	return [ "fas", "warning" ];
 }
 
-export function ServerStateToColor( State : TServerState ) : string {
+export function ServerStateToColor( State : EServerState ) : string {
 	switch ( State ) {
-		case "Online":
+		case EServerState.online:
 			return "success";
-		case "Offline":
+		case EServerState.offline:
 			return "danger";
-		case "ActionInProgress":
+		case EServerState.actionInProgress:
 			return "info";
-		case "Running":
+		case EServerState.running:
 			return "primary";
 		default:
 			return "warning";
 	}
 }
 
-export function ServerStateToReadableString( State : TServerState ) : string {
+export function ServerStateToReadableString( State : EServerState ) : string {
 	switch ( State ) {
-		case "NotInstalled":
+		case EServerState.notInstalled:
 			return "Nicht Installiert";
-		case "ActionInProgress":
+		case EServerState.actionInProgress:
 			return "Aktion in Arbeit...";
-		case "Running":
+		case EServerState.running:
 			return "Server Startet";
 		default:
 			return State;

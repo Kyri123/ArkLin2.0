@@ -1,5 +1,18 @@
-import * as mongoose      from "mongoose";
-import type { MongoBase } from "@app/Types/MongoDB";
+import * as mongoose from "mongoose";
+import { z }         from "zod";
+
+const ZodUsageSchema = z.object( {
+	CPU: z.number(),
+	MemMax: z.number(),
+	MemUsed: z.number(),
+	DiskMax: z.number(),
+	DiskUsed: z.number(),
+	PanelNeedUpdate: z.boolean(),
+	UpdateIsRunning: z.boolean(),
+	PanelVersionName: z.string(),
+	PanelBuildVersion: z.string(),
+	NextPanelBuildVersion: z.string()
+} );
 
 const UsageSchema = new mongoose.Schema( {
 	CPU: { type: Number, required: true },
@@ -15,5 +28,9 @@ const UsageSchema = new mongoose.Schema( {
 } );
 
 
-export type SystemUsage = mongoose.InferSchemaType<typeof UsageSchema> & MongoBase
+export type SystemUsage = z.infer<typeof ZodUsageSchema>
 export default mongoose.model<SystemUsage>( "usage", UsageSchema );
+export {
+	ZodUsageSchema,
+	UsageSchema
+};

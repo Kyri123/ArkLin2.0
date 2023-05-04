@@ -6,14 +6,14 @@ import {
 import CServerAdminCard                from "./PageComponents/Server/ServerAdminCard";
 import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import { Modal }                       from "react-bootstrap";
-import { LTELoadingButton }            from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { LTELoadingButton }            from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
 import CLTEInput                       from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import { API_ServerLib }               from "../../Lib/Api/API_Server.Lib";
+import { API_ServerLib }               from "@app/Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerContext                   from "../../Context/ServerContext";
 import AlertContext                    from "../../Context/AlertContext";
-import type { ISelectMask }            from "@shared/Type/Systeminformation";
+import type { ISelectMask }                 from "@app/Types/Systeminformation";
 
 export default function PAdminServer() {
 	const { InstanceData } = useContext( ServerContext );

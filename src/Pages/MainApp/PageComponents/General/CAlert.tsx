@@ -7,7 +7,7 @@ import {
 }                                  from "react";
 import { Alert }                   from "react-bootstrap";
 import { GenerateIconFromColor }   from "../../../../Lib/Conversion.Lib";
-import type { IAPIResponseBase }   from "@shared/Type/API_Response";
+import type { IAPIResponseBase }   from "@app/Types/API_Response";
 import type { IChildrenBaseProps } from "../../../../Types/BaseTypes";
 
 export interface IAlertProps extends IChildrenBaseProps {

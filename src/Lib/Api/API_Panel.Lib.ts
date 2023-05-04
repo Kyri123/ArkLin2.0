@@ -4,7 +4,7 @@ import type {
 	TResponse_Panel_Log,
 	TResponse_Panel_SetConfig,
 	TResponse_Panel_Update
-}                       from "@shared/Type/API_Response";
+}                       from "@app/Types/API_Response";
 import { EPanelUrl }    from "@shared/Enum/Routing";
 
 export class API_PanelLib {

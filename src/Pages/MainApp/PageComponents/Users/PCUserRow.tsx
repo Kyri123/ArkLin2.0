@@ -20,9 +20,9 @@ import {
 	EPerm,
 	EPerm_Server
 }                           from "@shared/Enum/User.Enum";
-import AlertContext         from "../../../../Context/AlertContext";
-import ServerContext        from "../../../../Context/ServerContext";
-import AccountContext       from "../../../../Context/AccountContext";
+import AlertContext         from "@context/AlertContext";
+import ServerContext        from "@context/ServerContext";
+import AccountContext       from "@context/AccountContext";
 
 interface IProps {
 	User : UserAccount;

@@ -1,8 +1,8 @@
 import { API_QueryLib }                   from "./API_Query.Lib";
-import type { SystemUsage }               from "@shared/Type/Systeminformation";
 import { DefaultSystemUsage }             from "@shared/Default/Server.Default";
 import { ESysUrl }                        from "@shared/Enum/Routing";
-import type { TResponse_System_Getusage } from "@shared/Type/API_Response";
+import type { TResponse_System_Getusage } from "@app/Types/API_Response";
+import type { SystemUsage }                    from "@server/MongoDB/DB_Usage";
 
 export class API_System {
 	static async GetSystemUsage() : Promise<SystemUsage> {

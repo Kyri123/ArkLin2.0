@@ -1,5 +1,4 @@
 import { API_QueryLib }             from "./API_Query.Lib";
-import type { PanelServerConfig }   from "@shared/Type/ArkSE";
 import type {
 	IAPIResponseBase,
 	TResponse_Server_Addserver,
@@ -12,9 +11,10 @@ import type {
 	TResponse_Server_Sendcommand,
 	TResponse_Server_Setpanelconfig,
 	TResponse_Server_Setserverconfig
-}                                   from "@shared/Type/API_Response";
+}                                   from "@app/Types/API_Response";
 import type { EArkmanagerCommands } from "../ServerUtils.Lib";
 import { EServerUrl }               from "@shared/Enum/Routing";
+import type { PanelServerConfig }        from "@app/Types/ArkSE";
 
 export class API_ServerLib {
 	static async SetServerConfig(

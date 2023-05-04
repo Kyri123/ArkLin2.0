@@ -3,9 +3,9 @@ import {
 	useEffect,
 	useMemo,
 	useState
-}                        from "react";
-import ServerContext     from "../Context/ServerContext";
-import type { Instance } from "../Types/MongoDB";
+}                    from "react";
+import ServerContext from "../Context/ServerContext";
+import type { Instance }  from "@server/MongoDB/DB_Instances";
 
 export function useCluster( InstanceName : string ) {
 	const { ClusterData, InstanceData } = useContext( ServerContext );

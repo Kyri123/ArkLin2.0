@@ -23,7 +23,7 @@ export default class User {
 				console.error( e, Token );
 			}
 		}
-		this.Data = { _id: "", created_at: 0, permissions: [], updated_at: 0, mail: "", servers: [], username: "" };
+		this.Data = { _id: "", created_at: "", permissions: [], updated_at: "", mail: "", servers: [], username: "" };
 		this.LoggedIn = false;
 	}
 

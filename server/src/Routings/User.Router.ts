@@ -85,7 +85,7 @@ export default function( Api : core.Express ) {
 		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id ) {
 			const usr = await DB_Accounts.findById( Request.Id );
 			for await ( const instance of DB_Instances.find( { servers: usr.servers } ) ) {
-				Response.Data[ instance._id ] = instance;
+				Response.Data[ instance._id.toString() ] = instance;
 			}
 		}
 

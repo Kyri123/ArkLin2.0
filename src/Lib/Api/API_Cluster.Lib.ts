@@ -5,8 +5,7 @@ import type {
 	TResponse_Cluster_RemoveCluster,
 	TResponse_Cluster_SendCommandToCluster,
 	TResponse_Cluster_SetCluster
-}                                   from "@shared/Type/API_Response";
-import type { Cluster }             from "../../Types/MongoDB";
+}                                   from "@app/Types/API_Response";
 import { EClusterApiUrl }           from "@shared/Enum/Routing";
 import type {
 	TRequest_Cluster_CreateCluster,
@@ -14,8 +13,9 @@ import type {
 	TRequest_Cluster_RemoveCluster,
 	TRequest_Cluster_SendCommandToCluster,
 	TRequest_Cluster_SetCluster
-}                                   from "@shared/Type/API_Request";
+}                                   from "@app/Types/API_Request";
 import type { EArkmanagerCommands } from "../ServerUtils.Lib";
+import type { Cluster }                  from "@server/MongoDB/DB_Cluster";
 
 export class API_ClusterLib {
 	static async SetCluster(

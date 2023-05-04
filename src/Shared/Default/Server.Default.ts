@@ -4,7 +4,8 @@ import type {
 	InstanceState,
 	PanelServerConfig
 }                           from "@app/Types/ArkSE";
-import type { SystemUsage } from "@app/Types/Systeminformation";
+import type { SystemUsage } from "@server/MongoDB/DB_Usage";
+import { EServerState }     from "@shared/Enum/EServerState";
 
 export const DefaultCluster : Cluster = {
 	created_at: "",
@@ -28,9 +29,9 @@ export const DefaultCluster : Cluster = {
 export function DefaultInstanceState() : InstanceState {
 	return structuredClone<InstanceState>( {
 		IsListen: false,
-		State: "NotInstalled",
+		State: EServerState.notInstalled,
 		Player: 0,
-		OnlinePlayerList: [],
+		OnlinePlayerList: [] as string[],
 		ServerVersion: "0.0",
 		ArkmanagerPID: 0,
 		ArkserverPID: 0

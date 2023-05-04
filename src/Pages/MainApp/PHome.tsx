@@ -2,13 +2,13 @@ import {
 	useEffect,
 	useState
 }                                                 from "react";
-import { API_QueryLib }                           from "../../Lib/Api/API_Query.Lib";
+import { API_QueryLib }                           from "@app/Lib/Api/API_Query.Lib";
 import { Table }                                  from "react-bootstrap";
 import { Link }                                   from "react-router-dom";
 import { FontAwesomeIcon }                        from "@fortawesome/react-fontawesome";
 import { EChangelogUrl }                          from "@shared/Enum/Routing";
-import type { GithubReleases }                    from "@shared/Type/github";
-import type { TResponse_Changelog_GetChangelogs } from "@shared/Type/API_Response";
+import type { TResponse_Changelog_GetChangelogs } from "@app/Types/API_Response";
+import type { GithubReleases }                         from "@app/Types/github";
 
 export default function PHome() {
 	const [ Data, setData ] = useState<GithubReleases[]>( [] );

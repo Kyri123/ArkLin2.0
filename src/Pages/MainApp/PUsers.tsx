@@ -12,21 +12,19 @@ import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
 import {
 	LTELoadingButton,
 	LTEToggleButton
-}                                from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                                from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
 import { EPerm }                 from "@shared/Enum/User.Enum";
-import { API_User }              from "../../Lib/Api/API_User";
+import { API_User }              from "@app/Lib/Api/API_User";
 import CPageCounter              from "./PageComponents/General/CPageCounter";
-import type { IAPIResponseBase } from "@shared/Type/API_Response";
+import type { IAPIResponseBase } from "@app/Types/API_Response";
 import { CAlert }                from "./PageComponents/General/CAlert";
 import { useCopy }               from "@kyri123/k-reactutils";
-import type {
-	IMO_AccountKey,
-	UserAccount
-}                                from "../../Types/MongoDB";
 import usePermissionPage         from "../../Hooks/usePermissionPage";
 import PCUserRow                 from "./PageComponents/Users/PCUserRow";
 import AlertContext              from "../../Context/AlertContext";
 import AccountContext            from "../../Context/AccountContext";
+import type { UserAccount }      from "@server/MongoDB/DB_Accounts";
+import type { AccountKey }       from "@server/MongoDB/DB_AccountKey";
 
 export default function PUsers() {
 	const { DoSetAlert, setAcceptAction } = useContext( AlertContext );
@@ -54,13 +52,13 @@ export default function PUsers() {
 	const [ UserData, setUserData ] = useState<UserAccount[]>( [] );
 	const [ ShowUserData, setShowUserData ] = useState<UserAccount[]>( [] );
 
-	const [ AccountKey, setAccountKey ] = useState<IMO_AccountKey[]>( [] );
-	const [ ShowAccountKey, setShowAccountKey ] = useState<IMO_AccountKey[]>( [] );
+	const [ AccountKey, setAccountKey ] = useState<AccountKey[]>( [] );
+	const [ ShowAccountKey, setShowAccountKey ] = useState<AccountKey[]>( [] );
 
 	const [ DoCopy, IsCopied ] = useCopy<string>( undefined );
 
 	const ReadUserData = async() => {
-		setUserData( await API_User.GetAllUsers( Account.Account.GetDBInformation() ) );
+		setUserData( await API_User.GetAllUsers( Account.Account.Get ) );
 	};
 
 	const ReadAccountKey = async() => {
@@ -215,7 +213,7 @@ export default function PUsers() {
 										</LTELoadingButton>
 										<LTELoadingButton
 											disabled={ IsCopied( Key._id ) }
-											onClick={ () => DoCopy( Key.key, Key._id ) }
+											onClick={ () => DoCopy( Key.key!, Key._id ) }
 											className={ "btn-sm flat" }
 											IsLoading={ false }
 											variant="success"
@@ -232,7 +230,7 @@ export default function PUsers() {
 					</table>
 				</Modal.Body>
 				<Modal.Footer>
-					<CPageCounter<IMO_AccountKey>
+					<CPageCounter<AccountKey>
 						PerPage={ 8 }
 						OnSetPage={ setShowAccountKey }
 						Data={ AccountKey }

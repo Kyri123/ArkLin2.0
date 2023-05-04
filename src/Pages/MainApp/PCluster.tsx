@@ -1,17 +1,16 @@
-import type {
-	FunctionComponent} from "react";
+import type { FunctionComponent } from "react";
 import {
 	useContext,
 	useState
-}                           from "react";
-import ServerContext        from "../../Context/ServerContext";
-import PPClusterEditor      from "./PageComponents/Cluster/PCClusterEditor";
-import PCClusterElement     from "./PageComponents/Cluster/PCClusterElement";
-import { LTELoadingButton } from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import { Row }              from "react-bootstrap";
-import AlertContext         from "../../Context/AlertContext";
-import { API_ClusterLib }   from "../../Lib/Api/API_Cluster.Lib";
+}                                 from "react";
+import ServerContext              from "../../Context/ServerContext";
+import PPClusterEditor            from "./PageComponents/Cluster/PCClusterEditor";
+import PCClusterElement           from "./PageComponents/Cluster/PCClusterElement";
+import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import { Row }                    from "react-bootstrap";
+import AlertContext               from "../../Context/AlertContext";
+import { API_ClusterLib }         from "@app/Lib/Api/API_Cluster.Lib";
 
 const PCluster : FunctionComponent = () => {
 	const { DoSetAlert } = useContext( AlertContext );

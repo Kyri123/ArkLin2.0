@@ -9,7 +9,7 @@
       "node"
     ],
     "target": "ESNext",
-    "module": "commonjs",
+    "module": "NodeNext",
     "strict": true,
     "moduleResolution": "Node",
     "importHelpers": true,

@@ -9,18 +9,18 @@ import {
 	useLocation,
 	useSearchParams
 }                                               from "react-router-dom";
-import { API_PanelLib }                         from "../../Lib/Api/API_Panel.Lib";
+import { API_PanelLib }                         from "@app/Lib/Api/API_Panel.Lib";
 import { Card }                                 from "react-bootstrap";
 import CLTEInput                                from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { LTELoadingButton }                     from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { LTELoadingButton }                     from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }                      from "@fortawesome/react-fontawesome";
 import StringMapLib                             from "../../Lib/StringMap.Lib";
 import usePermissionPage                        from "../../Hooks/usePermissionPage";
 import AlertContext                             from "../../Context/AlertContext";
-import type { ISelectMask }                     from "@shared/Type/Systeminformation";
-import { API_QueryLib }                         from "../../Lib/Api/API_Query.Lib";
+import { API_QueryLib }                         from "@app/Lib/Api/API_Query.Lib";
 import { EChangelogUrl }                        from "@shared/Enum/Routing";
-import type { TResponse_Changelog_GetBranches } from "@shared/Type/API_Response";
+import type { TResponse_Changelog_GetBranches } from "@app/Types/API_Response";
+import type { ISelectMask }                          from "@app/Types/Systeminformation";
 
 const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 

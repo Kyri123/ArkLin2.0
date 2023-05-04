@@ -1,10 +1,37 @@
-import * as mongoose      from "mongoose";
-import type { MongoBase } from "../../../src/Types/MongoDB";
-import type {
-	InstanceData,
-	InstanceState,
-	PanelServerConfig
-}                         from "@app/Types/ArkSE";
+import * as mongoose         from "mongoose";
+import type { MongoBase }    from "@app/Types/MongoDB";
+import type { InstanceData } from "@app/Types/ArkSE";
+import type { Cluster }      from "@server/MongoDB/DB_Cluster";
+import { z }                 from "zod";
+import { EServerState }      from "@shared/Enum/EServerState";
+
+const ZodInstanceSchema = z.object( {
+	Instance: z.string(),
+	LastAutoBackup: z.number(),
+	LastAutoUpdate: z.number(),
+	ArkmanagerCfg: z.any(),
+	State: z.object( {
+		State: z.nativeEnum( EServerState ),
+		IsListen: z.boolean(),
+		Player: z.number(),
+		OnlinePlayerList: z.array( z.any() ),
+		ServerVersion: z.string(),
+		ArkmanagerPID: z.number(),
+		ArkserverPID: z.number()
+	} ),
+	PanelConfig: z.object( {
+		BackupEnabled: z.boolean(),
+		MaxBackupfolderSize: z.number(),
+		BackupInterval: z.number(),
+		AutoUpdateParameters: z.array( z.string() ),
+		AutoUpdateEnabled: z.boolean(),
+		AutoUpdateInterval: z.number()
+	} ),
+	ServerMap: z.object( {
+		BG: z.string(),
+		LOGO: z.string()
+	} )
+} );
 
 const InstanceSchema = new mongoose.Schema( {
 	Instance: { type: String, required: true, unique: true },
@@ -13,8 +40,7 @@ const InstanceSchema = new mongoose.Schema( {
 
 	ArkmanagerCfg: {
 		type: mongoose.Schema.Types.Mixed,
-		required: true,
-		strict: false
+		required: true
 	},
 
 	State: {
@@ -53,12 +79,12 @@ const InstanceSchema = new mongoose.Schema( {
 } );
 
 
-interface InstanceInterface extends mongoose.InferSchemaType<typeof InstanceSchema> {
+export interface InstanceInterface extends z.infer<typeof ZodInstanceSchema> {
 	ArkmanagerCfg : InstanceData & Record<string, any>;
-	State : InstanceState;
-	PanelConfig : PanelServerConfig;
 }
 
-export type Instance = InstanceInterface & MongoBase
+export type Instance = InstanceInterface & MongoBase & {
+	Cluster? : Cluster
+}
 
-export default mongoose.model<Instance>( "instances", InstanceSchema );
+export default mongoose.model<InstanceInterface>( "instances", InstanceSchema );
