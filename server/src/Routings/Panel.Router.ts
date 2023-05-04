@@ -55,7 +55,7 @@ export default function( Api : core.Express ) {
 
 		const Request : TRequest_Panel_Restart<true> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.ManagePanel ) ) {
-			SystemLib.LogWarning(
+			SystemLib.LogWarning( "system",
 				"User Request:",
 				SystemLib.ToBashColor( "Red" ),
 				"RESTART"

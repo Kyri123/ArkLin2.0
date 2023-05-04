@@ -1,4 +1,4 @@
-import type { IAPIResponseBase } from "../Type/API_Response";
+import type { IAPIResponseBase } from "@app/Types/API_Response";
 
 export const DefaultResponseSuccess : IAPIResponseBase<false> = {
 	Auth: false,

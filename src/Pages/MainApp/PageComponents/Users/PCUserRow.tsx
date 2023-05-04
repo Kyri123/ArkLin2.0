@@ -19,7 +19,7 @@ import { API_User }         from "../../../../Lib/Api/API_User";
 import {
 	EPerm,
 	EPerm_Server
-}                           from "../../../../Shared/Enum/User.Enum";
+}                           from "@shared/Enum/User.Enum";
 import AlertContext         from "../../../../Context/AlertContext";
 import ServerContext        from "../../../../Context/ServerContext";
 import AccountContext       from "../../../../Context/AccountContext";

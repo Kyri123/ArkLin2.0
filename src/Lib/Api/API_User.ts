@@ -8,13 +8,13 @@ import type {
 	TResponse_User_Removeaccount,
 	TResponse_User_Removekey,
 	TResponse_User_Usereditaccount
-}                       from "../../Shared/Type/API_Response";
+}                       from "@shared/Type/API_Response";
 import type {
 	IMO_AccountKey,
 	Instance,
 	UserAccount
 }                       from "../../Types/MongoDB";
-import { EUserUrl }     from "../../Shared/Enum/Routing";
+import { EUserUrl }     from "@shared/Enum/Routing";
 
 export class API_User {
 	static async UserSettings_EditAccount(

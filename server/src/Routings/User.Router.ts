@@ -35,6 +35,7 @@ import {
 	DefaultResponseSuccess
 }                           from "@shared/Default/ApiRequest.Default";
 import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import DB_Instances         from "@server/MongoDB/DB_Instances";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EUserUrl.alluser );
@@ -82,9 +83,9 @@ export default function( Api : core.Express ) {
 
 		const Request : TRequest_User_Getallowedservers<true> = request.body;
 		if ( Request.UserClass.HasPermission( EPerm.Super ) && Request.Id ) {
-			const User = await User.build( Request.Id );
-			if ( User.IsValid() ) {
-				Response.Data = await User.GetAllServerWithPermission();
+			const usr = await DB_Accounts.findById( Request.Id );
+			for await ( const instance of DB_Instances.find( { servers: usr.servers } ) ) {
+				Response.Data[ instance._id ] = instance;
 			}
 		}
 
@@ -179,9 +180,9 @@ export default function( Api : core.Express ) {
 			Request.UserData
 		) {
 			const LoginData = {
-				...Request.UserClass.GetDB(),
+				...Request.UserClass.Get,
 				...Request.UserData,
-				_id: Request.UserClass.GetDB()._id
+				_id: Request.UserClass.Get._id
 			};
 			if ( Request.Passwd && Request.Passwd.length >= 2 ) {
 				const [ PW1, PW2 ] = Request.Passwd;

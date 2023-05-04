@@ -6,7 +6,7 @@ import type React, {
 	HTMLInputTypeAttribute
 }                          from "react";
 import type { Variant }    from "react-bootstrap/types";
-import type { TLTEColors } from "../Shared/Type/AdminLTE";
+import type { TLTEColors } from "@shared/Type/AdminLTE";
 import type {
 	IChildrenBaseProps,
 	IPropsWithPermission

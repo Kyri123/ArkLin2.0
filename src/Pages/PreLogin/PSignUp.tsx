@@ -1,19 +1,19 @@
 import {
 	useRef,
 	useState
-}                                    from "react";
-import type { TResponse_Auth_IsLoggedIn } from "../../Shared/Type/API_Response";
-import { CAlert }                    from "../MainApp/PageComponents/General/CAlert";
-import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
-import { API_AuthLib }               from "../../Lib/Api/API_Auth.Lib";
-import useAuth                       from "../../Hooks/useAuth";
+}                                         from "react";
+import type { TResponse_Auth_IsLoggedIn } from "@shared/Type/API_Response";
+import { CAlert }                         from "../MainApp/PageComponents/General/CAlert";
+import { FontAwesomeIcon }                from "@fortawesome/react-fontawesome";
+import { API_AuthLib }                    from "../../Lib/Api/API_Auth.Lib";
+import useAuth                            from "../../Hooks/useAuth";
 import {
 	Col,
 	FloatingLabel,
 	Form,
 	Row
-}                                    from "react-bootstrap";
-import { LTELoadingButton }          from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
+}                                         from "react-bootstrap";
+import { LTELoadingButton }               from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
 
 export default function PSignUp() {
 	const { SetToken } = useAuth();

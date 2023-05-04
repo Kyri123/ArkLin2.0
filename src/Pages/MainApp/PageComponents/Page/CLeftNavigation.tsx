@@ -11,7 +11,7 @@ import {
 	useLocation
 }                     from "react-router-dom";
 import AccountContext from "../../../../Context/AccountContext";
-import { EPerm }      from "../../../../Shared/Enum/User.Enum";
+import { EPerm }      from "@shared/Enum/User.Enum";
 
 export default function CLeftNavigation() {
 	const { pathname } = useLocation();

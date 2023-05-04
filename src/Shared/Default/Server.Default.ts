@@ -1,12 +1,15 @@
-import type { Cluster }     from "../../Types/MongoDB";
+import type { Cluster }     from "@server/MongoDB/DB_Cluster";
 import type {
 	InstanceData,
 	InstanceState,
 	PanelServerConfig
-}                           from "../Type/ArkSE";
-import type { SystemUsage } from "../Type/Systeminformation";
+}                           from "@app/Types/ArkSE";
+import type { SystemUsage } from "@app/Types/Systeminformation";
 
 export const DefaultCluster : Cluster = {
+	created_at: "",
+	updated_at: "",
+	_id: "",
 	DisplayName: "",
 	Instances: [],
 	Master: "",

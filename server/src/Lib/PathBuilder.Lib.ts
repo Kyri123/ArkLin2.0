@@ -9,16 +9,16 @@ export function CreateUrl( Url : TServerUrls ) : string {
 		if ( !process.env.API_BASE_URL.endsWith( "/" ) ) {
 			process.env.API_BASE_URL += "/";
 		}
-		SystemLib.Log(
+		SystemLib.Log( "routing",
 			"Install Router",
-			SystemLib.ToBashColor( "Red" ),
+			BC( "Red" ),
 			`${ process.env.API_BASE_URL }${ Url }`
 		);
 		return `${ process.env.API_BASE_URL }${ Url }`;
 	}
-	SystemLib.Log(
+	SystemLib.Log( "routing",
 		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
+		BC( "Red" ),
 		`/api/v1/${ Url }`
 	);
 	return `/api/v1/${ Url }`;
@@ -33,7 +33,7 @@ export function CreateUrlV2( Url : TServerUrls, As : "GET" | "POST", Perm? : TPe
 		EndUrl = `${ process.env.API_BASE_URL }${ Url }`;
 	}
 
-	SystemLib.Log(
+	SystemLib.Log( "routing",
 		"Install Router",
 		BC( "Red" ),
 		EndUrl,

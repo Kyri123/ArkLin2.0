@@ -12,7 +12,7 @@ import {
 }                                 from "react-bootstrap";
 import { useCluster }             from "../../../../Hooks/useCluster";
 import type { Cluster }           from "../../../../Types/MongoDB";
-import { DefaultCluster }         from "../../../../Shared/Default/Server.Default";
+import { DefaultCluster }         from "@shared/Default/Server.Default";
 import {
 	LTELoadingButton,
 	LTEToggleButton
@@ -25,9 +25,9 @@ import type {
 import Select                     from "react-select";
 import ServerContext              from "../../../../Context/ServerContext";
 import { API_ServerLib }          from "../../../../Lib/Api/API_Server.Lib";
-import type { InstanceData }      from "../../../../Shared/Type/ArkSE";
+import type { InstanceData }      from "@shared/Type/ArkSE";
 import { CAlert }                 from "../General/CAlert";
-import type { IAPIResponseBase }  from "../../../../Shared/Type/API_Response";
+import type { IAPIResponseBase }  from "@shared/Type/API_Response";
 import { API_ClusterLib }         from "../../../../Lib/Api/API_Cluster.Lib";
 import AlertContext               from "../../../../Context/AlertContext";
 

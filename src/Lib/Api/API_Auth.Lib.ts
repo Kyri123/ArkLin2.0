@@ -3,12 +3,12 @@ import type {
 	TResponse_Auth_IsLoggedIn,
 	TResponse_Auth_SignIn,
 	TResponse_Auth_SignUp
-}                       from "../../Shared/Type/API_Response";
-import { EAuthUrl }     from "../../Shared/Enum/Routing";
+}                       from "@shared/Type/API_Response";
+import { EAuthUrl }     from "@shared/Enum/Routing";
 import type {
 	TRequest_Auth_SignIn,
 	TRequest_Auth_SignUp
-}                       from "../../Shared/Type/API_Request";
+}                       from "@shared/Type/API_Request";
 
 export class API_AuthLib {
 	static async IsLoggedIn() : Promise<TResponse_Auth_IsLoggedIn> {

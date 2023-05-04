@@ -118,7 +118,7 @@ export default new JobTask(
 					}
 				}
 				else if ( CurrentHash ) {
-					SystemLib.LogError( "CurrentHash is undefined... Is it a git repo?" );
+					SystemLib.LogError( "update", "CurrentHash is undefined... Is it a git repo?" );
 				}
 
 				//-------------------------------------------------------------------
@@ -142,14 +142,14 @@ export default new JobTask(
 				//-------------   Set Release and mb trigger Update   ---------------
 				//-------------------------------------------------------------------
 				if ( global.__PANNELUPDATE ) {
-					SystemLib.LogWarning( "[UPDATE] new update!" );
+					SystemLib.LogWarning( "UPDATE", "new update!" );
 
 					if ( !ConfigManager.GetDashboardConifg.PANEL_AutomaticUpdate ) {
-						SystemLib.LogWarning( "[UPDATE] Auto Update is disabled and will no trigger!" );
+						SystemLib.LogWarning( "UPDATE", "Auto Update is disabled and will no trigger!" );
 						return;
 					}
 
-					SystemLib.LogWarning( "[UPDATE] Trigger Update:", `${ EBashScript.update } ${ Branch }` );
+					SystemLib.LogWarning( "UPDATE", "Trigger Update:", `${ EBashScript.update } ${ Branch }` );
 					// Start to running the update script. by using screen
 					SSHManager.ExecCommandInScreen(
 						"ArkLinUpdate",
@@ -161,7 +161,7 @@ export default new JobTask(
 			}
 		}
 		catch ( e ) {
-			SystemLib.LogWarning( "[Github] Failed to Query:", ( e as Error ).message );
+			SystemLib.LogWarning( "Github", "Failed to Query:", ( e as Error ).message );
 		}
 	}
 );

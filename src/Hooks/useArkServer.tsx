@@ -8,7 +8,7 @@ import {
 	DefaultInstanceState,
 	GetDefaultPanelServerConfig,
 	GetRawInstanceData
-}                    from "../Shared/Default/Server.Default";
+}                    from "@shared/Default/Server.Default";
 import ServerContext from "../Context/ServerContext";
 
 export function useArkServer( InstanceName : string ) {

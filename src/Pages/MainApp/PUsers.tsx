@@ -13,10 +13,10 @@ import {
 	LTELoadingButton,
 	LTEToggleButton
 }                                from "../Components/Elements/AdminLTE/AdminLTE_Buttons";
-import { EPerm }                 from "../../Shared/Enum/User.Enum";
+import { EPerm }                 from "@shared/Enum/User.Enum";
 import { API_User }              from "../../Lib/Api/API_User";
 import CPageCounter              from "./PageComponents/General/CPageCounter";
-import type { IAPIResponseBase } from "../../Shared/Type/API_Response";
+import type { IAPIResponseBase } from "@shared/Type/API_Response";
 import { CAlert }                from "./PageComponents/General/CAlert";
 import { useCopy }               from "@kyri123/k-reactutils";
 import type {

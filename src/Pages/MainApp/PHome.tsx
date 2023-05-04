@@ -6,9 +6,9 @@ import { API_QueryLib }                           from "../../Lib/Api/API_Query.
 import { Table }                                  from "react-bootstrap";
 import { Link }                                   from "react-router-dom";
 import { FontAwesomeIcon }                        from "@fortawesome/react-fontawesome";
-import { EChangelogUrl }                          from "../../Shared/Enum/Routing";
-import type { GithubReleases }                    from "../../Shared/Type/github";
-import type { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
+import { EChangelogUrl }                          from "@shared/Enum/Routing";
+import type { GithubReleases }                    from "@shared/Type/github";
+import type { TResponse_Changelog_GetChangelogs } from "@shared/Type/API_Response";
 
 export default function PHome() {
 	const [ Data, setData ] = useState<GithubReleases[]>( [] );

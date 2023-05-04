@@ -4,8 +4,8 @@ import type {
 	TResponse_Panel_Log,
 	TResponse_Panel_SetConfig,
 	TResponse_Panel_Update
-}                       from "../../Shared/Type/API_Response";
-import { EPanelUrl }    from "../../Shared/Enum/Routing";
+}                       from "@shared/Type/API_Response";
+import { EPanelUrl }    from "@shared/Enum/Routing";
 
 export class API_PanelLib {
 	static async Restart() : Promise<void> {

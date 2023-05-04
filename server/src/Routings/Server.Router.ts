@@ -41,7 +41,7 @@ import {
 	DefaultResponseSuccess
 }                                     from "@shared/Default/ApiRequest.Default";
 import { GetAllServerWithPermission } from "@server/Lib/User.Lib";
-import type { Instance }                   from "@server/MongoDB/DB_Instances";
+import type { Instance }              from "@server/MongoDB/DB_Instances";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EServerUrl.getallserver );
@@ -85,15 +85,6 @@ export default function( Api : core.Express ) {
 	);
 
 	Url = CreateUrl( EServerUrl.setpanelconfig );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Setpanelconfig = {
 			...DefaultResponseFailed
@@ -120,15 +111,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.addserver );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Addserver = {
 			...DefaultResponseFailed
@@ -153,15 +135,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.removeserver );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Removeserver = {
 			...DefaultResponseFailed
@@ -189,15 +162,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.sendcommand );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Sendcommand = {
 			...DefaultResponseFailed
@@ -237,15 +201,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.cancelaction );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Cancelaction = {
 			...DefaultResponseFailed
@@ -283,15 +238,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.getlogs );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Getlogs = {
 			...DefaultResponseFailed,
@@ -319,15 +265,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.getconfigs );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Getconfigs = {
 			...DefaultResponseFailed,
@@ -359,15 +296,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EServerUrl.setserverconfig );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Server_Setserverconfig = {
 			...DefaultResponseFailed

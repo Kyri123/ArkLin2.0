@@ -40,9 +40,9 @@ export class SystemLib_Class {
 		this.DebugLog( "SYSTEM", "Try to load:", ".env" );
 		dotenv.config();
 		if ( SystemLib_Class.IsDev() ) {
-			this.DebugLog( "SYSTEM", "Try to load:", ".env.dev" );
+			this.DebugLog( "SYSTEM", "Try to load:", ".env.development" );
 			dotenv.config( {
-				path: ".env.dev"
+				path: ".env.development"
 			} );
 		}
 		else {

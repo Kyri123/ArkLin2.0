@@ -1,4 +1,4 @@
-import type React from "react";
+import type React                from "react";
 import {
 	useContext,
 	useEffect,
@@ -16,18 +16,18 @@ import {
 import { LTELoadingButton }      from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
 import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
-import type { Socket } from "socket.io-client";
-import io            from "socket.io-client";
+import type { Socket }           from "socket.io-client";
+import io                        from "socket.io-client";
 import type {
 	IEmitEvents,
 	IListenEvents
-}                                from "../../../../Shared/Type/Socket";
+}                                from "@shared/Type/Socket";
 import { SocketIOLib }           from "../../../../Lib/Api/SocketIO.Lib";
 import { API_SteamAPILib }       from "../../../../Lib/Api/API_SteamAPI.Lib";
-import type { ISteamApiMod }          from "../../../../Types/SteamAPI";
+import type { ISteamApiMod }     from "../../../../Types/SteamAPI";
 import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
 import AlertContext              from "../../../../Context/AlertContext";
-import { DefaultResponseFailed } from "../../../../Shared/Default/ApiRequest.Default";
+import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
 
 interface IProps {
 	InstanceName : string;

@@ -5,16 +5,16 @@ import type {
 	TResponse_Cluster_RemoveCluster,
 	TResponse_Cluster_SendCommandToCluster,
 	TResponse_Cluster_SetCluster
-}                                   from "../../Shared/Type/API_Response";
+}                                   from "@shared/Type/API_Response";
 import type { Cluster }             from "../../Types/MongoDB";
-import { EClusterApiUrl }           from "../../Shared/Enum/Routing";
+import { EClusterApiUrl }           from "@shared/Enum/Routing";
 import type {
 	TRequest_Cluster_CreateCluster,
 	TRequest_Cluster_GetClusters,
 	TRequest_Cluster_RemoveCluster,
 	TRequest_Cluster_SendCommandToCluster,
 	TRequest_Cluster_SetCluster
-}                                   from "../../Shared/Type/API_Request";
+}                                   from "@shared/Type/API_Request";
 import type { EArkmanagerCommands } from "../ServerUtils.Lib";
 
 export class API_ClusterLib {

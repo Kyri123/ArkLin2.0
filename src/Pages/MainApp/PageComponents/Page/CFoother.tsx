@@ -1,5 +1,5 @@
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import type { SystemUsage } from "../../../../Shared/Type/Systeminformation";
+import type { SystemUsage } from "@shared/Type/Systeminformation";
 import { Link }             from "react-router-dom";
 
 export default function CFoother( Props : { SystemUsage : SystemUsage } ) {

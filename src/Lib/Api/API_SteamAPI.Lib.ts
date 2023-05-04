@@ -1,7 +1,7 @@
-import { API_QueryLib }               from "./API_Query.Lib";
-import { ESteamApiUrl }               from "../../Shared/Enum/Routing";
+import { API_QueryLib }                    from "./API_Query.Lib";
+import { ESteamApiUrl }                    from "@shared/Enum/Routing";
 import type { ISteamApiMod }               from "../../Types/SteamAPI";
-import type { TResponse_SteamApi_Getmods } from "../../Shared/Type/API_Response";
+import type { TResponse_SteamApi_Getmods } from "@shared/Type/API_Response";
 
 export class API_SteamAPILib {
 	static async GetMods( Mods : number[] ) : Promise<Record<number, ISteamApiMod>> {

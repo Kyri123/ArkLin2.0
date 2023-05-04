@@ -324,7 +324,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 			SocketIO.emit( "OnServerRemoved" );
 		}
 		catch ( e ) {
-			SystemLib.LogError( "[SERVER] RemoveServer:", e );
+			SystemLib.LogError( "SERVER", "RemoveServer:", e );
 		}
 	}
 

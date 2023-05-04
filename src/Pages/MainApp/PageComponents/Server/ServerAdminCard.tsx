@@ -17,17 +17,17 @@ import {
 	ButtonGroup,
 	Modal
 }                                      from "react-bootstrap";
-import { EPerm }                       from "../../../../Shared/Enum/User.Enum";
-import { GetDefaultPanelServerConfig } from "../../../../Shared/Default/Server.Default";
+import { EPerm }                       from "@shared/Enum/User.Enum";
+import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import { LTELoadingButton }            from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { API_ServerLib }               from "../../../../Lib/Api/API_Server.Lib";
-import Update_SelectMask               from "../../../../Shared/SelectMask/Arkmanager_Command_Update.json";
-import type { PanelServerConfig }      from "../../../../Shared/Type/ArkSE";
+import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
+import type { PanelServerConfig }      from "@shared/Type/ArkSE";
 import CServerAction                   from "./CServerAction";
 import AlertContext                    from "../../../../Context/AlertContext";
 import AccountContext                  from "../../../../Context/AccountContext";
 import CLTEInput                       from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import type { ISelectMask }            from "../../../../Shared/Type/Systeminformation";
+import type { ISelectMask }            from "@shared/Type/Systeminformation";
 
 export default function CServerAdminCard( Props : IServerCardProps ) {
 	const GAlert = useContext( AlertContext );

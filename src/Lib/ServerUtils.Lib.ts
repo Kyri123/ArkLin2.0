@@ -1,9 +1,9 @@
-import Arkmanager_Command_Checkmodupdate from "../Shared/SelectMask/Arkmanager_Command_Checkmodupdate.json";
-import Arkmanager_Command_Restart        from "../Shared/SelectMask/Arkmanager_Command_Restart.json";
-import Arkmanager_Command_Stop           from "../Shared/SelectMask/Arkmanager_Command_Stop.json";
-import Arkmanager_Command_Update         from "../Shared/SelectMask/Arkmanager_Command_Update.json";
-import Arkmanager_Command_Start          from "../Shared/SelectMask/Arkmanager_Command_Start.json";
-import type { ISelectMask }                   from "../Shared/Type/Systeminformation";
+import Arkmanager_Command_Checkmodupdate from "@shared/SelectMask/Arkmanager_Command_Checkmodupdate.json";
+import Arkmanager_Command_Restart        from "@shared/SelectMask/Arkmanager_Command_Restart.json";
+import Arkmanager_Command_Stop           from "@shared/SelectMask/Arkmanager_Command_Stop.json";
+import Arkmanager_Command_Update         from "@shared/SelectMask/Arkmanager_Command_Update.json";
+import Arkmanager_Command_Start          from "@shared/SelectMask/Arkmanager_Command_Start.json";
+import type { ISelectMask }                   from "@app/Types/Systeminformation";
 
 export enum EArkmanagerCommands {
 	start = "start",

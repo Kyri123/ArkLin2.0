@@ -8,6 +8,7 @@ import path              from "path";
 import fs                from "fs";
 import { SSHLib }        from "./SSH.Lib";
 import DB_GithubBranches from "@server/MongoDB/DB_GithubBranches";
+import { BC }            from "@server/Lib/System.Lib";
 
 export async function GetCurrentBranch() : Promise<[ string, string | undefined ]> {
 	let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
@@ -105,7 +106,7 @@ export class ConfigManagerClass {
 				return JSON.parse( fs.readFileSync( ConfigFile ).toString() );
 			}
 			catch ( e ) {
-				SystemLib.LogError( "[CONFIG]", e );
+				SystemLib.LogError( "CONFIG", e );
 			}
 		}
 		return {};
@@ -126,7 +127,7 @@ export class ConfigManagerClass {
 				ConfigPath,
 				fs.readFileSync( FallbackConfigPath ).toString()
 			);
-			SystemLib.Log( "Config recreated:", SystemLib.ToBashColor( "Red" ), File );
+			SystemLib.Log( "config", "Config recreated:", BC( "Red" ), File );
 		}
 
 		if ( !NotAJson ) {
@@ -146,8 +147,8 @@ export class ConfigManagerClass {
 			for ( const Key of Object.keys( Return ) ) {
 				if ( !FallbackKeys.includes( Key ) ) {
 					SystemLib.DebugLog(
-						"[CONFIG] Removed Key",
-						SystemLib.ToBashColor( "Red" ),
+						"CONFIG", "Removed Key",
+						BC( "Red" ),
 						Key
 					);
 					delete Return[ Key ];

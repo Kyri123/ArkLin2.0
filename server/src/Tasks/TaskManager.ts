@@ -1,5 +1,6 @@
-import fs   from "fs";
-import path from "path";
+import fs     from "fs";
+import path   from "path";
+import { BC } from "@server/Lib/System.Lib";
 
 export type TTasksRunner = "ServerState" | "Systeminformation" | "DataCleaner" | "Github" | "SteamAPI" | "Server";
 
@@ -115,7 +116,7 @@ export class JobTaskCycle<T> extends JobTask {
 		this.JobName = JobName;
 		this.TaskFunction = Task;
 		this.Tick().then( () =>
-			SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
+			SystemLib.Log( "tasks", `Init run job:`, BC( "Red" ), this.JobName )
 		);
 	}
 }

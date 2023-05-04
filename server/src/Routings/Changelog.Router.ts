@@ -16,19 +16,9 @@ import type {
 	TRequest_Changelog_GetBranches,
 	TRequest_Changelog_GetChangelogs
 }                                 from "@app/Types/API_Request";
-import { BC }                     from "@server/Lib/System.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EChangelogUrl.get );
-	SystemLib.Log( "router",
-		"Install Router",
-		BC( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Changelog_GetChangelogs = {
 			...DefaultResponseSuccess,
@@ -44,15 +34,6 @@ export default function( Api : core.Express ) {
 	} );
 
 	Url = CreateUrl( EChangelogUrl.branches );
-	SystemLib.Log(
-		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		Url,
-		SystemLib.ToBashColor( "Default" ),
-		"| Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		"POST"
-	);
 	Api.get( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Changelog_GetBranches = {
 			...DefaultResponseSuccess,
