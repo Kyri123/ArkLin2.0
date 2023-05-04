@@ -25,4 +25,4 @@ RUN yarn Client
 EXPOSE 28080:28080
 EXPOSE 28100:28100/udp
 
-CMD yarn Server
+CMD yarn start:production
