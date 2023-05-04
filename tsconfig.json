@@ -32,32 +32,31 @@
         "./*"
       ],
       "@app/*": [
-        "src/*"
+        "./src/*"
       ],
       "@shared/*": [
-        "src/Shared/*"
+        "./src/Shared/*"
       ],
       "@server/*": [
-        "server/src/*"
+        "./server/src/*"
       ],
       "@hooks/*": [
-        "src/Hooks/*"
+        "./src/Hooks/*"
       ],
       "@comp/*": [
-        "src/Pages/Components/*"
+        "./src/Pages/Components/*"
       ],
       "@context/*": [
-        "src/Context/*"
+        "./src/Context/*"
       ],
       "@style/*": [
-        "src/styles/*"
+        "./src/styles/*"
       ],
       "@page/*": [
-        "src/Pages/*"
+        "./src/Pages/*"
       ]
     }
-  }
-},
+  },
   "include": [
     "src",
     "src/Shared"

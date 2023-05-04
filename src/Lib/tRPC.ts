@@ -9,8 +9,8 @@ import type {
 }                                 from "@server/trpc/server";
 import type { SweetAlertOptions } from "sweetalert2";
 import Swal                       from "sweetalert2";
-import { AUTHTOKEN }              from "@applib/constance";
 import superjson                  from "superjson";
+import { AUTHTOKEN }              from "@app/Lib/constance";
 
 
 export function fireSwalFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
