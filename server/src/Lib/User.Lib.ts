@@ -30,10 +30,10 @@ export async function CreateSession( User : Partial<UserAccount>, stayLoggedIn =
 	delete User.salt;
 	delete User.hash;
 	try {
-		const Token = jwt.sign( User, process.env.JWTToken || "", {
+		const Token = jwt.sign( User, GetSecretAppToken(), {
 			expiresIn: stayLoggedIn ? "28d" : "1d"
 		} );
-		const Decoded = jwt.verify( Token, process.env.JWTToken || "" ) as jwt.JwtPayload;
+		const Decoded = jwt.verify( Token, GetSecretAppToken() ) as jwt.JwtPayload;
 		if ( Decoded ) {
 			await DB_SessionToken.deleteMany( { expire: { $lte: new Date() } } );
 			const session = await DB_SessionToken.create( {

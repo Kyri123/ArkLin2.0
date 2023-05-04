@@ -7,6 +7,8 @@ import {
 import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
 import DB_Accounts                from "@server/MongoDB/DB_Accounts";
 import DB_SessionToken            from "@server/MongoDB/DB_SessionToken";
+import DB_AccountKey              from "@server/MongoDB/DB_AccountKey";
+import { GetSecretAppToken }      from "@server/Lib/User.Lib";
 
 export const public_validate =
 	router( {
@@ -16,12 +18,31 @@ export const public_validate =
 			tokenValid : boolean;
 		}>( async( { input } ) => {
 			try {
-				const result = await jwt.verify( input.token, process.env.JWTToken || "" ) as ClientUserAccount;
+				const result = await jwt.verify( input.token, GetSecretAppToken() ) as ClientUserAccount;
 				const userAccountExsists = !!( await DB_Accounts.exists( { _id: result._id } ) );
 				if ( !userAccountExsists ) {
 					DB_SessionToken.deleteMany( { userid: result._id } );
 				}
 				return { tokenValid: !!( await DB_SessionToken.exists( { token: input.token } ) ) && userAccountExsists };
+			}
+			catch ( e ) {
+				console.log( e );
+			}
+			return { tokenValid: false };
+		} ),
+
+		validateResetToken: publicProcedure.input( z.object( {
+			token: z.string()
+		} ) ).query<{
+			tokenValid : boolean;
+		}>( async( { input } ) => {
+			try {
+				return {
+					tokenValid: !!( await DB_AccountKey.exists( {
+						token: input.token,
+						isPasswordReset: true
+					} ) )
+				};
 			}
 			catch ( e ) {
 			}

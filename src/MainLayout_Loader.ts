@@ -1,5 +1,8 @@
 import type { LoaderFunction } from "react-router-dom";
-import { json }                from "react-router-dom";
+import {
+	json,
+	redirect
+}                              from "react-router-dom";
 import {
 	tRPC_handleError,
 	tRPC_Public,
@@ -20,11 +23,11 @@ const loader : LoaderFunction = async( { request } ) => {
 	}
 
 	if ( !hasAuth && ( !Url.pathname.startsWith( "/auth" ) && !Url.pathname.startsWith( "/error" ) ) ) {
-		//redirect( "/auth/login" );
+		return redirect( "/auth/login" );
 	}
 
-	if ( hasAuth && Url.pathname.startsWith( "/auth" ) ) {
-		//redirect( "/home" );
+	if ( hasAuth && ( Url.pathname.startsWith( "/auth" ) || Url.pathname === "/" ) ) {
+		return redirect( "/home" );
 	}
 
 	return json<AuthLoaderProps>( { hasAuth } );

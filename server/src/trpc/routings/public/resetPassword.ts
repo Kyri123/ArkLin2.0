@@ -15,7 +15,7 @@ export const public_resetPassword = publicProcedure.input( z.object( {
 	password: z.string().min( 8, { message: "Password is to short." } )
 } ) ).mutation( async( { input } ) => {
 	const { key, password } = input;
-
+ 
 	try {
 		const token = await DB_AccountKey.findOne( {
 			key,

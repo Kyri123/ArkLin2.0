@@ -24,7 +24,11 @@ const rootRouter = createBrowserRouter( [
 					},
 					{
 						path: "/auth/reset/:token",
-						lazy: async() => await import("@page/auth/reset/[token]")
+						lazy: async() => await import("@page/auth/reset/[token]"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/auth/reset/[token]_loader" );
+							return loader( { request, params } );
+						}
 					}
 				]
 			},
