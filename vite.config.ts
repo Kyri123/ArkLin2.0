@@ -1,19 +1,18 @@
 // @ts-ignore
-import type {
-	Alias} from "vite";
+import type { Alias } from "vite";
 import {
 	defineConfig,
 	loadEnv
-}             from "vite";
+}                     from "vite";
 // @ts-ignore
-import react  from "@vitejs/plugin-react";
+import react          from "@vitejs/plugin-react";
 // @ts-ignore
-import eslint from "vite-plugin-eslint";
-import fs     from "fs";
+import eslint         from "vite-plugin-eslint";
+import fs             from "fs";
 import {
 	join,
 	resolve
-}             from "path";
+}                     from "path";
 
 const reactchunk = [ "react", "react-router-dom", "react-dom" ];
 const bootstrap = [ "react-bootstrap", "bootstrap" ];

@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: 22
-          script: ~/docker/github.sh "${{ github.event.repository.name }}" "${{ github.head_ref || github.ref_name }}"
+          script: ~/KAdmin/ArkLin2.0/sh/update.sh "${{ github.head_ref || github.ref_name }}" "TRUE"
 
   read-for-release:
     name: 🔍 Read and cache version
