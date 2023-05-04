@@ -1,11 +1,13 @@
+import type {
+	TPermissions
+} from "../Shared/Enum/User.Enum";
 import {
 	EPerm,
-	GetEnumValue,
-	TPermissions
+	GetEnumValue
 }                       from "../Shared/Enum/User.Enum";
-import { IMO_Accounts } from "../Types/MongoDB";
+import type { IMO_Accounts } from "../Types/MongoDB";
 import jwt              from "jwt-decode";
-import { JwtPayload }   from "jsonwebtoken";
+import type { JwtPayload }   from "jsonwebtoken";
 
 export type JwtSession = IMO_Accounts & JwtPayload;
 export default class FrontendUserLib {

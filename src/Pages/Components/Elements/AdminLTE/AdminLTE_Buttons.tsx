@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button }          from "react-bootstrap";
-import {
+import type {
 	ILTELoadingButton,
 	ILTEToggleButton
 }                          from "../../../../Types/AdminLTE";
-import React               from "react";
+import type React               from "react";
 
 export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
 	Permission,

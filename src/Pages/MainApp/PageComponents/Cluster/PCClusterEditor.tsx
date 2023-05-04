@@ -1,5 +1,6 @@
+import type {
+	FunctionComponent} from "react";
 import {
-	FunctionComponent,
 	useContext,
 	useEffect,
 	useMemo,
@@ -11,22 +12,23 @@ import {
 	Modal
 }                           from "react-bootstrap";
 import { useCluster }       from "../../../../Hooks/useCluster";
-import { IMO_Cluster }      from "../../../../Types/MongoDB";
+import type { IMO_Cluster }      from "../../../../Types/MongoDB";
 import { DefaultCluster }   from "../../../../Shared/Default/Server.Default";
 import {
 	LTELoadingButton,
 	LTEToggleButton
 }                           from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import Select, {
+import type {
 	MultiValue,
 	SingleValue
-}                           from "react-select";
+} from "react-select";
+import Select                           from "react-select";
 import ServerContext        from "../../../../Context/ServerContext";
 import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
-import { IInstanceData }    from "../../../../Shared/Type/ArkSE";
+import type { IInstanceData }    from "../../../../Shared/Type/ArkSE";
 import { CAlert }           from "../General/CAlert";
-import { IAPIResponseBase } from "../../../../Shared/Type/API_Response";
+import type { IAPIResponseBase } from "../../../../Shared/Type/API_Response";
 import { API_ClusterLib }   from "../../../../Lib/Api/API_Cluster.Lib";
 import AlertContext         from "../../../../Context/AlertContext";
 

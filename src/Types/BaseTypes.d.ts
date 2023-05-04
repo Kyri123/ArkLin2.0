@@ -1,11 +1,11 @@
 /** @format */
 
-import {
+import type {
 	HTMLAttributes,
 	PropsWithChildren
 }                       from "react";
-import { TPermissions } from "../Shared/Enum/User.Enum";
-import { TLTEColors }   from "../Shared/Type/AdminLTE";
+import type { TPermissions } from "../Shared/Enum/User.Enum";
+import type { TLTEColors }   from "../Shared/Type/AdminLTE";
 
 export interface IAdminLTEBase extends IChildrenBaseProps {
 	Color? : TLTEColors;

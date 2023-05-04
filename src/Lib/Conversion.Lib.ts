@@ -1,6 +1,6 @@
-import { TLTEColors }   from "../Shared/Type/AdminLTE";
-import { IconProp }     from "@fortawesome/fontawesome-svg-core";
-import { TServerState } from "../Shared/Type/ArkSE";
+import type { TLTEColors }   from "../Shared/Type/AdminLTE";
+import type { IconProp }     from "@fortawesome/fontawesome-svg-core";
+import type { TServerState } from "../Shared/Type/ArkSE";
 
 export function GenerateIconFromColor( Type : TLTEColors ) : IconProp {
 	switch ( Type ) {

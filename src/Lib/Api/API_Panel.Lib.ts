@@ -1,5 +1,5 @@
 import { API_QueryLib } from "./API_Query.Lib";
-import {
+import type {
 	TResponse_Panel_GetConfig,
 	TResponse_Panel_Log,
 	TResponse_Panel_SetConfig,

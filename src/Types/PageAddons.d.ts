@@ -1,6 +1,6 @@
 /** @format */
 
-import { IChildrenBaseProps } from "./BaseTypes";
+import type { IChildrenBaseProps } from "./BaseTypes";
 
 export interface IPageCounterProps<T> extends IChildrenBaseProps {
 	PerPage? : number;

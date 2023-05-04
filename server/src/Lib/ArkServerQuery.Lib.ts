@@ -1,6 +1,6 @@
 import { ServerLib }     from "./Server.Lib";
 import { Rcon }          from "rcon-client";
-import { IServerStatus } from "../../../src/Shared/Type/ArkSE";
+import type { IServerStatus } from "../../../src/Shared/Type/ArkSE";
 import * as dgram        from "dgram";
 
 

@@ -1,5 +1,5 @@
 import bytes            from "bytes";
-import { ISystemUsage } from "../../../../Shared/Type/Systeminformation";
+import type { ISystemUsage } from "../../../../Shared/Type/Systeminformation";
 import { CStateCard }   from "../../../Components/Elements/AdminLTE/AdminLTE_Cards";
 import {
 	Col,

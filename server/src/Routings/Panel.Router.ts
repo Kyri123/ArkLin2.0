@@ -1,10 +1,10 @@
-import * as core         from "express-serve-static-core";
-import {
+import type * as core         from "express-serve-static-core";
+import type {
 	Request,
 	Response
 }                        from "express-serve-static-core";
 import { CreateUrl }     from "../Lib/PathBuilder.Lib";
-import {
+import type {
 	TResponse_Panel_GetConfig,
 	TResponse_Panel_Log,
 	TResponse_Panel_Restart,
@@ -18,13 +18,13 @@ import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
 }                        from "../../../src/Shared/Default/ApiRequest.Default";
-import {
+import type {
 	TRequest_Panel_GetConfig,
 	TRequest_Panel_Log,
 	TRequest_Panel_Restart,
 	TRequest_Panel_SetConfig
 }                        from "../../../src/Shared/Type/API_Request";
-import { UserLib }       from "../Lib/User.Lib";
+import type { UserLib }       from "../Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EPanelUrl.log );

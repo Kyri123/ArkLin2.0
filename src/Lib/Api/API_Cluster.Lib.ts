@@ -1,21 +1,21 @@
 import { API_QueryLib }        from "./API_Query.Lib";
-import {
+import type {
 	TResponse_Cluster_CreateCluster,
 	TResponse_Cluster_GetClusters,
 	TResponse_Cluster_RemoveCluster,
 	TResponse_Cluster_SendCommandToCluster,
 	TResponse_Cluster_SetCluster
 }                              from "../../Shared/Type/API_Response";
-import { IMO_Cluster }         from "../../Types/MongoDB";
+import type { IMO_Cluster }         from "../../Types/MongoDB";
 import { EClusterApiUrl }      from "../../Shared/Enum/Routing";
-import {
+import type {
 	TRequest_Cluster_CreateCluster,
 	TRequest_Cluster_GetClusters,
 	TRequest_Cluster_RemoveCluster,
 	TRequest_Cluster_SendCommandToCluster,
 	TRequest_Cluster_SetCluster
 }                              from "../../Shared/Type/API_Request";
-import { EArkmanagerCommands } from "../ServerUtils.Lib";
+import type { EArkmanagerCommands } from "../ServerUtils.Lib";
 
 export class API_ClusterLib {
 	static async SetCluster(

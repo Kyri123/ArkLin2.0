@@ -1,18 +1,19 @@
 /** @format */
 
-import { IconProp }   from "@fortawesome/fontawesome-svg-core";
-import React, {
+import type { IconProp }   from "@fortawesome/fontawesome-svg-core";
+import type {
 	HTMLAttributeAnchorTarget,
 	HTMLInputTypeAttribute
-}                     from "react";
-import { Variant }    from "react-bootstrap/types";
-import { TLTEColors } from "../Shared/Type/AdminLTE";
-import {
+} from "react";
+import type React                     from "react";
+import type { Variant }    from "react-bootstrap/types";
+import type { TLTEColors } from "../Shared/Type/AdminLTE";
+import type {
 	IChildrenBaseProps,
 	IPropsWithPermission
 }                     from "./BaseTypes";
-import { Button }     from "react-bootstrap";
-import { CardProps }  from "react-bootstrap/Card";
+import type { Button }     from "react-bootstrap";
+import type { CardProps }  from "react-bootstrap/Card";
 
 export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
 

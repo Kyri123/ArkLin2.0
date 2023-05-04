@@ -1,16 +1,16 @@
 /** @format */
-import { TLTEColors }           from "./AdminLTE";
-import { IAccountInformations } from "./User";
-import {
+import type { TLTEColors }           from "./AdminLTE";
+import type { IAccountInformations } from "./User";
+import type {
 	IGithubBranche,
 	IGithubReleases
 }                               from "./github";
-import { ISteamApiMod }         from "../../Types/SteamAPI";
-import {
+import type { ISteamApiMod }         from "../../Types/SteamAPI";
+import type {
 	IMO_Cluster,
 	TMO_Instance
 }                               from "../../Types/MongoDB";
-import { ISystemUsage }         from "./Systeminformation";
+import type { ISystemUsage }         from "./Systeminformation";
 
 type ResponseBase<T = any> = {
 	Success : boolean;

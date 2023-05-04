@@ -1,6 +1,6 @@
-import { IPanelServerConfig }  from "./ArkSE";
-import { EArkmanagerCommands } from "../../Lib/ServerUtils.Lib";
-import {
+import type { IPanelServerConfig }  from "./ArkSE";
+import type { EArkmanagerCommands } from "../../Lib/ServerUtils.Lib";
+import type {
 	IMO_Accounts,
 	IMO_Cluster
 }                              from "../../Types/MongoDB";

@@ -1,6 +1,7 @@
-import React, { createContext }  from "react";
-import { IAPIResponseBase }      from "../Shared/Type/API_Response";
-import { IAcceptActionFunction } from "../Pages/MainApp/PageComponents/General/CAcceptAction";
+import type React from "react";
+import { createContext }  from "react";
+import type { IAPIResponseBase }      from "../Shared/Type/API_Response";
+import type { IAcceptActionFunction } from "../Pages/MainApp/PageComponents/General/CAcceptAction";
 
 export default createContext<{
 	DoSetAlert : ( Value : IAPIResponseBase<true> | undefined ) => void;

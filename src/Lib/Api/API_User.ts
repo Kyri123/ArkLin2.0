@@ -1,5 +1,5 @@
 import { API_QueryLib } from "./API_Query.Lib";
-import {
+import type {
 	TResponse_User_Addkey,
 	TResponse_User_Allkeys,
 	TResponse_User_Alluser,
@@ -9,7 +9,7 @@ import {
 	TResponse_User_Removekey,
 	TResponse_User_Usereditaccount
 }                       from "../../Shared/Type/API_Response";
-import {
+import type {
 	IMO_AccountKeys,
 	IMO_Accounts,
 	TMO_Instance

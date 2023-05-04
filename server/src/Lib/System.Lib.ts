@@ -2,13 +2,13 @@ import process          from "process";
 import os               from "os";
 import Util             from "util";
 import fs               from "fs";
-import {
+import type {
 	BashColorString,
 	SystemPlatform
 }                       from "../Types/System.Lib";
 import * as console     from "console";
 import * as dotenv      from "dotenv";
-import { IDebugConfig } from "../Types/Config";
+import type { IDebugConfig } from "../Types/Config";
 
 export class SystemLib_Class {
 	public readonly IsDevMode : boolean;

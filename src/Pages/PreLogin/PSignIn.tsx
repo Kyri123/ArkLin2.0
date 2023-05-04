@@ -4,7 +4,7 @@ import {
 }                                    from "react";
 import { CAlert }                    from "../MainApp/PageComponents/General/CAlert";
 import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
-import { TResponse_Auth_IsLoggedIn } from "../../Shared/Type/API_Response";
+import type { TResponse_Auth_IsLoggedIn } from "../../Shared/Type/API_Response";
 import { API_AuthLib }               from "../../Lib/Api/API_Auth.Lib";
 import { CLTECheckbox }              from "../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import useAuth                       from "../../Hooks/useAuth";

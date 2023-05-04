@@ -1,7 +1,8 @@
-import { IServerCardProps }    from "../../../../Types/Server";
+import type { IServerCardProps }    from "../../../../Types/Server";
 import { Card }                from "react-bootstrap";
 import CFormatLog              from "../../PageComponents/Server/CFormatLog";
-import Select, { SingleValue } from "react-select";
+import type { SingleValue } from "react-select";
+import Select from "react-select";
 import { useArkServerLogs }    from "../../../../Hooks/useArkServerLogs";
 
 export default function SPServerLogs( Props : IServerCardProps ) {

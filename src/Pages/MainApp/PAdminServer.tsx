@@ -13,7 +13,7 @@ import { API_ServerLib }               from "../../Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "../../Shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerContext                   from "../../Context/ServerContext";
 import AlertContext                    from "../../Context/AlertContext";
-import { ISelectMask }                 from "../../Shared/Type/Systeminformation";
+import type { ISelectMask }                 from "../../Shared/Type/Systeminformation";
 
 export default function PAdminServer() {
 	const { InstanceData } = useContext( ServerContext );

@@ -11,8 +11,8 @@ import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesom
 import ReactMarkdown                         from "react-markdown";
 import { API_QueryLib }                      from "../../Lib/Api/API_Query.Lib";
 import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
-import { IGithubReleases }                   from "../../Shared/Type/github";
-import { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
+import type { IGithubReleases }                   from "../../Shared/Type/github";
+import type { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PChangelog() : JSX.Element {
 	const { version } = useParams();

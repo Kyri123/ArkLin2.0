@@ -11,7 +11,7 @@ import ServerContext       from "../../../../Context/ServerContext";
 import useAuth             from "../../../../Hooks/useAuth";
 import { API_PanelLib }    from "../../../../Lib/Api/API_Panel.Lib";
 import { EPerm }           from "../../../../Shared/Enum/User.Enum";
-import { ISystemUsage }    from "../../../../Shared/Type/Systeminformation";
+import type { ISystemUsage }    from "../../../../Shared/Type/Systeminformation";
 import CServerCard         from "../Server/ServerCard";
 
 export default function CTopNavigation( Props : {

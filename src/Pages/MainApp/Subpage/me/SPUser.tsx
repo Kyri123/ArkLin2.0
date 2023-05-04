@@ -8,7 +8,7 @@ import { LTELoadingButton } from "../../../Components/Elements/AdminLTE/AdminLTE
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import CLTEInput            from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { API_User }         from "../../../../Lib/Api/API_User";
-import { IMO_Accounts }     from "../../../../Types/MongoDB";
+import type { IMO_Accounts }     from "../../../../Types/MongoDB";
 import AlertContext         from "../../../../Context/AlertContext";
 import AccountContext       from "../../../../Context/AccountContext";
 

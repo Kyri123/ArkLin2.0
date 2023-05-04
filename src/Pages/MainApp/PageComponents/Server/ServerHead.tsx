@@ -1,4 +1,4 @@
-import { IServerCardProps } from "../../../../Types/Server";
+import type { IServerCardProps } from "../../../../Types/Server";
 import { Link }             from "react-router-dom";
 import {
 	useContext,

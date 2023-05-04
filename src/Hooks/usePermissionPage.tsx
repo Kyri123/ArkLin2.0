@@ -2,7 +2,7 @@ import {
 	useContext,
 	useEffect
 }                       from "react";
-import { TPermissions } from "../Shared/Enum/User.Enum";
+import type { TPermissions } from "../Shared/Enum/User.Enum";
 import AccountContext   from "../Context/AccountContext";
 
 export default function usePermissionPage( Permission : TPermissions ) {

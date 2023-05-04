@@ -1,4 +1,4 @@
-import { IServerCardProps }                     from "../../../../Types/Server";
+import type { IServerCardProps }                     from "../../../../Types/Server";
 import { Link }                                 from "react-router-dom";
 import {
 	useContext,
@@ -11,7 +11,8 @@ import {
 	ServerStateToReadableString
 }                                               from "../../../../Lib/Conversion.Lib";
 import { useArkServer }                         from "../../../../Hooks/useArkServer";
-import CAcceptAction, { IAcceptActionFunction } from "../General/CAcceptAction";
+import type { IAcceptActionFunction } from "../General/CAcceptAction";
+import CAcceptAction from "../General/CAcceptAction";
 import {
 	ButtonGroup,
 	Modal
@@ -21,12 +22,12 @@ import { GetDefaultPanelServerConfig }          from "../../../../Shared/Default
 import { LTELoadingButton }                     from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { API_ServerLib }                        from "../../../../Lib/Api/API_Server.Lib";
 import Update_SelectMask                        from "../../../../Shared/SelectMask/Arkmanager_Command_Update.json";
-import { IPanelServerConfig }                   from "../../../../Shared/Type/ArkSE";
+import type { IPanelServerConfig }                   from "../../../../Shared/Type/ArkSE";
 import CServerAction                            from "./CServerAction";
 import AlertContext                             from "../../../../Context/AlertContext";
 import AccountContext                           from "../../../../Context/AccountContext";
 import CLTEInput                                from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { ISelectMask }                          from "../../../../Shared/Type/Systeminformation";
+import type { ISelectMask }                          from "../../../../Shared/Type/Systeminformation";
 
 export default function CServerAdminCard( Props : IServerCardProps ) {
 	const GAlert = useContext( AlertContext );

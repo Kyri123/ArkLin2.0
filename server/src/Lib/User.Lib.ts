@@ -1,10 +1,12 @@
+import type {
+	TPermissions
+} from "../../../src/Shared/Enum/User.Enum";
 import {
 	EPerm,
-	GetEnumValue,
-	TPermissions
+	GetEnumValue
 }                    from "../../../src/Shared/Enum/User.Enum";
 import DB_Accounts   from "../MongoDB/DB_Accounts";
-import {
+import type {
 	IMO_Accounts,
 	IMO_Instance,
 	TMO_Instance
@@ -15,7 +17,7 @@ import path          from "path";
 import fs            from "fs";
 import * as jwt      from "jsonwebtoken";
 import { ServerLib } from "./Server.Lib";
-import { If }        from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import type { If }        from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
 
 export function GetSecretAppToken() : string {
 	if ( global.__AppToken && typeof __AppToken === "string" ) {

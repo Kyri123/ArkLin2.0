@@ -7,8 +7,8 @@ import { Table }                             from "react-bootstrap";
 import { Link }                              from "react-router-dom";
 import { FontAwesomeIcon }                   from "@fortawesome/react-fontawesome";
 import { EChangelogUrl }                     from "../../Shared/Enum/Routing";
-import { IGithubReleases }                   from "../../Shared/Type/github";
-import { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
+import type { IGithubReleases }                   from "../../Shared/Type/github";
+import type { TResponse_Changelog_GetChangelogs } from "../../Shared/Type/API_Response";
 
 export default function PHome() {
 	const [ Data, setData ] = useState<IGithubReleases[]>( [] );

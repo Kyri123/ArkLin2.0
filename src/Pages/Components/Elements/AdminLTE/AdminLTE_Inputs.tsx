@@ -1,10 +1,11 @@
-import {
+import type {
 	IAdminLTEBase,
 	IChildrenBaseProps
 }                          from "../../../../Types/BaseTypes";
-import {
+import type {
 	ChangeEvent,
-	HTMLInputTypeAttribute,
+	HTMLInputTypeAttribute} from "react";
+import {
 	useEffect,
 	useId,
 	useState
@@ -16,7 +17,7 @@ import {
 }                          from "./AdminLTE_Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select              from "react-select";
-import { ISelectMask }     from "../../../../Shared/Type/Systeminformation";
+import type { ISelectMask }     from "../../../../Shared/Type/Systeminformation";
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 

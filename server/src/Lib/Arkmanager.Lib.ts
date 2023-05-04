@@ -1,4 +1,4 @@
-import { IInstanceData }    from "../../../src/Shared/Type/ArkSE";
+import type { IInstanceData }    from "../../../src/Shared/Type/ArkSE";
 import path                 from "path";
 import fs                   from "fs";
 import { MakeRandomString } from "@kyri123/k-javascript-utils";

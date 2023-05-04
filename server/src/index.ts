@@ -5,11 +5,13 @@ import * as path            from "path";
 import "./Lib/System.Lib";
 import express              from "express";
 import * as http            from "http";
-import {
-	Server,
+import type {
 	Socket
-}                           from "socket.io";
+} from "socket.io";
 import {
+	Server
+}                           from "socket.io";
+import type {
 	IEmitEvents,
 	IListenEvents
 }                           from "../../src/Shared/Type/Socket";
@@ -31,7 +33,7 @@ import TaskManager          from "./Tasks/TaskManager";
 import * as jwt             from "jsonwebtoken";
 import { CreateUrl }        from "./Lib/PathBuilder.Lib";
 import { RunTest }          from "./Testing";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import type { DefaultEventsMap } from "socket.io/dist/typed-events";
 import fetch                from "node-fetch";
 
 "asdasd".contains( "asd" );

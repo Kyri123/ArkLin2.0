@@ -1,6 +1,6 @@
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import { ISystemUsage }     from "./Systeminformation";
-import {
+import type { DefaultEventsMap } from "socket.io/dist/typed-events";
+import type { ISystemUsage }     from "./Systeminformation";
+import type {
 	IMO_Cluster,
 	TMO_Instance
 }                           from "../../Types/MongoDB";

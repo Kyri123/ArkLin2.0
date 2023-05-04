@@ -1,11 +1,11 @@
-import {
+import type {
 	NextFunction,
 	Request,
 	Response
 }                                from "express";
-import { TPermissions }          from "../../../src/Shared/Enum/User.Enum";
-import { TRequest_Unknown }      from "../../../src/Shared/Type/API_Request";
-import { UserLib }               from "../Lib/User.Lib";
+import type { TPermissions }          from "../../../src/Shared/Enum/User.Enum";
+import type { TRequest_Unknown }      from "../../../src/Shared/Type/API_Request";
+import type { UserLib }               from "../Lib/User.Lib";
 import { DefaultResponseFailed } from "../../../src/Shared/Default/ApiRequest.Default";
 
 export type TMiddlewares = any & {

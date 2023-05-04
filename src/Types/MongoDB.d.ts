@@ -1,9 +1,9 @@
-import {
+import type {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
 }                       from "../Shared/Type/ArkSE";
-import { ISystemUsage } from "../Shared/Type/Systeminformation";
+import type { ISystemUsage } from "../Shared/Type/Systeminformation";
 
 
 export interface IMO_AccountKeys extends IMongoDB {

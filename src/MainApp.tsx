@@ -16,8 +16,10 @@ import {
 	Navigate,
 	useLocation
 }                                               from "react-router-dom";
-import io, { Socket }                           from "socket.io-client";
-import CAcceptAction, { IAcceptActionFunction } from "./Pages/MainApp/PageComponents/General/CAcceptAction";
+import type { Socket } from "socket.io-client";
+import io                           from "socket.io-client";
+import type { IAcceptActionFunction } from "./Pages/MainApp/PageComponents/General/CAcceptAction";
+import CAcceptAction from "./Pages/MainApp/PageComponents/General/CAcceptAction";
 import { CAlert }                               from "./Pages/MainApp/PageComponents/General/CAlert";
 import CLeftNavigation                          from "./Pages/MainApp/PageComponents/Page/CLeftNavigation";
 import CTopNavigation                           from "./Pages/MainApp/PageComponents/Page/CTopNavigation";
@@ -27,17 +29,17 @@ import ServerContext                            from "./Context/ServerContext";
 import { API_ServerLib }                        from "./Lib/Api/API_Server.Lib";
 import { API_System }                           from "./Lib/Api/API_System";
 import { SocketIOLib }                          from "./Lib/Api/SocketIO.Lib";
-import {
+import type {
 	IMO_Cluster,
 	TMO_Instance
 }                                               from "./Types/MongoDB";
 import { DefaultSystemUsage }                   from "./Shared/Default/Server.Default";
-import {
+import type {
 	IEmitEvents,
 	IListenEvents
 }                                               from "./Shared/Type/Socket";
-import { ISystemUsage }                         from "./Shared/Type/Systeminformation";
-import { IAPIResponseBase }                     from "./Shared/Type/API_Response";
+import type { ISystemUsage }                         from "./Shared/Type/Systeminformation";
+import type { IAPIResponseBase }                     from "./Shared/Type/API_Response";
 import CSideHeader                              from "./Pages/MainApp/PageComponents/Page/CSideHeader";
 import CTraffics                                from "./Pages/MainApp/PageComponents/Page/CTraffics";
 import CFoother                                 from "./Pages/MainApp/PageComponents/Page/CFoother";

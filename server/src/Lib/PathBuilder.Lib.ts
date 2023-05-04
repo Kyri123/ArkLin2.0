@@ -1,7 +1,7 @@
 import * as process     from "process";
-import { TServerUrls }  from "../../../src/Shared/Enum/Routing";
+import type { TServerUrls }  from "../../../src/Shared/Enum/Routing";
 import path             from "path";
-import { TPermissions } from "../../../src/Shared/Enum/User.Enum";
+import type { TPermissions } from "../../../src/Shared/Enum/User.Enum";
 
 export function CreateUrl( Url : TServerUrls ) : string {
 	if ( process.env.API_BASE_URL ) {

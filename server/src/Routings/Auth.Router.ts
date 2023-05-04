@@ -1,26 +1,28 @@
-import * as core         from "express-serve-static-core";
-import {
+import type * as core         from "express-serve-static-core";
+import type {
 	Request,
 	Response
 }                        from "express-serve-static-core";
 import { CreateUrl }     from "../Lib/PathBuilder.Lib";
-import {
+import type {
 	TResponse_Auth_SignIn,
 	TResponse_Auth_SignUp
 }                        from "../../../src/Shared/Type/API_Response";
 import { Md5 }           from "ts-md5";
 import { ConfigManager } from "../Lib/ConfigManager.Lib";
+import type {
+	UserLib
+} from "../Lib/User.Lib";
 import {
 	GenerateAccessToken,
-	GetSecretAppToken,
-	UserLib
+	GetSecretAppToken
 }                        from "../Lib/User.Lib";
 import DB_Accounts       from "../MongoDB/DB_Accounts";
 import DB_AccountKey     from "../MongoDB/DB_AccountKey";
-import { IMO_Accounts }  from "../../../src/Types/MongoDB";
+import type { IMO_Accounts }  from "../../../src/Types/MongoDB";
 import * as jwt          from "jsonwebtoken";
 import { EAuthUrl }      from "../../../src/Shared/Enum/Routing";
-import {
+import type {
 	TRequest_Auth_SignIn,
 	TRequest_Auth_SignUp
 }                        from "../../../src/Shared/Type/API_Request";

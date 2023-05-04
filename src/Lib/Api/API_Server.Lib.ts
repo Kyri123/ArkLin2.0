@@ -1,6 +1,6 @@
 import { API_QueryLib }        from "./API_Query.Lib";
-import { IPanelServerConfig }  from "../../Shared/Type/ArkSE";
-import {
+import type { IPanelServerConfig }  from "../../Shared/Type/ArkSE";
+import type {
 	IAPIResponseBase,
 	TResponse_Server_Addserver,
 	TResponse_Server_Cancelaction,
@@ -13,7 +13,7 @@ import {
 	TResponse_Server_Setpanelconfig,
 	TResponse_Server_Setserverconfig
 }                              from "../../Shared/Type/API_Response";
-import { EArkmanagerCommands } from "../ServerUtils.Lib";
+import type { EArkmanagerCommands } from "../ServerUtils.Lib";
 import { EServerUrl }          from "../../Shared/Enum/Routing";
 
 export class API_ServerLib {

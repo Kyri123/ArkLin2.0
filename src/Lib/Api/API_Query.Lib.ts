@@ -1,6 +1,6 @@
-import { IAPIResponseBase } from "../../Shared/Type/API_Response";
-import { TServerUrls }      from "../../Shared/Enum/Routing";
-import { IAPIRequestBase }  from "../../Shared/Type/API_Request";
+import type { IAPIResponseBase } from "../../Shared/Type/API_Response";
+import type { TServerUrls }      from "../../Shared/Enum/Routing";
+import type { IAPIRequestBase }  from "../../Shared/Type/API_Request";
 
 export class API_QueryLib {
 	static async PostToAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D extends IAPIRequestBase = any>(

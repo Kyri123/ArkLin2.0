@@ -3,10 +3,11 @@ import {
 	useState
 }                       from "react";
 import { Modal }        from "react-bootstrap";
-import io, { Socket }   from "socket.io-client";
+import type { Socket } from "socket.io-client";
+import io   from "socket.io-client";
 import { API_PanelLib } from "../../../../Lib/Api/API_Panel.Lib";
 import { SocketIOLib }  from "../../../../Lib/Api/SocketIO.Lib";
-import {
+import type {
 	IEmitEvents,
 	IListenEvents
 }                       from "../../../../Shared/Type/Socket";

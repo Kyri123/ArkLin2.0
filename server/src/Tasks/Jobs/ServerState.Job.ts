@@ -5,10 +5,10 @@ import {
 }                         from "../../Lib/ConfigManager.Lib";
 import fs                 from "fs";
 import path               from "path";
-import { IInstanceState } from "../../../../src/Shared/Type/ArkSE";
+import type { IInstanceState } from "../../../../src/Shared/Type/ArkSE";
 import DB_Instances       from "../../MongoDB/DB_Instances";
 import { ServerLib }      from "../../Lib/Server.Lib";
-import {
+import type {
 	IMO_Instance,
 	TMO_Instance
 }                         from "../../../../src/Types/MongoDB";

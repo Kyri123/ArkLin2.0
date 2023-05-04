@@ -1,8 +1,10 @@
-import {
-	NodeSSH,
+import type {
 	SSHExecCommandOptions,
 	SSHExecCommandResponse,
 	SSHExecOptions
+} from "node-ssh";
+import {
+	NodeSSH
 }                        from "node-ssh";
 import { ConfigManager } from "./ConfigManager.Lib";
 

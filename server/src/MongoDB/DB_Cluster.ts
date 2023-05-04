@@ -1,5 +1,5 @@
 import * as mongoose              from "mongoose";
-import { IMO_Cluster }            from "../../../src/Types/MongoDB";
+import type { IMO_Cluster }            from "../../../src/Types/MongoDB";
 import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
 
 const Schema = new mongoose.Schema<IMO_Cluster>( {

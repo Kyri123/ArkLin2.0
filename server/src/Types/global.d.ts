@@ -1,16 +1,16 @@
-import * as core              from "express-serve-static-core";
-import { Server }             from "socket.io";
-import { DefaultEventsMap }   from "socket.io/dist/typed-events";
-import * as http              from "http";
-import {
+import type * as core              from "express-serve-static-core";
+import type { Server }             from "socket.io";
+import type { DefaultEventsMap }   from "socket.io/dist/typed-events";
+import type * as http              from "http";
+import type {
 	IEmitEvents,
 	IListenEvents
 }                             from "../../../src/Shared/Type/Socket";
 import "./Types";
-import { SystemLib_Class }    from "../Lib/System.Lib";
-import { ConfigManagerClass } from "../Lib/ConfigManager.Lib";
-import { TaskManagerClass }   from "../Tasks/TaskManager";
-import { SSHLib }             from "../Lib/SSH.Lib";
+import type { SystemLib_Class }    from "../Lib/System.Lib";
+import type { ConfigManagerClass } from "../Lib/ConfigManager.Lib";
+import type { TaskManagerClass }   from "../Tasks/TaskManager";
+import type { SSHLib }             from "../Lib/SSH.Lib";
 
 export declare global {
 	var Api : core.Express;

@@ -2,7 +2,7 @@ import fs                              from "fs";
 import path                            from "path";
 import { EArkmanagerCommands }         from "../../../../src/Lib/ServerUtils.Lib";
 import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
-import { IInstanceData }               from "../../../../src/Shared/Type/ArkSE";
+import type { IInstanceData }               from "../../../../src/Shared/Type/ArkSE";
 import {
 	ConfigToJSON,
 	FillWithDefaultValues

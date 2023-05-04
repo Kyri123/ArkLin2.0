@@ -16,10 +16,10 @@ import {
 import { EPerm }            from "../../Shared/Enum/User.Enum";
 import { API_User }         from "../../Lib/Api/API_User";
 import CPageCounter         from "./PageComponents/General/CPageCounter";
-import { IAPIResponseBase } from "../../Shared/Type/API_Response";
+import type { IAPIResponseBase } from "../../Shared/Type/API_Response";
 import { CAlert }           from "./PageComponents/General/CAlert";
 import { useCopy }          from "@kyri123/k-reactutils";
-import {
+import type {
 	IMO_AccountKeys,
 	IMO_Accounts
 }                           from "../../Types/MongoDB";

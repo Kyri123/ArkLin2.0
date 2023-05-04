@@ -1,8 +1,9 @@
-import React, {
+import type React from "react";
+import {
 	useContext,
 	useState
 }                                from "react";
-import { ISteamApiMod }          from "../../../../Types/SteamAPI";
+import type { ISteamApiMod }          from "../../../../Types/SteamAPI";
 import { useArkServer }          from "../../../../Hooks/useArkServer";
 import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
 import AlertContext              from "../../../../Context/AlertContext";

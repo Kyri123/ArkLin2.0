@@ -1,10 +1,10 @@
-import { IMO_Cluster }  from "../../Types/MongoDB";
-import {
+import type { IMO_Cluster }  from "../../Types/MongoDB";
+import type {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
 }                       from "../Type/ArkSE";
-import { ISystemUsage } from "../Type/Systeminformation";
+import type { ISystemUsage } from "../Type/Systeminformation";
 
 export const DefaultCluster : IMO_Cluster = {
 	DisplayName: "",

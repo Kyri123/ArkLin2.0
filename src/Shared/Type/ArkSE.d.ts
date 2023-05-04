@@ -1,4 +1,4 @@
-import {
+import type {
 	IMongoDB,
 	TMO_Instance
 } from "../../Types/MongoDB";

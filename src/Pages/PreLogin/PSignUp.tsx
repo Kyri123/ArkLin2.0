@@ -2,7 +2,7 @@ import {
 	useRef,
 	useState
 }                                    from "react";
-import { TResponse_Auth_IsLoggedIn } from "../../Shared/Type/API_Response";
+import type { TResponse_Auth_IsLoggedIn } from "../../Shared/Type/API_Response";
 import { CAlert }                    from "../MainApp/PageComponents/General/CAlert";
 import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
 import { API_AuthLib }               from "../../Lib/Api/API_Auth.Lib";

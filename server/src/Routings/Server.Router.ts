@@ -1,10 +1,10 @@
-import * as core        from "express-serve-static-core";
-import {
+import type * as core        from "express-serve-static-core";
+import type {
 	Request,
 	Response
 }                       from "express-serve-static-core";
 import { CreateUrl }    from "../Lib/PathBuilder.Lib";
-import {
+import type {
 	TResponse_Server_Addserver,
 	TResponse_Server_Cancelaction,
 	TResponse_Server_Getallserver,
@@ -24,7 +24,7 @@ import { EPerm }        from "../../../src/Shared/Enum/User.Enum";
 import TaskManager      from "../Tasks/TaskManager";
 import { SSHManager }   from "../Lib/ConfigManager.Lib";
 import { EServerUrl }   from "../../../src/Shared/Enum/Routing";
-import {
+import type {
 	TRequest_Server_Addserver,
 	TRequest_Server_Cancelaction,
 	TRequest_Server_Getallserver,
@@ -40,8 +40,8 @@ import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
 }                       from "../../../src/Shared/Default/ApiRequest.Default";
-import { TMO_Instance } from "../../../src/Types/MongoDB";
-import { UserLib }      from "../Lib/User.Lib";
+import type { TMO_Instance } from "../../../src/Types/MongoDB";
+import type { UserLib }      from "../Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EServerUrl.getallserver );

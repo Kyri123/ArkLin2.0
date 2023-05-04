@@ -1,8 +1,8 @@
 /** @format */
 
-import { IStateCardProps }   from "../../../../Types/AdminLTE";
+import type { IStateCardProps }   from "../../../../Types/AdminLTE";
 import { Card }              from "react-bootstrap";
-import { FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
 
 export const CStateCard : FunctionComponent<IStateCardProps> = ( {

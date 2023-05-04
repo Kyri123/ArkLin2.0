@@ -1,10 +1,10 @@
-import * as core                  from "express-serve-static-core";
-import {
+import type * as core                  from "express-serve-static-core";
+import type {
 	Request,
 	Response
 }                                 from "express-serve-static-core";
 import { CreateUrl }              from "../Lib/PathBuilder.Lib";
-import {
+import type {
 	TResponse_Changelog_GetBranches,
 	TResponse_Changelog_GetChangelogs
 }                                 from "../../../src/Shared/Type/API_Response";
@@ -12,11 +12,11 @@ import { EChangelogUrl }          from "../../../src/Shared/Enum/Routing";
 import DB_GithubBranches          from "../MongoDB/DB_GithubBranches";
 import DB_GithubReleases          from "../MongoDB/DB_GithubReleases";
 import { DefaultResponseSuccess } from "../../../src/Shared/Default/ApiRequest.Default";
-import {
+import type {
 	TRequest_Changelog_GetBranches,
 	TRequest_Changelog_GetChangelogs
 }                                 from "../../../src/Shared/Type/API_Request";
-import { UserLib }                from "../Lib/User.Lib";
+import type { UserLib }                from "../Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EChangelogUrl.get );

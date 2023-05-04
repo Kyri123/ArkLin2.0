@@ -1,22 +1,22 @@
 import { MakeRandomString }    from "@kyri123/k-javascript-utils";
-import {
+import type {
 	ExplIf,
 	If
 }                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
 import fs                      from "fs";
 import * as ini                from "ini";
 import path                    from "path";
-import { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
+import type { EArkmanagerCommands } from "../../../src/Lib/ServerUtils.Lib";
 import {
 	DefaultInstanceState,
 	GetDefaultPanelServerConfig
 }                              from "../../../src/Shared/Default/Server.Default";
-import {
+import type {
 	IInstanceData,
 	IInstanceState,
 	IPanelServerConfig
 }                              from "../../../src/Shared/Type/ArkSE";
-import {
+import type {
 	IMO_Cluster,
 	IMO_Instance,
 	TMO_Instance

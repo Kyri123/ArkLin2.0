@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import {
+import type {
 	IMO_Cluster,
 	TMO_Instance
 }                        from "../Types/MongoDB";

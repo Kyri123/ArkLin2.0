@@ -17,10 +17,10 @@ import { FontAwesomeIcon }                 from "@fortawesome/react-fontawesome"
 import StringMapLib                        from "../../Lib/StringMap.Lib";
 import usePermissionPage                   from "../../Hooks/usePermissionPage";
 import AlertContext                        from "../../Context/AlertContext";
-import { ISelectMask }                     from "../../Shared/Type/Systeminformation";
+import type { ISelectMask }                     from "../../Shared/Type/Systeminformation";
 import { API_QueryLib }                    from "../../Lib/Api/API_Query.Lib";
 import { EChangelogUrl }                   from "../../Shared/Enum/Routing";
-import { TResponse_Changelog_GetBranches } from "../../Shared/Type/API_Response";
+import type { TResponse_Changelog_GetBranches } from "../../Shared/Type/API_Response";
 
 const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 

@@ -1,4 +1,5 @@
-import React, {
+import type React from "react";
+import {
 	useContext,
 	useEffect,
 	useRef,
@@ -14,7 +15,8 @@ import {
 	Nav,
 	Row
 }                              from "react-bootstrap";
-import Select, { SingleValue } from "react-select";
+import type { SingleValue } from "react-select";
+import Select from "react-select";
 import CLTEInput               from "../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { LTELoadingButton }    from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { useToggle }           from "@kyri123/k-reactutils";

@@ -1,11 +1,11 @@
 import { API_QueryLib } from "./API_Query.Lib";
-import {
+import type {
 	TResponse_Auth_IsLoggedIn,
 	TResponse_Auth_SignIn,
 	TResponse_Auth_SignUp
 }                       from "../../Shared/Type/API_Response";
 import { EAuthUrl }     from "../../Shared/Enum/Routing";
-import {
+import type {
 	TRequest_Auth_SignIn,
 	TRequest_Auth_SignUp
 }                       from "../../Shared/Type/API_Request";

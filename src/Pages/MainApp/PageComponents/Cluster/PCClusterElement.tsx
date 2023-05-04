@@ -1,5 +1,6 @@
+import type {
+	FunctionComponent} from "react";
 import {
-	FunctionComponent,
 	useContext
 }                           from "react";
 import {

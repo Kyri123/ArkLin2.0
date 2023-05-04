@@ -1,4 +1,4 @@
-import {
+import type {
 	IAPI_BaseConfig,
 	IDashboard_BaseConfig,
 	IDebugConfig,

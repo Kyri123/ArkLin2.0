@@ -1,4 +1,4 @@
-import { IChildrenBaseProps } from "../../../../Types/BaseTypes";
+import type { IChildrenBaseProps } from "../../../../Types/BaseTypes";
 import { Modal }              from "react-bootstrap";
 import { LTELoadingButton }   from "../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
 import { FontAwesomeIcon }    from "@fortawesome/react-fontawesome";

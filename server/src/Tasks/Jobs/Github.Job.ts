@@ -6,7 +6,7 @@ import {
 }                        from "../../Lib/ConfigManager.Lib";
 import { Octokit }       from "octokit";
 import DB_GithubBranches from "../../MongoDB/DB_GithubBranches";
-import {
+import type {
 	IGithubBranche,
 	IGithubReleases
 }                        from "../../../../src/Shared/Type/github";

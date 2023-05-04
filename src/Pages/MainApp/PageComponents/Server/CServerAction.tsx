@@ -15,7 +15,7 @@ import Select               from "react-select";
 import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
 import { useArkServer }     from "../../../../Hooks/useArkServer";
 import AlertContext         from "../../../../Context/AlertContext";
-import { ISelectMask }      from "../../../../Shared/Type/Systeminformation";
+import type { ISelectMask }      from "../../../../Shared/Type/Systeminformation";
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },

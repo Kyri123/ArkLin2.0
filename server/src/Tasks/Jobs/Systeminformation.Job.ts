@@ -1,6 +1,6 @@
 import { JobTask }       from "../TaskManager";
 import * as Si           from "systeminformation";
-import { ISystemUsage }  from "../../../../src/Shared/Type/Systeminformation";
+import type { ISystemUsage }  from "../../../../src/Shared/Type/Systeminformation";
 import { ConfigManager } from "../../Lib/ConfigManager.Lib";
 import DB_Usage          from "../../MongoDB/DB_Usage";
 

@@ -1,10 +1,10 @@
-import * as core            from "express-serve-static-core";
-import {
+import type * as core            from "express-serve-static-core";
+import type {
 	Request,
 	Response
 }                           from "express-serve-static-core";
 import { CreateUrl }        from "../Lib/PathBuilder.Lib";
-import {
+import type {
 	TResponse_User_Addkey,
 	TResponse_User_Allkeys,
 	TResponse_User_Alluser,
@@ -17,11 +17,11 @@ import {
 import { EPerm }            from "../../../src/Shared/Enum/User.Enum";
 import { UserLib }          from "../Lib/User.Lib";
 import { Md5 }              from "ts-md5";
-import { IMO_Accounts }     from "../../../src/Types/MongoDB";
+import type { IMO_Accounts }     from "../../../src/Types/MongoDB";
 import DB_Accounts          from "../MongoDB/DB_Accounts";
 import DB_AccountKey        from "../MongoDB/DB_AccountKey";
 import { EUserUrl }         from "../../../src/Shared/Enum/Routing";
-import {
+import type {
 	TRequest_User_Addkey,
 	TRequest_User_Allkeys,
 	TRequest_User_Alluser,

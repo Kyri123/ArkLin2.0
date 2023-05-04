@@ -1,8 +1,9 @@
-import React, {
+import type React from "react";
+import {
 	useContext,
 	useState
 }                          from "react";
-import { IMO_Accounts }    from "../../../../Types/MongoDB";
+import type { IMO_Accounts }    from "../../../../Types/MongoDB";
 import {
 	ButtonGroup,
 	Card,
