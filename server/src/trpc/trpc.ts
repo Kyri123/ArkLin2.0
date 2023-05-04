@@ -3,6 +3,7 @@ import { TRPCError }         from "@trpc/server";
 import type * as trpcExpress from "@trpc/server/adapters/express";
 import type User             from "@app/Lib/User.Lib";
 import superjson             from "superjson";
+import { z }                 from "zod";
 
 export function handleTRCPErr( e : unknown ) {
 	if ( e instanceof TRPCError ) {
@@ -15,13 +16,11 @@ export function handleTRCPErr( e : unknown ) {
 }
 
 export interface Context {
-	token? : string,
-	userClass? : User,
+	token : string,
+	userClass : User,
 }
 
-export const createContext = async( {
-	req
-} : trpcExpress.CreateExpressContextOptions ) => {
+export const createContext = async( { req } : trpcExpress.CreateExpressContextOptions ) => {
 	const ctx : Context = {
 		token: req.body.JsonWebToken,
 		userClass: req.body.UserClass
@@ -38,3 +37,7 @@ const t = trpc.initTRPC.context<Context>().create( {
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
+export const authProcedure = t.procedure;
+export const serverProcedure = t.procedure.input( z.object( {
+	instance: z.string()
+} ) );
