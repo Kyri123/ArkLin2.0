@@ -1,11 +1,11 @@
-import { JobTask }       from "../TaskManager";
-import { ConfigManager } from "../../Lib/ConfigManager.Lib";
+import { JobTask }           from "../TaskManager";
+import { ConfigManager }     from "@server/Lib/ConfigManager.Lib";
 import {
 	GetAllModIds,
 	QuerySteamAPI
-}                        from "../../Lib/SteamApi.Lib";
-import DB_SteamAPI_Mods  from "../../MongoDB/DB_SteamAPI_Mods";
-import type { ISteamApiMod }  from "../../../../src/Types/SteamAPI";
+}                            from "@server/Lib/SteamApi.Lib";
+import DB_SteamAPI_Mods      from "../../MongoDB/DB_SteamAPI_Mods";
+import type { ISteamApiMod } from "../../../../src/Types/SteamAPI";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.DataCleanerInterval,

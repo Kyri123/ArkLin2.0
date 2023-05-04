@@ -1,40 +1,36 @@
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import "./InitDirs";
-import { InstallRoutings }  from "./Init";
-import * as path            from "path";
+import { InstallRoutings }       from "./Init";
+import * as path                 from "path";
 import "./Lib/System.Lib";
-import express              from "express";
-import * as http            from "http";
-import type {
-	Socket
-} from "socket.io";
-import {
-	Server
-}                           from "socket.io";
+import express                   from "express";
+import * as http                 from "http";
+import type { Socket }           from "socket.io";
+import { Server }                from "socket.io";
 import type {
 	IEmitEvents,
 	IListenEvents
-}                           from "../../src/Shared/Type/Socket";
-import * as process         from "process";
-import fs                   from "fs";
+}                                from "../../src/Shared/Type/Socket";
+import * as process              from "process";
+import fs                        from "fs";
 import {
 	ConfigManager,
 	SSHManager
-}                           from "./Lib/ConfigManager.Lib";
+}                                from "./Lib/ConfigManager.Lib";
 import {
 	GetSecretAppToken,
 	UserLib
-}                           from "./Lib/User.Lib";
-import * as mongoose        from "mongoose";
-import AccountKey           from "./MongoDB/DB_AccountKey";
-import DB_AccountKey        from "./MongoDB/DB_AccountKey";
-import DB_Accounts          from "./MongoDB/DB_Accounts";
-import TaskManager          from "./Tasks/TaskManager";
-import * as jwt             from "jsonwebtoken";
-import { CreateUrl }        from "./Lib/PathBuilder.Lib";
-import { RunTest }          from "./Testing";
+}                                from "./Lib/User.Lib";
+import * as mongoose             from "mongoose";
+import AccountKey                from "./MongoDB/DB_AccountKey";
+import DB_AccountKey             from "./MongoDB/DB_AccountKey";
+import DB_Accounts               from "./MongoDB/DB_Accounts";
+import TaskManager               from "./Tasks/TaskManager";
+import * as jwt                  from "jsonwebtoken";
+import { CreateUrl }             from "./Lib/PathBuilder.Lib";
+import { RunTest }               from "./Testing";
 import type { DefaultEventsMap } from "socket.io/dist/typed-events";
-import fetch                from "node-fetch";
+import fetch                     from "node-fetch";
 
 "asdasd".contains( "asd" );
 
@@ -169,7 +165,7 @@ mongoose
 		) {
 			await AccountKey.create( {
 				key: "KAdmin-ArkLIN2",
-				AsSuperAdmin: true
+				asSuperAdmin: true
 			} );
 			SystemLib.Log(
 				"[DB] Create default AccountKey:" + SystemLib.ToBashColor( "Red" ),

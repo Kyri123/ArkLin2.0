@@ -1,8 +1,12 @@
-import * as mongoose              from "mongoose";
-import type { IMO_Instance }           from "../../../src/Types/MongoDB";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
+import * as mongoose from "mongoose";
+import type { MongoBase } from "../../../src/Types/MongoDB";
+import type {
+	IInstanceData,
+	IInstanceState,
+	IPanelServerConfig
+}                    from "@app/Types/ArkSE";
 
-const Schema = new mongoose.Schema<IMO_Instance>( {
+const InstanceSchema = new mongoose.Schema( {
 	Instance: { type: String, required: true, unique: true },
 	LastAutoBackup: { type: Number, required: false },
 	LastAutoUpdate: { type: Number, required: false },
@@ -48,6 +52,13 @@ const Schema = new mongoose.Schema<IMO_Instance>( {
 	}
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IMO_Instance>( "instances", Schema );
+interface InstanceInterface extends mongoose.InferSchemaType<typeof InstanceSchema> {
+	ArkmanagerCfg : IInstanceData & Record<string, any>;
+	State : IInstanceState;
+	PanelConfig : IPanelServerConfig;
+}
+
+export type Instance = InstanceInterface & MongoBase
+
+export default mongoose.model<Instance>( "instances", InstanceSchema );

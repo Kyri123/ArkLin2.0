@@ -3,7 +3,7 @@ import {
 	ConfigManager,
 	GetCurrentBranch,
 	SSHManager
-}                        from "../../Lib/ConfigManager.Lib";
+}                        from "@server/Lib/ConfigManager.Lib";
 import { Octokit }       from "octokit";
 import DB_GithubBranches from "../../MongoDB/DB_GithubBranches";
 import type {

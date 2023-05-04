@@ -1,8 +1,7 @@
-import * as mongoose              from "mongoose";
-import type { IMO_Usage }              from "../../../src/Types/MongoDB";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
+import * as mongoose from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
 
-const Schema = new mongoose.Schema<IMO_Usage>( {
+const UsageSchema = new mongoose.Schema( {
 	CPU: { type: Number, required: true },
 	MemMax: { type: Number, required: true },
 	MemUsed: { type: Number, required: true },
@@ -14,6 +13,6 @@ const Schema = new mongoose.Schema<IMO_Usage>( {
 	NextPanelBuildVersion: { type: String }
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IMO_Usage>( "usage", Schema );
+export type Usage = mongoose.InferSchemaType<typeof UsageSchema> & MongoBase
+export default mongoose.model<Usage>( "usage", UsageSchema );

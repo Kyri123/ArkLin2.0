@@ -1,8 +1,7 @@
-import * as mongoose              from "mongoose";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import type { IGithubReleases }        from "../../../src/Shared/Type/github";
+import * as mongoose from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
 
-const Schema = new mongoose.Schema<IGithubReleases>( {
+const GithubReleaseSchema = new mongoose.Schema( {
 	assets_url: { type: String },
 	body: { type: String },
 	created_at: { type: String },
@@ -19,6 +18,6 @@ const Schema = new mongoose.Schema<IGithubReleases>( {
 	url: { type: String }
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IGithubReleases>( "github_releases", Schema );
+export type GithubRelease = mongoose.InferSchemaType<typeof GithubReleaseSchema> & MongoBase
+export default mongoose.model<GithubRelease>( "github_releases", GithubReleaseSchema );

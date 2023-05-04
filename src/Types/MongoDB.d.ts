@@ -1,24 +1,19 @@
-import type {
-	IInstanceData,
-	IInstanceState,
-	IPanelServerConfig
-}                       from "../Shared/Type/ArkSE";
 import type { ISystemUsage } from "../Shared/Type/Systeminformation";
 
 
-export interface IMO_AccountKeys extends IMongoDB {
+export interface IMO_AccountKeys extends MongoBase {
 	key : string;
-	AsSuperAdmin : boolean;
+	asSuperAdmin : boolean;
 }
 
-export interface IMongoDB {
-	_id? : string;
+export interface MongoBase {
+	_id : string;
 	__v? : number;
-	created_at? : number;
-	updated_at? : number;
+	created_at : number;
+	updated_at : number;
 }
 
-export interface IMO_Accounts extends IMongoDB {
+export interface IMO_Accounts extends MongoBase {
 	username : string;
 	password : string;
 	mail : string;
@@ -26,7 +21,7 @@ export interface IMO_Accounts extends IMongoDB {
 	permissions? : string[];
 }
 
-export interface IMO_Cluster extends IMongoDB {
+export interface IMO_Cluster extends MongoBase {
 	Instances : string[];
 	SyncInis : string[];
 	SyncSettings : string[];
@@ -47,11 +42,8 @@ type TMO_Instance = IMO_Instance & {
 	Cluster? : IMO_Cluster | null | undefined;
 }
 
-export interface IMO_Instance extends IMongoDB {
+export interface IMO_Instance extends MongoBase {
 	Instance : string;
-	ArkmanagerCfg : IInstanceData;
-	State : IInstanceState;
-	PanelConfig : IPanelServerConfig;
 	ServerMap : {
 		LOGO : string;
 		BG : string;
@@ -60,4 +52,4 @@ export interface IMO_Instance extends IMongoDB {
 	LastAutoBackup? : number;
 }
 
-export type IMO_Usage = ISystemUsage & IMongoDB;
+export type IMO_Usage = ISystemUsage & MongoBase;

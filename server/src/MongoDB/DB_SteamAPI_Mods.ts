@@ -1,9 +1,7 @@
-import * as mongoose              from "mongoose";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import type { ISteamApiMod }           from "../../../src/Types/SteamAPI";
-import type { IMongoDB }               from "../../../src/Types/MongoDB";
+import * as mongoose from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
 
-const Schema = new mongoose.Schema<ISteamApiMod & IMongoDB>(
+const SteamModSchema = new mongoose.Schema(
 	{
 		publishedfileid: { type: String, unique: true },
 		result: { type: Number },
@@ -39,6 +37,6 @@ const Schema = new mongoose.Schema<ISteamApiMod & IMongoDB>(
 	{ strict: true }
 );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<ISteamApiMod & IMongoDB>( "steamapi_mods", Schema );
+export type SteamMod = mongoose.InferSchemaType<typeof SteamModSchema> & MongoBase
+export default mongoose.model<SteamMod>( "steamapi_mods", SteamModSchema );

@@ -5,12 +5,12 @@ import type * as http              from "http";
 import type {
 	IEmitEvents,
 	IListenEvents
-}                             from "../../../src/Shared/Type/Socket";
+}                                  from "../../../src/Shared/Type/Socket";
 import "./Types";
-import type { SystemLib_Class }    from "../Lib/System.Lib";
-import type { ConfigManagerClass } from "../Lib/ConfigManager.Lib";
+import type { SystemLib_Class }    from "@server/Lib/System.Lib";
+import type { ConfigManagerClass } from "@server/Lib/ConfigManager.Lib";
 import type { TaskManagerClass }   from "../Tasks/TaskManager";
-import type { SSHLib }             from "../Lib/SSH.Lib";
+import type { SSHLib }             from "@server/Lib/SSH.Lib";
 
 export declare global {
 	var Api : core.Express;

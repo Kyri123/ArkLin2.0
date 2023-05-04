@@ -2,15 +2,15 @@ import type * as core                     from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                                    from "express-serve-static-core";
-import { CreateUrl }                 from "../Lib/PathBuilder.Lib";
+}                                         from "express-serve-static-core";
+import { CreateUrl }                      from "@server/Lib/PathBuilder.Lib";
 import type { TResponse_System_Getusage } from "../../../src/Shared/Type/API_Response";
-import DB_Usage                      from "../MongoDB/DB_Usage";
-import { ESysUrl }                   from "../../../src/Shared/Enum/Routing";
-import { DefaultResponseSuccess }    from "../../../src/Shared/Default/ApiRequest.Default";
-import { DefaultSystemUsage }        from "../../../src/Shared/Default/Server.Default";
+import DB_Usage                           from "../MongoDB/DB_Usage";
+import { ESysUrl }                        from "../../../src/Shared/Enum/Routing";
+import { DefaultResponseSuccess }         from "../../../src/Shared/Default/ApiRequest.Default";
+import { DefaultSystemUsage }             from "../../../src/Shared/Default/Server.Default";
 import type { TRequest_System_Getusage }  from "../../../src/Shared/Type/API_Request";
-import type { UserLib }                   from "../Lib/User.Lib";
+import type { UserLib }                   from "@server/Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	const Url = CreateUrl( ESysUrl.usage );

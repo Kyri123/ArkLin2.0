@@ -2,8 +2,8 @@ import type * as core        from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                       from "express-serve-static-core";
-import { CreateUrl }    from "../Lib/PathBuilder.Lib";
+}                            from "express-serve-static-core";
+import { CreateUrl }         from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Server_Addserver,
 	TResponse_Server_Cancelaction,
@@ -15,15 +15,15 @@ import type {
 	TResponse_Server_Sendcommand,
 	TResponse_Server_Setpanelconfig,
 	TResponse_Server_Setserverconfig
-}                       from "../../../src/Shared/Type/API_Response";
+}                            from "../../../src/Shared/Type/API_Response";
 import {
 	CreateServer,
 	ServerLib
-}                       from "../Lib/Server.Lib";
-import { EPerm }        from "../../../src/Shared/Enum/User.Enum";
-import TaskManager      from "../Tasks/TaskManager";
-import { SSHManager }   from "../Lib/ConfigManager.Lib";
-import { EServerUrl }   from "../../../src/Shared/Enum/Routing";
+}                            from "@server/Lib/Server.Lib";
+import { EPerm }             from "../../../src/Shared/Enum/User.Enum";
+import TaskManager           from "../Tasks/TaskManager";
+import { SSHManager }        from "@server/Lib/ConfigManager.Lib";
+import { EServerUrl }        from "../../../src/Shared/Enum/Routing";
 import type {
 	TRequest_Server_Addserver,
 	TRequest_Server_Cancelaction,
@@ -35,13 +35,13 @@ import type {
 	TRequest_Server_Sendcommand,
 	TRequest_Server_Setpanelconfig,
 	TRequest_Server_Setserverconfig
-}                       from "../../../src/Shared/Type/API_Request";
+}                            from "../../../src/Shared/Type/API_Request";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                       from "../../../src/Shared/Default/ApiRequest.Default";
+}                            from "../../../src/Shared/Default/ApiRequest.Default";
 import type { TMO_Instance } from "../../../src/Types/MongoDB";
-import type { UserLib }      from "../Lib/User.Lib";
+import type { UserLib }      from "@server/Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EServerUrl.getallserver );

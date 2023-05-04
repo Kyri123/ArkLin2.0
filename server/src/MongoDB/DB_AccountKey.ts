@@ -1,12 +1,14 @@
-import * as mongoose              from "mongoose";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import type { IMO_AccountKeys }        from "../../../src/Types/MongoDB";
+import * as mongoose      from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
 
-const Schema = new mongoose.Schema<IMO_AccountKeys>( {
+const AccountKeysSchema = new mongoose.Schema( {
 	key: { type: String, unique: true, index: true, require: true },
-	AsSuperAdmin: { type: Boolean, default: false, require: true }
+	asSuperAdmin: { type: Boolean, default: false, require: true },
+	isAdminReset: { type: Boolean, default: false, require: false }
 } );
 
-Plugin_MongoDB_findOne( Schema );
+export type AccountKeys = mongoose.InferSchemaType<typeof AccountKeysSchema> & MongoBase
 
-export default mongoose.model( "accountkey", Schema );
+
+export default mongoose.model<AccountKeys>( "accountkey", AccountKeysSchema );
+export { AccountKeysSchema };

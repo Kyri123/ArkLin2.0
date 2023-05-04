@@ -1,5 +1,5 @@
 import type {
-	IMongoDB,
+	MongoBase,
 	TMO_Instance
 } from "../../Types/MongoDB";
 
@@ -10,7 +10,7 @@ export type TServerState =
 	| "ActionInProgress"
 	| "Running";
 
-export interface IInstanceState extends IMongoDB {
+export interface IInstanceState extends MongoBase {
 	State : TServerState;
 	IsListen : boolean;
 	Player : number;

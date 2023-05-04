@@ -1,8 +1,7 @@
-import * as mongoose              from "mongoose";
-import type { IMO_Cluster }            from "../../../src/Types/MongoDB";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
+import * as mongoose from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
 
-const Schema = new mongoose.Schema<IMO_Cluster>( {
+const ClusterSchema = new mongoose.Schema( {
 	Instances: { type: [ String ], required: true },
 	SyncInis: { type: [ String ], required: true },
 	SyncSettings: { type: [ String ], required: true },
@@ -18,6 +17,6 @@ const Schema = new mongoose.Schema<IMO_Cluster>( {
 	PreventUploadSurvivors: { type: Boolean, required: true }
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IMO_Cluster>( "kadmin_cluster", Schema );
+export type Cluster = mongoose.InferSchemaType<typeof ClusterSchema> & MongoBase
+export default mongoose.model<Cluster>( "kadmin_cluster", ClusterSchema );

@@ -1,8 +1,8 @@
-import { JobTask }       from "../TaskManager";
-import * as Si           from "systeminformation";
-import type { ISystemUsage }  from "../../../../src/Shared/Type/Systeminformation";
-import { ConfigManager } from "../../Lib/ConfigManager.Lib";
-import DB_Usage          from "../../MongoDB/DB_Usage";
+import { JobTask }           from "../TaskManager";
+import * as Si               from "systeminformation";
+import type { ISystemUsage } from "../../../../src/Shared/Type/Systeminformation";
+import { ConfigManager }     from "@server/Lib/ConfigManager.Lib";
+import DB_Usage              from "../../MongoDB/DB_Usage";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.SystemInformationInterval,

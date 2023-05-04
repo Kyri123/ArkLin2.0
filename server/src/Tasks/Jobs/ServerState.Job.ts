@@ -1,18 +1,18 @@
-import { JobTaskCycle }   from "../TaskManager";
+import { JobTaskCycle }        from "../TaskManager";
 import {
 	ConfigManager,
 	SSHManager
-}                         from "../../Lib/ConfigManager.Lib";
-import fs                 from "fs";
-import path               from "path";
+}                              from "@server/Lib/ConfigManager.Lib";
+import fs                      from "fs";
+import path                    from "path";
 import type { IInstanceState } from "../../../../src/Shared/Type/ArkSE";
-import DB_Instances       from "../../MongoDB/DB_Instances";
-import { ServerLib }      from "../../Lib/Server.Lib";
+import DB_Instances            from "../../MongoDB/DB_Instances";
+import { ServerLib }           from "@server/Lib/Server.Lib";
 import type {
 	IMO_Instance,
 	TMO_Instance
-}                         from "../../../../src/Types/MongoDB";
-import { QueryArkServer } from "../../Lib/ArkServerQuery.Lib";
+}                              from "../../../../src/Types/MongoDB";
+import { QueryArkServer }      from "@server/Lib/ArkServerQuery.Lib";
 
 export default new JobTaskCycle<IMO_Instance>(
 	"ServerState",

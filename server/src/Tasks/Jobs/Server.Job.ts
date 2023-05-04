@@ -2,17 +2,17 @@ import fs                              from "fs";
 import path                            from "path";
 import { EArkmanagerCommands }         from "../../../../src/Lib/ServerUtils.Lib";
 import { GetDefaultPanelServerConfig } from "../../../../src/Shared/Default/Server.Default";
-import type { IInstanceData }               from "../../../../src/Shared/Type/ArkSE";
+import type { IInstanceData }          from "../../../../src/Shared/Type/ArkSE";
 import {
 	ConfigToJSON,
 	FillWithDefaultValues
-}                                      from "../../Lib/Arkmanager.Lib";
-import { ConfigManager }               from "../../Lib/ConfigManager.Lib";
-import { ToRealDir }                   from "../../Lib/PathBuilder.Lib";
+}                                      from "@server/Lib/Arkmanager.Lib";
+import { ConfigManager }               from "@server/Lib/ConfigManager.Lib";
+import { ToRealDir }                   from "@server/Lib/PathBuilder.Lib";
 import {
 	CreateServer,
 	ServerLib
-}                                      from "../../Lib/Server.Lib";
+}                                      from "@server/Lib/Server.Lib";
 import DB_Instances                    from "../../MongoDB/DB_Instances";
 import { JobTask }                     from "../TaskManager";
 

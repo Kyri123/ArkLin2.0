@@ -1,9 +1,9 @@
-import type * as core         from "express-serve-static-core";
+import type * as core    from "express-serve-static-core";
 import type {
 	Request,
 	Response
 }                        from "express-serve-static-core";
-import { CreateUrl }     from "../Lib/PathBuilder.Lib";
+import { CreateUrl }     from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Panel_GetConfig,
 	TResponse_Panel_Log,
@@ -12,7 +12,7 @@ import type {
 }                        from "../../../src/Shared/Type/API_Response";
 import fs                from "fs";
 import { EPerm }         from "../../../src/Shared/Enum/User.Enum";
-import { ConfigManager } from "../Lib/ConfigManager.Lib";
+import { ConfigManager } from "@server/Lib/ConfigManager.Lib";
 import { EPanelUrl }     from "../../../src/Shared/Enum/Routing";
 import {
 	DefaultResponseFailed,
@@ -24,7 +24,7 @@ import type {
 	TRequest_Panel_Restart,
 	TRequest_Panel_SetConfig
 }                        from "../../../src/Shared/Type/API_Request";
-import type { UserLib }       from "../Lib/User.Lib";
+import type { UserLib }  from "@server/Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EPanelUrl.log );

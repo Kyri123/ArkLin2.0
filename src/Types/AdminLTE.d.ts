@@ -1,19 +1,41 @@
 /** @format */
 
 import type { IconProp }   from "@fortawesome/fontawesome-svg-core";
-import type {
+import type React, {
 	HTMLAttributeAnchorTarget,
 	HTMLInputTypeAttribute
-} from "react";
-import type React                     from "react";
+}                          from "react";
 import type { Variant }    from "react-bootstrap/types";
 import type { TLTEColors } from "../Shared/Type/AdminLTE";
 import type {
 	IChildrenBaseProps,
 	IPropsWithPermission
-}                     from "./BaseTypes";
+}                          from "./BaseTypes";
 import type { Button }     from "react-bootstrap";
 import type { CardProps }  from "react-bootstrap/Card";
+
+export type TLTEColors =
+	| "danger"
+	| "success"
+	| "info"
+	| "primary"
+	| "secondary"
+	| "black"
+	| "gray-dark"
+	| "light"
+	| "indigo"
+	| "warning"
+	| "light-blue"
+	| "navy"
+	| "purple"
+	| "fuchsia"
+	| "pink"
+	| "maroon"
+	| "orange"
+	| "lime"
+	| "teal"
+	| "olive";
+
 
 export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
 

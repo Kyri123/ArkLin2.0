@@ -3,18 +3,18 @@ import type {
 	Request,
 	Response
 }                            from "express-serve-static-core";
-import { CreateUrl }         from "../Lib/PathBuilder.Lib";
+import { CreateUrl }         from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Auth_SignIn,
 	TResponse_Auth_SignUp
 }                            from "../../../src/Shared/Type/API_Response";
 import { Md5 }               from "ts-md5";
-import { ConfigManager }     from "../Lib/ConfigManager.Lib";
-import type { UserLib }      from "../Lib/User.Lib";
+import { ConfigManager }     from "@server/Lib/ConfigManager.Lib";
+import type { UserLib }      from "@server/Lib/User.Lib";
 import {
 	GenerateAccessToken,
 	GetSecretAppToken
-}                            from "../Lib/User.Lib";
+}                            from "@server/Lib/User.Lib";
 import DB_Accounts           from "../MongoDB/DB_Accounts";
 import DB_AccountKey         from "../MongoDB/DB_AccountKey";
 import type { IMO_Accounts } from "../../../src/Types/MongoDB";
@@ -158,7 +158,7 @@ export default function( Api : core.Express ) {
 						const NewAccount = await DB_Accounts.create( {
 							mail: Request.email.replaceAll( " ", "" ),
 							password: Md5.hashStr( Request.password.replaceAll( " ", "" ) ),
-							permissions: Key.AsSuperAdmin ? [ "Super" ] : [],
+							permissions: Key.asSuperAdmin ? [ "Super" ] : [],
 							servers: [],
 							username: Request.user.replaceAll( " ", "" )
 						} );

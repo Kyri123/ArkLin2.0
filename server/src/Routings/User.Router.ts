@@ -1,9 +1,9 @@
-import type * as core            from "express-serve-static-core";
+import type * as core        from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                           from "express-serve-static-core";
-import { CreateUrl }        from "../Lib/PathBuilder.Lib";
+}                            from "express-serve-static-core";
+import { CreateUrl }         from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_User_Addkey,
 	TResponse_User_Allkeys,
@@ -13,14 +13,14 @@ import type {
 	TResponse_User_Removeaccount,
 	TResponse_User_Removekey,
 	TResponse_User_Usereditaccount
-}                           from "../../../src/Shared/Type/API_Response";
-import { EPerm }            from "../../../src/Shared/Enum/User.Enum";
-import { UserLib }          from "../Lib/User.Lib";
-import { Md5 }              from "ts-md5";
-import type { IMO_Accounts }     from "../../../src/Types/MongoDB";
-import DB_Accounts          from "../MongoDB/DB_Accounts";
-import DB_AccountKey        from "../MongoDB/DB_AccountKey";
-import { EUserUrl }         from "../../../src/Shared/Enum/Routing";
+}                            from "../../../src/Shared/Type/API_Response";
+import { EPerm }             from "../../../src/Shared/Enum/User.Enum";
+import { UserLib }           from "@server/Lib/User.Lib";
+import { Md5 }               from "ts-md5";
+import type { IMO_Accounts } from "../../../src/Types/MongoDB";
+import DB_Accounts           from "../MongoDB/DB_Accounts";
+import DB_AccountKey         from "../MongoDB/DB_AccountKey";
+import { EUserUrl }          from "../../../src/Shared/Enum/Routing";
 import type {
 	TRequest_User_Addkey,
 	TRequest_User_Allkeys,
@@ -30,12 +30,12 @@ import type {
 	TRequest_User_Removeaccount,
 	TRequest_User_Removekey,
 	TRequest_User_Usereditaccount
-}                           from "../../../src/Shared/Type/API_Request";
+}                            from "../../../src/Shared/Type/API_Request";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                           from "../../../src/Shared/Default/ApiRequest.Default";
-import { MakeRandomString } from "@kyri123/k-javascript-utils";
+}                            from "../../../src/Shared/Default/ApiRequest.Default";
+import { MakeRandomString }  from "@kyri123/k-javascript-utils";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( EUserUrl.alluser );
@@ -174,7 +174,7 @@ export default function( Api : core.Express ) {
 		) {
 			const Key = MakeRandomString( 20, "-" );
 			await DB_AccountKey.create( {
-				AsSuperAdmin: Request.rang !== 0,
+				asSuperAdmin: Request.rang !== 0,
 				key: Key
 			} );
 			Response.Success = true;

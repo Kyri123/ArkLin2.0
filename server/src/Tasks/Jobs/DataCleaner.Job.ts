@@ -1,9 +1,9 @@
-import { JobTask }       from "../TaskManager";
-import { ConfigManager } from "../../Lib/ConfigManager.Lib";
-import type { IMO_Instance }  from "../../../../src/Types/MongoDB";
-import DB_Instances      from "../../MongoDB/DB_Instances";
-import { ServerLib }     from "../../Lib/Server.Lib";
-import fs                from "fs";
+import { JobTask }           from "../TaskManager";
+import { ConfigManager }     from "@server/Lib/ConfigManager.Lib";
+import type { IMO_Instance } from "../../../../src/Types/MongoDB";
+import DB_Instances          from "../../MongoDB/DB_Instances";
+import { ServerLib }         from "@server/Lib/Server.Lib";
+import fs                    from "fs";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.DataCleanerInterval,

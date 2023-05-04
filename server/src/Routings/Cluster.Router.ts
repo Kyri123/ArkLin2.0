@@ -1,9 +1,9 @@
-import type * as core          from "express-serve-static-core";
+import type * as core     from "express-serve-static-core";
 import type {
 	Request,
 	Response
 }                         from "express-serve-static-core";
-import { CreateUrlV2 }    from "../Lib/PathBuilder.Lib";
+import { CreateUrlV2 }    from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Cluster_CreateCluster,
 	TResponse_Cluster_GetClusters,
@@ -12,7 +12,7 @@ import type {
 	TResponse_Cluster_SetCluster
 }                         from "../../../src/Shared/Type/API_Response";
 import { EPerm }          from "../../../src/Shared/Enum/User.Enum";
-import type { UserLib }        from "../Lib/User.Lib";
+import type { UserLib }   from "@server/Lib/User.Lib";
 import { EClusterApiUrl } from "../../../src/Shared/Enum/Routing";
 import type {
 	TRequest_Cluster_CreateCluster,
@@ -26,9 +26,9 @@ import {
 }                         from "../../../src/Shared/Default/ApiRequest.Default";
 import { AuthMiddleware } from "../Middleware/Auth.Middleware";
 import DB_Instances       from "../MongoDB/DB_Instances";
-import { ServerLib }      from "../Lib/Server.Lib";
+import { ServerLib }      from "@server/Lib/Server.Lib";
 import DB_Cluster         from "../MongoDB/DB_Cluster";
-import { EmitClusters }   from "../Lib/SocketIO.Lib";
+import { EmitClusters }   from "@server/Lib/SocketIO.Lib";
 import type {
 	IMO_Cluster,
 	IMO_Instance

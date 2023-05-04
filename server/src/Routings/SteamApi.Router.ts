@@ -2,14 +2,14 @@ import type * as core                      from "express-serve-static-core";
 import type {
 	Request,
 	Response
-}                                     from "express-serve-static-core";
-import { CreateUrl }                  from "../Lib/PathBuilder.Lib";
+}                                          from "express-serve-static-core";
+import { CreateUrl }                       from "@server/Lib/PathBuilder.Lib";
 import type { TResponse_SteamApi_Getmods } from "../../../src/Shared/Type/API_Response";
-import { ESteamApiUrl }               from "../../../src/Shared/Enum/Routing";
-import DB_SteamAPI_Mods               from "../MongoDB/DB_SteamAPI_Mods";
+import { ESteamApiUrl }                    from "../../../src/Shared/Enum/Routing";
+import DB_SteamAPI_Mods                    from "../MongoDB/DB_SteamAPI_Mods";
 import type { TRequest_SteamApi_Getmods }  from "../../../src/Shared/Type/API_Request";
-import { DefaultResponseSuccess }     from "../../../src/Shared/Default/ApiRequest.Default";
-import type { UserLib }                    from "../Lib/User.Lib";
+import { DefaultResponseSuccess }          from "../../../src/Shared/Default/ApiRequest.Default";
+import type { UserLib }                    from "@server/Lib/User.Lib";
 
 export default function( Api : core.Express ) {
 	const Url = CreateUrl( ESteamApiUrl.getmods );
