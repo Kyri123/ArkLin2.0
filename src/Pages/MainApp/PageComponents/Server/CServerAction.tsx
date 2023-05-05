@@ -1,21 +1,18 @@
-import { Modal }            from "react-bootstrap";
-import { IconButton }       from "@comp/Elements/AdminLTE/Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+import { Modal }           from "react-bootstrap";
+import { IconButton }      from "@comp/Elements/AdminLTE/Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-	useContext,
 	useEffect,
 	useState
-}                           from "react";
-import CLTEInput            from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+}                          from "react";
+import CLTEInput           from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import {
 	EArkmanagerCommands,
 	GetMaskFromCommand
-}                           from "../../../../Lib/serverUtils";
-import Select               from "react-select";
-import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
-import { useArkServer }     from "../../../../Hooks/useArkServer";
-import AlertContext         from "@context/AlertContext";
-import type { ISelectMask } from "@shared/Type/Systeminformation";
+}                          from "../../../../Lib/serverUtils";
+import Select              from "react-select";
+import { API_ServerLib }   from "../../../../Lib/Api/API_Server.Lib";
+import { useArkServer }    from "../../../../Hooks/useArkServer";
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },
@@ -42,7 +39,6 @@ export default function CServerAction( Props : {
 	OnClose : () => void;
 } ) {
 	const { State } = useArkServer( Props.InstanceName );
-	const GAlert = useContext( AlertContext );
 	const [ IsSending, setIsSending ] = useState( false );
 	const [ Parameter, setParameter ] = useState<string[]>( [] );
 	const [ ParameterMask, setParameterMask ] = useState<

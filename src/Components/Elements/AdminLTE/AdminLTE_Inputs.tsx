@@ -1,24 +1,24 @@
 import type {
 	IAdminLTEBase,
 	IChildrenBaseProps
-}                          from "@app/Types/BaseTypes";
+}                           from "@app/Types/BaseTypes";
 import type {
 	ChangeEvent,
 	HTMLInputTypeAttribute
-}                          from "react";
+}                           from "react";
 import {
 	useEffect,
 	useId,
 	useState
-}                          from "react";
-import { ButtonGroup }     from "react-bootstrap";
+}                           from "react";
+import { ButtonGroup }      from "react-bootstrap";
 import {
 	IconButton,
 	ToggleButton
-}                          from "./Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Select              from "react-select";
-import type { ISelectMask }     from "@app/Types/Systeminformation";
+}                           from "./Buttons";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+import Select               from "react-select";
+import type { ISelectMask } from "@app/Types/Systeminformation";
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 
@@ -31,6 +31,7 @@ export interface ILTEInpute<
 		| number[]
 		| string[]
 		| undefined
+		| Date
 > extends IChildrenBaseProps {
 	Type? : HTMLInputTypeAttribute;
 	Value : T;

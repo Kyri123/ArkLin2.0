@@ -70,6 +70,10 @@ const rootRouter = createBrowserRouter( [
 							const { loader } = await import( "@page/app/loader/[changelogTag]" );
 							return loader( { request, params } );
 						}
+					},
+					{
+						path: "/app/adminserver",
+						lazy: async() => await import("@page/app/adminServer")
 					}
 				]
 			},

@@ -8,11 +8,14 @@ import * as Icon            from "react-icons/bs";
 import { Link }             from "react-router-dom";
 import ServerContext        from "@context/ServerContext";
 import useAuth              from "@hooks/useAuth";
-import { API_PanelLib }     from "@app/Lib/Api/API_Panel.Lib";
 import { EPerm }            from "@shared/Enum/User.Enum";
 import CServerCard          from "@page/MainApp/PageComponents/Server/ServerCard";
 import useAccount           from "@hooks/useAccount";
 import type { SystemUsage } from "@server/MongoDB/DB_Usage";
+import {
+	fireSwalFromApi,
+	tRPC_Auth
+}                           from "@app/Lib/tRPC";
 
 export default function TopNavigation( Props : {
 	SystemUsage : SystemUsage;
@@ -33,6 +36,41 @@ export default function TopNavigation( Props : {
 		else if ( Sidebar ) {
 			Sidebar.classList.add( "d-none" );
 			Sidebar.classList.remove( "show" );
+		}
+	};
+
+	const restartPanel = async() => {
+		const accept = await fireSwalFromApi( "Möchtest du wirklich das Panel neustarten?", "question", {
+			showConfirmButton: true,
+			showCancelButton: true,
+			confirmButtonText: "Ja",
+			cancelButtonText: "Nein",
+			timer: 5000
+		} );
+
+		if ( accept?.isConfirmed ) {
+			const result = await tRPC_Auth.panelAdmin.restart.mutate();
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
+		}
+	};
+ 
+
+	const updatePanel = async() => {
+		const accept = await fireSwalFromApi( "Möchtest du wirklich das Panel updaten?", "question", {
+			showConfirmButton: true,
+			showCancelButton: true,
+			confirmButtonText: "Ja",
+			cancelButtonText: "Nein",
+			timer: 5000
+		} );
+
+		if ( accept?.isConfirmed ) {
+			const result = await tRPC_Auth.panelAdmin.update.mutate();
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
 		}
 	};
 
@@ -66,7 +104,7 @@ export default function TopNavigation( Props : {
 									{ ( Props.SystemUsage.PanelNeedUpdate ) && (
 										<>
 											<button
-												onClick={ API_PanelLib.TriggerUpdate }
+												onClick={ updatePanel }
 												className="dropdown-item text-info"
 											>
 												<Icon.BsDownload className={ "pe-2" } size={ 22 }/>
@@ -97,7 +135,7 @@ export default function TopNavigation( Props : {
 										</Link>
 									) }
 									<button
-										onClick={ () => API_PanelLib.Restart() }
+										onClick={ restartPanel }
 										className="dropdown-item text-bg-danger"
 										data-toggle="modal"
 										data-target="#panelControlerLogs"

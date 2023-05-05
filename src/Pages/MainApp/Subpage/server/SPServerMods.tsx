@@ -1,6 +1,5 @@
 import type React                from "react";
 import {
-	useContext,
 	useEffect,
 	useId,
 	useRef,
@@ -18,15 +17,10 @@ import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
 import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
 import type { Socket }           from "socket.io-client";
 import io                        from "socket.io-client";
-import type {
-	EmitEvents,
-	ListenEvents
-}                                from "@shared/Type/Socket";
 import { SocketIOLib }           from "../../../../Lib/Api/SocketIO.Lib";
 import { API_SteamAPILib }       from "../../../../Lib/Api/API_SteamAPI.Lib";
 import type { ISteamApiMod }     from "../../../../Types/SteamAPI";
 import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
-import AlertContext              from "@context/AlertContext";
 import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
 
 interface IProps {
@@ -37,7 +31,6 @@ const SocketIO : Socket<EmitEvents, ListenEvents> = io(
 	SocketIOLib.GetSpocketHost()
 );
 const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
-	const { DoSetAlert } = useContext( AlertContext );
 	const ID = useId();
 	const { Data, TempModify } = useArkServer( InstanceName );
 	const [ IsSending, setIsSending ] = useState( false );

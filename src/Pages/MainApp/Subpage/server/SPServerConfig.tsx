@@ -1,6 +1,5 @@
 import type React              from "react";
 import {
-	useContext,
 	useEffect,
 	useRef,
 	useState
@@ -29,14 +28,12 @@ import {
 	gruvboxDarkInit
 }                              from "@uiw/codemirror-theme-gruvbox-dark";
 import { API_ServerLib }       from "../../../../Lib/Api/API_Server.Lib";
-import AlertContext            from "@context/AlertContext";
 
 interface IProps {
 	InstanceName : string;
 }
 
 const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
-	const { DoSetAlert } = useContext( AlertContext );
 	const {
 		RequestConfigContent,
 		ConfigFiles,

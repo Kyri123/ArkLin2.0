@@ -1,26 +1,24 @@
-import type { IServerCardProps } from "../../../../Types/Server";
-import { Link }                  from "react-router-dom";
+import type { ServerAdminCardProps } from "../../../../Types/Server";
+import { Link }                      from "react-router-dom";
 import {
 	useContext,
 	useState
-}                                from "react";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
+}                                    from "react";
+import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
 import {
 	ServerStateToColor,
 	ServerStateToReadableString
-}                                from "../../../../Lib/Conversion.Lib";
-import { useArkServer }          from "../../../../Hooks/useArkServer";
-import { ButtonGroup }           from "react-bootstrap";
-import { IconButton }            from "@comp/Elements/AdminLTE/Buttons";
-import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
-import CServerAction             from "./CServerAction";
-import AlertContext              from "@context/AlertContext";
-import AccountContext            from "@context/AccountContext";
+}                                    from "../../../../Lib/Conversion.Lib";
+import { useArkServer }              from "../../../../Hooks/useArkServer";
+import { ButtonGroup }               from "react-bootstrap";
+import { IconButton }                from "@comp/Elements/AdminLTE/Buttons";
+import { API_ServerLib }             from "../../../../Lib/Api/API_Server.Lib";
+import CServerAction                 from "./CServerAction";
+import AccountContext                from "@context/AccountContext";
 
-export default function CServerHead( Props : IServerCardProps ) {
+export default function CServerHead( Props : ServerAdminCardProps ) {
 	const Account = useContext( AccountContext );
 	const Server = useArkServer( Props.InstanceName );
-	const GAlert = useContext( AlertContext );
 	const [ SendCancel, setSendCancel ] = useState( false );
 	const [ ShowModals, setShowModal ] = useState( false );
 

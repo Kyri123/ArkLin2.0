@@ -1,15 +1,15 @@
-import type { IServerCardProps } from "@app/Types/Server";
+import type { ServerAdminCardProps } from "@app/Types/Server";
 import {
 	useEffect,
 	useRef
-}                                from "react";
-import { useArkServer }          from "@hooks/useArkServer";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
-import { ServerStateToColor }    from "@app/Lib/Conversion.Lib";
-import { Dropdown }              from "react-bootstrap";
-import { Link }                  from "react-router-dom";
+}                                    from "react";
+import { useArkServer }              from "@hooks/useArkServer";
+import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
+import { ServerStateToColor }        from "@app/Lib/Conversion.Lib";
+import { Dropdown }                  from "react-bootstrap";
+import { Link }                      from "react-router-dom";
 
-export default function CServerCard( Props : IServerCardProps ) {
+export default function CServerCard( Props : ServerAdminCardProps ) {
 	const CardRef = useRef<HTMLDivElement>( null );
 	const { Data, IsValid, ServerMap, State } = useArkServer( Props.InstanceName );
 

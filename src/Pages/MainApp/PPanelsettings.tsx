@@ -1,5 +1,4 @@
 import {
-	useContext,
 	useEffect,
 	useId,
 	useState
@@ -15,8 +14,6 @@ import CLTEInput                                from "../../Components/Elements/
 import { IconButton }                           from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }                      from "@fortawesome/react-fontawesome";
 import StringMapLib                             from "../../Lib/StringMap.Lib";
-import usePermissionPage                        from "../../Hooks/usePermissionPage";
-import AlertContext                             from "../../Context/AlertContext";
 import { API_QueryLib }                         from "@app/Lib/Api/API_Query.Lib";
 import { EChangelogUrl }                        from "@shared/Enum/Routing";
 import type { TResponse_Changelog_GetBranches } from "@app/Types/API_Response";
@@ -25,7 +22,6 @@ import type { ISelectMask }                     from "@app/Types/Systeminformati
 const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 
 export default function PPanelsettings() {
-	const GAlert = useContext( AlertContext );
 	const Id = useId();
 	const Location = useLocation();
 	const [ ConfigData, setConfigData ] = useState<Record<string, any>>( {} );

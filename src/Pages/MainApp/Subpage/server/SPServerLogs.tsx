@@ -1,11 +1,11 @@
-import type { IServerCardProps } from "../../../../Types/Server";
-import { Card }                  from "react-bootstrap";
-import FormatLog                 from "@comp/FormatLog";
-import type { SingleValue }      from "react-select";
-import Select                    from "react-select";
-import { useArkServerLogs }      from "../../../../Hooks/useArkServerLogs";
+import type { ServerAdminCardProps } from "../../../../Types/Server";
+import { Card }                      from "react-bootstrap";
+import FormatLog                     from "@comp/FormatLog";
+import type { SingleValue }          from "react-select";
+import Select                        from "react-select";
+import { useArkServerLogs }          from "../../../../Hooks/useArkServerLogs";
 
-export default function SPServerLogs( Props : IServerCardProps ) {
+export default function SPServerLogs( Props : ServerAdminCardProps ) {
 	const { LogFiles, LogContent, RequestLogContent, CurrentFile } =
 		useArkServerLogs( Props.InstanceName );
 

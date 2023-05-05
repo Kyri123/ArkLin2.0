@@ -4,6 +4,16 @@ import fs                from "fs";
 import * as console      from "console";
 import * as dotenv       from "dotenv";
 import { ConfigManager } from "@server/Lib/ConfigManager.Lib";
+import { EBashScript }   from "@server/Enum/EBashScript";
+
+export async function RunUpdate() {
+	SystemLib.Log( "Update", "Running Update..." );
+
+	const config = ConfigManager.GetDashboardConifg;
+
+	await SSHManagerLib.ExecCommandInScreen( "kadminupdate", `${ EBashScript.update } '${ config.PANEL_Branch }'` );
+}
+
 
 export type BashColorString =
 	| "Default"

@@ -9,11 +9,9 @@ import PCClusterElement           from "./PageComponents/Cluster/PCClusterElemen
 import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import { Row }                    from "react-bootstrap";
-import AlertContext               from "../../Context/AlertContext";
 import { API_ClusterLib }         from "@app/Lib/Api/API_Cluster.Lib";
 
 const PCluster : FunctionComponent = () => {
-	const { DoSetAlert } = useContext( AlertContext );
 	const { ClusterData } = useContext( ServerContext );
 	const [ SelectedCluster, setSelectedCluster ] = useState<string | undefined>( undefined );
 

@@ -1,5 +1,4 @@
 import type { FunctionComponent } from "react";
-import { useContext }             from "react";
 import {
 	Button,
 	ButtonGroup,
@@ -11,7 +10,6 @@ import { useCluster }             from "../../../../Hooks/useCluster";
 import { useArkServer }           from "../../../../Hooks/useArkServer";
 import { MakeRandomString }       from "@kyri123/k-javascript-utils";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
-import AlertContext               from "@context/AlertContext";
 
 interface IPCServerClusterRow {
 	ServerName : string;
@@ -48,7 +46,6 @@ interface IPCClusterElementProps {
 const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { ClusterID, TriggerEdit, TriggerRemove } ) => {
 	const { Cluster, MasterServer, IsValid } = useCluster( ClusterID );
 	const { ServerMap, Data } = useArkServer( MasterServer[ 0 ] );
-	const { setAcceptAction } = useContext( AlertContext );
 
 	if ( !IsValid ) {
 		return (

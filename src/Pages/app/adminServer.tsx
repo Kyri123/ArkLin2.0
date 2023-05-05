@@ -1,43 +1,40 @@
+import type { FC }                     from "react";
 import {
 	useContext,
-	useEffect,
 	useState
 }                                      from "react";
-import CServerAdminCard                from "./PageComponents/Server/ServerAdminCard";
 import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import { Modal }                       from "react-bootstrap";
 import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
-import CLTEInput                       from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+import CLTEInput                       from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import { API_ServerLib }               from "@app/Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
-import ServerContext                   from "../../Context/ServerContext";
-import AlertContext                    from "../../Context/AlertContext";
+import ServerContext                   from "@context/ServerContext";
 import type { ISelectMask }            from "@app/Types/Systeminformation";
+import _                               from "lodash";
+import { ServerAdminCard }             from "@page/app/pageComponents/adminServer/ServerAdminCard";
 
-export default function PAdminServer() {
+const Component : FC = () => {
 	const { InstanceData } = useContext( ServerContext );
-	const GAlert = useContext( AlertContext );
 	const [ ShowNewServer, setShowNewServer ] = useState( false );
-	const [ FormData, setFormData ] = useState( GetDefaultPanelServerConfig() );
+	const [ FormData, setFormData ] = useState( () => _.cloneDeep( GetDefaultPanelServerConfig() ) );
 	const [ IsSending, setIsSending ] = useState( false );
-
-	useEffect( () => setFormData( GetDefaultPanelServerConfig() ), [ ShowNewServer ] );
 
 	const CreateServer = async() => {
 		setIsSending( true );
-		GAlert.DoSetAlert( await API_ServerLib.AddServer( FormData ) );
+
 		setIsSending( false );
 		setShowNewServer( false );
+		setFormData( () => _.cloneDeep( GetDefaultPanelServerConfig() ) );
 	};
 
 	return (
 		<>
 			<div className="row" id="serverControlCenterContainer">
-				{ Object.entries( InstanceData ).map( ( [ InstanceName ] ) => (
-					<CServerAdminCard
+				{ Object.entries( InstanceData ).map( ( [ InstanceName, Instance ] ) => (
+					<ServerAdminCard
 						InstanceName={ InstanceName }
-						key={ "SERVERADMIN" + InstanceName }
+						key={ Instance._id }
 					/>
 				) ) }
 
@@ -105,4 +102,6 @@ export default function PAdminServer() {
 			</Modal>
 		</>
 	);
-}
+};
+
+export { Component };

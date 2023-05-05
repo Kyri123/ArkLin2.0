@@ -28,7 +28,6 @@ import { API_ServerLib }          from "../../../../Lib/Api/API_Server.Lib";
 import type { InstanceData }      from "@shared/Type/ArkSE";
 import type { IAPIResponseBase }  from "@app/Types/API_Response";
 import { API_ClusterLib }         from "../../../../Lib/Api/API_Cluster.Lib";
-import AlertContext               from "@context/AlertContext";
 
 interface IPCClusterElementProps {
 	ClusterID : string | undefined;
@@ -50,7 +49,6 @@ const RemovedOptions : ( keyof InstanceData )[] = [
 ];
 
 const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterID, Close } ) => {
-	const { DoSetAlert } = useContext( AlertContext );
 	const { InstanceData } = useContext( ServerContext );
 	const { Cluster, IsValid } = useCluster( ClusterID || "" );
 	const [ Form, setForm ] = useState<Cluster>( { ...DefaultCluster } );

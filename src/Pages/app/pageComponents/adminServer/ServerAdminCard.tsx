@@ -1,7 +1,6 @@
-import type { IServerCardProps }       from "../../../../Types/Server";
 import { Link }                        from "react-router-dom";
+import type { FC }                     from "react";
 import {
-	useContext,
 	useEffect,
 	useState
 }                                      from "react";
@@ -9,10 +8,8 @@ import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import {
 	ServerStateToColor,
 	ServerStateToReadableString
-}                                      from "../../../../Lib/Conversion.Lib";
-import { useArkServer }                from "../../../../Hooks/useArkServer";
-import type { IAcceptActionFunction }  from "../General/CAcceptAction";
-import CAcceptAction                   from "../General/CAcceptAction";
+}                                      from "@app/Lib/Conversion.Lib";
+import { useArkServer }                from "@hooks/useArkServer";
 import {
 	ButtonGroup,
 	Modal
@@ -20,20 +17,21 @@ import {
 import { EPerm }                       from "@shared/Enum/User.Enum";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
-import { API_ServerLib }               from "../../../../Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
-import type { PanelServerConfig }      from "@shared/Type/ArkSE";
-import CServerAction                   from "./CServerAction";
-import AlertContext                    from "@context/AlertContext";
-import AccountContext                  from "@context/AccountContext";
-import CLTEInput                       from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import type { ISelectMask }            from "@shared/Type/Systeminformation";
+import CServerAction                   from "../../../MainApp/PageComponents/Server/CServerAction";
+import CLTEInput                       from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
+import type { PanelServerConfig }      from "@app/Types/ArkSE";
+import useAccount                      from "@hooks/useAccount";
+import type { ISelectMask }            from "@app/Types/Systeminformation";
 
-export default function CServerAdminCard( Props : IServerCardProps ) {
-	const GAlert = useContext( AlertContext );
+export interface ServerAdminCardProps {
+	InstanceName : string;
+}
+
+const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
+	const { user } = useAccount();
 	const [ SendCancel, setSendCancel ] = useState( false );
-	const Account = useContext( AccountContext );
-	const Server = useArkServer( Props.InstanceName );
+	const Server = useArkServer( InstanceName );
 	const [ ShowEditServer, setShowEditServer ] = useState( false );
 	const [ ShowAction, setShowAction ] = useState( false );
 	const [ IsSending, setIsSending ] = useState( {
@@ -42,15 +40,8 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 	} );
 	const [ FormData, setFormData ] = useState( GetDefaultPanelServerConfig() );
 
-	const [ AcceptAction, setAcceptAction ] = useState<IAcceptActionFunction>( {
-		Payload: undefined,
-		PayloadArgs: [],
-		ActionTitle: ""
-	} );
-
 	const RemoveServer = async() => {
 		setIsSending( { ...IsSending, Delete: true } );
-		GAlert.DoSetAlert( await API_ServerLib.RemoveServer( Props.InstanceName ) );
 		setIsSending( { ...IsSending, Delete: false } );
 	};
 
@@ -64,12 +55,6 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 			...FormData,
 			...CopyForm
 		} );
-		GAlert.DoSetAlert(
-			await API_ServerLib.SetPanelConfig( Props.InstanceName, {
-				...FormData,
-				...CopyForm
-			} )
-		);
 		setIsSending( { ...IsSending, Edit: false } );
 		setShowEditServer( false );
 	};
@@ -81,8 +66,12 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 	}, [ Server.PanelConfig, ShowEditServer ] );
 
 	if ( !Server.IsValid() ) {
-		return <></>;
+		return null;
 	}
+
+	const cancelAction = async() => {
+
+	};
 
 	return (
 		<>
@@ -121,7 +110,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 					<div className="d-flex bd-highlight">
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
 							<button
-								disabled={ !Account.Account.HasPermission( EPerm.ManageServers ) }
+								disabled={ !user.HasPermission( EPerm.ManageServers ) }
 								onClick={ () => setShowEditServer( true ) }
 								className="w-100 pe-5 rounded-0 btn btn-dark"
 							>
@@ -130,13 +119,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 						</div>
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
               <span
-	              onClick={ () =>
-		              setAcceptAction( {
-			              Payload: RemoveServer,
-			              PayloadArgs: [],
-			              ActionTitle: `Server [${ Props.InstanceName }] - ${ Server.Data.ark_SessionName } wirklich löschen?`
-		              } )
-	              }
+	              onClick={ RemoveServer }
 	              className="w-100 ps-5 rounded-0 text-white btn btn-danger"
 	              data-toggle="modal"
               >
@@ -168,7 +151,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 										<ButtonGroup>
 											<IconButton
 												disabled={
-													!Account.Account.HasPermissionForServer(
+													!user.HasPermissionForServer(
 														Server.InstanceName
 													)
 												}
@@ -179,22 +162,14 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 											</IconButton>
 											<IconButton
 												disabled={
-													!Account.Account.HasPermissionForServer(
+													!user.HasPermissionForServer(
 														Server.InstanceName
 													)
 												}
 												Hide={ Server.State.ArkmanagerPID <= 1 }
 												variant={ "danger" }
 												IsLoading={ SendCancel }
-												onClick={ async() => {
-													setSendCancel( true );
-													GAlert.DoSetAlert(
-														await API_ServerLib.CancelAction(
-															Server.InstanceName
-														)
-													);
-													setSendCancel( false );
-												} }
+												onClick={ cancelAction }
 											>
 												<FontAwesomeIcon icon={ "cancel" }/>
 											</IconButton>
@@ -231,7 +206,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 						<div className="row">
 							<div className="col-12">
 								<Link
-									to={ `/server/${ Props.InstanceName }/logs` }
+									to={ `/server/${ InstanceName }/logs` }
 									className="btn btn-sm btn-dark rounded-0 w-100"
 								>
 									ServerCenter
@@ -247,16 +222,15 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 				Show={ ShowAction }
 				OnClose={ () => setShowAction( false ) }
 			/>
-			<CAcceptAction Function={ AcceptAction } SetFunction={ setAcceptAction }/>
 
-			{ Account.Account.HasPermission( EPerm.ManageServers ) && (
+			{ user.HasPermission( EPerm.ManageServers ) && (
 				<Modal
 					size={ "lg" }
 					show={ ShowEditServer }
 					onHide={ () => setShowEditServer( false ) }
 				>
 					<Modal.Header closeButton>
-						Server Bearbeiten: [{ Props.InstanceName }] -{ " " }
+						Server Bearbeiten: [{ InstanceName }] -{ " " }
 						{ Server.Data.ark_SessionName }
 					</Modal.Header>
 					<Modal.Body>
@@ -269,7 +243,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 											? "number"
 											: "text"
 								}
-								key={ Props.InstanceName + "EDIT" + Key + Idx }
+								key={ InstanceName + "EDIT" + Key + Idx }
 								Value={ Value }
 								OnValueSet={ ( Val ) => {
 									const Obj : Record<string, any> = {};
@@ -307,4 +281,6 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 			) }
 		</>
 	);
-}
+};
+
+export { ServerAdminCard };
