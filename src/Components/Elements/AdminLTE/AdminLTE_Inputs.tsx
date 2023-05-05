@@ -1,24 +1,24 @@
 import type {
 	IAdminLTEBase,
 	IChildrenBaseProps
-}                           from "../../../Types/BaseTypes";
+}                          from "@app/Types/BaseTypes";
 import type {
 	ChangeEvent,
 	HTMLInputTypeAttribute
-}                           from "react";
+}                          from "react";
 import {
 	useEffect,
 	useId,
 	useState
-}                           from "react";
-import { ButtonGroup }      from "react-bootstrap";
+}                          from "react";
+import { ButtonGroup }     from "react-bootstrap";
 import {
-	LTELoadingButton,
-	LTEToggleButton
-}                           from "./AdminLTE_Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import Select               from "react-select";
-import type { ISelectMask } from "@shared/Type/Systeminformation";
+	IconButton,
+	ToggleButton
+}                          from "./Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Select              from "react-select";
+import type { ISelectMask }     from "@app/Types/Systeminformation";
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 
@@ -296,7 +296,7 @@ export function CLTEInputBoolean( Props : ILTEInpute<boolean> ) {
 	return (
 		<div className={ "form-group row " + ( Props.className || "" ) }>
 			<div className={ "col-sm-1" }>
-				<LTEToggleButton
+				<ToggleButton
 					className={ "w-100" }
 					Value={ Props.Value as boolean }
 					OnToggle={ Props.OnValueSet }
@@ -379,15 +379,15 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 								OnValueSet={ ( V ) => OnValueChanged( V, Idx ) }
 							>
 								<ButtonGroup>
-									<LTELoadingButton
+									<IconButton
 										onClick={ () => OnRemoveIndex( Idx ) }
 										variant={ "danger" }
 									>
 										<FontAwesomeIcon icon={ "trash-alt" }/>
-									</LTELoadingButton>
-									<LTELoadingButton onClick={ OnAddIndex }>
+									</IconButton>
+									<IconButton onClick={ OnAddIndex }>
 										<FontAwesomeIcon icon={ "plus" }/>
-									</LTELoadingButton>
+									</IconButton>
 								</ButtonGroup>
 							</CLTESelectMask>
 						) : (
@@ -400,15 +400,15 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 								/>
 								<div className="input-group-append">
 									<ButtonGroup>
-										<LTELoadingButton
+										<IconButton
 											onClick={ () => OnRemoveIndex( Idx ) }
 											variant={ "danger" }
 										>
 											<FontAwesomeIcon icon={ "trash-alt" }/>
-										</LTELoadingButton>
-										<LTELoadingButton onClick={ OnAddIndex }>
+										</IconButton>
+										<IconButton onClick={ OnAddIndex }>
 											<FontAwesomeIcon icon={ "plus" }/>
-										</LTELoadingButton>
+										</IconButton>
 									</ButtonGroup>
 								</div>
 							</>
@@ -428,9 +428,9 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 								OnValueSet={ ( V ) => OnValueChanged( V, 0 ) }
 							>
 								<ButtonGroup>
-									<LTELoadingButton onClick={ OnAddIndex }>
+									<IconButton onClick={ OnAddIndex }>
 										<FontAwesomeIcon icon={ "plus" }/>
-									</LTELoadingButton>
+									</IconButton>
 								</ButtonGroup>
 							</CLTESelectMask>
 						) : (
@@ -443,9 +443,9 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 								/>
 								<div className="input-group-append">
 									<ButtonGroup>
-										<LTELoadingButton onClick={ OnAddIndex }>
+										<IconButton onClick={ OnAddIndex }>
 											<FontAwesomeIcon icon={ "plus" }/>
-										</LTELoadingButton>
+										</IconButton>
 									</ButtonGroup>
 								</div>
 							</>

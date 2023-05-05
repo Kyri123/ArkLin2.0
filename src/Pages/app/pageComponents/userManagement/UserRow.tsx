@@ -3,7 +3,6 @@ import {
 	useContext,
 	useState
 }                           from "react";
-import type { UserAccount } from "../../../../Types/MongoDB";
 import {
 	ButtonGroup,
 	Card,
@@ -11,69 +10,39 @@ import {
 	Nav
 }                           from "react-bootstrap";
 import {
-	LTELoadingButton,
-	LTEToggleButton
-}                           from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+	IconButton,
+	ToggleButton
+}                           from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import { API_User }         from "../../../../Lib/Api/API_User";
 import {
 	EPerm,
 	EPerm_Server
 }                           from "@shared/Enum/User.Enum";
-import AlertContext         from "@context/AlertContext";
 import ServerContext        from "@context/ServerContext";
-import AccountContext       from "@context/AccountContext";
+import { useToggle }        from "@kyri123/k-reactutils";
+import useAccount           from "@hooks/useAccount";
+import type { UserAccount } from "@server/MongoDB/DB_Accounts";
 
 interface IProps {
 	User : UserAccount;
-	Remove : ( Id : string, IsKey : boolean ) => void;
-	UpdateUsers : () => void;
 }
 
-const PCUserRow : React.FunctionComponent<IProps> = ( {
-														  User,
-														  Remove,
-														  UpdateUsers
-													  } ) => {
-	const { setAcceptAction, DoSetAlert } = useContext( AlertContext );
+const UserRow : React.FunctionComponent<IProps> = ( { User } ) => {
+	const { user } = useAccount();
 	const { InstanceData } = useContext( ServerContext );
-	const { Account } = useContext( AccountContext );
-	const [ Form, setForm ] = useState( () => User );
+	const [ Form, setForm ] = useState<UserAccount>( () => User );
 	const [ IsSending, setIsSending ] = useState( false );
-	const [ ShowServerModal, setShowServerModal ] = useState( false );
-	const [ ShowPermissionModal, setShowPermissionModal ] = useState( false );
+	const [ serverModal, toggleServerModal ] = useToggle( false );
+	const [ permissionModal, togglePermissionModal ] = useToggle( false );
 	const [ SelectedPermission, setSelectedPermission ] = useState<any>( EPerm );
 
 	const SetAllowedServer = async() => {
-		setIsSending( true );
-		const Result = await API_User.EditUser( User._id!, {
-			servers: Form.servers
-		} );
-		DoSetAlert( Result );
-		if ( Result.Success ) {
-			UpdateUsers();
-		}
-		setShowServerModal( false );
-		setIsSending( false );
 	};
 
 	const SetPermissions = async() => {
-		setIsSending( true );
-		const Result = await API_User.EditUser( User._id!, {
-			permissions: Form.permissions
-		} );
-		DoSetAlert( Result );
-		if ( Result.Success ) {
-			UpdateUsers();
-		}
-		setShowPermissionModal( false );
-		setIsSending( false );
 	};
 
-	const RemoveMiddleware = async( Id : string ) => {
-		setIsSending( true );
-		await Remove( Id, false );
-		setIsSending( false );
+	const RemoveUser = async() => {
 	};
 
 	return (
@@ -83,36 +52,30 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 				<td>{ User.username }</td>
 				<td>{ User.mail }</td>
 				<td>
-					{ Account.GetDBInformation()._id !== User._id && (
+					{ user.GetDBInformation()._id !== User._id && (
 						<ButtonGroup>
-							<LTELoadingButton
-								onClick={ () =>
-									setAcceptAction( {
-										Payload: RemoveMiddleware,
-										PayloadArgs: [ User._id ],
-										ActionTitle: `Möchtest du den Benutzer ${ User.username } wirklich löschen?`
-									} )
-								}
+							<IconButton
+								onClick={ RemoveUser }
 								className={ "btn-sm flat" }
 								IsLoading={ IsSending }
 								variant="danger"
 							>
 								<FontAwesomeIcon icon={ "trash-alt" }/>
-							</LTELoadingButton>
-							<LTELoadingButton
-								onClick={ () => setShowServerModal( true ) }
+							</IconButton>
+							<IconButton
+								onClick={ toggleServerModal }
 								className={ "btn-sm flat" }
 								IsLoading={ false }
 							>
 								<FontAwesomeIcon icon={ "server" }/>
-							</LTELoadingButton>
-							<LTELoadingButton
-								onClick={ () => setShowPermissionModal( true ) }
+							</IconButton>
+							<IconButton
+								onClick={ togglePermissionModal }
 								className={ "btn-sm flat" }
 								IsLoading={ false }
 							>
 								<FontAwesomeIcon icon={ "ranking-star" }/>
-							</LTELoadingButton>
+							</IconButton>
 						</ButtonGroup>
 					) }
 				</td>
@@ -120,10 +83,8 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 
 			<Modal
 				size="xl"
-				show={ ShowPermissionModal }
-				onHide={ () => {
-					setShowPermissionModal( false );
-				} }
+				show={ permissionModal }
+				onHide={ togglePermissionModal }
 			>
 				<Modal.Header closeButton>
 					<Modal.Title id="example-modal-sizes-title-sm">
@@ -159,11 +120,11 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 							return (
 								<tr key={ Key }>
 									<td className={ "p-0" } style={ { width: 0 } }>
-										<LTEToggleButton
+										<ToggleButton
 											className={ " w-100 h-100 flat " }
 											Value={ Form.permissions?.includes( Key ) || false }
 											OnToggle={ ( Value : boolean ) =>
-												setForm( ( Current ) => {
+												setForm( Current => {
 													let Permissions = [ ...Current.permissions! ];
 													if ( Value ) {
 														Permissions.push( Key );
@@ -192,21 +153,21 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 					<Card className={ "m-0" }>
 						<div className="input-group">
 							<div className="input-group-append">
-								<LTELoadingButton
+								<IconButton
 									onClick={ SetPermissions }
 									className={ "btn-sm flat" }
 									IsLoading={ IsSending }
 									variant="success"
 								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
-								</LTELoadingButton>
-								<LTELoadingButton
-									onClick={ () => setShowPermissionModal( false ) }
+								</IconButton>
+								<IconButton
+									onClick={ togglePermissionModal }
 									className={ "btn-sm flat" }
 									variant="danger"
 								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
-								</LTELoadingButton>
+								</IconButton>
 							</div>
 						</div>
 					</Card>
@@ -215,10 +176,8 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 
 			<Modal
 				size="lg"
-				show={ ShowServerModal }
-				onHide={ () => {
-					setShowServerModal( false );
-				} }
+				show={ serverModal }
+				onHide={ toggleServerModal }
 			>
 				<Modal.Header closeButton>
 					<Modal.Title id="example-modal-sizes-title-sm">
@@ -240,7 +199,7 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 								<tr key={ "SERV" + Instance }>
 									<td style={ { width: 0 } } className="p-2">
 										<ButtonGroup>
-											<LTEToggleButton
+											<ToggleButton
 												Value={ Form.servers.includes( Instance ) }
 												OnToggle={ ( V : boolean ) =>
 													setForm( ( Current ) => {
@@ -271,21 +230,21 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 					<Card className={ "m-0" }>
 						<div className="input-group">
 							<div className="input-group-append">
-								<LTELoadingButton
+								<IconButton
 									onClick={ SetAllowedServer }
 									className={ "btn-sm flat" }
 									IsLoading={ IsSending }
 									variant="success"
 								>
 									<FontAwesomeIcon icon={ "check" }/> Speichern
-								</LTELoadingButton>
-								<LTELoadingButton
-									onClick={ () => setShowServerModal( false ) }
+								</IconButton>
+								<IconButton
+									onClick={ toggleServerModal }
 									className={ "btn-sm flat" }
 									variant="danger"
 								>
 									<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
-								</LTELoadingButton>
+								</IconButton>
 							</div>
 						</div>
 					</Card>
@@ -295,4 +254,4 @@ const PCUserRow : React.FunctionComponent<IProps> = ( {
 	);
 };
 
-export default PCUserRow;
+export default UserRow;

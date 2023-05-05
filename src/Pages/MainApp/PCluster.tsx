@@ -6,7 +6,7 @@ import {
 import ServerContext              from "../../Context/ServerContext";
 import PPClusterEditor            from "./PageComponents/Cluster/PCClusterEditor";
 import PCClusterElement           from "./PageComponents/Cluster/PCClusterElement";
-import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import { Row }                    from "react-bootstrap";
 import AlertContext               from "../../Context/AlertContext";
@@ -23,9 +23,9 @@ const PCluster : FunctionComponent = () => {
 
 	return (
 		<>
-			<LTELoadingButton className={ "w-100" } onClick={ () => setSelectedCluster( "" ) }>
+			<IconButton className={ "w-100" } onClick={ () => setSelectedCluster( "" ) }>
 				<FontAwesomeIcon icon={ "plus" }/> Cluster Erstellen
-			</LTELoadingButton>
+			</IconButton>
 			<Row>
 				{ Object.keys( ClusterData ).map( ID =>
 					<PCClusterElement key={ ID } ClusterID={ ID } TriggerEdit={ setSelectedCluster }

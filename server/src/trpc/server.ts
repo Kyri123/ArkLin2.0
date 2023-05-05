@@ -1,17 +1,18 @@
-import * as trpcExpress         from "@trpc/server/adapters/express";
-import { public_validate }      from "@server/trpc/routings/public/validate";
-import { public_login }         from "@server/trpc/routings/public/login";
-import { public_createAccount } from "@server/trpc/routings/public/createAccount";
+import * as trpcExpress           from "@trpc/server/adapters/express";
+import { public_validate }        from "@server/trpc/routings/public/validate";
+import { public_login }           from "@server/trpc/routings/public/login";
+import { public_createAccount }   from "@server/trpc/routings/public/createAccount";
 import {
 	createContext,
 	router
-}                               from "@server/trpc/trpc";
-import { MW_Auth }              from "@server/trpc/middleware";
-import { BC }                   from "@server/Lib/System.Lib";
-import { public_resetPassword } from "@server/trpc/routings/public/resetPassword";
-import { public_github }        from "@server/trpc/routings/public/github";
-import { auth_globalState }     from "@server/trpc/routings/auth/globalState";
-import { auth_panelAdmin }      from "@server/trpc/routings/auth/panelAdmin";
+}                                 from "@server/trpc/trpc";
+import { MW_Auth }                from "@server/trpc/middleware";
+import { BC }                     from "@server/Lib/System.Lib";
+import { public_resetPassword }   from "@server/trpc/routings/public/resetPassword";
+import { public_github }          from "@server/trpc/routings/public/github";
+import { auth_globalState }       from "@server/trpc/routings/auth/globalState";
+import { auth_panelAdmin }        from "@server/trpc/routings/auth/panelAdmin";
+import { auth_accountManagement } from "@server/trpc/routings/admin/accountManagement";
 
 
 const publicRouter = router( {
@@ -23,7 +24,10 @@ const publicRouter = router( {
 } );
 const authRouter = router( {
 	globaleState: auth_globalState,
-	panelAdmin: auth_panelAdmin
+	panelAdmin: auth_panelAdmin,
+	admin: router( {
+		account: auth_accountManagement
+	} )
 } );
 
 

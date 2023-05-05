@@ -19,7 +19,7 @@ import {
 }                                      from "react-bootstrap";
 import { EPerm }                       from "@shared/Enum/User.Enum";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import { LTELoadingButton }            from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
 import { API_ServerLib }               from "../../../../Lib/Api/API_Server.Lib";
 import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import type { PanelServerConfig }      from "@shared/Type/ArkSE";
@@ -130,16 +130,16 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 						</div>
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
               <span
-				  onClick={ () =>
-					  setAcceptAction( {
-						  Payload: RemoveServer,
-						  PayloadArgs: [],
-						  ActionTitle: `Server [${ Props.InstanceName }] - ${ Server.Data.ark_SessionName } wirklich löschen?`
-					  } )
-				  }
-				  className="w-100 ps-5 rounded-0 text-white btn btn-danger"
-				  data-toggle="modal"
-			  >
+	              onClick={ () =>
+		              setAcceptAction( {
+			              Payload: RemoveServer,
+			              PayloadArgs: [],
+			              ActionTitle: `Server [${ Props.InstanceName }] - ${ Server.Data.ark_SessionName } wirklich löschen?`
+		              } )
+	              }
+	              className="w-100 ps-5 rounded-0 text-white btn btn-danger"
+	              data-toggle="modal"
+              >
                 <FontAwesomeIcon icon={ "trash-alt" }/>
               </span>
 						</div>
@@ -166,7 +166,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 									<div className="info-box-content pt-2 ps-3 text-center">
 										<span className="description-text">AKTION</span> <br/>
 										<ButtonGroup>
-											<LTELoadingButton
+											<IconButton
 												disabled={
 													!Account.Account.HasPermissionForServer(
 														Server.InstanceName
@@ -176,8 +176,8 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 												onClick={ () => setShowAction( true ) }
 											>
 												Aktion
-											</LTELoadingButton>
-											<LTELoadingButton
+											</IconButton>
+											<IconButton
 												disabled={
 													!Account.Account.HasPermissionForServer(
 														Server.InstanceName
@@ -197,7 +197,7 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 												} }
 											>
 												<FontAwesomeIcon icon={ "cancel" }/>
-											</LTELoadingButton>
+											</IconButton>
 										</ButtonGroup>
 									</div>
 								</div>
@@ -289,19 +289,19 @@ export default function CServerAdminCard( Props : IServerCardProps ) {
 						) ) }
 					</Modal.Body>
 					<Modal.Footer>
-						<LTELoadingButton
+						<IconButton
 							variant={ "success" }
 							IsLoading={ IsSending.Edit }
 							onClick={ SavePanelConfig }
 						>
 							<FontAwesomeIcon icon={ "save" }/> Speichern
-						</LTELoadingButton>
-						<LTELoadingButton
+						</IconButton>
+						<IconButton
 							variant={ "danger" }
 							onClick={ () => setShowEditServer( false ) }
 						>
 							<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
-						</LTELoadingButton>
+						</IconButton>
 					</Modal.Footer>
 				</Modal>
 			) }

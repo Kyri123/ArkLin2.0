@@ -5,7 +5,7 @@ import { useArkServer }          from "@hooks/useArkServer";
 import { API_ServerLib }         from "@app/Lib/Api/API_Server.Lib";
 import { Link }                  from "react-router-dom";
 import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
-import { LTELoadingButton }      from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }            from "@comp/Elements/AdminLTE/Buttons";
 import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
 
 interface IProps {
@@ -98,7 +98,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 	return (
 		<tr>
 			<td width="20px" className="p-0">
-				<LTELoadingButton
+				<IconButton
 					IsLoading={ IsSendingMove }
 					id="FB_upload"
 					variant={ "gray-dark" }
@@ -107,8 +107,8 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-up" }/>
-				</LTELoadingButton>
-				<LTELoadingButton
+				</IconButton>
+				<IconButton
 					IsLoading={ IsSendingMove }
 					id="FB_upload"
 					variant={ "gray-dark" }
@@ -117,7 +117,7 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-down" }/>
-				</LTELoadingButton>
+				</IconButton>
 			</td>
 			<td width="62px" className="p-0">
 				<img
@@ -150,13 +150,13 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 			</td>
 			<td style={ { width: 0 } } className="p-0">
 				<div className="btn-group">
-					<LTELoadingButton
+					<IconButton
 						IsLoading={ IsSending }
 						className="btn btn-danger m-0"
 						onClick={ RemoveMod }
 					>
 						<FontAwesomeIcon icon={ "trash-alt" }/> Entfernen
-					</LTELoadingButton>
+					</IconButton>
 				</div>
 			</td>
 		</tr>

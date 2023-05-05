@@ -1,5 +1,5 @@
 import { Modal }            from "react-bootstrap";
-import { LTELoadingButton } from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }       from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
 import {
 	useContext,
@@ -109,16 +109,16 @@ export default function CServerAction( Props : {
 				) }
 			</Modal.Body>
 			<Modal.Footer>
-				<LTELoadingButton
+				<IconButton
 					onClick={ SendCommand }
 					disabled={ Selected === null }
 					IsLoading={ IsSending }
 				>
 					<FontAwesomeIcon icon={ "terminal" }/> Ausführen
-				</LTELoadingButton>
-				<LTELoadingButton variant={ "danger" } onClick={ Props.OnClose }>
+				</IconButton>
+				<IconButton variant={ "danger" } onClick={ Props.OnClose }>
 					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
-				</LTELoadingButton>
+				</IconButton>
 			</Modal.Footer>
 		</Modal>
 	);

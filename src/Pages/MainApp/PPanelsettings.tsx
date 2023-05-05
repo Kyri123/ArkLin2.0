@@ -12,7 +12,7 @@ import {
 import { API_PanelLib }                         from "@app/Lib/Api/API_Panel.Lib";
 import { Card }                                 from "react-bootstrap";
 import CLTEInput                                from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { LTELoadingButton }                     from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }                           from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }                      from "@fortawesome/react-fontawesome";
 import StringMapLib                             from "../../Lib/StringMap.Lib";
 import usePermissionPage                        from "../../Hooks/usePermissionPage";
@@ -119,13 +119,13 @@ export default function PPanelsettings() {
 					) ) }
 				</Card.Body>
 				<Card.Footer>
-					<LTELoadingButton
+					<IconButton
 						Hide={ Object.keys( ConfigData ).length <= 0 }
 						IsLoading={ IsSending }
 						onClick={ SendConfig }
 					>
 						<FontAwesomeIcon icon={ "save" }/> Speichern
-					</LTELoadingButton>
+					</IconButton>
 				</Card.Footer>
 			</Card>
 		</>

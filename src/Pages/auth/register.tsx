@@ -12,7 +12,7 @@ import {
 	Form,
 	Row
 }                                         from "react-bootstrap";
-import { LTELoadingButton }               from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }                     from "@comp/Elements/AdminLTE/Buttons";
 import {
 	Link,
 	useNavigate
@@ -119,7 +119,7 @@ const Component : FunctionComponent = () => {
 
 			<Row>
 				<Col>
-					<LTELoadingButton
+					<IconButton
 						className="w-100 mb-2 rounded-3"
 						onClick={ OnReg }
 						varian="primary"
@@ -127,7 +127,7 @@ const Component : FunctionComponent = () => {
 					>
 						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" }/>
 						Account Erstellen und Einloggen
-					</LTELoadingButton>
+					</IconButton>
 				</Col>
 			</Row>
 

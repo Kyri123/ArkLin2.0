@@ -6,7 +6,7 @@ import {
 import CServerAdminCard                from "./PageComponents/Server/ServerAdminCard";
 import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
 import { Modal }                       from "react-bootstrap";
-import { LTELoadingButton }            from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
 import CLTEInput                       from "../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import { API_ServerLib }               from "@app/Lib/Api/API_Server.Lib";
@@ -43,10 +43,10 @@ export default function PAdminServer() {
 
 				<span className="col-lg-6 col-xl-4 mt-3">
           <div
-			  onClick={ () => setShowNewServer( true ) }
-			  className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100 rounded-0"
-			  style={ { fontSize: 75, height: 450, cursor: "pointer" } }
-		  >
+	          onClick={ () => setShowNewServer( true ) }
+	          className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100 rounded-0"
+	          style={ { fontSize: 75, height: 450, cursor: "pointer" } }
+          >
             <FontAwesomeIcon icon={ "plus" }/>
           </div>
         </span>
@@ -88,19 +88,19 @@ export default function PAdminServer() {
 					) ) }
 				</Modal.Body>
 				<Modal.Footer>
-					<LTELoadingButton
+					<IconButton
 						variant={ "success" }
 						IsLoading={ IsSending }
 						onClick={ CreateServer }
 					>
 						<FontAwesomeIcon icon={ "save" }/> Erstellen
-					</LTELoadingButton>
-					<LTELoadingButton
+					</IconButton>
+					<IconButton
 						variant={ "danger" }
 						onClick={ () => setShowNewServer( false ) }
 					>
 						<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
-					</LTELoadingButton>
+					</IconButton>
 				</Modal.Footer>
 			</Modal>
 		</>

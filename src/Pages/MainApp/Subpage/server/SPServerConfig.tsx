@@ -18,7 +18,7 @@ import {
 import type { SingleValue }    from "react-select";
 import Select                  from "react-select";
 import CLTEInput               from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { LTELoadingButton }    from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }          from "@comp/Elements/AdminLTE/Buttons";
 import { useToggle }           from "@kyri123/k-reactutils";
 import { FontAwesomeIcon }     from "@fortawesome/react-fontawesome";
 import * as ini                from "ini";
@@ -183,18 +183,18 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 			</Card.Header>
 			<Card.Header className={ "p-0" }>
 				<ButtonGroup className={ "w-100" }>
-					<LTELoadingButton
+					<IconButton
 						IsLoading={ IsSending }
 						className={ "flat" }
 						onClick={ SaveConfig }
 						variant={ "success" }
 					>
 						<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
-					</LTELoadingButton>
-					<LTELoadingButton className={ "flat" } onClick={ ToggleTextEditor }>
+					</IconButton>
+					<IconButton className={ "flat" } onClick={ ToggleTextEditor }>
 						{ " " }
 						{ UseTextEdtior ? "Benutze Editor" : "Benutze Text Editor" }{ " " }
-					</LTELoadingButton>
+					</IconButton>
 				</ButtonGroup>
 				{ JsonError !== "" && (
 					<Alert

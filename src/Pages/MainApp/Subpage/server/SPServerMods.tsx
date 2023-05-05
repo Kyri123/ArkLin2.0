@@ -13,7 +13,7 @@ import {
 	InputGroup,
 	Table
 }                                from "react-bootstrap";
-import { LTELoadingButton }      from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }            from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
 import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
 import type { Socket }           from "socket.io-client";
@@ -128,7 +128,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 						type="text"
 						ref={ InputRef }
 					></FormControl>
-					<LTELoadingButton
+					<IconButton
 						className={ "flat" }
 						IsLoading={ IsSending }
 						variant={ "success" }
@@ -143,7 +143,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 						} }
 					>
 						<FontAwesomeIcon icon={ "plus" }/>
-					</LTELoadingButton>
+					</IconButton>
 				</InputGroup>
 				<Table striped>
 					<tbody>

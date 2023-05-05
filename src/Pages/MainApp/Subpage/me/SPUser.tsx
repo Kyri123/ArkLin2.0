@@ -4,7 +4,7 @@ import {
 	useState
 }                                 from "react";
 import { Card }                   from "react-bootstrap";
-import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import CLTEInput                  from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
 import { API_User }               from "@app/Lib/Api/API_User";
@@ -97,13 +97,13 @@ export default function SPUser() {
 				</CLTEInput>
 			</Card.Body>
 			<Card.Footer>
-				<LTELoadingButton
+				<IconButton
 					onClick={ SaveSettings }
 					disabled={ DisableSend }
 					IsLoading={ IsSending }
 				>
 					<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
-				</LTELoadingButton>
+				</IconButton>
 			</Card.Footer>
 		</>
 	);

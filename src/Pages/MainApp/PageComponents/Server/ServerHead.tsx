@@ -11,7 +11,7 @@ import {
 }                                from "../../../../Lib/Conversion.Lib";
 import { useArkServer }          from "../../../../Hooks/useArkServer";
 import { ButtonGroup }           from "react-bootstrap";
-import { LTELoadingButton }      from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }            from "@comp/Elements/AdminLTE/Buttons";
 import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
 import CServerAction             from "./CServerAction";
 import AlertContext              from "@context/AlertContext";
@@ -115,7 +115,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 											<span className="description-text">AKTION</span>
 											<h6 className="description-header text-success h-100 align-middle">
 												<ButtonGroup>
-													<LTELoadingButton
+													<IconButton
 														disabled={
 															!Account.Account.HasPermissionForServer(
 																Server.InstanceName
@@ -125,8 +125,8 @@ export default function CServerHead( Props : IServerCardProps ) {
 														onClick={ () => setShowModal( true ) }
 													>
 														Aktion
-													</LTELoadingButton>
-													<LTELoadingButton
+													</IconButton>
+													<IconButton
 														disabled={
 															!Account.Account.HasPermissionForServer(
 																Server.InstanceName
@@ -146,7 +146,7 @@ export default function CServerHead( Props : IServerCardProps ) {
 														} }
 													>
 														<FontAwesomeIcon icon={ "cancel" }/>
-													</LTELoadingButton>
+													</IconButton>
 												</ButtonGroup>
 											</h6>
 										</div>

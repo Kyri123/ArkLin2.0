@@ -1,20 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button }          from "react-bootstrap";
 import type {
-	ILTELoadingButton,
-	ILTEToggleButton
+	IconButtonProps,
+	ToggleButtonProps
 }                          from "@app/Types/AdminLTE";
 import type React          from "react";
 
 
-export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
-																				   Permission,
-																				   IsLoading,
-																				   Hide,
-																				   LoadingIcon,
-																				   ForceDisable,
-																				   ...Props
-																			   } ) => {
+export const IconButton : React.FunctionComponent<IconButtonProps> = ( {
+	Permission,
+	IsLoading,
+	Hide,
+	LoadingIcon,
+	ForceDisable,
+	...Props
+} ) => {
 	if ( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}
@@ -30,7 +30,7 @@ export const LTELoadingButton : React.FunctionComponent<ILTELoadingButton> = ( {
 	);
 };
 
-export const LTEToggleButton : React.FunctionComponent<ILTEToggleButton> = ( { OnToggle, Value, Ref, ...Props } ) => {
+export const ToggleButton : React.FunctionComponent<ToggleButtonProps> = ( { OnToggle, Value, Ref, ...Props } ) => {
 	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
 		return <></>;
 	}

@@ -63,9 +63,9 @@ export default function LeftNavigation() {
 				{ user.HasPermission( EPerm.Super ) && (
 					<Nav.Item as="li" className="mt-2">
 						<Link
-							to="/app/users"
+							to="/app/usermanagement"
 							className={ `nav-link ${
-								pathname.endsWith( "/app/users" ) ? "active" : ""
+								pathname.endsWith( "/app/usermanagement" ) ? "active" : ""
 							} text-white` }>
 							<BsPeople size={ 17 } className={ "me-1" }/>
 							Benutzer

@@ -12,7 +12,7 @@ import {
 	Form,
 	Row
 }                                 from "react-bootstrap";
-import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 import {
 	Link,
 	useNavigate
@@ -48,7 +48,7 @@ const Component : FunctionComponent = () => {
 			password: target.password,
 			stayLoggedIn
 		} ).catch( tRPC_handleError );
- 
+
 		if ( Response ) {
 			if ( Response.passwordResetToken ) {
 				fireSwalFromApi( Response.message, true );
@@ -93,7 +93,7 @@ const Component : FunctionComponent = () => {
 					</CLTECheckbox>
 				</Col>
 				<Col span={ 6 }>
-					<LTELoadingButton
+					<IconButton
 						className="w-100 mb-2 rounded-3"
 						onClick={ DoLogin }
 						varian="primary"
@@ -101,7 +101,7 @@ const Component : FunctionComponent = () => {
 					>
 						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" }/>
 						Einloggen
-					</LTELoadingButton>
+					</IconButton>
 				</Col>
 			</Row>
 

@@ -3,7 +3,7 @@ import Arkmanager_Command_Restart        from "@shared/SelectMask/Arkmanager_Com
 import Arkmanager_Command_Stop           from "@shared/SelectMask/Arkmanager_Command_Stop.json";
 import Arkmanager_Command_Update         from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import Arkmanager_Command_Start          from "@shared/SelectMask/Arkmanager_Command_Start.json";
-import type { ISelectMask }                   from "@app/Types/Systeminformation";
+import type { ISelectMask }              from "@app/Types/Systeminformation";
 
 export enum EArkmanagerCommands {
 	start = "start",

@@ -25,14 +25,14 @@ export interface INavLinkProps extends IChildrenBaseProps {
 	Target? : HTMLAttributeAnchorTarget | undefined;
 }
 
-export type ILTELoadingButton = IPropsWithPermission &
+export type IconButtonProps = IPropsWithPermission &
 	Button.ButtonProps & {
 	IsLoading? : boolean;
 	ForceDisable? : boolean;
 	LoadingIcon? : IconProp;
 };
 
-export type ILTEToggleButton = IPropsWithPermission &
+export type ToggleButtonProps = IPropsWithPermission &
 	Button.ButtonProps & {
 	Value? : boolean;
 	OnToggle? : ( Value : boolean ) => void;

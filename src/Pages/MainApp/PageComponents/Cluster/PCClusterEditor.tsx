@@ -14,9 +14,9 @@ import { useCluster }             from "../../../../Hooks/useCluster";
 import type { Cluster }           from "../../../../Types/MongoDB";
 import { DefaultCluster }         from "@shared/Default/Server.Default";
 import {
-	LTELoadingButton,
-	LTEToggleButton
-}                                 from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+	IconButton,
+	ToggleButton
+}                                 from "@comp/Elements/AdminLTE/Buttons";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import type {
 	MultiValue,
@@ -270,7 +270,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						NoTransferFromFiltering: !Cur.NoTransferFromFiltering
 					} ) ) } Value={ Form.NoTransferFromFiltering }/>
@@ -280,7 +280,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						NoTributeDownloads: !Cur.NoTributeDownloads
 					} ) ) } Value={ Form.NoTributeDownloads }/>
@@ -290,7 +290,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventDownloadDinos: !Cur.PreventDownloadDinos
 					} ) ) } Value={ Form.PreventDownloadDinos }/>
@@ -300,7 +300,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventDownloadItems: !Cur.PreventDownloadItems
 					} ) ) } Value={ Form.PreventDownloadItems }/>
@@ -310,7 +310,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventDownloadSurvivors: !Cur.PreventDownloadSurvivors
 					} ) ) } Value={ Form.PreventDownloadSurvivors }/>
@@ -320,7 +320,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventUploadDinos: !Cur.PreventUploadDinos
 					} ) ) } Value={ Form.PreventUploadDinos }/>
@@ -330,7 +330,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventUploadItems: !Cur.PreventUploadItems
 					} ) ) } Value={ Form.PreventUploadItems }/>
@@ -340,7 +340,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<LTEToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventUploadSurvivors: !Cur.PreventUploadSurvivors
 					} ) ) } Value={ Form.PreventUploadSurvivors }/>
@@ -351,13 +351,13 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			</Modal.Body>
 
 			<Modal.Footer>
-				<LTELoadingButton IsLoading={ IsSending } onClick={ Save } variant={ "success" }
-				                  ForceDisable={ ( !SelectedMaster || SelectedMaster.value === "" ) || Form.DisplayName === "" }>
+				<IconButton IsLoading={ IsSending } onClick={ Save } variant={ "success" }
+				            ForceDisable={ ( !SelectedMaster || SelectedMaster.value === "" ) || Form.DisplayName === "" }>
 					<FontAwesomeIcon icon={ "plus" }/> { ClusterID !== "" && ClusterID ? "Speichern" : "Erstellen" }
-				</LTELoadingButton>
-				<LTELoadingButton onClick={ Close } variant={ "danger" }>
+				</IconButton>
+				<IconButton onClick={ Close } variant={ "danger" }>
 					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
-				</LTELoadingButton>
+				</IconButton>
 			</Modal.Footer>
 		</Modal>
 	);

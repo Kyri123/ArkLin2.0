@@ -6,7 +6,7 @@ import {
 }                                 from "react";
 import { ButtonGroup }            from "react-bootstrap";
 import type { IPageCounterProps } from "@app/Types/PageAddons";
-import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
+import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 
 export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 	const [ Page, setPage ] = useState( 0 );
@@ -36,81 +36,81 @@ export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 
 	return (
 		<ButtonGroup>
-			<LTELoadingButton
+			<IconButton
 				onClick={ () => setPage( 0 ) }
 				IsLoading={ false }
 				disabled={ Page <= 0 }
 			>
 				<FontAwesomeIcon icon={ "angle-double-left" }/>
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				onClick={ () => setPage( Page - 1 ) }
 				IsLoading={ false }
 				disabled={ PageGroups[ Page - 1 ] === undefined }
 			>
 				<FontAwesomeIcon icon={ "angle-left" }/>
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				IsLoading={ false }
 				Hide={ PageGroups[ Page - 3 ] === undefined }
 				disabled={ true }
 			>
 				...
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				className="d-sm-none d-md-block"
 				onClick={ () => setPage( Page - 2 ) }
 				IsLoading={ false }
 				Hide={ PageGroups[ Page - 2 ] === undefined }
 			>
 				{ Page - 2 }
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				onClick={ () => setPage( Page - 1 ) }
 				IsLoading={ false }
 				Hide={ PageGroups[ Page - 1 ] === undefined }
 			>
 				{ Page - 1 }
-			</LTELoadingButton>
-			<LTELoadingButton IsLoading={ false } disabled={ true }>
+			</IconButton>
+			<IconButton IsLoading={ false } disabled={ true }>
 				{ Page }
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				onClick={ () => setPage( Page + 1 ) }
 				IsLoading={ false }
 				Hide={ PageGroups[ Page + 1 ] === undefined }
 			>
 				{ Page + 1 }
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				className="d-sm-none d-md-block"
 				onClick={ () => setPage( Page + 2 ) }
 				IsLoading={ false }
 				Hide={ PageGroups[ Page + 2 ] === undefined }
 			>
 				{ Page + 2 }
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				IsLoading={ false }
 				Hide={ PageGroups[ Page + 3 ] === undefined }
 				disabled={ true }
 			>
 				...
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				onClick={ () => setPage( Page + 1 ) }
 				IsLoading={ false }
 				disabled={ PageGroups[ Page + 1 ] === undefined }
 			>
 				<FontAwesomeIcon icon={ "angle-right" }/>
-			</LTELoadingButton>
-			<LTELoadingButton
+			</IconButton>
+			<IconButton
 				onClick={ () => setPage( PageGroups.length - 1 ) }
 				IsLoading={ false }
 				disabled={ Page === PageGroups.length - 1 }
 			>
 				<FontAwesomeIcon icon={ "angle-double-right" }/>
-			</LTELoadingButton>
+			</IconButton>
 		</ButtonGroup>
 	);
 }
