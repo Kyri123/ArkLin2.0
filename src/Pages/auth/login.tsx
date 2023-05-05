@@ -55,9 +55,9 @@ const Component : FunctionComponent = () => {
 				navigate( `/auth/reset/${ Response.passwordResetToken }` );
 			}
 			else if ( Response.token ) {
-				fireSwalFromApi( Response.message, true );
 				SetToken( Response.token );
-				navigate( "/app" );
+				await fireSwalFromApi( Response.message, true );
+				navigate( 0 );
 			}
 			setInputState( [ false, false ] );
 		}

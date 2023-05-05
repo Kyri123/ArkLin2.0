@@ -53,9 +53,9 @@ const Component : FunctionComponent = () => {
 			} ).catch( tRPC_handleError );
 
 			if ( Response ) {
-				fireSwalFromApi( Response.message, true );
 				SetToken( Response.sessionToken );
-				navigate( "/app" );
+				await fireSwalFromApi( Response.message, true );
+				navigate( 0 );
 			}
 		}
 
