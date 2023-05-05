@@ -17,8 +17,9 @@ export default new JobTask(
 			"Systeminformation"
 		);
 
+		const space = fs.statfsSync( __server_dir );
+
 		const CPU = await Si.currentLoad();
-		const DISK = await Si.fsSize();
 		const MEM = await Si.mem();
 
 		const Usage = ( await DB_Usage.findOne() )?.toJSON() || ( {} as any );
@@ -34,25 +35,13 @@ export default new JobTask(
 			PanelBuildVersion: process.env.npm_package_version,
 			PanelVersionName: `${ process.env.npm_package_version }`,
 			CPU: CPU.currentLoad,
-			DiskMax: Usage.DiskMax || 0,
-			DiskUsed: Usage.DiskUsed || 0,
+			DiskMax: space.bsize * space.bfree,
+			DiskUsed: space.bsize * space.bfree - space.bsize * space.bavail,
 			MemMax: MEM.total,
 			MemUsed: MEM.total - MEM.available,
 			LogFiles: fs.readdirSync( __LogDir ).map( e => path.join( __LogDir, e ) ).reverse(),
 			PanelNeedUpdate: __PANNELUPDATE
 		};
-
-		for ( const Drive of DISK ) {
-			if ( Drive.mount === "/" ) {
-				NewUsage.DiskMax = Drive.size;
-				NewUsage.DiskUsed = Drive.used;
-			}
-		}
-
-		if ( NewUsage.DiskMax === 0 ) {
-			NewUsage.DiskMax = DISK[ 0 ].size;
-			NewUsage.DiskUsed = DISK[ 0 ].used;
-		}
 
 		await DB_Usage.findOneAndReplace( {}, NewUsage, {
 			upsert: true
