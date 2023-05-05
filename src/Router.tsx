@@ -59,6 +59,14 @@ const rootRouter = createBrowserRouter( [
 							const { loader } = await import( "@page/app/loader/userManagement" );
 							return loader( { request, params } );
 						}
+					},
+					{
+						path: "/app/version/:changelogTag",
+						lazy: async() => await import("@page/app/version/[changelogTag]"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/app/loader/[changelogTag]" );
+							return loader( { request, params } );
+						}
 					}
 				]
 			},

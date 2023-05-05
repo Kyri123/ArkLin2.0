@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link }            from "react-router-dom";
-import type { SystemUsage }     from "@server/MongoDB/DB_Usage";
+import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
+import { Link }             from "react-router-dom";
+import type { SystemUsage } from "@server/MongoDB/DB_Usage";
 
 export default function Foother( Props : { SystemUsage : SystemUsage } ) {
 	return (
@@ -17,7 +17,7 @@ export default function Foother( Props : { SystemUsage : SystemUsage } ) {
 
 					<ul className="nav col-md-4 justify-content-end">
 						<li className="nav-item">
-							<Link to={ "/version/" + Props.SystemUsage.PanelVersionName }
+							<Link to={ "/app/version/" + Props.SystemUsage.PanelVersionName }
 							      className="nav-link px-2 text-body-secondary">
 								{ Props.SystemUsage.PanelVersionName }
 								<FontAwesomeIcon size={ "lg" } icon={ "book" } className={ "ms-3" }/>

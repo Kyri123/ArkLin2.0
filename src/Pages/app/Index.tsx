@@ -36,7 +36,7 @@ const Component : FC = () => {
 							{ new Date( Row.created_at ).toLocaleString() }
 						</td>
 						<td align="center">
-							<Link to={ "/version/" + Row.tag_name }
+							<Link to={ "/app/version/" + Row.tag_name }
 							      className={ "text-neutral-900 hover:text-neutral-700" }>
 								<FontAwesomeIcon size="xl" icon={ "book" }/>
 							</Link>

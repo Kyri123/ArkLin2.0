@@ -6,48 +6,24 @@ import type {
 import { CreateUrl }     from "@server/Lib/PathBuilder.Lib";
 import type {
 	TResponse_Panel_GetConfig,
-	TResponse_Panel_Log,
 	TResponse_Panel_Restart,
 	TResponse_Panel_SetConfig
 }                        from "@app/Types/API_Response";
-import fs                from "fs";
-import { EPerm }         from "../../../src/Shared/Enum/User.Enum";
+import { EPerm }         from "@shared/Enum/User.Enum";
 import { ConfigManager } from "@server/Lib/ConfigManager.Lib";
-import { EPanelUrl }     from "../../../src/Shared/Enum/Routing";
+import { EPanelUrl }     from "@shared/Enum/Routing";
 import {
 	DefaultResponseFailed,
 	DefaultResponseSuccess
-}                        from "../../../src/Shared/Default/ApiRequest.Default";
+}                        from "@shared/Default/ApiRequest.Default";
 import type {
 	TRequest_Panel_GetConfig,
-	TRequest_Panel_Log,
 	TRequest_Panel_Restart,
 	TRequest_Panel_SetConfig
 }                        from "@app/Types/API_Request";
 
 export default function( Api : core.Express ) {
-	let Url = CreateUrl( EPanelUrl.log );
-	Api.get( Url, async( request : Request, response : Response ) => {
-		const Response : TResponse_Panel_Log = {
-			...DefaultResponseSuccess,
-			Data: []
-		};
-
-		const Request : TRequest_Panel_Log<true> = request.body;
-		if ( Request.UserClass.HasPermission( EPerm.PanelLog ) ) {
-			if ( fs.existsSync( __LogFile ) ) {
-				Response.Data = fs
-					.readFileSync( __LogFile )
-					.toString()
-					.split( "\n" )
-					.reverse();
-			}
-		}
-
-		response.json( Response );
-	} );
-
-	Url = CreateUrl( EPanelUrl.restart );
+	let Url = CreateUrl( EPanelUrl.restart );
 	Api.post( Url, async( request : Request, response : Response ) => {
 		const Response : TResponse_Panel_Restart = {
 			...DefaultResponseSuccess
