@@ -36,7 +36,7 @@ const Component : FC = () => {
 			.catch( tRPC_handleError );
 	}
 
-	const { setPage, currentPage, maxPage, refresh } = useRawPageHandler( totalAccounts, onPageChange, 1 );
+	const { setPage, currentPage, maxPage, refresh } = useRawPageHandler( totalAccounts, onPageChange, 10 );
 
 	return (
 		<>
@@ -58,6 +58,7 @@ const Component : FC = () => {
 				<tbody>
 				{ accounts.map( User => (
 					<UserRow
+						refresh={ refresh }
 						User={ User }
 						key={ User._id }
 					/>

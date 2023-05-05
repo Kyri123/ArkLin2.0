@@ -25,6 +25,7 @@ import type { UserAccount } from "@server/MongoDB/DB_Accounts";
 
 interface IProps {
 	User : UserAccount;
+	refresh : () => void;
 }
 
 const UserRow : React.FunctionComponent<IProps> = ( { User } ) => {

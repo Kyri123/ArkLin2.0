@@ -13,6 +13,7 @@ import type { AccountKey }        from "@server/MongoDB/DB_AccountKey";
 import type { QueryRange }        from "@hooks/useRawPageHandler";
 import { useRawPageHandler }      from "@hooks/useRawPageHandler";
 import {
+	fireSwalFromApi,
 	tRPC_Auth,
 	tRPC_handleError
 }                                 from "@app/Lib/tRPC";
@@ -41,15 +42,17 @@ const AccountKeyManager : FunctionComponent<AccountKeyManagerProps> = ( { show, 
 			.catch( tRPC_handleError );
 	}
 
-	const { setPage, currentPage, maxPage, filterOption } = useRawPageHandler( total, onPageChange, 10 );
+	const { setPage, currentPage, maxPage, refresh } = useRawPageHandler( total, onPageChange, 10 );
 
-
-	const removeKey = async() => {
-
-	};
-
+	console.log( maxPage, total );
 	const createAccountKey = async() => {
-
+		setIsSending( true );
+		const result = await tRPC_Auth.admin.account.createAccountKey.mutate( asAdminKey ).catch( tRPC_handleError );
+		if ( result ) {
+			fireSwalFromApi( result, true );
+			await refresh();
+		}
+		setIsSending( false );
 	};
 
 	return (
@@ -70,7 +73,7 @@ const AccountKeyManager : FunctionComponent<AccountKeyManagerProps> = ( { show, 
 					</thead>
 					<tbody>
 					{ keys.map( Key => (
-						<AccountKeyRow Key={ Key } key={ Key._id }/>
+						<AccountKeyRow refresh={ refresh } Key={ Key } key={ Key._id }/>
 					) ) }
 					</tbody>
 				</table>
@@ -80,12 +83,8 @@ const AccountKeyManager : FunctionComponent<AccountKeyManagerProps> = ( { show, 
 				<Card className={ "m-0" }>
 					<div className="input-group">
 						<div className="input-group-append">
-							<ToggleButton
-								className={ "btn-sm" }
-								Value={ asAdminKey }
-								OnToggle={ toggleAsAdminKey }
-							>
-								{ " " }
+							<ToggleButton className={ "btn-sm flat" } Value={ asAdminKey }
+							              OnToggle={ toggleAsAdminKey }>
 								{ asAdminKey ? "Super Admin" : "Member" }
 							</ToggleButton>
 							<IconButton
@@ -103,5 +102,5 @@ const AccountKeyManager : FunctionComponent<AccountKeyManagerProps> = ( { show, 
 		</Modal>
 	);
 };
- 
+
 export default AccountKeyManager;
