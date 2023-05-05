@@ -140,9 +140,9 @@ export class TaskManagerClass {
 		}
 	}
 
-	RunTask( Task : TTasksRunner, ResetTimer = false ) {
+	async RunTask( Task : TTasksRunner, ResetTimer = false ) {
 		if ( this.Jobs[ Task ] ) {
-			this.Jobs[ Task ].ForceTask( ResetTimer );
+			await this.Jobs[ Task ].ForceTask( ResetTimer );
 		}
 	}
 }

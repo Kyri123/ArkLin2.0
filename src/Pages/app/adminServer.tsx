@@ -8,15 +8,16 @@ import { Modal }                       from "react-bootstrap";
 import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
 import CLTEInput                       from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerContext                   from "@context/ServerContext";
-import type { ISelectMask }            from "@app/Types/Systeminformation";
 import _                               from "lodash";
 import { ServerAdminCard }             from "@page/app/pageComponents/adminServer/ServerAdminCard";
+import UpdateSelectMask                from "@shared/SelectMask/Arkmanager_Command_Update.json";
+import type { InputSelectMask }        from "@app/Types/Systeminformation";
+import { useToggle }                   from "@kyri123/k-reactutils";
 
 const Component : FC = () => {
 	const { InstanceData } = useContext( ServerContext );
-	const [ ShowNewServer, setShowNewServer ] = useState( false );
+	const [ ShowNewServer, toggleShowNewServer ] = useToggle( false );
 	const [ FormData, setFormData ] = useState( () => _.cloneDeep( GetDefaultPanelServerConfig() ) );
 	const [ IsSending, setIsSending ] = useState( false );
 
@@ -24,7 +25,7 @@ const Component : FC = () => {
 		setIsSending( true );
 
 		setIsSending( false );
-		setShowNewServer( false );
+		toggleShowNewServer();
 		setFormData( () => _.cloneDeep( GetDefaultPanelServerConfig() ) );
 	};
 
@@ -40,7 +41,7 @@ const Component : FC = () => {
 
 				<span className="col-lg-6 col-xl-4 mt-3">
           <div
-	          onClick={ () => setShowNewServer( true ) }
+	          onClick={ toggleShowNewServer }
 	          className="border border-success text-success align-content-center justify-content-center align-items-center d-flex card w-100 rounded-0"
 	          style={ { fontSize: 75, height: 450, cursor: "pointer" } }
           >
@@ -52,7 +53,7 @@ const Component : FC = () => {
 			<Modal
 				size={ "lg" }
 				show={ ShowNewServer }
-				onHide={ () => setShowNewServer( false ) }
+				onHide={ toggleShowNewServer }
 			>
 				<Modal.Header closeButton>Server Erstellen</Modal.Header>
 				<Modal.Body>
@@ -76,8 +77,8 @@ const Component : FC = () => {
 								} );
 							} }
 							ValueKey={ Key }
-							SelectMask={ {
-								AutoUpdateParameters: Update_SelectMask as ISelectMask[]
+							InputSelectMask={ {
+								AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
 							} }
 						>
 							{ Key }
@@ -94,7 +95,7 @@ const Component : FC = () => {
 					</IconButton>
 					<IconButton
 						variant={ "danger" }
-						onClick={ () => setShowNewServer( false ) }
+						onClick={ toggleShowNewServer }
 					>
 						<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 					</IconButton>

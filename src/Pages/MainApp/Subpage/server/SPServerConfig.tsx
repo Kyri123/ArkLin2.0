@@ -332,7 +332,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 															} ) )
 														}
 														ValueKey={ Key }
-														SelectMask={ {} }
+														InputSelectMask={ {} }
 													>
 														{ " " }
 														{ Key }{ " " }

@@ -4,10 +4,9 @@ import type * as trpcExpress from "@trpc/server/adapters/express";
 import type User             from "@app/Lib/User.Lib";
 import superjson             from "superjson";
 import { z }                 from "zod";
-import type { Instance }     from "@server/MongoDB/DB_Instances";
-import DB_Instances          from "@server/MongoDB/DB_Instances";
 import type { TPermissions } from "@shared/Enum/User.Enum";
 import { EPerm }             from "@shared/Enum/User.Enum";
+import { ServerLib }         from "@server/Lib/Server.Lib";
 
 export function handleTRCPErr( e : unknown ) {
 	if ( e instanceof TRPCError ) {
@@ -48,11 +47,11 @@ export const serverOwnerMiddleware = middleware( async( opts ) => {
 	}
 
 	try {
-		const server = await DB_Instances.findOne( { Instance: instanceName } );
-		if ( server ) {
+		const server = await ServerLib.build( instanceName );
+		if ( server?.IsValid() ) {
 			return opts.next( {
 				ctx: {
-					server: server.toJSON() as Instance
+					server: server
 				}
 			} );
 		}

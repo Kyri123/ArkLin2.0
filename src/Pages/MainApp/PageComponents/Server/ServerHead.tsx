@@ -13,7 +13,7 @@ import { useArkServer }              from "../../../../Hooks/useArkServer";
 import { ButtonGroup }               from "react-bootstrap";
 import { IconButton }                from "@comp/Elements/AdminLTE/Buttons";
 import { API_ServerLib }             from "../../../../Lib/Api/API_Server.Lib";
-import CServerAction                 from "./CServerAction";
+import ServerAction                  from "@comp/ServerAction";
 import AccountContext                from "@context/AccountContext";
 
 export default function CServerHead( Props : ServerAdminCardProps ) {
@@ -166,7 +166,7 @@ export default function CServerHead( Props : ServerAdminCardProps ) {
 				</div>
 			</div>
 
-			<CServerAction
+			<ServerAction
 				InstanceName={ Server.InstanceName }
 				Show={ ShowModals }
 				OnClose={ () => setShowModal( false ) }

@@ -17,7 +17,7 @@ import StringMapLib                             from "../../Lib/StringMap.Lib";
 import { API_QueryLib }                         from "@app/Lib/Api/API_Query.Lib";
 import { EChangelogUrl }                        from "@shared/Enum/Routing";
 import type { TResponse_Changelog_GetBranches } from "@app/Types/API_Response";
-import type { ISelectMask }                     from "@app/Types/Systeminformation";
+import type { InputSelectMask }                 from "@app/Types/Systeminformation";
 
 const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 
@@ -27,7 +27,7 @@ export default function PPanelsettings() {
 	const [ ConfigData, setConfigData ] = useState<Record<string, any>>( {} );
 	const [ IsSending, setIsSending ] = useState( false );
 	const [ searchParams, setSearchParams ] = useSearchParams();
-	const [ BRANCHES, setBRANCHES ] = useState<ISelectMask[]>( [] );
+	const [ BRANCHES, setBRANCHES ] = useState<InputSelectMask[]>( [] );
 	usePermissionPage( EPerm.PanelSettings );
 
 	useEffect( () => {
@@ -40,7 +40,7 @@ export default function PPanelsettings() {
 			( Data ) => {
 				if ( Data.Data ) {
 					setBRANCHES(
-						Data.Data.map<ISelectMask>( ( R ) => ( {
+						Data.Data.map<InputSelectMask>( ( R ) => ( {
 							Value: R.name,
 							PreAndSuffix: "",
 							Text: R.name
@@ -107,7 +107,7 @@ export default function PPanelsettings() {
 								Config[ Key ] = Value;
 								setConfigData( Config );
 							} }
-							SelectMask={ { PANEL_Branch: BRANCHES } }
+							InputSelectMask={ { PANEL_Branch: BRANCHES } }
 							ValueKey={ Key }
 						>
 							{ StringMapLib.Config( Key ) }

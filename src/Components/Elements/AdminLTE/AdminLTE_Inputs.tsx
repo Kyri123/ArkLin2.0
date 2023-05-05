@@ -1,24 +1,24 @@
 import type {
 	IAdminLTEBase,
 	IChildrenBaseProps
-}                           from "@app/Types/BaseTypes";
+}                               from "@app/Types/BaseTypes";
 import type {
 	ChangeEvent,
 	HTMLInputTypeAttribute
-}                           from "react";
+}                               from "react";
 import {
 	useEffect,
 	useId,
 	useState
-}                           from "react";
-import { ButtonGroup }      from "react-bootstrap";
+}                               from "react";
+import { ButtonGroup }          from "react-bootstrap";
 import {
 	IconButton,
 	ToggleButton
-}                           from "./Buttons";
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import Select               from "react-select";
-import type { ISelectMask } from "@app/Types/Systeminformation";
+}                               from "./Buttons";
+import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
+import Select                   from "react-select";
+import type { InputSelectMask } from "@app/Types/Systeminformation";
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 
@@ -37,7 +37,7 @@ export interface ILTEInpute<
 	Value : T;
 	OnValueSet : ( Value : any ) => void;
 	ValueKey? : string;
-	SelectMask? : Record<string, ISelectMask[]>;
+	InputSelectMask? : Record<string, InputSelectMask[]>;
 	InputAlert? : TInputAlert;
 	NumMin? : number;
 	NumMax? : number;
@@ -46,7 +46,7 @@ export interface ILTEInpute<
 export interface ILTESelect extends ILTEInpute {
 	ArraySupport? : boolean;
 	ValueKey : string;
-	SelectMask : Record<string, ISelectMask[]>;
+	InputSelectMask : Record<string, InputSelectMask[]>;
 }
 
 export function CLTECheckbox(
@@ -87,11 +87,11 @@ export default function CLTEInput( Props : ILTEInpute ) {
 	if (
 		!Array.isArray( Props.Value ) &&
 		Props.ValueKey &&
-		Props.SelectMask &&
-		Props.SelectMask[ Props.ValueKey ]
+		Props.InputSelectMask &&
+		Props.InputSelectMask[ Props.ValueKey ]
 	) {
 		// @ts-ignore
-		return <CLTESelectMask { ...Props } />;
+		return <CLTEInputSelectMask { ...Props } />;
 	}
 
 	if (
@@ -129,16 +129,16 @@ export default function CLTEInput( Props : ILTEInpute ) {
 	);
 }
 
-export function CLTESelectMask( Props : ILTESelect ) {
-	const GetSelectMask = ( Value : string ) : ISelectMask => {
-		let Mask : ISelectMask = {
+export function CLTEInputSelectMask( Props : ILTESelect ) {
+	const GetInputSelectMask = ( Value : string ) : InputSelectMask => {
+		let Mask : InputSelectMask = {
 			Value: "",
 			Text: "",
 			PreAndSuffix: ""
 		};
 
 		if ( SelectedValue ) {
-			const fMask = Props.SelectMask[ Props.ValueKey ].find(
+			const fMask = Props.InputSelectMask[ Props.ValueKey ].find(
 				( E ) => E.Value === Value
 			);
 			if ( fMask ) {
@@ -158,7 +158,7 @@ export function CLTESelectMask( Props : ILTESelect ) {
 			? ( Props.Value as string )
 				.split( "=" )[ 1 ]
 				.replaceAll(
-					GetSelectMask( ( Props.Value as string ).split( "=" )[ 0 ] ).PreAndSuffix,
+					GetInputSelectMask( ( Props.Value as string ).split( "=" )[ 0 ] ).PreAndSuffix,
 					""
 				)
 			: ""
@@ -178,7 +178,7 @@ export function CLTESelectMask( Props : ILTESelect ) {
 
 	const SetRow = ( Value = "" ) => {
 		if ( SelectedValue ) {
-			const Row : ISelectMask = GetSelectMask( SelectedValue.value );
+			const Row : InputSelectMask = GetInputSelectMask( SelectedValue.value );
 			if ( Row.HasValue ) {
 				Props.OnValueSet(
 					`${ Value }=${ Row.PreAndSuffix }${ ParameterValue }${ Row.PreAndSuffix }`
@@ -200,10 +200,10 @@ export function CLTESelectMask( Props : ILTESelect ) {
 	const GetOptions = () : { value : string; label : string }[] => {
 		const Options : { value : string; label : string }[] = [];
 
-		for ( let Idx = 0; Idx < Props.SelectMask[ Props.ValueKey ].length; ++Idx ) {
+		for ( let Idx = 0; Idx < Props.InputSelectMask[ Props.ValueKey ].length; ++Idx ) {
 			Options.push( {
-				value: Props.SelectMask[ Props.ValueKey ][ Idx ].Value,
-				label: Props.SelectMask[ Props.ValueKey ][ Idx ].Text
+				value: Props.InputSelectMask[ Props.ValueKey ][ Idx ].Value,
+				label: Props.InputSelectMask[ Props.ValueKey ][ Idx ].Text
 			} );
 		}
 
@@ -231,7 +231,7 @@ export function CLTESelectMask( Props : ILTESelect ) {
 						options={ GetOptions() }
 						isClearable={ false }
 					/>
-					{ SelectedValue && GetSelectMask( SelectedValue.value ).HasValue && (
+					{ SelectedValue && GetInputSelectMask( SelectedValue.value ).HasValue && (
 						<div className="flex-grow-1 bd-highlight ps-2 pe-2">
 							<input
 								type="text"
@@ -239,7 +239,7 @@ export function CLTESelectMask( Props : ILTESelect ) {
 								value={ ( Props.Value as string )
 									.split( "=" )[ 1 ]
 									?.replaceAll(
-										GetSelectMask( SelectedValue.value ).PreAndSuffix,
+										GetInputSelectMask( SelectedValue.value ).PreAndSuffix,
 										""
 									) }
 								onChange={ OnParameterChanges }
@@ -266,7 +266,7 @@ export function CLTESelectMask( Props : ILTESelect ) {
 						options={ GetOptions() }
 						isClearable={ true }
 					/>
-					{ SelectedValue && GetSelectMask( SelectedValue.value ).HasValue && (
+					{ SelectedValue && GetInputSelectMask( SelectedValue.value ).HasValue && (
 						<div className="flex-grow-1 bd-highlight ps-2 pe-2">
 							<input
 								type="text"
@@ -274,7 +274,7 @@ export function CLTESelectMask( Props : ILTESelect ) {
 								value={ ( Props.Value as string )
 									.split( "=" )[ 1 ]
 									?.replaceAll(
-										GetSelectMask( SelectedValue.value ).PreAndSuffix,
+										GetInputSelectMask( SelectedValue.value ).PreAndSuffix,
 										""
 									) }
 								onChange={ OnParameterChanges }
@@ -370,10 +370,10 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 				{ ( Props.Value as string[] | number[] ).map( ( Value, Idx ) => (
 					<div className="input-group w-100 pb-2" key={ ID + Idx }>
 						{ Props.ValueKey &&
-						Props.SelectMask &&
-						Props.SelectMask[ Props.ValueKey ] ? (
+						Props.InputSelectMask &&
+						Props.InputSelectMask[ Props.ValueKey ] ? (
 							// @ts-ignore
-							<CLTESelectMask
+							<CLTEInputSelectMask
 								{ ...Props }
 								Value={ Value }
 								ArraySupport={ true }
@@ -390,7 +390,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 										<FontAwesomeIcon icon={ "plus" }/>
 									</IconButton>
 								</ButtonGroup>
-							</CLTESelectMask>
+							</CLTEInputSelectMask>
 						) : (
 							<>
 								<input
@@ -419,10 +419,10 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 				{ ( Props.Value as string[] | number[] ).length <= 0 && (
 					<div className="input-group w-100 pb-2" key={ ID + "0" }>
 						{ Props.ValueKey &&
-						Props.SelectMask &&
-						Props.SelectMask[ Props.ValueKey ] ? (
+						Props.InputSelectMask &&
+						Props.InputSelectMask[ Props.ValueKey ] ? (
 							// @ts-ignore
-							<CLTESelectMask
+							<CLTEInputSelectMask
 								{ ...Props }
 								Value={ "" }
 								ArraySupport={ true }
@@ -433,7 +433,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 										<FontAwesomeIcon icon={ "plus" }/>
 									</IconButton>
 								</ButtonGroup>
-							</CLTESelectMask>
+							</CLTEInputSelectMask>
 						) : (
 							<>
 								<input

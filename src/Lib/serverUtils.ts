@@ -3,7 +3,7 @@ import Arkmanager_Command_Restart        from "@shared/SelectMask/Arkmanager_Com
 import Arkmanager_Command_Stop           from "@shared/SelectMask/Arkmanager_Command_Stop.json";
 import Arkmanager_Command_Update         from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import Arkmanager_Command_Start          from "@shared/SelectMask/Arkmanager_Command_Start.json";
-import type { ISelectMask }              from "@app/Types/Systeminformation";
+import type { InputSelectMask }          from "@app/Types/Systeminformation";
 
 export enum EArkmanagerCommands {
 	start = "start",
@@ -26,24 +26,24 @@ export enum EArkmanagerCommands {
 
 export function GetMaskFromCommand(
 	Command : EArkmanagerCommands
-) : ISelectMask[] {
+) : InputSelectMask[] {
 	switch ( Command ) {
 		case EArkmanagerCommands.start:
-			return Arkmanager_Command_Start as ISelectMask[];
+			return Arkmanager_Command_Start as InputSelectMask[];
 		case EArkmanagerCommands.stop:
-			return Arkmanager_Command_Stop as ISelectMask[];
+			return Arkmanager_Command_Stop as InputSelectMask[];
 		case EArkmanagerCommands.restart:
-			return Arkmanager_Command_Restart as ISelectMask[];
+			return Arkmanager_Command_Restart as InputSelectMask[];
 		case EArkmanagerCommands.install:
 			break;
 		case EArkmanagerCommands.update:
-			return Arkmanager_Command_Update as ISelectMask[];
+			return Arkmanager_Command_Update as InputSelectMask[];
 		case EArkmanagerCommands.cancelshutdown:
 			break;
 		case EArkmanagerCommands.checkupdate:
 			break;
 		case EArkmanagerCommands.checkmodupdate:
-			return Arkmanager_Command_Checkmodupdate as ISelectMask[];
+			return Arkmanager_Command_Checkmodupdate as InputSelectMask[];
 		case EArkmanagerCommands.installmods:
 			break;
 		case EArkmanagerCommands.uninstallmods:

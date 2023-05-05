@@ -1,8 +1,8 @@
-import path                 from "path";
-import fs                   from "fs";
-import { MakeRandomString } from "@kyri123/k-javascript-utils";
-import { ToRealDir }        from "./PathBuilder.Lib";
-import type { InstanceData }     from "@app/Types/ArkSE";
+import path                  from "path";
+import fs                    from "fs";
+import { MakeRandomString }  from "@kyri123/k-javascript-utils";
+import { ToRealDir }         from "./PathBuilder.Lib";
+import type { InstanceData } from "@app/Types/ArkSE";
 
 export function ConfigToJSON( Content : string ) : Partial<InstanceData> {
 	const InstanceData : Partial<InstanceData> = {
@@ -129,9 +129,9 @@ export function GetDefaultInstanceData( Servername : string ) : InstanceData {
 		arkBackupPreUpdate: true,
 		ark_GameModIds: [],
 		ark_MaxPlayers: 70,
+		ark_RCONEnabled: true,
 		ark_Port: 7778,
 		ark_QueryPort: 27015,
-		ark_RCONEnabled: true,
 		ark_RCONPort: 32330,
 		ark_ServerAdminPassword: MakeRandomString( 10, "-" ),
 		ark_ServerPassword: "",

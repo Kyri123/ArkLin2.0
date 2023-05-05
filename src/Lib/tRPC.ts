@@ -15,6 +15,17 @@ import Swal          from "sweetalert2";
 import superjson     from "superjson";
 import { AUTHTOKEN } from "@app/Lib/constance";
 
+export async function onConfirm<PreConfirmResult = any>( msg : string, moreOptions? : SweetAlertOptions<PreConfirmResult> ) : Promise<boolean> {
+	const accept = await fireSwalFromApi( msg, "question", {
+		showConfirmButton: true,
+		showCancelButton: true,
+		confirmButtonText: "Ja",
+		cancelButtonText: "Nein",
+		timer: 5000,
+		...moreOptions
+	} );
+	return !!accept?.isConfirmed;
+}
 
 export function fireSwalFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean | SweetAlertIcon, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
 	if ( message && message.length >= 0 ) {

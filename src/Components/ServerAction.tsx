@@ -1,18 +1,25 @@
-import { Modal }           from "react-bootstrap";
-import { IconButton }      from "@comp/Elements/AdminLTE/Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Modal }                from "react-bootstrap";
+import { IconButton }           from "@comp/Elements/AdminLTE/Buttons";
+import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
+import type { FC }              from "react";
 import {
 	useEffect,
 	useState
-}                          from "react";
-import CLTEInput           from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
+}                               from "react";
+import CLTEInput                from "./Elements/AdminLTE/AdminLTE_Inputs";
 import {
 	EArkmanagerCommands,
 	GetMaskFromCommand
-}                          from "../../../../Lib/serverUtils";
-import Select              from "react-select";
-import { API_ServerLib }   from "../../../../Lib/Api/API_Server.Lib";
-import { useArkServer }    from "../../../../Hooks/useArkServer";
+}                               from "../Lib/serverUtils";
+import Select                   from "react-select";
+import { useArkServer }         from "@hooks/useArkServer";
+import type { InputSelectMask } from "@app/Types/Systeminformation";
+import type { SingleOption }         from "@app/Types/Systeminformation";
+import {
+	fireSwalFromApi,
+	tRPC_Auth,
+	tRPC_handleError
+}                               from "@app/Lib/tRPC";
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },
@@ -33,27 +40,26 @@ const options = [
 	{ value: EArkmanagerCommands.uninstallmods, label: "Mods Deinstallieren" }
 ];
 
-export default function CServerAction( Props : {
+interface ServerActionProps {
 	InstanceName : string;
 	Show : boolean;
 	OnClose : () => void;
-} ) {
-	const { State } = useArkServer( Props.InstanceName );
+}
+
+const ServerAction : FC<ServerActionProps> = ( { InstanceName, OnClose, Show } ) => {
+	const { State } = useArkServer( InstanceName );
 	const [ IsSending, setIsSending ] = useState( false );
 	const [ Parameter, setParameter ] = useState<string[]>( [] );
 	const [ ParameterMask, setParameterMask ] = useState<
-		Record<string, ISelectMask[]>
+		Record<string, InputSelectMask[]>
 	>( { para: [] } );
-	const [ Selected, setSelected ] = useState<{
-		value : EArkmanagerCommands;
-		label : string;
-	} | null>( null );
+	const [ Selected, setSelected ] = useState<SingleOption<EArkmanagerCommands>>( null );
 
-	useEffect( () => {
+	const onShow = () => {
 		setParameter( [] );
 		setSelected( null );
 		setIsSending( false );
-	}, [ Props.Show ] );
+	};
 
 	useEffect( () => {
 		if ( Selected ) {
@@ -64,22 +70,24 @@ export default function CServerAction( Props : {
 	const SendCommand = async() => {
 		if ( Selected ) {
 			setIsSending( true );
-			const Response = await API_ServerLib.SendCommandToServer(
-				Props.InstanceName,
-				Selected.value,
-				Parameter.filter( ( C ) => C.trim().replaceAll( " ", "" ) !== "" )
-			);
-			GAlert.DoSetAlert( Response );
-			Props.OnClose();
+			const result = await tRPC_Auth.server.action.executeCommand.mutate( {
+				instanceName: InstanceName,
+				command: Selected.value,
+				params: Parameter
+			} ).catch( tRPC_handleError );
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
+			OnClose();
 		}
 	};
 
 	return (
-		<Modal
-			onHide={ Props.OnClose }
-			show={ Props.Show && State.ArkmanagerPID === 0 }
-			centered
-			size={ "lg" }
+		<Modal onShow={ onShow }
+		       onHide={ OnClose }
+		       show={ Show && State.ArkmanagerPID === 0 }
+		       centered
+		       size={ "lg" }
 		>
 			<Modal.Header closeButton>Server Aktion</Modal.Header>
 			<Modal.Body>
@@ -95,7 +103,7 @@ export default function CServerAction( Props : {
 						<CLTEInput
 							Value={ Parameter }
 							OnValueSet={ setParameter }
-							SelectMask={ ParameterMask }
+							InputSelectMask={ ParameterMask }
 							ValueKey={ "para" }
 						>
 							{ " " }
@@ -112,10 +120,12 @@ export default function CServerAction( Props : {
 				>
 					<FontAwesomeIcon icon={ "terminal" }/> Ausführen
 				</IconButton>
-				<IconButton variant={ "danger" } onClick={ Props.OnClose }>
+				<IconButton variant={ "danger" } onClick={ OnClose }>
 					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 				</IconButton>
 			</Modal.Footer>
 		</Modal>
 	);
-}
+};
+
+export default ServerAction;

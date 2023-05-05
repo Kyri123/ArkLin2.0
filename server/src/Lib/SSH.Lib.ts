@@ -43,17 +43,7 @@ export class SSHLib {
 		if ( !this.HasInit ) {
 			return "ERROR";
 		}
-		return await this.SSHConnection.exec( command, parameters, options ).catch(
-			( e ) => {
-				this.CrashCount++;
-				if ( this.CrashCount >= 10 ) {
-					SystemLib.LogFatal( `SSH", "Error ${ this.CrashCount } / 10:`, e );
-				}
-				else {
-					SystemLib.LogError( `SSH", "Error ${ this.CrashCount } / 10:`, e );
-				}
-			}
-		);
+		return await this.SSHConnection.exec( command, parameters, options );
 	}
 
 	async ExecCommand(

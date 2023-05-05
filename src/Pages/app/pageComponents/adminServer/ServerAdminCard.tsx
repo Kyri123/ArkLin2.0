@@ -17,12 +17,19 @@ import {
 import { EPerm }                       from "@shared/Enum/User.Enum";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
-import Update_SelectMask               from "@shared/SelectMask/Arkmanager_Command_Update.json";
-import CServerAction                   from "../../../MainApp/PageComponents/Server/CServerAction";
+import UpdateSelectMask                from "@shared/SelectMask/Arkmanager_Command_Update.json";
+import ServerAction                    from "@comp/ServerAction";
 import CLTEInput                       from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
 import type { PanelServerConfig }      from "@app/Types/ArkSE";
 import useAccount                      from "@hooks/useAccount";
-import type { ISelectMask }            from "@app/Types/Systeminformation";
+import type { InputSelectMask }        from "@app/Types/Systeminformation";
+import {
+	fireSwalFromApi,
+	onConfirm,
+	tRPC_Auth,
+	tRPC_handleError
+}                                      from "@app/Lib/tRPC";
+import _                               from "lodash";
 
 export interface ServerAdminCardProps {
 	InstanceName : string;
@@ -30,32 +37,47 @@ export interface ServerAdminCardProps {
 
 const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 	const { user } = useAccount();
-	const [ SendCancel, setSendCancel ] = useState( false );
 	const Server = useArkServer( InstanceName );
 	const [ ShowEditServer, setShowEditServer ] = useState( false );
 	const [ ShowAction, setShowAction ] = useState( false );
 	const [ IsSending, setIsSending ] = useState( {
 		Edit: false,
-		Delete: false
+		Delete: false,
+		Cancel: false
 	} );
 	const [ FormData, setFormData ] = useState( GetDefaultPanelServerConfig() );
 
 	const RemoveServer = async() => {
 		setIsSending( { ...IsSending, Delete: true } );
+		const confirm = await onConfirm( "Möchtest du wirklich diese Aktion abbrechen?" );
+		if ( confirm ) {
+			const result = await tRPC_Auth.server.action.removeServer.mutate( {
+				instanceName: InstanceName
+			} ).catch( tRPC_handleError );
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
+		}
 		setIsSending( { ...IsSending, Delete: false } );
 	};
 
 	const SavePanelConfig = async() => {
-		const CopyForm : PanelServerConfig = structuredClone( FormData );
-		CopyForm.AutoUpdateParameters = CopyForm.AutoUpdateParameters.filter(
+		const config : PanelServerConfig = _.cloneDeep( FormData );
+		config.AutoUpdateParameters = config.AutoUpdateParameters.filter(
 			( e ) => e.replaceAll( " ", "" ).trim() !== ""
 		);
+
 		setIsSending( { ...IsSending, Edit: true } );
-		setFormData( {
-			...FormData,
-			...CopyForm
-		} );
+		const result = await tRPC_Auth.server.action.updatePanelConfig.mutate( {
+			instanceName: InstanceName,
+			config: config
+		} ).catch( tRPC_handleError );
+		if ( result ) {
+			fireSwalFromApi( result, true );
+		}
 		setIsSending( { ...IsSending, Edit: false } );
+
+		setFormData( { ..._.cloneDeep( FormData ), ...config } );
 		setShowEditServer( false );
 	};
 
@@ -70,7 +92,18 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 	}
 
 	const cancelAction = async() => {
-
+		setIsSending( { ...IsSending, Cancel: true } );
+		const confirm = await onConfirm( "Möchtest du wirklich diese Aktion abbrechen?" );
+		if ( confirm ) {
+			const result = await tRPC_Auth.server.action.killAction.mutate( {
+				instanceName: InstanceName,
+				killServer: false
+			} ).catch( tRPC_handleError );
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
+		}
+		setIsSending( { ...IsSending, Cancel: false } );
 	};
 
 	return (
@@ -168,7 +201,7 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 												}
 												Hide={ Server.State.ArkmanagerPID <= 1 }
 												variant={ "danger" }
-												IsLoading={ SendCancel }
+												IsLoading={ IsSending.Cancel }
 												onClick={ cancelAction }
 											>
 												<FontAwesomeIcon icon={ "cancel" }/>
@@ -217,7 +250,7 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 				</div>
 			</div>
 
-			<CServerAction
+			<ServerAction
 				InstanceName={ Server.InstanceName }
 				Show={ ShowAction }
 				OnClose={ () => setShowAction( false ) }
@@ -254,8 +287,8 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 									} );
 								} }
 								ValueKey={ Key }
-								SelectMask={ {
-									AutoUpdateParameters: Update_SelectMask as ISelectMask[]
+								InputSelectMask={ {
+									AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
 								} }
 							>
 								{ Key }
