@@ -75,7 +75,7 @@ const Component : FunctionComponent = () => {
 		}
 
 		SocketIO.on( "OnSystemUpdate", ( Usage ) => {
-			setSystemUsage( Usage );
+			setSystemUsage( () => Usage );
 			tRPC_Auth.globaleState.state.query().then( setGameServerState ).catch( () => {
 			} );
 		} );

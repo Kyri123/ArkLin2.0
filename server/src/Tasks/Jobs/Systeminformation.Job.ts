@@ -28,6 +28,7 @@ export default new JobTask(
 		delete Usage.__v;
 
 		const NewUsage : SystemUsage = {
+			...Usage,
 			UpdateIsRunning: false,
 			NextPanelBuildVersion: Usage.NextPanelBuildVersion || "",
 			PanelBuildVersion: process.env.npm_package_version,
@@ -37,7 +38,6 @@ export default new JobTask(
 			DiskUsed: Usage.DiskUsed || 0,
 			MemMax: MEM.total,
 			MemUsed: MEM.total - MEM.available,
-			...Usage,
 			LogFiles: fs.readdirSync( __LogDir ).map( e => path.join( __LogDir, e ) ).reverse(),
 			PanelNeedUpdate: __PANNELUPDATE
 		};
