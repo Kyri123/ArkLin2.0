@@ -26,7 +26,6 @@ import Select                     from "react-select";
 import ServerContext              from "@context/ServerContext";
 import { API_ServerLib }          from "../../../../Lib/Api/API_Server.Lib";
 import type { InstanceData }      from "@shared/Type/ArkSE";
-import { CAlert }                 from "../General/CAlert";
 import type { IAPIResponseBase }  from "@app/Types/API_Response";
 import { API_ClusterLib }         from "../../../../Lib/Api/API_Cluster.Lib";
 import AlertContext               from "@context/AlertContext";
@@ -208,11 +207,6 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			</Modal.Header>
 
 			<Modal.Body>
-				<CAlert
-					OnClear={ () => setResponse( undefined ) }
-					Data={ Response }
-				/>
-
 				<InputGroup className="mb-2">
 					<InputGroup.Text>
 						Cluster Name im Panel
@@ -229,11 +223,11 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 						Server im Cluster
 					</InputGroup.Text>
 					<Select onChange={ setSelectedServer } className={ "flex-1" }
-							isClearable={ true }
-							isMulti={ true }
-							isOptionDisabled={ ( option ) => option.disabled === true }
-							value={ SelectedServer }
-							options={ ServerSelectOptions }
+					        isClearable={ true }
+					        isMulti={ true }
+					        isOptionDisabled={ ( option ) => option.disabled === true }
+					        value={ SelectedServer }
+					        options={ ServerSelectOptions }
 					/>
 				</InputGroup>
 
@@ -242,10 +236,10 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 						Master Server
 					</InputGroup.Text>
 					<Select onChange={ setSelectedMaster } className={ "flex-1" }
-							isClearable={ false } isDisabled={ SelectedServer.length === 0 }
-							isOptionDisabled={ ( option ) => option.disabled === true || !SelectedServer.find( E => E.value === option.value ) }
-							value={ SelectedMaster }
-							options={ ServerSelectOptions }
+					        isClearable={ false } isDisabled={ SelectedServer.length === 0 }
+					        isOptionDisabled={ ( option ) => option.disabled === true || !SelectedServer.find( E => E.value === option.value ) }
+					        value={ SelectedMaster }
+					        options={ ServerSelectOptions }
 					/>
 				</InputGroup>
 
@@ -254,11 +248,11 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 						Sync Konfigurationen
 					</InputGroup.Text>
 					<Select onChange={ setArkmanagerSync } className={ "flex-1" }
-							isClearable={ true }
-							isMulti={ true } isDisabled={ SelectedMaster?.value === "" || !SelectedMaster }
-							isOptionDisabled={ ( option ) => option.disabled === true }
-							value={ ArkmanagerSync }
-							options={ FileSync }
+					        isClearable={ true }
+					        isMulti={ true } isDisabled={ SelectedMaster?.value === "" || !SelectedMaster }
+					        isOptionDisabled={ ( option ) => option.disabled === true }
+					        value={ ArkmanagerSync }
+					        options={ FileSync }
 					/>
 				</InputGroup>
 
@@ -267,11 +261,11 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 						Sync Arkmanager Einstellungen
 					</InputGroup.Text>
 					<Select onChange={ setSelectedServerSettings } className={ "flex-1" }
-							isClearable={ true }
-							isMulti={ true } isDisabled={ SelectedMaster?.value === "" || !SelectedMaster }
-							isOptionDisabled={ ( option ) => option.disabled === true }
-							value={ SelectedServerSettings }
-							options={ ServerSettingsOptions }
+					        isClearable={ true }
+					        isMulti={ true } isDisabled={ SelectedMaster?.value === "" || !SelectedMaster }
+					        isOptionDisabled={ ( option ) => option.disabled === true }
+					        value={ SelectedServerSettings }
+					        options={ ServerSettingsOptions }
 					/>
 				</InputGroup>
 
@@ -358,7 +352,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 
 			<Modal.Footer>
 				<LTELoadingButton IsLoading={ IsSending } onClick={ Save } variant={ "success" }
-								  ForceDisable={ ( !SelectedMaster || SelectedMaster.value === "" ) || Form.DisplayName === "" }>
+				                  ForceDisable={ ( !SelectedMaster || SelectedMaster.value === "" ) || Form.DisplayName === "" }>
 					<FontAwesomeIcon icon={ "plus" }/> { ClusterID !== "" && ClusterID ? "Speichern" : "Erstellen" }
 				</LTELoadingButton>
 				<LTELoadingButton onClick={ Close } variant={ "danger" }>

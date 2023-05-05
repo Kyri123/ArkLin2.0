@@ -17,7 +17,6 @@ import { EPerm }                 from "@shared/Enum/User.Enum";
 import { API_User }              from "@app/Lib/Api/API_User";
 import CPageCounter              from "./PageComponents/General/CPageCounter";
 import type { IAPIResponseBase } from "@app/Types/API_Response";
-import { CAlert }                from "./PageComponents/General/CAlert";
 import { useCopy }               from "@kyri123/k-reactutils";
 import usePermissionPage         from "../../Hooks/usePermissionPage";
 import PCUserRow                 from "./PageComponents/Users/PCUserRow";
@@ -174,11 +173,6 @@ export default function PUsers() {
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body className={ "p-0" }>
-					<CAlert
-						className={ "m-0 rounded-0" }
-						Data={ KeyAlert }
-						OnClear={ () => setKeyAlert( undefined ) }
-					/>
 					<table className={ "table table-striped w-100 m-0" }>
 						<thead>
 						<tr>

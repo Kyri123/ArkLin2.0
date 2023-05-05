@@ -4,7 +4,6 @@ import {
 	useState
 }                                         from "react";
 import type { TResponse_Auth_IsLoggedIn } from "@app/Types/API_Response";
-import { CAlert }                         from "../MainApp/PageComponents/General/CAlert";
 import { FontAwesomeIcon }                from "@fortawesome/react-fontawesome";
 import useAuth                            from "../../Hooks/useAuth";
 import {
@@ -82,13 +81,6 @@ const Component : FunctionComponent = () => {
 
 	return (
 		<>
-			<CAlert
-				OnClear={ () => {
-					setResponse( undefined );
-				} }
-				Data={ Response }
-			/>
-
 			<FloatingLabel controlId="login" label="Benutzername" className="mb-3">
 				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] }/>
 			</FloatingLabel>

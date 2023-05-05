@@ -5,7 +5,6 @@ import {
 }                                         from "react";
 import useAuth                            from "@hooks/useAuth";
 import type { TResponse_Auth_IsLoggedIn } from "@app/Types/API_Response";
-import { CAlert }                         from "@page/MainApp/PageComponents/General/CAlert";
 import {
 	Col,
 	FloatingLabel,
@@ -72,13 +71,6 @@ const Component : FunctionComponent = () => {
 
 	return (
 		<>
-			<CAlert
-				OnClear={ () => {
-					setResponse( undefined );
-				} }
-				Data={ Response }
-			/>
-
 			<FloatingLabel controlId="password1" label="Passwort" className="mb-3">
 				<Form.Control
 					type="password"
