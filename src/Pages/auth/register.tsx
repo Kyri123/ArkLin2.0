@@ -65,7 +65,7 @@ const Component : FunctionComponent = () => {
 			if ( Response ) {
 				fireSwalFromApi( Response.message, true );
 				SetToken( Response.sessionToken );
-				navigate( 0 );
+				navigate( "/app" );
 			}
 		}
 

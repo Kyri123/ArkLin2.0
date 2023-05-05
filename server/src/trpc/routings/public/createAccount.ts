@@ -15,7 +15,7 @@ export const public_createAccount =
 			return !!await DB_AccountKey.exists( { key: e, isPasswordReset: { $ne: true } } );
 		}, { message: "Token ist nicht gültig!" } ),
 		username: z.string().min( 6, { message: "Benutzername ist zu kurz" } ),
-		email: z.string().email( { message: "Email ist invalid" } ),
+		email: z.string().email( { message: "Email hat ein falsches format" } ),
 		password: z.string().min( 8, { message: "Passwort ist zu kurz" } )
 	} ) ).mutation<{
 		sessionToken : string;
@@ -47,7 +47,7 @@ export const public_createAccount =
 						if ( sessionToken ) {
 							return {
 								sessionToken,
-								message: "Account created and logged in successfully!"
+								message: `Account wurde erstellt. Willkommen ${ userDocument.username }`
 							};
 						}
 						throw new TRPCError( {

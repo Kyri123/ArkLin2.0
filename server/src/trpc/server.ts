@@ -14,6 +14,7 @@ import { auth_globalState }       from "@server/trpc/routings/auth/globalState";
 import { auth_panelAdmin }        from "@server/trpc/routings/auth/panelAdmin";
 import { auth_accountManagement } from "@server/trpc/routings/admin/accountManagement";
 import { auth_serverAction }      from "@server/trpc/routings/auth/serverAction";
+import { auth_user }              from "@server/trpc/routings/auth/user";
 
 
 const publicRouter = router( {
@@ -24,6 +25,7 @@ const publicRouter = router( {
 	github: public_github
 } );
 const authRouter = router( {
+	user: auth_user,
 	globaleState: auth_globalState,
 	panelAdmin: auth_panelAdmin,
 	server: router( {

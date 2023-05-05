@@ -10,8 +10,8 @@ import DB_AccountKey        from "@server/MongoDB/DB_AccountKey";
 import { MakeRandomString } from "@kyri123/k-javascript-utils";
 
 export const public_login = publicProcedure.input( z.object( {
-	login: z.string().min( 6, { message: "Username is to short." } ),
-	password: z.string().min( 8, { message: "Password is to short." } ),
+	login: z.string().min( 6, { message: "Benutzername muss mindestens 6 Zeichen lang sein." } ),
+	password: z.string().min( 8, { message: "Passwort muss mindestens 8 Zeichen lang sein." } ),
 	stayLoggedIn: z.boolean()
 } ) ).mutation( async( { input } ) => {
 	const { login, password, stayLoggedIn } = input;
@@ -42,7 +42,7 @@ export const public_login = publicProcedure.input( z.object( {
 				else if ( userDocument.validPassword( password ) ) {
 					const token = await CreateSession( userDocument.toJSON(), stayLoggedIn );
 					if ( token ) {
-						return { token, message: `Login successfully, Welcome ${ userDocument.username }` };
+						return { token, message: `Willkommen ${ userDocument.username }` };
 					}
 				}
 			}

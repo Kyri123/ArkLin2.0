@@ -12,10 +12,10 @@ export const public_resetPassword = publicProcedure.input( z.object( {
 	key: z.string().min( 6, { message: "Token ist zu kurz!" } ).refine( async e => {
 		return !!await DB_AccountKey.exists( { key: e, isPasswordReset: true } );
 	}, { message: "Token ist nicht gültig!" } ),
-	password: z.string().min( 8, { message: "Password is to short." } )
+	password: z.string().min( 8, { message: "Passwort muss mindestens 8 Zeichen lang sein." } )
 } ) ).mutation( async( { input } ) => {
 	const { key, password } = input;
- 
+
 	try {
 		const token = await DB_AccountKey.findOne( {
 			key,
@@ -31,7 +31,7 @@ export const public_resetPassword = publicProcedure.input( z.object( {
 					if ( sessionToken ) {
 						return {
 							sessionToken,
-							message: "Password wurde gespeichert. Du wirst nun eingeloggt."
+							message: `Password wurde gespeichert. Willkommen ${ userDocument.username }`
 						};
 					}
 					throw new TRPCError( {
