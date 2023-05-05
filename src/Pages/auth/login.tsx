@@ -57,7 +57,7 @@ const Component : FunctionComponent = () => {
 			else if ( Response.token ) {
 				SetToken( Response.token );
 				await fireSwalFromApi( Response.message, true );
-				navigate( 0 );
+				navigate( "/app", { replace: true } );
 			}
 			setInputState( [ false, false ] );
 		}
