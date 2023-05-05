@@ -1,14 +1,10 @@
 import type { FC }                   from "react";
-import {
-	useLoaderData,
-	useParams
-}                               from "react-router-dom";
-import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
-import ReactMarkdown            from "react-markdown";
+import { useLoaderData }             from "react-router-dom";
+import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
+import ReactMarkdown                 from "react-markdown";
 import type { ChangelogLoaderProps } from "@page/app/loader/[changelogTag]";
 
 const Component : FC = () => {
-	const { version } = useParams();
 	const { changelog } = useLoaderData() as ChangelogLoaderProps;
 
 	return (

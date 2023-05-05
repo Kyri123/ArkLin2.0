@@ -1,27 +1,26 @@
-import type { FunctionComponent }         from "react";
+import type { FunctionComponent } from "react";
 import {
 	useRef,
 	useState
-}                                         from "react";
-import type { TResponse_Auth_IsLoggedIn } from "@app/Types/API_Response";
-import { FontAwesomeIcon }                from "@fortawesome/react-fontawesome";
-import useAuth                            from "../../Hooks/useAuth";
+}                                 from "react";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import useAuth                    from "../../Hooks/useAuth";
 import {
 	Col,
 	FloatingLabel,
 	Form,
 	Row
-}                                         from "react-bootstrap";
-import { IconButton }                     from "@comp/Elements/AdminLTE/Buttons";
+}                                 from "react-bootstrap";
+import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 import {
 	Link,
 	useNavigate
-}                                         from "react-router-dom";
+}                                 from "react-router-dom";
 import {
 	fireSwalFromApi,
 	tRPC_handleError,
 	tRPC_Public
-}                                         from "@app/Lib/tRPC";
+}                                 from "@app/Lib/tRPC";
 
 const Component : FunctionComponent = () => {
 	const navigate = useNavigate();
@@ -38,8 +37,6 @@ const Component : FunctionComponent = () => {
 
 	const OnReg = async() => {
 		setIsSending( true );
-		const Resp : TResponse_Auth_IsLoggedIn<true> | undefined = undefined;
-
 		const target = {
 			user: LoginRef.current?.value || "",
 			email: EmailRef.current?.value || "",

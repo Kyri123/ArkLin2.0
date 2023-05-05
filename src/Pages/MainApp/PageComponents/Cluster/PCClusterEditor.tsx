@@ -64,7 +64,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const [ FileSync, setFileSync ] = useState<MultiValue<ISelectOption<string>>>( [] );
 	const [ SelectedMaster, setSelectedMaster ] = useState<SingleValue<ISelectOption<string>>>( null );
 
-	const [ Response, setResponse ] = useState<IAPIResponseBase<true> | undefined>();
+	const [ , setResponse ] = useState<IAPIResponseBase<true> | undefined>();
 
 	const MasterServer = useMemo( () => {
 		if ( SelectedMaster && SelectedMaster.value !== "" && InstanceData[ SelectedMaster.value ] ) {
