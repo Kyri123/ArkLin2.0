@@ -11,7 +11,6 @@ import {
 	useEffect,
 	useState
 }                                 from "react";
-import { API_ServerLib }          from "@app/Lib/Api/API_Server.Lib";
 import ServerContext              from "@context/ServerContext";
 import LeftNavigation             from "@comp/PageLayout/LeftNavigation";
 import TopNavigation              from "@comp/PageLayout/TopNavigation";
@@ -31,7 +30,10 @@ import type { Cluster }           from "@server/MongoDB/DB_Cluster";
 import type { LayoutLoaderProps } from "@page/app/loader/Layout";
 import { useToggle }              from "@kyri123/k-reactutils";
 import { fetchMainData }          from "@page/app/loader/func/functions";
-import { fireSwalFromApi }        from "@app/Lib/tRPC";
+import {
+	fireSwalFromApi,
+	tRPC_Auth
+}                                 from "@app/Lib/tRPC";
 import { EPerm }                  from "@shared/Enum/User.Enum";
 import useAccount                 from "@hooks/useAccount";
 import PanelLog                   from "@comp/PanelLog";
@@ -75,7 +77,8 @@ const Component : FunctionComponent = () => {
 
 		SocketIO.on( "OnSystemUpdate", ( Usage ) => {
 			setSystemUsage( Usage );
-			API_ServerLib.GetGlobalState().then( setGameServerState );
+			tRPC_Auth.globaleState.state.query().then( setGameServerState ).catch( () => {
+			} );
 		} );
 
 		SocketIO.on( "OnServerUpdated", ( R ) =>
