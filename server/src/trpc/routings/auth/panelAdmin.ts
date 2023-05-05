@@ -8,7 +8,7 @@ import { TRPCError } from "@trpc/server";
 import { EPerm }     from "@shared/Enum/User.Enum";
 
 export const auth_panelAdmin = router( {
-	getPanelLog: authProcedure.use( permissionMiddleware( EPerm.PanelLog ) ).query( async( { ctx } ) => {
+	getPanelLog: authProcedure.use( permissionMiddleware( EPerm.PanelLog ) ).query( async() => {
 		try {
 			return [ "" ];
 		}

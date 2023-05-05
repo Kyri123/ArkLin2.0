@@ -27,9 +27,6 @@ const Component : FunctionComponent = () => {
 	const navigate = useNavigate();
 	const { SetToken } = useAuth();
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
-	const [ Response, setResponse ] = useState<
-		TResponse_Auth_IsLoggedIn<true> | undefined
-	>();
 
 	const [ IsSending, setIsSending ] = useState( false );
 
@@ -75,7 +72,6 @@ const Component : FunctionComponent = () => {
 			}
 		}
 
-		setResponse( Resp );
 		setIsSending( false );
 	};
 

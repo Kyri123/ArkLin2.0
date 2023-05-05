@@ -5,7 +5,6 @@ import { FontAwesomeIcon }                from "@fortawesome/react-fontawesome";
 import { IconButton }                     from "@comp/Elements/AdminLTE/Buttons";
 import { useToggle }                      from "@kyri123/k-reactutils";
 import UserRow                            from "./pageComponents/userManagement/UserRow";
-import useAccount                         from "@hooks/useAccount";
 import { useLoaderData }                  from "react-router-dom";
 import type { UserManagementLoaderProps } from "@page/app/loader/userManagement";
 import {
@@ -23,8 +22,6 @@ const Component : FC = () => {
 	const [ accounts, setAccounts ] = useState( () => accs );
 	const [ total, setTotal ] = useState( () => totalAccounts );
 
-	const Account = useAccount();
-
 	const [ ShowKeys, toggleShowKeys ] = useToggle( false );
 
 	async function onPageChange( range : QueryRange ) {
@@ -36,7 +33,7 @@ const Component : FC = () => {
 			.catch( tRPC_handleError );
 	}
 
-	const { setPage, currentPage, maxPage, refresh } = useRawPageHandler( totalAccounts, onPageChange, 10 );
+	const { setPage, currentPage, maxPage, refresh } = useRawPageHandler( total, onPageChange, 10 );
 
 	return (
 		<>
