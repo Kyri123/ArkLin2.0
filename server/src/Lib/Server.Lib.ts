@@ -298,15 +298,21 @@ export class ServerLib<Ready extends boolean = boolean> {
 
 		try {
 			await Promise.all( [
-				SSHManager.Exec( "kill", [ State.ArkmanagerPID.toString() ] ).catch(),
-				SSHManager.Exec( "kill", [ State.ArkserverPID.toString() ] ).catch(),
-				SSHManager.Exec( "arkmanager", [ "stop", `@${ this.Instance }` ] ).catch()
+				SSHManager.Exec( "kill", [ State.ArkmanagerPID.toString() ] ).catch( () => {
+				} ),
+				SSHManager.Exec( "kill", [ State.ArkserverPID.toString() ] ).catch( () => {
+				} ),
+				SSHManager.Exec( "arkmanager", [ "stop", `@${ this.Instance }` ] ).catch( () => {
+				} )
 			] );
 
 			await Promise.all( [
-				SSHManager.Exec( "rm", [ "-R", Config.logdir ] ).catch(),
-				SSHManager.Exec( "rm", [ "-R", Config.arkserverroot ] ).catch(),
-				rm( path.join( __server_arkmanager, "instances", this.Instance + ".cfg" ) ).catch(),
+				SSHManager.Exec( "rm", [ "-R", Config.logdir ] ).catch( () => {
+				} ),
+				SSHManager.Exec( "rm", [ "-R", Config.arkserverroot ] ).catch( () => {
+				} ),
+				rm( path.join( __server_arkmanager, "instances", this.Instance + ".cfg" ) ).catch( () => {
+				} ),
 				DB_Instances.findByIdAndRemove( this.MongoDBData?._id )
 			] );
 

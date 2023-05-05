@@ -42,7 +42,8 @@ export const auth_serverAction = router( {
 			const State = server.GetState();
 			const PID = killServer ? State.ArkserverPID : State.ArkmanagerPID;
 			if ( PID >= 10 ) {
-				await SSHManagerLib.Exec( "kill", [ PID.toString() ] ).catch();
+				await SSHManagerLib.Exec( "kill", [ PID.toString() ] ).catch( () => {
+				} );
 				await TManager.RunTask( "ServerState", true );
 				return killServer ? "Server wurde beendet!" : "Arkmanager aktion wurde beendet!";
 			}
