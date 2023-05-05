@@ -16,6 +16,7 @@ import type { Cluster }             from "@server/MongoDB/DB_Cluster";
 import DB_Cluster                   from "@server/MongoDB/DB_Cluster";
 import type { Instance }            from "@server/MongoDB/DB_Instances";
 import DB_Instances                 from "@server/MongoDB/DB_Instances";
+import { rm }                       from "fs/promises";
 import {
 	FillWithDefaultValues,
 	GetDefaultInstanceData,
@@ -297,25 +298,18 @@ export class ServerLib<Ready extends boolean = boolean> {
 
 		try {
 			await Promise.all( [
-				SSHManager.Exec( "kill", [ State.ArkmanagerPID.toString() ] ),
-				SSHManager.Exec( "kill", [ State.ArkserverPID.toString() ] )
+				SSHManager.Exec( "kill", [ State.ArkmanagerPID.toString() ] ).catch(),
+				SSHManager.Exec( "kill", [ State.ArkserverPID.toString() ] ).catch(),
+				SSHManager.Exec( "arkmanager", [ "stop", `@${ this.Instance }` ] ).catch()
 			] );
-			await SSHManager.Exec( "arkmanager", [ "stop", `@${ this.Instance }` ] );
 
-			SSHManager.Exec( "rm", [ "-R", Config.logdir ] )
-				.then()
-				.catch( () => {
-				} );
-			SSHManager.Exec( "rm", [ "-R", Config.arkserverroot ] )
-				.then()
-				.catch( () => {
-				} );
+			await Promise.all( [
+				SSHManager.Exec( "rm", [ "-R", Config.logdir ] ).catch(),
+				SSHManager.Exec( "rm", [ "-R", Config.arkserverroot ] ).catch(),
+				rm( path.join( __server_arkmanager, "instances", this.Instance + ".cfg" ) ).catch(),
+				DB_Instances.findByIdAndRemove( this.MongoDBData?._id )
+			] );
 
-			fs.rmSync(
-				path.join( __server_arkmanager, "instances", this.Instance + ".cfg" )
-			);
-
-			DB_Instances.findByIdAndRemove( this.MongoDBData?._id );
 			SystemLib.LogWarning(
 				"SERVER", "Server Removed:",
 				this.MongoDBData?.Instance

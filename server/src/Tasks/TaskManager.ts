@@ -35,7 +35,7 @@ export class JobTask {
 	public DestroyTask() {
 		clearInterval( this.Task );
 	}
-
+ 
 	public async ForceTask( ResetTime = false ) {
 		if ( this.IsRun ) {
 			this.RunNextTask = [ true, ResetTime ];

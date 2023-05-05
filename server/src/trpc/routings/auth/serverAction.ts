@@ -59,6 +59,7 @@ export const auth_serverAction = router( {
 		const { server } = ctx;
 		try {
 			await server.RemoveServer();
+			await TManager.RunTask( "ServerState", true );
 			return "Server wurde entfernt!";
 		}
 		catch ( e ) {
@@ -78,6 +79,7 @@ export const auth_serverAction = router( {
 		const { config } = input;
 		try {
 			await server.SetPanelConfig( config );
+			await TManager.RunTask( "ServerState", true );
 			return "Panel config wurde bearbeitet!";
 		}
 		catch ( e ) {
@@ -118,6 +120,7 @@ export const auth_serverAction = router( {
 				ark_QueryPort,
 				ark_RCONPort
 			} );
+			await TManager.RunTask( "ServerState", true );
 
 			if ( server?.IsValid() ) {
 				return "Ark-Server wurde erfolgreich erstellt";

@@ -14,6 +14,11 @@ import { ServerAdminCard }             from "@page/app/pageComponents/adminServe
 import UpdateSelectMask                from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import type { InputSelectMask }        from "@app/Types/Systeminformation";
 import { useToggle }                   from "@kyri123/k-reactutils";
+import {
+	fireSwalFromApi,
+	tRPC_Auth,
+	tRPC_handleError
+}                                      from "@app/Lib/tRPC";
 
 const Component : FC = () => {
 	const { InstanceData } = useContext( ServerContext );
@@ -23,7 +28,12 @@ const Component : FC = () => {
 
 	const CreateServer = async() => {
 		setIsSending( true );
-
+		const result = await tRPC_Auth.server.action.createServer.mutate( {
+			config: _.cloneDeep( FormData )
+		} ).catch( tRPC_handleError );
+		if ( result ) {
+			fireSwalFromApi( result, true );
+		}
 		setIsSending( false );
 		toggleShowNewServer();
 		setFormData( () => _.cloneDeep( GetDefaultPanelServerConfig() ) );
