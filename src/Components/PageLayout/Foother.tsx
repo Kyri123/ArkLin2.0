@@ -17,7 +17,7 @@ export default function Foother( Props : { SystemUsage : SystemUsage } ) {
 
 					<ul className="nav col-md-4 justify-content-end">
 						<li className="nav-item">
-							<Link to={ "/app/version/" + Props.SystemUsage.PanelVersionName }
+							<Link to={ "/app" }
 							      className="nav-link px-2 text-body-secondary">
 								{ Props.SystemUsage.PanelVersionName }
 								<FontAwesomeIcon size={ "lg" } icon={ "book" } className={ "ms-3" }/>
