@@ -6,7 +6,6 @@ import {
 }                                 from "react-router-dom";
 import type { FunctionComponent } from "react";
 import {
-	Suspense,
 	useCallback,
 	useEffect,
 	useState
@@ -122,48 +121,46 @@ const Component : FunctionComponent = () => {
 			<ServerContext.Provider
 				value={ { InstanceData: Instances, HasData: HasData, ClusterData: Clusters } }
 			>
-				<Suspense fallback={ <></> }>
-					<main className="d-flex flex-nowrap w-100">
-						<LeftNavigation/>
-						<div className="flex-fill d-flex flex-column w-100">
-							<div className="flex-grow-0">
-								<TopNavigation
-									ShowLog={ toggleShowLog }
-									ServerState={ [ GameServerOnline, GameServerOffline ] }
-									SystemUsage={ SystemUsage }
-								/>
-							</div>
-
-							<div className="flex-grow-0">
-								<SideHeader/>
-							</div>
-
-							<div className="flex-auto h-100 overflow-y-scroll overflow-x-hidden">
-								<section
-									className="content p-3 h-100 pt-0 pb-0">
-									<div className="py-3">
-										<Traffics
-											SystemUsage={ SystemUsage }
-											ServerState={ [
-												GameServerOnline,
-												GameServerOffline,
-												GameServerTotal
-											] }
-										/>
-
-										<Outlet/>
-									</div>
-								</section>
-							</div>
-
-							<div className="flex-grow-0">
-								<Foother SystemUsage={ SystemUsage }/>
-							</div>
+				<main className="d-flex flex-nowrap w-100">
+					<LeftNavigation/>
+					<div className="flex-fill d-flex flex-column w-100">
+						<div className="flex-grow-0">
+							<TopNavigation
+								ShowLog={ toggleShowLog }
+								ServerState={ [ GameServerOnline, GameServerOffline ] }
+								SystemUsage={ SystemUsage }
+							/>
 						</div>
-					</main>
 
-					{ user.HasPermission( EPerm.PanelLog ) && <PanelLog Show={ ShowLog } OnHide={ toggleShowLog }/> }
-				</Suspense>
+						<div className="flex-grow-0">
+							<SideHeader/>
+						</div>
+
+						<div className="flex-auto h-100 overflow-y-scroll overflow-x-hidden">
+							<section
+								className="content p-3 h-100 pt-0 pb-0">
+								<div className="py-3">
+									<Traffics
+										SystemUsage={ SystemUsage }
+										ServerState={ [
+											GameServerOnline,
+											GameServerOffline,
+											GameServerTotal
+										] }
+									/>
+
+									<Outlet/>
+								</div>
+							</section>
+						</div>
+
+						<div className="flex-grow-0">
+							<Foother SystemUsage={ SystemUsage }/>
+						</div>
+					</div>
+				</main>
+
+				{ user.HasPermission( EPerm.PanelLog ) && <PanelLog Show={ ShowLog } OnHide={ toggleShowLog }/> }
 			</ServerContext.Provider>
 		</>
 	);

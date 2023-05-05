@@ -1,4 +1,7 @@
-import { createBrowserRouter } from "react-router-dom";
+import {
+	createBrowserRouter,
+	Navigate
+} from "react-router-dom";
 
 const rootRouter = createBrowserRouter( [
 	{
@@ -71,15 +74,13 @@ const rootRouter = createBrowserRouter( [
 				]
 			},
 			// end App ----------------------------------
-
-
 			{
-				index: true,
-				element: <></>
+				path: "*",
+				element: <Navigate to={ "/error/404" }/>
 			},
 			{
 				path: "/error/:statusCode",
-				element: <></>
+				lazy: async() => await import("@page/error/[statusCode]")
 			}
 		]
 	}
