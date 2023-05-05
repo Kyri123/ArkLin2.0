@@ -10,18 +10,12 @@ import { BC }             from "@server/Lib/System.Lib";
 const watchedFile : Map<string, FSWatcher> = new Map();
 
 const watchPanelLog = () => {
-	SocketIO.in( "panelLog" ).emit( "OnPanelLogUpdated", fs
-		.readFileSync( __LogFile )
-		.toString()
-		.split( "\n" )
-		.reverse() );
-
 	for ( const key of SocketIO.sockets.adapter.rooms.keys() ) {
-		if ( key.startsWith( "/" ) && fs.existsSync( key ) && !watchedFile.has( key ) ) {
-			const watcher = fs.watch( __LogFile, ( event, path ) => {
+		if ( key.startsWith( __basedir ) && fs.existsSync( key ) && !watchedFile.has( key ) && key.endsWith( ".log" ) ) {
+			const watcher = fs.watch( key, ( event, path ) => {
 				if ( event === "change" ) {
-					SocketIO.in( path ).emit( "OnPanelLogUpdated", fs
-						.readFileSync( __LogFile )
+					SocketIO.in( key ).emit( "onFileUpdated", key, fs
+						.readFileSync( key )
 						.toString()
 						.split( "\n" )
 						.reverse() );
@@ -30,16 +24,10 @@ const watchPanelLog = () => {
 					if ( !SocketIO.sockets.adapter.rooms.has( path ) ) {
 						watcher.close();
 						SystemLib.Log( "watcher", "Close watching file " + BC( "Green" ), path );
-						watchedFile.delete( path );
+						watchedFile.delete( key );
 					}
 				}
 			} );
-
-			SocketIO.in( key ).emit( "OnPanelLogUpdated", fs
-				.readFileSync( __LogFile )
-				.toString()
-				.split( "\n" )
-				.reverse() );
 
 			SystemLib.Log( "watcher", "Start watching file " + BC( "Green" ), key );
 			watchedFile.set( key, watcher );
@@ -51,6 +39,14 @@ const watchPanelLog = () => {
 			SystemLib.Log( "watcher", "Close watching file " + BC( "Green" ), file );
 			watcher.close();
 			watchedFile.delete( file );
+		}
+		else {
+			SystemLib.DebugLog( "watcher", "EmitFileWatch " + BC( "Green" ), file );
+			SocketIO.in( file ).emit( "onFileUpdated", file, fs
+				.readFileSync( file )
+				.toString()
+				.split( "\n" )
+				.reverse() );
 		}
 	}
 };
@@ -67,12 +63,7 @@ const Connection = async(
 		watchPanelLog();
 	} );
 
-	if ( roomName === "panelLog" ) {
-		socket.join( __LogFile );
-	}
-	else {
-		socket.join( roomName );
-	}
+	socket.join( roomName );
 
 	watchPanelLog();
 };

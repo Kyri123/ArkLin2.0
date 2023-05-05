@@ -160,7 +160,8 @@ const Component : FunctionComponent = () => {
 					</div>
 				</main>
 
-				{ user.HasPermission( EPerm.PanelLog ) && <PanelLog Show={ ShowLog } OnHide={ toggleShowLog }/> }
+				{ user.HasPermission( EPerm.PanelLog ) &&
+					<PanelLog usage={ SystemUsage } Show={ ShowLog } OnHide={ toggleShowLog }/> }
 			</ServerContext.Provider>
 		</>
 	);

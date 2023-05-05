@@ -1,9 +1,11 @@
-import { JobTask }               from "../TaskManager";
-import * as Si                   from "systeminformation";
-import { ConfigManager }         from "@server/Lib/ConfigManager.Lib";
+import { JobTask }          from "../TaskManager";
+import * as Si              from "systeminformation";
+import { ConfigManager }    from "@server/Lib/ConfigManager.Lib";
 import type { SystemUsage } from "@server/MongoDB/DB_Usage";
-import DB_Usage from "@server/MongoDB/DB_Usage";
-import { BC }                    from "@server/Lib/System.Lib";
+import DB_Usage             from "@server/MongoDB/DB_Usage";
+import { BC }               from "@server/Lib/System.Lib";
+import fs                   from "fs";
+import path                 from "path";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.SystemInformationInterval,
@@ -19,7 +21,11 @@ export default new JobTask(
 		const DISK = await Si.fsSize();
 		const MEM = await Si.mem();
 
-		const Usage = ( await DB_Usage.findOne<SystemUsage>() ) || ( {} as any );
+		const Usage = ( await DB_Usage.findOne() )?.toJSON() || ( {} as any );
+		delete Usage._id;
+		delete Usage.createdAt;
+		delete Usage.updatedAt;
+		delete Usage.__v;
 
 		const NewUsage : SystemUsage = {
 			UpdateIsRunning: false,
@@ -32,6 +38,7 @@ export default new JobTask(
 			MemMax: MEM.total,
 			MemUsed: MEM.total - MEM.available,
 			...Usage,
+			LogFiles: fs.readdirSync( __LogDir ).map( e => path.join( __LogDir, e ) ).reverse(),
 			PanelNeedUpdate: __PANNELUPDATE
 		};
 
@@ -47,7 +54,9 @@ export default new JobTask(
 			NewUsage.DiskUsed = DISK[ 0 ].used;
 		}
 
-		await DB_Usage.findOneAndUpdate( {}, NewUsage, { upsert: true } );
+		await DB_Usage.findOneAndReplace( {}, NewUsage, {
+			upsert: true
+		} );
 		SocketIO.emit( "OnSystemUpdate", NewUsage );
 	}
 );

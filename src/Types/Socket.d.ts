@@ -5,7 +5,7 @@ import type { Cluster }          from "@server/MongoDB/DB_Cluster";
 
 interface EmitEvents extends DefaultEventsMap {
 	OnSystemUpdate : ( Usage : SystemUsage ) => void;
-	OnPanelLogUpdated : ( Log : string[] ) => void;
+	onFileUpdated : ( File : string, Log : string[] ) => void;
 	OnServerUpdated : ( Updated : Record<string, Instance> ) => void;
 	OnServerRemoved : () => void;
 	OnClusterUpdated : ( Updated : Record<string, Cluster> ) => void;

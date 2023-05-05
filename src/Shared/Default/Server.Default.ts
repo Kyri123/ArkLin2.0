@@ -40,6 +40,7 @@ export function DefaultInstanceState() : InstanceState {
 
 export function DefaultSystemUsage() : SystemUsage {
 	return structuredClone<SystemUsage>( {
+		LogFiles: [],
 		UpdateIsRunning: false,
 		PanelBuildVersion: "",
 		PanelVersionName: "",

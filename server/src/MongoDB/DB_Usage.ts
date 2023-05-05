@@ -11,7 +11,8 @@ const ZodUsageSchema = z.object( {
 	UpdateIsRunning: z.boolean(),
 	PanelVersionName: z.string(),
 	PanelBuildVersion: z.string(),
-	NextPanelBuildVersion: z.string()
+	NextPanelBuildVersion: z.string(),
+	LogFiles: z.array( z.string() )
 } );
 
 const UsageSchema = new mongoose.Schema( {
@@ -24,7 +25,8 @@ const UsageSchema = new mongoose.Schema( {
 	PanelVersionName: { type: String, required: true },
 	PanelBuildVersion: { type: String, required: true },
 	NextPanelBuildVersion: { type: String },
-	UpdateIsRunning: { type: Boolean }
+	UpdateIsRunning: { type: Boolean },
+	LogFiles: { type: [ String ], required: true }
 } );
 
 
