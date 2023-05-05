@@ -1,6 +1,6 @@
 import fs                              from "fs";
 import path                            from "path";
-import { EArkmanagerCommands }         from "@app/Lib/ServerUtils.Lib";
+import { EArkmanagerCommands }         from "@app/Lib/serverUtils";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import {
 	ConfigToJSON,

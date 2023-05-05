@@ -10,7 +10,8 @@ import {
 }                              from "@app/Lib/tRPC";
 
 export interface AuthLoaderProps {
-	hasAuth : boolean;
+	hasAuth : boolean,
+	token : string
 }
 
 const loader : LoaderFunction = async( { request } ) => {
@@ -25,12 +26,12 @@ const loader : LoaderFunction = async( { request } ) => {
 	if ( !hasAuth && ( !Url.pathname.startsWith( "/auth" ) && !Url.pathname.startsWith( "/error" ) ) ) {
 		return redirect( "/auth/login" );
 	}
- 
-	if ( hasAuth && ( !Url.pathname.startsWith( "/auth" ) || !Url.pathname.startsWith( "/error" ) ) ) {
+
+	if ( hasAuth && ( !Url.pathname.startsWith( "/app" ) && !Url.pathname.startsWith( "/error" ) ) ) {
 		return redirect( "/app" );
 	}
 
-	return json<AuthLoaderProps>( { hasAuth } );
+	return json<AuthLoaderProps>( { hasAuth, token } );
 };
 
 export { loader };

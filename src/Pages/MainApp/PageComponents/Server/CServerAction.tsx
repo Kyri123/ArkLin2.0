@@ -10,7 +10,7 @@ import CLTEInput            from "../../../../Components/Elements/AdminLTE/Admin
 import {
 	EArkmanagerCommands,
 	GetMaskFromCommand
-}                           from "../../../../Lib/ServerUtils.Lib";
+}                           from "../../../../Lib/serverUtils";
 import Select               from "react-select";
 import { API_ServerLib }    from "../../../../Lib/Api/API_Server.Lib";
 import { useArkServer }     from "../../../../Hooks/useArkServer";

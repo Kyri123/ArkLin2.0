@@ -1,9 +1,9 @@
-import type { IServerCardProps }    from "../../../../Types/Server";
-import { Card }                from "react-bootstrap";
-import CFormatLog              from "../../PageComponents/Server/CFormatLog";
-import type { SingleValue } from "react-select";
-import Select from "react-select";
-import { useArkServerLogs }    from "../../../../Hooks/useArkServerLogs";
+import type { IServerCardProps } from "../../../../Types/Server";
+import { Card }                  from "react-bootstrap";
+import FormatLog                 from "@comp/FormatLog";
+import type { SingleValue }      from "react-select";
+import Select                    from "react-select";
+import { useArkServerLogs }      from "../../../../Hooks/useArkServerLogs";
 
 export default function SPServerLogs( Props : IServerCardProps ) {
 	const { LogFiles, LogContent, RequestLogContent, CurrentFile } =
@@ -52,7 +52,7 @@ export default function SPServerLogs( Props : IServerCardProps ) {
 				className={ "bg-dark text-light p-0" }
 				style={ { overflowX: "hidden", overflowY: "scroll", maxHeight: 750 } }
 			>
-				<CFormatLog LogContent={ LogContent }/>
+				<FormatLog LogContent={ LogContent }/>
 			</Card.Body>
 		</Card>
 	);

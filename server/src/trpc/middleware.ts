@@ -2,12 +2,13 @@ import type {
 	NextFunction,
 	Request,
 	Response
-}                        from "express";
-import User              from "@app/Lib/User.Lib";
-import DB_SessionToken   from "@server/MongoDB/DB_SessionToken";
-import * as jwt          from "jsonwebtoken";
-import DB_Accounts       from "@server/MongoDB/DB_Accounts";
-import { errorResponse } from "@server/Lib/openApi.response";
+}                            from "express";
+import User                  from "@app/Lib/User.Lib";
+import DB_SessionToken       from "@server/MongoDB/DB_SessionToken";
+import * as jwt              from "jsonwebtoken";
+import DB_Accounts           from "@server/MongoDB/DB_Accounts";
+import { errorResponse }     from "@server/Lib/openApi.response";
+import { GetSecretAppToken } from "@server/Lib/User.Lib";
 
 export async function MW_Auth( req : Request, res : Response, next : NextFunction ) {
 	/*const Response : ResponseBase = {
@@ -25,7 +26,7 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 
 	if ( Token ) {
 		try {
-			const Result = jwt.verify( Token, process.env.JWTToken as string );
+			const Result = jwt.verify( Token, GetSecretAppToken() );
 			if ( typeof Result === "object" ) {
 				const UserData = new User( Token );
 				const Session = await DB_SessionToken.findOne( { token: Token, userid: UserData.Get._id } );
@@ -37,6 +38,7 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 			}
 		}
 		catch ( e ) {
+			console.log( e );
 		}
 	}
 	res.sendStatus( 401 );

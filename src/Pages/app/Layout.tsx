@@ -1,80 +1,168 @@
 /** @format */
 
-import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import {
-	Col,
-	Modal,
-	Row
-}                                 from "react-bootstrap";
-import {
-	Link,
-	Outlet
+	Outlet,
+	useLoaderData
 }                                 from "react-router-dom";
-import { LTERibbon }              from "@comp/Elements/AdminLTE/AdminLTE";
 import type { FunctionComponent } from "react";
+import {
+	Suspense,
+	useCallback,
+	useEffect,
+	useState
+}                                 from "react";
+import { API_ServerLib }          from "@app/Lib/Api/API_Server.Lib";
+import ServerContext              from "@context/ServerContext";
+import LeftNavigation             from "@comp/PageLayout/LeftNavigation";
+import TopNavigation              from "@comp/PageLayout/TopNavigation";
+import SideHeader                 from "@comp/PageLayout/SideHeader";
+import Traffics                   from "@comp/PageLayout/Traffics";
+import Foother                    from "@comp/PageLayout/Foother";
+import type { Socket }            from "socket.io-client";
+import io                         from "socket.io-client";
+import { SocketIOLib }            from "@app/Lib/Api/SocketIO.Lib";
+import type { SystemUsage }       from "@server/MongoDB/DB_Usage";
+import type {
+	EmitEvents,
+	ListenEvents
+}                                 from "@app/Types/Socket";
+import type { Instance }          from "@server/MongoDB/DB_Instances";
+import type { Cluster }           from "@server/MongoDB/DB_Cluster";
+import type { LayoutLoaderProps } from "@page/app/loader/Layout";
+import { useToggle }              from "@kyri123/k-reactutils";
+import { fetchMainData }          from "@page/app/loader/func/functions";
+import { fireSwalFromApi }        from "@app/Lib/tRPC";
+import { EPerm }                  from "@shared/Enum/User.Enum";
+import useAccount                 from "@hooks/useAccount";
+import PanelLog                   from "@comp/PanelLog";
+
+const SocketIO : Socket<EmitEvents, ListenEvents> = io(
+	SocketIOLib.GetSpocketHost()
+);
 
 const Component : FunctionComponent = () => {
-	return (
-		<div
-			className="register-page bg-image"
-			style={ {
-				backgroundImage: "url('/img/backgrounds/bg.jpg')",
-				backgroundSize: "cover",
-				backgroundColor: "rgba(11, 19, 26, 1)",
-				backgroundPosition: "center",
-				backgroundRepeat: "no-repeat",
-				height: "100%",
-				width: "100%"
-			} }
-		>
-			<Modal
-				onHide={ () => {
-				} }
-				show={ true }
-				centered
-				backdrop={ false }
-				contentClassName={ "rounded-4" }
-			>
-				<Modal.Header className={ "p-3 pb-2 border-bottom-0" }>
-					<h1 className="fw-bold mb-0 fs-2 p-2 text-center w-100">
-						KAdmin ArkLin 2.0
-					</h1>
-					<LTERibbon>Alpha</LTERibbon>
-				</Modal.Header>
-				<Modal.Body className={ "p-3 pt-0" }>
+	const { cluster, server, usage, globalState, hasError } = useLoaderData() as LayoutLoaderProps;
+	const { user } = useAccount();
+	const [ ShowLog, toggleShowLog ] = useToggle( false );
+	const [ [ GameServerOnline, GameServerOffline, GameServerTotal ], setGameServerState ] = useState<number[]>( () => globalState );
+	const [ SystemUsage, setSystemUsage ] = useState<SystemUsage>( () => usage );
+	const [ HasData, setHasData ] = useState( () => !hasError );
 
-					<Outlet/>
-					<Row>
-						<Col span={ 6 }>
-							<Link
-								to="https://discord.gg/uXxsqXD"
-								target="_blank"
-								className={ "btn btn-dark w-100 mb-2 rounded-3" }
-							>
-								<FontAwesomeIcon
-									icon={ [ "fab", "discord" ] }
-									className={ "pe-2" }
+	const [ Instances, setInstances ] = useState<Record<string, Instance>>( () => server );
+	const [ Clusters, setClusters ] = useState<Record<string, Cluster>>( () => cluster );
+
+	const GetAllServer = useCallback( async() => {
+		if ( hasError ) {
+			return;
+		}
+
+		const result = await fetchMainData();
+
+		if ( result ) {
+			const [ globalState, server, cluster, usage ] = result;
+
+			setSystemUsage( () => usage );
+			setGameServerState( () => globalState );
+			setClusters( () => cluster );
+			setInstances( () => server );
+		}
+	}, [ hasError ] );
+
+	useEffect( () => {
+		if ( hasError ) {
+			return;
+		}
+
+		SocketIO.on( "OnSystemUpdate", ( Usage ) => {
+			setSystemUsage( Usage );
+			API_ServerLib.GetGlobalState().then( setGameServerState );
+		} );
+
+		SocketIO.on( "OnServerUpdated", ( R ) =>
+			setInstances( ( I ) => ( {
+				...I,
+				...R
+			} ) )
+		);
+
+		SocketIO.on( "OnClusterUpdated", ( R ) =>
+			setClusters( ( I ) => ( {
+				...I,
+				...R
+			} ) )
+		);
+
+		SocketIO.on( "OnClusterRemoved", GetAllServer );
+		SocketIO.on( "OnServerRemoved", GetAllServer );
+		SocketIO.on( "connect", GetAllServer );
+		SocketIO.on( "disconnect", () => setHasData( false ) );
+
+		return () => {
+			SocketIO.off( "OnClusterRemoved", GetAllServer );
+			SocketIO.off( "OnClusterUpdated" );
+			SocketIO.off( "connect" );
+			SocketIO.off( "disconnect" );
+			SocketIO.off( "OnServerUpdated" );
+			SocketIO.off( "OnServerRemoved", GetAllServer );
+			SocketIO.off( "OnSystemUpdate" );
+		};
+	}, [ GetAllServer, hasError ] );
+
+	// eslint-disable-next-line no-constant-condition
+	if ( hasError ) {
+		fireSwalFromApi( "Api konnte nicht abgerufen werden! oder es ist ein fehler aufgetretten. Bitte lade die seite erneut!", false, { timer: undefined } );
+		return ( <></> );
+	}
+
+	return (
+		<>
+			<ServerContext.Provider
+				value={ { InstanceData: Instances, HasData: HasData, ClusterData: Clusters } }
+			>
+				<Suspense fallback={ <></> }>
+					<main className="d-flex flex-nowrap w-100">
+						<LeftNavigation/>
+						<div className="flex-fill d-flex flex-column w-100">
+							<div className="flex-grow-0">
+								<TopNavigation
+									ShowLog={ toggleShowLog }
+									ServerState={ [ GameServerOnline, GameServerOffline ] }
+									SystemUsage={ SystemUsage }
 								/>
-								Discord
-							</Link>
-						</Col>
-						<Col span={ 6 }>
-							<Link
-								to="https://github.com/Kyri123/ArkLin2.0/"
-								target="_blank"
-								className={ "btn btn-dark w-100 mb-2 rounded-3" }
-							>
-								<FontAwesomeIcon
-									icon={ [ "fab", "github" ] }
-									className={ "pe-2" }
-								/>
-								Github
-							</Link>
-						</Col>
-					</Row>
-				</Modal.Body>
-			</Modal>
-		</div>
+							</div>
+
+							<div className="flex-grow-0">
+								<SideHeader/>
+							</div>
+
+							<div className="flex-auto h-100 overflow-y-scroll overflow-x-hidden">
+								<section
+									className="content p-3 h-100 pt-0 pb-0">
+									<div className="py-3">
+										<Traffics
+											SystemUsage={ SystemUsage }
+											ServerState={ [
+												GameServerOnline,
+												GameServerOffline,
+												GameServerTotal
+											] }
+										/>
+
+										<Outlet/>
+									</div>
+								</section>
+							</div>
+
+							<div className="flex-grow-0">
+								<Foother SystemUsage={ SystemUsage }/>
+							</div>
+						</div>
+					</main>
+
+					{ user.HasPermission( EPerm.PanelLog ) && <PanelLog Show={ ShowLog } OnHide={ toggleShowLog }/> }
+				</Suspense>
+			</ServerContext.Provider>
+		</>
 	);
 };
 

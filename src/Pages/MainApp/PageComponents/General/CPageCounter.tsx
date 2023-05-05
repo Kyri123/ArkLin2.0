@@ -5,8 +5,8 @@ import {
 	useState
 }                                 from "react";
 import { ButtonGroup }            from "react-bootstrap";
-import type { IPageCounterProps } from "../../../../Types/PageAddons";
-import { LTELoadingButton }       from "../../../../Components/Elements/AdminLTE/AdminLTE_Buttons";
+import type { IPageCounterProps } from "@app/Types/PageAddons";
+import { LTELoadingButton }       from "@comp/Elements/AdminLTE/AdminLTE_Buttons";
 
 export default function CPageCounter<T>( Props : IPageCounterProps<T> ) {
 	const [ Page, setPage ] = useState( 0 );

@@ -1,12 +1,12 @@
-import bytes                from "bytes";
-import type { SystemUsage } from "@shared/Type/Systeminformation";
-import { CStateCard }       from "../../../../Components/Elements/AdminLTE/AdminLTE_Cards";
+import bytes           from "bytes";
+import { CStateCard }  from "../Elements/AdminLTE/AdminLTE_Cards";
 import {
 	Col,
 	Row
-}                           from "react-bootstrap";
+}                      from "react-bootstrap";
+import type { SystemUsage } from "@server/MongoDB/DB_Usage";
 
-export default function CTraffics( Props : {
+export default function Traffics( Props : {
 	ServerState : [ number, number, number ];
 	SystemUsage : SystemUsage;
 } ) {

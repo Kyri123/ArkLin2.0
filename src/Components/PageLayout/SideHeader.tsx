@@ -1,9 +1,9 @@
-import type React from "react";
-import { useMemo } from "react";
-import StringMapLib       from "../../../../Lib/StringMap.Lib";
-import { useLocation }    from "react-router-dom";
+import type React      from "react";
+import { useMemo }     from "react";
+import StringMapLib    from "../../Lib/StringMap.Lib";
+import { useLocation } from "react-router-dom";
 
-const CSideHeader : React.FunctionComponent = () => {
+const SideHeader : React.FunctionComponent = () => {
 	const { pathname } = useLocation();
 
 	const Pathname = useMemo( () => {
@@ -34,4 +34,4 @@ const CSideHeader : React.FunctionComponent = () => {
 	);
 };
 
-export default CSideHeader;
+export default SideHeader;

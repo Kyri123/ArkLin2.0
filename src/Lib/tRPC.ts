@@ -2,22 +2,25 @@ import {
 	createTRPCProxyClient,
 	httpBatchLink,
 	TRPCClientError
-}                                 from "@trpc/client";
+}                    from "@trpc/client";
 import type {
 	AuthRouter,
 	PublicRouter
-}                                 from "@server/trpc/server";
-import type { SweetAlertOptions } from "sweetalert2";
-import Swal                       from "sweetalert2";
-import superjson                  from "superjson";
-import { AUTHTOKEN }              from "@app/Lib/constance";
+}                    from "@server/trpc/server";
+import type {
+	SweetAlertIcon,
+	SweetAlertOptions
+}                    from "sweetalert2";
+import Swal          from "sweetalert2";
+import superjson     from "superjson";
+import { AUTHTOKEN } from "@app/Lib/constance";
 
 
-export function fireSwalFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
+export function fireSwalFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean | SweetAlertIcon, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
 	if ( message && message.length >= 0 ) {
 		return Swal.fire<PreConfirmResult>( {
 			html: Array.isArray( message ) ? message.join( "<br />" ) : message,
-			icon: success ? "success" : "error",
+			icon: typeof success === "string" ? success : ( success ? "success" : "error" ),
 			showConfirmButton: false,
 			timerProgressBar: true,
 			timer: 3000,
@@ -27,13 +30,13 @@ export function fireSwalFromApi<PreConfirmResult = any>( message : string[] | st
 	return null;
 }
 
-export function fireToastFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
+export function fireToastFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean | SweetAlertIcon, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
 	if ( message && message.length >= 0 ) {
 		return Swal.fire( {
 			position: "bottom-end",
 			toast: true,
 			html: Array.isArray( message ) ? message.join( "<br />" ) : message,
-			icon: success ? "success" : "error",
+			icon: typeof success === "string" ? success : ( success ? "success" : "error" ),
 			showConfirmButton: false,
 			timerProgressBar: true,
 			timer: 3000,

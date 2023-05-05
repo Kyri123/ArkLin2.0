@@ -1,12 +1,12 @@
-import { useId }           from "react";
-import type { TLTEColors } from "@shared/Type/AdminLTE";
+import { useId }        from "react";
+import type { Variant } from "react-bootstrap/types";
 
-export default function CFormatLog( Props : { LogContent : string } ) {
+export default function FormatLog( Props : { LogContent : string } ) {
 	const ID = useId();
-	const LineColor = ( Line : string ) : TLTEColors => {
-		let Color : TLTEColors = "light";
+	const LineColor = ( Line : string ) : Variant => {
+		let Color : Variant = "light";
 		if ( Line.includes( "[DEBUG]" ) ) {
-			Color = "purple";
+			Color = "info";
 		}
 		else if ( Line.includes( "[WARN]" ) ) {
 			Color = "warning";

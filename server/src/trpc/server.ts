@@ -10,6 +10,8 @@ import { MW_Auth }              from "@server/trpc/middleware";
 import { BC }                   from "@server/Lib/System.Lib";
 import { public_resetPassword } from "@server/trpc/routings/public/resetPassword";
 import { public_github }        from "@server/trpc/routings/public/github";
+import { auth_globalState }     from "@server/trpc/routings/auth/globalState";
+import { auth_panelAdmin }      from "@server/trpc/routings/auth/panelAdmin";
 
 
 const publicRouter = router( {
@@ -19,7 +21,10 @@ const publicRouter = router( {
 	password: public_resetPassword,
 	github: public_github
 } );
-const authRouter = router( {} );
+const authRouter = router( {
+	globaleState: auth_globalState,
+	panelAdmin: auth_panelAdmin
+} );
 
 
 SystemLib.Log( "start", "register TRCP on", BC( "Red" ), "/api/v2/*" );

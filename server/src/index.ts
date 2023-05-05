@@ -1,31 +1,29 @@
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import "./InitDirs";
-import { InstallRoutings }       from "./Init";
-import * as path                 from "path";
+import { InstallRoutings } from "./Init";
+import * as path           from "path";
 import "./Lib/System.Lib";
-import express                   from "express";
-import * as http                 from "http";
-import type { Socket }           from "socket.io";
-import { Server }                from "socket.io";
-import * as process              from "process";
-import fs                        from "fs";
+import express             from "express";
+import * as http           from "http";
+import { Server }          from "socket.io";
+import * as process        from "process";
+import fs                  from "fs";
 import {
 	ConfigManager,
 	SSHManager
-}                                from "./Lib/ConfigManager.Lib";
-import * as mongoose             from "mongoose";
-import AccountKey                from "./MongoDB/DB_AccountKey";
-import DB_AccountKey             from "./MongoDB/DB_AccountKey";
-import DB_Accounts               from "./MongoDB/DB_Accounts";
-import TaskManager               from "./Tasks/TaskManager";
-import { RunTest }               from "./Testing";
-import type { DefaultEventsMap } from "socket.io/dist/typed-events";
-import fetch                     from "node-fetch";
-import { BC }                    from "@server/Lib/System.Lib";
+}                          from "./Lib/ConfigManager.Lib";
+import * as mongoose       from "mongoose";
+import AccountKey          from "./MongoDB/DB_AccountKey";
+import DB_AccountKey       from "./MongoDB/DB_AccountKey";
+import DB_Accounts         from "./MongoDB/DB_Accounts";
+import TaskManager         from "./Tasks/TaskManager";
+import { RunTest }         from "./Testing";
+import fetch               from "node-fetch";
+import { BC }              from "@server/Lib/System.Lib";
 import type {
 	EmitEvents,
 	ListenEvents
-}                                from "@app/Types/Socket";
+}                          from "@app/Types/Socket";
 
 "asdasd".contains( "asd" );
 
@@ -62,14 +60,6 @@ global.SocketIO = new Server<ListenEvents, EmitEvents>( HttpServer, {
 Api.use( express.json() );
 Api.use( express.static( path.join( __basedir, "build" ) ) );
 
-const Connection = async(
-	socket : Socket<ListenEvents, EmitEvents, DefaultEventsMap, any>
-) => {
-	socket.emit( "Connect" );
-};
-
-SocketIO.on( "connection", Connection );
-
 Api.use( function( req, res, next ) {
 	res.setHeader( "Access-Control-Allow-Origin", "*" );
 	res.setHeader( "Access-Control-Allow-Methods", "GET, POST" );
@@ -92,6 +82,8 @@ mongoose
 		}
 	)
 	.then( async() => {
+		SystemLib.Log( "socketio", "Install socket listener" );
+		await import("@server/socketIO");
 		if ( ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs() !== "" ) {
 			global.__PublicIP = ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs();
 		}

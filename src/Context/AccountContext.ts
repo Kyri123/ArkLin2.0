@@ -2,7 +2,7 @@ import { createContext } from "react";
 import User              from "../Lib/User.Lib";
 
 export default createContext<{
-	Account : User;
+	user : User;
 }>( {
-	Account: new User( "" )
+	user: new User( "" )
 } );

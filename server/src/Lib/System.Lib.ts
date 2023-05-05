@@ -1,8 +1,9 @@
-import process      from "process";
-import Util         from "util";
-import fs           from "fs";
-import * as console from "console";
-import * as dotenv  from "dotenv";
+import process           from "process";
+import Util              from "util";
+import fs                from "fs";
+import * as console      from "console";
+import * as dotenv       from "dotenv";
+import { ConfigManager } from "@server/Lib/ConfigManager.Lib";
 
 export type BashColorString =
 	| "Default"
@@ -27,15 +28,12 @@ export class SystemLib_Class {
 	private readonly UseDebug : boolean;
 
 	static IsDev() : boolean {
-		return process.env.NODE_ENV !== "production";
+		return process.env.NODE_ENV !== "production" || ConfigManager.GetDebugConfig.UseDebug;
 	}
 
 	constructor() {
-		this.IsDevMode = process.argv[ 2 ] === "true";
-		this.UseDebug =
-			process.argv[ 2 ] === "true" ||
-			process.argv[ 2 ] === "Debug" ||
-			process.argv[ 2 ] === "development";
+		this.IsDevMode = SystemLib_Class.IsDev();
+		this.UseDebug = SystemLib_Class.IsDev();
 
 		this.DebugLog( "SYSTEM", "Try to load:", ".env" );
 		dotenv.config();
@@ -108,6 +106,7 @@ export class SystemLib_Class {
 	public WriteStringToLog( ...Log : any[] ) : void {
 		Log.push( "\n" );
 		const OutLog : string = Util.format( ...Log );
+
 		let CurrentLog = "";
 		if ( fs.existsSync( __LogFile ) ) {
 			CurrentLog = fs.readFileSync( __LogFile ).toString();
@@ -118,6 +117,10 @@ export class SystemLib_Class {
 
 	public DebugLog( Prefix : string, ...data : any[] ) {
 		if ( this.DebugMode() ) {
+			if ( ConfigManager.GetDebugConfig.FilterDebug.some( e => `[${ Prefix.toUpperCase() }]`.includes( `[${ e }]`.toUpperCase() ) ) ) {
+				return;
+			}
+
 			data.addAtIndex(
 				`${ this.ToBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
 			);
@@ -174,22 +177,6 @@ export class SystemLib_Class {
 		console.error( ...data );
 		this.WriteStringToLog( ...data );
 		process.exit();
-	}
-
-	public CustomLog(
-		Color : BashColorString,
-		Key : string,
-		IsFata : boolean,
-		...data : any[]
-	) {
-		data.addAtIndex(
-			this.ToBashColor( Color ) + `[${ new Date().toUTCString() }][${ Key }]\x1B[0m`
-		);
-		console.error( ...data );
-		this.WriteStringToLog( ...data );
-		if ( IsFata ) {
-			process.exit();
-		}
 	}
 }
 

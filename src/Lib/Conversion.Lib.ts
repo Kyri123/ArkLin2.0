@@ -1,7 +1,7 @@
-import type { TLTEColors } from "@app/Types/AdminLTE";
-import { EServerState }    from "@shared/Enum/EServerState";
+import type { Variant } from "@app/Types/AdminLTE";
+import { EServerState } from "@shared/Enum/EServerState";
 
-export function GenerateIconFromColor( Type : TLTEColors ) : any {
+export function GenerateIconFromColor( Type : Variant ) : any {
 	switch ( Type ) {
 		case "danger":
 			break;

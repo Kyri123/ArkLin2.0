@@ -25,7 +25,7 @@ export default new JobTask(
 	"Github",
 	async() => {
 		SystemLib.DebugLog(
-			"TASKS ", "Running Task",
+			"TASKS", "Running Task",
 			BC( "Red" ),
 			"Github"
 		);

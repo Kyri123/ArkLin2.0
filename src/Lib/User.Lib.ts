@@ -1,5 +1,8 @@
 import type { TPermissions }      from "@shared/Enum/User.Enum";
-import { EPerm }                  from "@shared/Enum/User.Enum";
+import {
+	EPerm,
+	GetEnumValue
+}                                 from "@shared/Enum/User.Enum";
 import jwt                        from "jwt-decode";
 import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
 
@@ -37,17 +40,15 @@ export default class User {
 
 	public HasPermission( Permission : TPermissions ) : boolean {
 		return (
-			this.Data?.permissions?.includes( EPerm.Super ) ||
-			this.Data?.permissions?.includes( Permission ) ||
-			false
+			this.Data?.permissions?.includes( GetEnumValue( EPerm.Super ) ) ||
+			this.Data?.permissions?.includes( GetEnumValue( Permission ) )
 		);
 	}
 
 	public HasPermissionForServer( ServerName : string ) : boolean {
 		return (
-			this.Data?.permissions?.includes( EPerm.Super ) ||
-			this.Data?.servers?.includes( ServerName ) ||
-			false
+			this.Data?.permissions?.includes( GetEnumValue( EPerm.Super ) ) ||
+			this.Data?.servers?.includes( ServerName )
 		);
 	}
 

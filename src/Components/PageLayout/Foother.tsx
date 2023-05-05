@@ -1,8 +1,8 @@
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import type { SystemUsage } from "@shared/Type/Systeminformation";
-import { Link }             from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link }            from "react-router-dom";
+import type { SystemUsage }     from "@server/MongoDB/DB_Usage";
 
-export default function CFoother( Props : { SystemUsage : SystemUsage } ) {
+export default function Foother( Props : { SystemUsage : SystemUsage } ) {
 	return (
 		<>
 			<div className="bottom-0">

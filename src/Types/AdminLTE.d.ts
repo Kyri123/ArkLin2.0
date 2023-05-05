@@ -1,54 +1,17 @@
 /** @format */
 
-import type { IconProp }   from "@fortawesome/fontawesome-svg-core";
-import type React, {
-	HTMLAttributeAnchorTarget,
-	HTMLInputTypeAttribute
-}                          from "react";
-import type { Variant }    from "react-bootstrap/types";
-import type { TLTEColors } from "@shared/Type/AdminLTE";
+import type { IconProp }                         from "@fortawesome/fontawesome-svg-core";
+import type React, { HTMLAttributeAnchorTarget } from "react";
+import type { Variant }                          from "react-bootstrap/types";
 import type {
 	IChildrenBaseProps,
 	IPropsWithPermission
-}                          from "./BaseTypes";
-import type { Button }     from "react-bootstrap";
-import type { CardProps }  from "react-bootstrap/Card";
-
-export type TLTEColors =
-	| "danger"
-	| "success"
-	| "info"
-	| "primary"
-	| "secondary"
-	| "black"
-	| "gray-dark"
-	| "light"
-	| "indigo"
-	| "warning"
-	| "light-blue"
-	| "navy"
-	| "purple"
-	| "fuchsia"
-	| "pink"
-	| "maroon"
-	| "orange"
-	| "lime"
-	| "teal"
-	| "olive";
-
-
-export type TFormOutline = "is-valid" | "is-warning" | "is-invalid" | "";
-
-export interface IInputWithIcon extends IChildrenBaseProps {
-	Icon : IconProp;
-	InputType : HTMLInputTypeAttribute;
-	Name : string;
-	Placeholder? : string;
-	Outline? : TFormOutline;
-}
+}                                                from "./BaseTypes";
+import type { Button }                           from "react-bootstrap";
+import type { CardProps }                        from "react-bootstrap/Card";
 
 export type IStateCardProps = CardProps & IPropsWithPermission & {
-	Color : TLTEColors;
+	Color : Variant;
 	BarPercent : number;
 	Title : string;
 	Icon : IconProp;

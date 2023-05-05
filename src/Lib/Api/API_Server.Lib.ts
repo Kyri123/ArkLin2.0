@@ -12,9 +12,9 @@ import type {
 	TResponse_Server_Setpanelconfig,
 	TResponse_Server_Setserverconfig
 }                                   from "@app/Types/API_Response";
-import type { EArkmanagerCommands } from "../ServerUtils.Lib";
+import type { EArkmanagerCommands } from "../serverUtils";
 import { EServerUrl }               from "@shared/Enum/Routing";
-import type { PanelServerConfig }        from "@app/Types/ArkSE";
+import type { PanelServerConfig }   from "@app/Types/ArkSE";
 
 export class API_ServerLib {
 	static async SetServerConfig(

@@ -5,14 +5,14 @@ import type {
 	PropsWithChildren
 }                            from "react";
 import type { TPermissions } from "@shared/Enum/User.Enum";
-import type { TLTEColors }   from "@shared/Type/AdminLTE";
+import type { Variant }      from "@shared/Type/AdminLTE";
 
 export interface IAdminLTEBase extends IChildrenBaseProps {
-	Color? : TLTEColors;
+	Color? : Variant;
 }
 
 export interface IAdminLTEBaseT<T> extends IChildrenBasePropsT<T> {
-	BtnColor? : TLTEColors;
+	BtnColor? : Variant;
 }
 
 export interface IChildrenBasePropsT<T> extends HTMLAttributes<T> {

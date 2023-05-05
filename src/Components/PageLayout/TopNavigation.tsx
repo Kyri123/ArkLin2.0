@@ -6,15 +6,15 @@ import {
 import { Dropdown }         from "react-bootstrap";
 import * as Icon            from "react-icons/bs";
 import { Link }             from "react-router-dom";
-import AccountContext       from "@context/AccountContext";
 import ServerContext        from "@context/ServerContext";
-import useAuth              from "../../../../Hooks/useAuth";
-import { API_PanelLib }     from "../../../../Lib/Api/API_Panel.Lib";
+import useAuth              from "@hooks/useAuth";
+import { API_PanelLib }     from "@app/Lib/Api/API_Panel.Lib";
 import { EPerm }            from "@shared/Enum/User.Enum";
-import type { SystemUsage } from "@shared/Type/Systeminformation";
-import CServerCard          from "../Server/ServerCard";
+import CServerCard          from "@page/MainApp/PageComponents/Server/ServerCard";
+import useAccount           from "@hooks/useAccount";
+import type { SystemUsage } from "@server/MongoDB/DB_Usage";
 
-export default function CTopNavigation( Props : {
+export default function TopNavigation( Props : {
 	SystemUsage : SystemUsage;
 	ServerState : [ number, number ];
 	ShowLog : ( Value : boolean ) => void;
@@ -22,7 +22,7 @@ export default function CTopNavigation( Props : {
 	const ID = useId();
 	const { InstanceData } = useContext( ServerContext );
 	const { Logout } = useAuth();
-	const { Account } = useContext( AccountContext );
+	const { user } = useAccount();
 
 	const ToggleSidebar = () => {
 		const Sidebar = window.document.getElementById( "Sidebar" );
@@ -49,7 +49,7 @@ export default function CTopNavigation( Props : {
 							<FontAwesomeIcon icon={ "bars" } className={ "me-2" }/>
 							Navigation
 						</Link>
-						{ Account.HasPermission( EPerm.PanelSettings ) && (
+						{ user.HasPermission( EPerm.PanelSettings ) && (
 							<div className="dropdown text-end ms-2">
 								<Link
 									to="#"
@@ -85,7 +85,7 @@ export default function CTopNavigation( Props : {
 										<Icon.BsClipboard className={ "pe-2" } size={ 22 }/>
 										Panel Log
 									</button>
-									{ Account.HasPermission( EPerm.PanelSettings ) && (
+									{ user.HasPermission( EPerm.PanelSettings ) && (
 										<Link
 											to="/paneladmin"
 											className="dropdown-item"
@@ -150,7 +150,7 @@ export default function CTopNavigation( Props : {
 							aria-expanded="false"
 						>
 							<Icon.BsPeople className={ "me-2" }/>
-							{ Account.GetDBInformation().username }
+							{ user.Get.username }
 						</Link>
 						<div
 							className="dropdown-menu flex-column flex-lg-row align-items-stretch justify-content-start p-3 rounded-3 shadow-lg"

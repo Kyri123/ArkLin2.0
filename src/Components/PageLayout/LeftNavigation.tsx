@@ -1,21 +1,20 @@
-import { useContext } from "react";
-import { Nav }        from "react-bootstrap";
+import { Nav }    from "react-bootstrap";
 import {
 	BsHddNetwork,
 	BsHouseDoor,
 	BsPeople,
 	BsServer
-}                     from "react-icons/bs";
+}                 from "react-icons/bs";
 import {
 	Link,
 	useLocation
-}                     from "react-router-dom";
-import AccountContext from "@context/AccountContext";
-import { EPerm }      from "@shared/Enum/User.Enum";
+}                 from "react-router-dom";
+import { EPerm }  from "@shared/Enum/User.Enum";
+import useAccount from "@hooks/useAccount";
 
-export default function CLeftNavigation() {
+export default function LeftNavigation() {
 	const { pathname } = useLocation();
-	const { Account } = useContext( AccountContext );
+	const { user } = useAccount();
 
 	return (
 		<div
@@ -24,7 +23,7 @@ export default function CLeftNavigation() {
 			style={ { width: 280 } }
 		>
 			<Link
-				to="/home"
+				to="/app"
 				className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
 			>
 				<img
@@ -39,21 +38,21 @@ export default function CLeftNavigation() {
 			<Nav as="ul" variant="pills" className={ "mb-auto flex-column nav-pills" }>
 				<Nav.Item as="li" className="">
 					<Link
-						to="/home"
+						to="/app"
 						className={ `nav-link ${
-							pathname.endsWith( "/home" ) ? "active" : ""
+							pathname.endsWith( "/app" ) ? "active" : ""
 						} text-white` }>
 						<BsHouseDoor size={ 17 } className={ "me-1" }/>
 						Startseite
 					</Link>
 				</Nav.Item>
 
-				{ Account.HasPermission( EPerm.ManageCluster ) && (
+				{ user.HasPermission( EPerm.ManageCluster ) && (
 					<Nav.Item as="li" className="mt-2">
 						<Link
-							to="/cluster"
+							to="/app/cluster"
 							className={ `nav-link ${
-								pathname.endsWith( "/cluster" ) ? "active" : ""
+								pathname.endsWith( "/app/cluster" ) ? "active" : ""
 							} text-white` }>
 							<BsHddNetwork size={ 17 } className={ "me-1" }/>
 							Cluster
@@ -61,12 +60,12 @@ export default function CLeftNavigation() {
 					</Nav.Item>
 				) }
 
-				{ Account.HasPermission( EPerm.Super ) && (
+				{ user.HasPermission( EPerm.Super ) && (
 					<Nav.Item as="li" className="mt-2">
 						<Link
-							to="/users"
+							to="/app/users"
 							className={ `nav-link ${
-								pathname.endsWith( "/users" ) ? "active" : ""
+								pathname.endsWith( "/app/users" ) ? "active" : ""
 							} text-white` }>
 							<BsPeople size={ 17 } className={ "me-1" }/>
 							Benutzer
@@ -74,12 +73,12 @@ export default function CLeftNavigation() {
 					</Nav.Item>
 				) }
 
-				{ Account.HasPermission( EPerm.Super ) && (
+				{ user.HasPermission( EPerm.Super ) && (
 					<Nav.Item as="li" className="mt-2">
 						<Link
-							to="/adminserver"
+							to="/app/adminserver"
 							className={ `nav-link ${
-								pathname.endsWith( "/adminserver" ) ? "active" : ""
+								pathname.endsWith( "/app/adminserver" ) ? "active" : ""
 							} text-white` }
 						>
 							<BsServer size={ 17 } className={ "me-1" }/>

@@ -14,8 +14,8 @@ import type {
 	TRequest_Cluster_SendCommandToCluster,
 	TRequest_Cluster_SetCluster
 }                                   from "@app/Types/API_Request";
-import type { EArkmanagerCommands } from "../ServerUtils.Lib";
-import type { Cluster }                  from "@server/MongoDB/DB_Cluster";
+import type { EArkmanagerCommands } from "../serverUtils";
+import type { Cluster }             from "@server/MongoDB/DB_Cluster";
 
 export class API_ClusterLib {
 	static async SetCluster(

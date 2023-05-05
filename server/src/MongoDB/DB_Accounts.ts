@@ -1,10 +1,9 @@
-import * as mongoose         from "mongoose";
-import crypto                from "crypto";
-import type { TPermissions } from "@shared/Enum/User.Enum";
-import type { MongoBase }    from "@app/Types/MongoDB";
-import type { JwtPayload }   from "jwt-decode";
-import { MakeRandomString }  from "@kyri123/k-javascript-utils";
-import { z }                 from "zod";
+import * as mongoose        from "mongoose";
+import crypto               from "crypto";
+import type { MongoBase }   from "@app/Types/MongoDB";
+import type { JwtPayload }  from "jwt-decode";
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import { z }                from "zod";
 
 const ZodUserAccountSchema = z.object( {
 	username: z.string(),
@@ -49,7 +48,7 @@ const UserAccountSchema = new mongoose.Schema( {
 } );
 
 interface UserAccountInterface extends z.infer<typeof ZodUserAccountSchema> {
-	permissions : TPermissions[];
+	permissions : string[];
 }
 
 export type UserAccount = UserAccountInterface & MongoBase;

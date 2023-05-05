@@ -4,6 +4,10 @@ import type * as trpcExpress from "@trpc/server/adapters/express";
 import type User             from "@app/Lib/User.Lib";
 import superjson             from "superjson";
 import { z }                 from "zod";
+import type { Instance }     from "@server/MongoDB/DB_Instances";
+import DB_Instances          from "@server/MongoDB/DB_Instances";
+import type { TPermissions } from "@shared/Enum/User.Enum";
+import { EPerm }             from "@shared/Enum/User.Enum";
 
 export function handleTRCPErr( e : unknown ) {
 	if ( e instanceof TRPCError ) {
@@ -34,10 +38,45 @@ const t = trpc.initTRPC.context<Context>().create( {
 	isDev: SystemLib.IsDevMode
 } );
 
+export const middleware = t.middleware;
+
+export const serverOwnerMiddleware = middleware( async( opts ) => {
+	const { instanceName } = opts.input as any;
+
+	if ( !instanceName ) {
+		throw new TRPCError( { code: "BAD_REQUEST", message: "Server ID is required." } );
+	}
+
+	try {
+		const server = await DB_Instances.findOne( { Instance: instanceName } );
+		if ( server ) {
+			return opts.next( {
+				ctx: {
+					server: server.toJSON() as Instance
+				}
+			} );
+		}
+	}
+	catch ( e ) {
+	}
+	throw new TRPCError( { code: "BAD_REQUEST", message: "Server ID was not found." } );
+} );
+
+export const permissionMiddleware = ( permission : TPermissions ) => middleware( async( opts ) => {
+	const { userClass } = opts.ctx;
+
+	if ( !userClass || !userClass.HasPermission( permission ) ) {
+		throw new TRPCError( { code: "UNAUTHORIZED", message: "Server ID is required." } );
+	}
+
+	return opts.next();
+} );
+
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
 export const authProcedure = t.procedure;
+export const superAdminProcedure = t.procedure.use( permissionMiddleware( EPerm.Super ) );
 export const serverProcedure = t.procedure.input( z.object( {
-	instance: z.string()
-} ) );
+	instanceName: z.string()
+} ) ).use( serverOwnerMiddleware );

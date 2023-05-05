@@ -6,7 +6,7 @@ import type {
 import fs                           from "fs";
 import * as ini                     from "ini";
 import path                         from "path";
-import type { EArkmanagerCommands } from "@app/Lib/ServerUtils.Lib";
+import type { EArkmanagerCommands } from "@app/Lib/serverUtils";
 import {
 	DefaultInstanceState,
 	GetDefaultPanelServerConfig

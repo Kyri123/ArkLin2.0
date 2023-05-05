@@ -1,5 +1,5 @@
 /** @format */
-import type { TLTEColors }           from "./AdminLTE";
+import type { Variant }              from "./AdminLTE";
 import type { IAccountInformations } from "./User";
 import type {
 	GithubBranche,
@@ -30,7 +30,7 @@ export type IAPIResponseBase<MessageOpt extends boolean = false, T = any> =
 export interface IAPIResponseMessage {
 	Title : string;
 	Message : string;
-	AlertType : TLTEColors;
+	AlertType : Variant;
 }
 
 export type TResponse_AnyData<MessageOpt extends boolean = false> = IAPIResponseBase<MessageOpt>;
