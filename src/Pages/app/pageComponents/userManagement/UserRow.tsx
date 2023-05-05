@@ -22,13 +22,18 @@ import ServerContext        from "@context/ServerContext";
 import { useToggle }        from "@kyri123/k-reactutils";
 import useAccount           from "@hooks/useAccount";
 import type { UserAccount } from "@server/MongoDB/DB_Accounts";
+import {
+	fireSwalFromApi,
+	tRPC_Auth,
+	tRPC_handleError
+}                           from "@app/Lib/tRPC";
 
 interface IProps {
 	User : UserAccount;
 	refresh : () => void;
 }
 
-const UserRow : React.FunctionComponent<IProps> = ( { User } ) => {
+const UserRow : React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 	const { user } = useAccount();
 	const { InstanceData } = useContext( ServerContext );
 	const [ Form, setForm ] = useState<UserAccount>( () => User );
@@ -37,13 +42,41 @@ const UserRow : React.FunctionComponent<IProps> = ( { User } ) => {
 	const [ permissionModal, togglePermissionModal ] = useToggle( false );
 	const [ SelectedPermission, setSelectedPermission ] = useState<any>( EPerm );
 
-	const SetAllowedServer = async() => {
+	const SetPermissions = async() => {
+		setIsSending( true );
+		const result = await tRPC_Auth.admin.account.updatePermissions.mutate( {
+			accountId: User._id!,
+			permissions: Form.permissions,
+			servers: Form.servers
+		} ).catch( tRPC_handleError );
+		if ( result ) {
+			fireSwalFromApi( result, true );
+			await refresh();
+		}
+		setIsSending( false );
 	};
 
-	const SetPermissions = async() => {
+	const SetAllowedServer = async() => {
+		await SetPermissions();
 	};
 
 	const RemoveUser = async() => {
+		setIsSending( true );
+		const accept = await fireSwalFromApi( "Möchtest du wirklich diesen Benutzer löschen?", "question", {
+			showConfirmButton: true,
+			showCancelButton: true,
+			confirmButtonText: "Ja",
+			cancelButtonText: "Nein",
+			timer: 5000
+		} );
+		if ( accept?.isConfirmed ) {
+			const result = await tRPC_Auth.admin.account.removeAccount.mutate( User._id! ).catch( tRPC_handleError );
+			if ( result ) {
+				fireSwalFromApi( result, true );
+				await refresh();
+			}
+		}
+		setIsSending( false );
 	};
 
 	return (

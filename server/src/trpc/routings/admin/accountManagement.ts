@@ -37,6 +37,33 @@ export const auth_accountManagement = router( {
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
 	} ),
 
+	removeAccount: superAdminProcedure.input( z.string() ).mutation( async( { input } ) => {
+		try {
+			await DB_Accounts.findByIdAndDelete( input );
+			return "Account wurde entfernt";
+		}
+		catch ( e ) {
+			handleTRCPErr( e );
+		}
+		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
+	} ),
+
+	updatePermissions: superAdminProcedure.input( z.object( {
+		accountId: z.string( z.string() ),
+		servers: z.array( z.string() ),
+		permissions: z.array( z.string() )
+	} ) ).mutation( async( { input } ) => {
+		const { accountId, servers, permissions } = input;
+		try {
+			await DB_Accounts.findByIdAndUpdate( accountId, { servers, permissions } );
+			return "Account wurde bearbeitet";
+		}
+		catch ( e ) {
+			handleTRCPErr( e );
+		}
+		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
+	} ),
+
 	getalluser: superAdminProcedure.input( z.object( {
 		skip: z.number().optional(),
 		limit: z.number().optional()

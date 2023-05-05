@@ -66,7 +66,7 @@ export const permissionMiddleware = ( permission : TPermissions ) => middleware(
 	const { userClass } = opts.ctx;
 
 	if ( !userClass || !userClass.HasPermission( permission ) ) {
-		throw new TRPCError( { code: "UNAUTHORIZED", message: "Server ID is required." } );
+		throw new TRPCError( { code: "UNAUTHORIZED", message: "Permission is required." } );
 	}
 
 	return opts.next();

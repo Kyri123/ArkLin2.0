@@ -44,7 +44,6 @@ const AccountKeyManager : FunctionComponent<AccountKeyManagerProps> = ( { show, 
 
 	const { setPage, currentPage, maxPage, refresh } = useRawPageHandler( total, onPageChange, 10 );
 
-	console.log( maxPage, total );
 	const createAccountKey = async() => {
 		setIsSending( true );
 		const result = await tRPC_Auth.admin.account.createAccountKey.mutate( asAdminKey ).catch( tRPC_handleError );
