@@ -3,6 +3,10 @@ import "./InitDirs";
 import { InstallRoutings } from "./Init";
 import * as path           from "path";
 import "./Lib/System.Lib";
+import type {
+	Request,
+	Response
+}                          from "express";
 import express             from "express";
 import * as http           from "http";
 import { Server }          from "socket.io";
@@ -83,7 +87,11 @@ mongoose
 	)
 	.then( async() => {
 		SystemLib.Log( "socketio", "Install socket listener" );
+
 		await import("@server/socketIO");
+
+		Api.use( "*", ( req : Request, res : Response ) => res.sendFile( path.join( __basedir, "build/index.html" ) ) );
+
 		if ( ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs() !== "" ) {
 			global.__PublicIP = ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs();
 		}
@@ -109,6 +117,7 @@ mongoose
 				"KAdmin-ArkLIN2"
 			);
 		}
+
 
 		// start Tasks
 		await TaskManager.Init();
