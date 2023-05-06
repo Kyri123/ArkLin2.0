@@ -74,7 +74,11 @@ const rootRouter = createBrowserRouter( [
 							},
 							{
 								path: "/app/server/:instanceName/mods",
-								lazy: async() => await import("@page/app/server/[instanceName]/mods")
+								lazy: async() => await import("@page/app/server/[instanceName]/mods"),
+								loader: async( { request, params } ) => {
+									const { loader } = await import( "@page/app/loader/server/mods" );
+									return loader( { request, params } );
+								}
 							},
 							{
 								path: "/app/server/:instanceName/config",

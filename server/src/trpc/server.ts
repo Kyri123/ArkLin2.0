@@ -18,6 +18,7 @@ import { auth_user }              from "@server/trpc/routings/auth/user";
 import { auth_clusterManagement } from "@server/trpc/routings/auth/clusterManagement";
 import { auth_logs }              from "@server/trpc/routings/auth/logs";
 import { auth_serverConfig }      from "@server/trpc/routings/auth/config";
+import { auth_steamapi }          from "@server/trpc/routings/auth/steamapi";
 
 
 const publicRouter = router( {
@@ -35,7 +36,8 @@ const authRouter = router( {
 		clusterManagement: auth_clusterManagement,
 		action: auth_serverAction,
 		log: auth_logs,
-		config: auth_serverConfig
+		config: auth_serverConfig,
+		api: auth_steamapi
 	} ),
 	admin: router( {
 		account: auth_accountManagement

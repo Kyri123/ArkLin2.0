@@ -61,7 +61,6 @@ Api.use( express.json() );
 Api.use( express.static( path.join( __basedir, "build" ) ) );
 
 Api.use( function( req, res, next ) {
-	console.log( req.path );
 	res.setHeader( "Access-Control-Allow-Origin", "*" );
 	res.setHeader( "Access-Control-Allow-Methods", "GET, POST" );
 	res.setHeader(

@@ -9,7 +9,7 @@ import type { ISteamApiMod } from "@app/Types/SteamAPI";
 import { BC }                from "@server/Lib/System.Lib";
 
 export default new JobTask(
-	ConfigManager.GetTaskConfig.DataCleanerInterval,
+	ConfigManager.GetTaskConfig.SteamAPIQuery,
 	"SteamAPI",
 	async() => {
 		// Clear old Sessions

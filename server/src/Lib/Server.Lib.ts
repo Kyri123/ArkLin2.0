@@ -201,6 +201,11 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return this.MongoDBData?.ArkmanagerCfg!;
 	}
 
+	async GetDb() : Promise<Instance | null> {
+		return ( await DB_Instances.findById( this.MongoDBData!._id ).catch( () => {
+		} ) )?.toJSON() as Instance || null;
+	}
+
 	async ExecuteCommand(
 		Command : EArkmanagerCommands,
 		Params : string[] = []
@@ -269,7 +274,12 @@ export class ServerLib<Ready extends boolean = boolean> {
 					Document.markModified( `${ SubDocumentKey }` );
 				}
 
-				await Document.save();
+				if ( await Document.save() ) {
+					const data = await this.GetDb();
+					if ( data ) {
+						SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: data } );
+					}
+				}
 				await this.Init();
 			}
 		}

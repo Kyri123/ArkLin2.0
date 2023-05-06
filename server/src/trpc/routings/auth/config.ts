@@ -8,6 +8,7 @@ import {
 	string,
 	z
 }                    from "zod";
+import _             from "lodash";
 
 export const auth_serverConfig = router( {
 	updateConfigClearText: serverProcedure.input( z.object( {
@@ -19,6 +20,25 @@ export const auth_serverConfig = router( {
 		try {
 			server.SetServerConfigRaw( file, content );
 			return "Konfiguration wurde erfolgreich gespeichert";
+		}
+		catch ( e ) {
+			handleTRCPErr( e );
+		}
+		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
+	} ),
+
+	updateMods: serverProcedure.input( z.object( {
+		mods: z.array( z.number() )
+	} ) ).mutation( async( { ctx, input } ) => {
+		const { mods } = input;
+		const { server } = ctx;
+		try {
+			const config = _.cloneDeep( server.GetConfig() );
+			config.ark_GameModIds = mods;
+
+			if ( await server.SetServerConfig( "arkmanager.cfg", config ) ) {
+				return "Mods bearbeitet";
+			}
 		}
 		catch ( e ) {
 			handleTRCPErr( e );

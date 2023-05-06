@@ -1,119 +1,66 @@
-import type React                from "react";
-import { useState }              from "react";
-import type { ISteamApiMod }     from "@app/Types/SteamAPI";
-import { useArkServer }          from "@hooks/useArkServer";
-import { API_ServerLib }         from "@app/Lib/Api/API_Server.Lib";
-import { Link }                  from "react-router-dom";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
-import { IconButton }            from "@comp/Elements/Buttons";
-import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
+import type React          from "react";
+import { useArkServer }    from "@hooks/useArkServer";
+import { Link }            from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconButton }      from "@comp/Elements/Buttons";
+import type { SteamMod }   from "@server/MongoDB/DB_SteamAPI_Mods";
+import _                   from "lodash";
+import { onConfirm }       from "@app/Lib/tRPC";
 
 interface IProps {
+	setMods : ( mods : number[], asToast? : boolean ) => Promise<void>,
+	allMods : number[],
+	isSending : boolean;
 	ModId : number;
-	ModData : ISteamApiMod | undefined;
+	ModData : SteamMod | undefined;
 	InstanceName : string;
 	ModIndex : number;
 }
 
 const PCServerModsRow : React.FunctionComponent<IProps> = ( {
+	setMods,
+	allMods,
+	isSending,
 	ModId,
 	ModData,
 	InstanceName,
 	ModIndex
 } ) => {
-	const { Data, TempModify } = useArkServer( InstanceName );
-	const [ IsSending, setIsSending ] = useState( false );
-	const [ IsSendingMove, setIsSendingMove ] = useState( false );
-
+	const { Data } = useArkServer( InstanceName );
 	const RemoveMod = async() => {
-		setIsSending( true );
-
-		if ( !Data.ark_GameModIds.includes( ModId ) ) {
-			DoSetAlert( {
-				...DefaultResponseFailed,
-				Message: {
-					Message: `Die Mod mit der ID ${ ModId } wurde bereits entfernt!`,
-					Title: "Achtung!",
-					AlertType: "warning"
-				}
-			} );
-			setIsSending( false );
-			return;
+		if ( await onConfirm( "Möchtest du diese mod wirklich entfernen?" ) ) {
+			const mods = _.clone( allMods );
+			mods.splice( ModIndex, 1 );
+			await setMods( mods );
 		}
-
-		const CopyData = {
-			...Data
-		};
-
-		CopyData.ark_GameModIds = [
-			...new Set( CopyData.ark_GameModIds.filter( ( E ) => E !== ModId ) )
-		];
-		const Result = await API_ServerLib.SetServerConfig(
-			InstanceName,
-			"Arkmanager.cfg",
-			CopyData
-		);
-		if ( Result.Success ) {
-			TempModify( ( Current ) => ( {
-				...Current,
-				ArkmanagerCfg: CopyData
-			} ) );
-		}
-		DoSetAlert( Result );
-
-		setIsSending( false );
 	};
 
 	const MoveMod = async( IndexOffset : 1 | -1 ) => {
-		setIsSendingMove( true );
-
-		const NewIndex = Math.max(
-			0,
-			Math.min( Data.ark_GameModIds.length - 1, IndexOffset + ModIndex )
-		);
-
-		const CopyData = {
-			...Data
-		};
-		const ID = CopyData.ark_GameModIds.splice( ModIndex, 1 )[ 0 ];
-		CopyData.ark_GameModIds.splice( NewIndex, 0, ID );
-
-		CopyData.ark_GameModIds = [ ...new Set( CopyData.ark_GameModIds ) ];
-		const Result = await API_ServerLib.SetServerConfig(
-			InstanceName,
-			"Arkmanager.cfg",
-			CopyData
-		);
-		if ( Result.Success ) {
-			TempModify( ( Current ) => ( {
-				...Current,
-				ArkmanagerCfg: CopyData
-			} ) );
+		if ( ModIndex + IndexOffset >= 0 && ModIndex + IndexOffset < allMods.length ) {
+			const mods = _.clone( allMods );
+			mods.swapElements( ModIndex, ModIndex + IndexOffset );
+			await setMods( mods, true );
 		}
-		DoSetAlert( Result );
-
-		setIsSendingMove( false );
 	};
+
 
 	return (
 		<tr>
 			<td width="20px" className="p-0">
 				<IconButton
-					IsLoading={ IsSendingMove }
-					id="FB_upload"
+					IsLoading={ isSending }
 					variant={ "gray-dark" }
-					disabled={ ModIndex - 1 < 0 }
+					ForceDisable={ !( ModIndex - 1 >= 0 ) }
 					onClick={ () => MoveMod( -1 ) }
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-up" }/>
 				</IconButton>
 				<IconButton
-					IsLoading={ IsSendingMove }
-					id="FB_upload"
+					IsLoading={ isSending }
 					variant={ "gray-dark" }
 					onClick={ () => MoveMod( 1 ) }
-					disabled={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
+					ForceDisable={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
 					className="btn btn-sm flat text-bg-dark m-0"
 				>
 					<FontAwesomeIcon icon={ "arrow-down" }/>
@@ -151,8 +98,8 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 			<td style={ { width: 0 } } className="p-0">
 				<div className="btn-group">
 					<IconButton
-						IsLoading={ IsSending }
-						className="btn btn-danger m-0"
+						IsLoading={ isSending }
+						className="btn btn-danger m-0 flat"
 						onClick={ RemoveMod }
 					>
 						<FontAwesomeIcon icon={ "trash-alt" }/> Entfernen

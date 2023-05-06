@@ -1,44 +1,51 @@
-import type React            from "react";
+import type React                     from "react";
 import {
-	useEffect,
 	useId,
+	useMemo,
 	useRef,
 	useState
-}                            from "react";
-import { useArkServer }      from "@hooks/useArkServer";
+}                                     from "react";
+import { useArkServer }               from "@hooks/useArkServer";
 import {
 	Card,
 	FormControl,
 	InputGroup,
 	Table
-}                            from "react-bootstrap";
-import { IconButton }        from "@comp/Elements/Buttons";
-import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
-import PCServerModsRow       from "../../pageComponents/server/PCServerModsRow";
-import type { Socket }       from "socket.io-client";
-import io                    from "socket.io-client";
-import { SocketIOLib }       from "@app/Lib/Api/SocketIO.Lib";
-import type { ISteamApiMod } from "@app/Types/SteamAPI";
-import { useParams }         from "react-router-dom";
-import type {
-	EmitEvents,
-	ListenEvents
-}                            from "@app/Types/Socket";
+}                                     from "react-bootstrap";
+import { IconButton }                 from "@comp/Elements/Buttons";
+import { FontAwesomeIcon }            from "@fortawesome/react-fontawesome";
+import PCServerModsRow                from "../../pageComponents/server/PCServerModsRow";
+import {
+	useLoaderData,
+	useParams
+}                                     from "react-router-dom";
+import type { ServerModsLoaderProps } from "@page/app/loader/server/mods";
+import type { SteamMod }              from "@server/MongoDB/DB_SteamAPI_Mods";
+import _                              from "lodash";
+import {
+	fireSwalFromApi,
+	successSwal,
+	tRPC_Auth,
+	tRPC_handleError
+}                                     from "@app/Lib/tRPC";
 
-const SocketIO : Socket<EmitEvents, ListenEvents> = io(
-	SocketIOLib.GetSpocketHost()
-);
 const Component = () => {
+	const { steamApiMods } = useLoaderData() as ServerModsLoaderProps;
 	const { instanceName } = useParams();
 	const ID = useId();
 	const { Data } = useArkServer( instanceName! );
 	const [ IsSending, setIsSending ] = useState( false );
 	const InputRef = useRef<HTMLInputElement>( null );
-	const [ SteamMods, setSteamMods ] = useState<Record<number, ISteamApiMod>>( {} );
+
+	const SteamMods = useMemo( () => {
+		const result : Record<number, SteamMod | undefined> = {};
+		for ( const modId of Data.ark_GameModIds ) {
+			result[ Number( modId ) ] = steamApiMods.find( e => Number( e.publishedfileid ) === Number( modId ) );
+		}
+		return result;
+	}, [ Data.ark_GameModIds, steamApiMods ] );
 
 	const AddMod = async( Input : string ) => {
-		setIsSending( true );
-
 		let Id = Number( Input );
 		try {
 			const AsUrl = new URL( Input );
@@ -50,34 +57,25 @@ const Component = () => {
 		}
 
 		if ( !isNaN( Id ) ) {
-			if ( Data.ark_GameModIds.includes( Id ) ) {
-				setIsSending( false );
+			if ( !Data.ark_GameModIds.includes( Id ) ) {
+				const mods = _.clone( Data.ark_GameModIds );
+				mods.push( Id );
+				await updateMods( mods );
 				return;
 			}
 
-			const CopyData = {
-				...Data
-			};
-
-			CopyData.ark_GameModIds.push( Id );
-			CopyData.ark_GameModIds = [ ...new Set( CopyData.ark_GameModIds ) ];
 		}
-		else {
-		}
-
-		setIsSending( false );
+		fireSwalFromApi( "Mod Id oder Url ist nicht richtig" );
 	};
 
-	useEffect( () => {
-		const QueryMods = () => {
-		};
-
-		QueryMods();
-		SocketIO.on( "SteamApiUpdated", QueryMods );
-		return () => {
-			SocketIO.off( "SteamApiUpdated", QueryMods );
-		};
-	}, [ Data.ark_GameModIds ] );
+	const updateMods = async( mods : number[], asToast = false ) => {
+		setIsSending( true );
+		await tRPC_Auth.server.config.updateMods.mutate( {
+			instanceName: instanceName!,
+			mods
+		} ).then( e => successSwal( e, asToast ) ).catch( tRPC_handleError );
+		setIsSending( false );
+	};
 
 	return (
 		<Card>
@@ -108,10 +106,13 @@ const Component = () => {
 						<FontAwesomeIcon icon={ "plus" }/>
 					</IconButton>
 				</InputGroup>
-				<Table striped>
+				<Table striped className="m-0">
 					<tbody>
 					{ Data.ark_GameModIds.map( ( ModId, Index ) => (
 						<PCServerModsRow
+							setMods={ updateMods }
+							allMods={ _.clone( Data.ark_GameModIds ) }
+							isSending={ IsSending }
 							key={ ID + ModId.toString() }
 							InstanceName={ instanceName! }
 							ModData={ SteamMods[ ModId ] }
