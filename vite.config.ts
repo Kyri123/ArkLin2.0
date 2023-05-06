@@ -19,6 +19,7 @@ const bootstrap = [ "react-bootstrap", "bootstrap", "icheck-bootstrap" ];
 const icons = [ "react-icons", "@fortawesome/fontawesome-svg-core", "@fortawesome/react-fontawesome" ];
 const addons = [ "react-markdown", "react-select", "lodash" ];
 const sweetalert = [ "sweetalert2", "sweetalert2-react-content" ];
+const codemirror = [ "@uiw/react-codemirror", "@uiw/codemirror-theme-gruvbox-dark", "@codemirror/lang-json" ];
 
 export default defineConfig( ( { command, mode, ssrBuild } ) => {
 	const Paths : Record<string, string[]> = JSON.parse( fs.readFileSync( resolve( __dirname, "tsconfig.json" ), "utf-8" ).toString() ).compilerOptions.paths;
@@ -60,7 +61,7 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 					chunkFileNames: `chunk/[name].[hash].js`,
 					assetFileNames: `asset/[name].[hash].[ext]`,
 					manualChunks: {
-						reactchunk, bootstrap, icons, addons, sweetalert
+						reactchunk, bootstrap, icons, addons, sweetalert, codemirror
 						//...renderChunks( dependencies )
 					}
 				}
