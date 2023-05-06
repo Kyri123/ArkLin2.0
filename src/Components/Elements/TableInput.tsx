@@ -16,7 +16,7 @@ import {
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import Select                     from "react-select";
 import type { InputSelectMask }   from "@app/Types/Systeminformation";
-import ReactMarkdown              from "react-markdown";
+
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 
@@ -130,7 +130,6 @@ export function TableInputSelectWithMask( Props : SelectProps ) {
 				)
 			: ""
 	);
-	const ID = useId();
 
 	useEffect( () => {
 		if ( SelectedValue ) {
@@ -251,8 +250,6 @@ export function TableInputSelectWithMask( Props : SelectProps ) {
 }
 
 export function TableInputToggleButton( Props : InputProps<boolean> ) {
-	const ID = useId();
-
 	if ( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
 		return <TableInputArrayField { ...Props } />;
 	}

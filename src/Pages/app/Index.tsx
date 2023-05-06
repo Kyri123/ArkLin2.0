@@ -15,7 +15,7 @@ const Component : FC = () => {
 		<>
 			<div className="flex">
 				<ol className="relative list-unstyled border-l-4 border-r-0 border-2 border-gray-800 border-start">
-					{ changelogs.map( ( Row, Index ) => (
+					{ changelogs.map( ( Row ) => (
 						<li className="ml-4" key={ "timeline" + Row._id }>
 							<div
 								className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>

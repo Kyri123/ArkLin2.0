@@ -1,4 +1,3 @@
-import type React              from "react";
 import {
 	useEffect,
 	useMemo,
@@ -53,6 +52,7 @@ const Component = () => {
 		if ( Object.keys( ConfigFiles ).length > 0 ) {
 			RequestConfigContent( Object.values( ConfigFiles )[ 0 ] );
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ ConfigFiles ] );
 
 	const GetOptions = useMemo( () => {

@@ -62,7 +62,7 @@ export const auth_serverConfig = router( {
 	} ),
 
 
-	getConfigs: serverProcedure.query( async( { ctx, input } ) => {
+	getConfigs: serverProcedure.query( async( { ctx } ) => {
 		const { server } = ctx;
 		try {
 			return server.GetConfigFiles();
