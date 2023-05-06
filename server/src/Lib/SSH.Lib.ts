@@ -7,7 +7,6 @@ import { NodeSSH }       from "node-ssh";
 import { ConfigManager } from "./ConfigManager.Lib";
 
 export class SSHLib {
-	private CrashCount = 0;
 	private HasInit = false;
 	private SSHConnection : NodeSSH = new NodeSSH();
 

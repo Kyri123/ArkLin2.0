@@ -1,9 +1,8 @@
 import type { IAPIResponseBase } from "@app/Types/API_Response";
 import type { TServerUrls }      from "@shared/Enum/Routing";
-import type { IAPIRequestBase }  from "@app/Types/API_Request";
 
 export class API_QueryLib {
-	static async PostToAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D extends IAPIRequestBase = any>(
+	static async PostToAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D = any>(
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {
@@ -47,7 +46,7 @@ export class API_QueryLib {
 		} as T;
 	}
 
-	static async GetFromAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D extends IAPIRequestBase = any>(
+	static async GetFromAPI<T extends IAPIResponseBase = IAPIResponseBase<false, any>, D = any>(
 		Path : TServerUrls,
 		Data : D = {} as D
 	) : Promise<T> {

@@ -19,7 +19,6 @@ export declare global {
 		typeof http.ServerResponse
 	>;
 	var SocketIO : Server<ListenEvents, EmitEvents, DefaultEventsMap, any>;
-	//var RedisClient : RedisClientType<RedisModules, RedisFunctions, RedisScripts>;
 	var TManager : TaskManagerClass;
 	var CManager : ConfigManagerClass;
 	var SystemLib : SystemLib_Class;
@@ -48,14 +47,6 @@ export declare global {
 			MONGODB_USER : string;
 			MONGODB_PASSWD : string;
 			MONGODB_DATABASE : string;
-			MARIADB_HOST : string;
-			MARIADB_PORT : string;
-			MARIADB_DATABASE : string;
-			MARIADB_USER : string;
-			MARIADB_PASSWORD : string;
-			REDIS_PORT : string;
-			REDIS_HOST : string;
-			REDIS_PASSWORD : string;
 			API_GAMEDIG_UDP : string;
 			API_EXPRESS_HTTP_PORT : string;
 			APPEND_BASEDIR : string;

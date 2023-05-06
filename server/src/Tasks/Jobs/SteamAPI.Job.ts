@@ -1,12 +1,12 @@
-import { JobTask }           from "../TaskManager";
-import { ConfigManager }     from "@server/Lib/ConfigManager.Lib";
+import { JobTask }                    from "../TaskManager";
+import { ConfigManager }              from "@server/Lib/ConfigManager.Lib";
 import {
 	GetAllModIds,
 	QuerySteamAPI
-}                            from "@server/Lib/SteamApi.Lib";
-import DB_SteamAPI_Mods      from "@server/MongoDB/DB_SteamAPI_Mods";
-import type { ISteamApiMod } from "@app/Types/SteamAPI";
-import { BC }                from "@server/Lib/System.Lib";
+}                                     from "@server/Lib/SteamApi.Lib";
+import type { SteamMod } from "@server/MongoDB/DB_SteamAPI_Mods";
+import DB_SteamAPI_Mods from "@server/MongoDB/DB_SteamAPI_Mods";
+import { BC }                         from "@server/Lib/System.Lib";
 
 export default new JobTask(
 	ConfigManager.GetTaskConfig.SteamAPIQuery,
@@ -33,7 +33,7 @@ export default new JobTask(
 
 			const ResultObject = JSON.parse( Response );
 			for ( const ModResult of ResultObject.response
-				.publishedfiledetails as ISteamApiMod[] ) {
+				.publishedfiledetails as SteamMod[] ) {
 				await DB_SteamAPI_Mods.findOneAndReplace(
 					{ publishedfileid: ModResult.publishedfileid },
 					ModResult,
