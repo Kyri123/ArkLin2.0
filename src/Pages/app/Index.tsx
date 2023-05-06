@@ -25,7 +25,7 @@ const Component : FC = () => {
 							<Button onClick={ () => setShowChangelog( Row ) } className="block w-full mt-2"
 							        variant="dark"
 							        size="sm"
-							        disabled={ Row._id === showChangelog._id }>
+							        disabled={ Row._id === showChangelog?._id }>
 								<h5 className="m-0 text-center">v.{ Row.tag_name }</h5>
 							</Button>
 							<hr/>
