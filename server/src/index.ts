@@ -90,8 +90,6 @@ mongoose
 
 		await import("@server/socketIO");
 
-		Api.use( "*", ( req : Request, res : Response ) => res.sendFile( path.join( __basedir, "build/index.html" ) ) );
-
 		if ( ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs() !== "" ) {
 			global.__PublicIP = ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs();
 		}
@@ -102,6 +100,9 @@ mongoose
 		}
 
 		await import( "@server/trpc/server" );
+
+		Api.use( "*", ( req : Request, res : Response ) => res.sendFile( path.join( __basedir, "build/index.html" ) ) );
+		
 		await SSHManager.Init();
 		// create an account key if no there and no user
 		if (
