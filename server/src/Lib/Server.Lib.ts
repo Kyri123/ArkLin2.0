@@ -1,33 +1,33 @@
-import { MakeRandomString }         from "@kyri123/k-javascript-utils";
+import { MakeRandomString }    from "@kyri123/k-javascript-utils";
 import type {
 	ExplIf,
 	If
-}                                   from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
-import fs                           from "fs";
-import * as ini                     from "ini";
-import path                         from "path";
-import type { EArkmanagerCommands } from "@app/Lib/serverUtils";
+}                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import fs                      from "fs";
+import * as ini                from "ini";
+import path                    from "path";
+import { EArkmanagerCommands } from "@app/Lib/serverUtils";
 import {
 	DefaultInstanceState,
 	GetDefaultPanelServerConfig
-}                                   from "@shared/Default/Server.Default";
-import { EBashScript }              from "../Enum/EBashScript";
-import type { Cluster }             from "@server/MongoDB/DB_Cluster";
-import DB_Cluster                   from "@server/MongoDB/DB_Cluster";
-import type { Instance }            from "@server/MongoDB/DB_Instances";
-import DB_Instances                 from "@server/MongoDB/DB_Instances";
-import { rm }                       from "fs/promises";
+}                              from "@shared/Default/Server.Default";
+import { EBashScript }         from "../Enum/EBashScript";
+import type { Cluster }        from "@server/MongoDB/DB_Cluster";
+import DB_Cluster              from "@server/MongoDB/DB_Cluster";
+import type { Instance }       from "@server/MongoDB/DB_Instances";
+import DB_Instances            from "@server/MongoDB/DB_Instances";
+import { rm }                  from "fs/promises";
 import {
 	FillWithDefaultValues,
 	GetDefaultInstanceData,
 	JSONtoConfig
-}                                   from "./Arkmanager.Lib";
-import { SSHManager }               from "./ConfigManager.Lib";
+}                              from "./Arkmanager.Lib";
+import { SSHManager }          from "./ConfigManager.Lib";
 import type {
 	InstanceData,
 	InstanceState,
 	PanelServerConfig
-}                                   from "@app/Types/ArkSE";
+}                              from "@app/Types/ArkSE";
 
 export async function CreateServer(
 	PanelConfig : PanelServerConfig,
@@ -110,6 +110,20 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 
 		return this.IsValid();
+	}
+
+	public async Wipe() : Promise<boolean> {
+		try {
+			await this.ExecuteCommand( EArkmanagerCommands.stop, [ "--force" ] );
+			fs.rmSync( path.join( __server_dir, this.Instance, "/ShooterGame/Saved/SavedArks" ), {
+				recursive: true,
+				force: true
+			} );
+		}
+		catch ( e ) {
+		}
+
+		return false;
 	}
 
 	public IsInCluster() : this is ServerLib<true> {

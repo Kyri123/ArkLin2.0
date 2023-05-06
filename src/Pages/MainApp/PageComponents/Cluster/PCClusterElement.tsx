@@ -78,6 +78,17 @@ const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { cluster
 		}
 	};
 
+	const wipeCluster = async() => {
+		if ( await onConfirm( "Möchtest du wirklich diesen Cluster löschen?" ) ) {
+			setIsSending( true );
+			const result = await tRPC_Auth.server.clusterManagement.wipeCluster.mutate( ClusterID ).catch( tRPC_handleError );
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
+			setIsSending( false );
+		}
+	};
+
 	return (
 		<Col md={ 6 }>
 			<Card className={ "mt-3 rounded-0" }>
@@ -129,6 +140,11 @@ const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { cluster
 						) ) }
 						</tbody>
 					</Table>
+					<IconButton IsLoading={ isSending } className={ "flat w-full" } variant={ "danger" }
+					            onClick={ wipeCluster }>
+						<FontAwesomeIcon icon={ "trash-alt" } className="me-2"/>
+						Wipe Cluster
+					</IconButton>
 				</Card.Body>
 			</Card>
 
