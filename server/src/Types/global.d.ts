@@ -1,16 +1,16 @@
-import * as core              from "express-serve-static-core";
-import { Server }             from "socket.io";
-import { DefaultEventsMap }   from "socket.io/dist/typed-events";
-import * as http              from "http";
-import {
-	IEmitEvents,
-	IListenEvents
-}                             from "../../../src/Shared/Type/Socket";
+import type * as core              from "express-serve-static-core";
+import type { Server }             from "socket.io";
+import type { DefaultEventsMap }   from "socket.io/dist/typed-events";
+import type * as http              from "http";
+import type {
+	EmitEvents,
+	ListenEvents
+}                                  from "@app/Types/Socket";
 import "./Types";
-import { SystemLib_Class }    from "../Lib/System.Lib";
-import { ConfigManagerClass } from "../Lib/ConfigManager.Lib";
-import { TaskManagerClass }   from "../Tasks/TaskManager";
-import { SSHLib }             from "../Lib/SSH.Lib";
+import type { SystemLib_Class }    from "@server/Lib/System.Lib";
+import type { ConfigManagerClass } from "@server/Lib/ConfigManager.Lib";
+import type { TaskManagerClass }   from "../Tasks/TaskManager";
+import type { SSHLib }             from "@server/Lib/SSH.Lib";
 
 export declare global {
 	var Api : core.Express;
@@ -18,8 +18,7 @@ export declare global {
 		typeof http.IncomingMessage,
 		typeof http.ServerResponse
 	>;
-	var SocketIO : Server<IListenEvents, IEmitEvents, DefaultEventsMap, any>;
-	//var RedisClient : RedisClientType<RedisModules, RedisFunctions, RedisScripts>;
+	var SocketIO : Server<ListenEvents, EmitEvents, DefaultEventsMap, any>;
 	var TManager : TaskManagerClass;
 	var CManager : ConfigManagerClass;
 	var SystemLib : SystemLib_Class;
@@ -48,14 +47,6 @@ export declare global {
 			MONGODB_USER : string;
 			MONGODB_PASSWD : string;
 			MONGODB_DATABASE : string;
-			MARIADB_HOST : string;
-			MARIADB_PORT : string;
-			MARIADB_DATABASE : string;
-			MARIADB_USER : string;
-			MARIADB_PASSWORD : string;
-			REDIS_PORT : string;
-			REDIS_HOST : string;
-			REDIS_PASSWORD : string;
 			API_GAMEDIG_UDP : string;
 			API_EXPRESS_HTTP_PORT : string;
 			APPEND_BASEDIR : string;

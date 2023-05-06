@@ -1,5 +1,5 @@
-import Navigation from "../Shared/StringMap/Navigation.json";
-import Config     from "../Shared/StringMap/Config.json";
+import Navigation from "@shared/StringMap/Navigation.json";
+import Config     from "@shared/StringMap/Config.json";
 
 export default class StringMapLib {
 	static Nav( Location : string ) : string {

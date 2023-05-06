@@ -1,37 +1,25 @@
-import * as process     from "process";
-import { TServerUrls }  from "../../../src/Shared/Enum/Routing";
-import path             from "path";
-import { TPermissions } from "../../../src/Shared/Enum/User.Enum";
+import * as process from "process";
+import path         from "path";
+import { BC }       from "@server/Lib/System.Lib";
 
-export function CreateUrl( Url : TServerUrls ) : string {
+export function CreateUrl( Url : string ) : string {
 	if ( process.env.API_BASE_URL ) {
 		if ( !process.env.API_BASE_URL.endsWith( "/" ) ) {
 			process.env.API_BASE_URL += "/";
 		}
+		SystemLib.Log( "routing",
+			"Install Router",
+			BC( "Red" ),
+			`${ process.env.API_BASE_URL }${ Url }`
+		);
 		return `${ process.env.API_BASE_URL }${ Url }`;
 	}
-	return `/api/v1/${ Url }`;
-}
-
-export function CreateUrlV2( Url : TServerUrls, As : "GET" | "POST", Perm? : TPermissions ) : [ string, TPermissions | undefined ] {
-	let EndUrl = `/api/v1/${ Url }`;
-	if ( process.env.API_BASE_URL ) {
-		if ( !process.env.API_BASE_URL.endsWith( "/" ) ) {
-			process.env.API_BASE_URL += "/";
-		}
-		EndUrl = `${ process.env.API_BASE_URL }${ Url }`;
-	}
-
-	SystemLib.Log(
+	SystemLib.Log( "routing",
 		"Install Router",
-		SystemLib.ToBashColor( "Red" ),
-		EndUrl,
-		SystemLib.ToBashColor( "Default" ),
-		"|  Mode:",
-		SystemLib.ToBashColor( "Red" ),
-		As
+		BC( "Red" ),
+		`/api/v1/${ Url }`
 	);
-	return [ EndUrl, Perm ];
+	return `/api/v1/${ Url }`;
 }
 
 export function ToRealDir( Dir : string ) : string {

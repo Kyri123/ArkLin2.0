@@ -1,20 +1,52 @@
-import * as mongoose              from "mongoose";
-import { IMO_Instance }           from "../../../src/Types/MongoDB";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
+import * as mongoose         from "mongoose";
+import type { MongoBase }    from "@app/Types/MongoDB";
+import type { InstanceData } from "@app/Types/ArkSE";
+import type { Cluster }      from "@server/MongoDB/DB_Cluster";
+import { z }                 from "zod";
+import { EServerState }      from "@shared/Enum/EServerState";
 
-const Schema = new mongoose.Schema<IMO_Instance>( {
+const ZodInstanceSchema = z.object( {
+	Instance: z.string(),
+	LastAutoBackup: z.number(),
+	LastAutoUpdate: z.number(),
+	ArkmanagerCfg: z.any(),
+	State: z.object( {
+		allConfigs: z.array( z.string() ),
+		State: z.nativeEnum( EServerState ),
+		IsListen: z.boolean(),
+		Player: z.number(),
+		OnlinePlayerList: z.array( z.any() ),
+		ServerVersion: z.string(),
+		ArkmanagerPID: z.number(),
+		ArkserverPID: z.number()
+	} ),
+	PanelConfig: z.object( {
+		BackupEnabled: z.boolean(),
+		MaxBackupfolderSize: z.number(),
+		BackupInterval: z.number(),
+		AutoUpdateParameters: z.array( z.string() ),
+		AutoUpdateEnabled: z.boolean(),
+		AutoUpdateInterval: z.number()
+	} ),
+	ServerMap: z.object( {
+		BG: z.string(),
+		LOGO: z.string()
+	} )
+} );
+
+const InstanceSchema = new mongoose.Schema( {
 	Instance: { type: String, required: true, unique: true },
 	LastAutoBackup: { type: Number, required: false },
 	LastAutoUpdate: { type: Number, required: false },
 
 	ArkmanagerCfg: {
 		type: mongoose.Schema.Types.Mixed,
-		required: true,
-		strict: false
+		required: true
 	},
 
 	State: {
 		type: {
+			allConfigs: { type: [ String ], required: false },
 			State: { type: String, required: true },
 			IsListen: { type: Boolean, required: true },
 			Player: { type: Number },
@@ -48,6 +80,13 @@ const Schema = new mongoose.Schema<IMO_Instance>( {
 	}
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IMO_Instance>( "instances", Schema );
+export interface InstanceInterface extends z.infer<typeof ZodInstanceSchema> {
+	ArkmanagerCfg : InstanceData & Record<string, any>;
+}
+
+export type Instance = InstanceInterface & MongoBase & {
+	Cluster? : Cluster
+}
+
+export default mongoose.model<InstanceInterface>( "instances", InstanceSchema );

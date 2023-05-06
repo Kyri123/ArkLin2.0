@@ -1,25 +1,24 @@
-import { JobTaskCycle }   from "../TaskManager";
+import { JobTaskCycle }       from "../TaskManager";
 import {
 	ConfigManager,
 	SSHManager
-}                         from "../../Lib/ConfigManager.Lib";
-import fs                 from "fs";
-import path               from "path";
-import { IInstanceState } from "../../../../src/Shared/Type/ArkSE";
-import DB_Instances       from "../../MongoDB/DB_Instances";
-import { ServerLib }      from "../../Lib/Server.Lib";
-import {
-	IMO_Instance,
-	TMO_Instance
-}                         from "../../../../src/Types/MongoDB";
-import { QueryArkServer } from "../../Lib/ArkServerQuery.Lib";
+}                             from "@server/Lib/ConfigManager.Lib";
+import fs                     from "fs";
+import path                   from "path";
+import type { Instance }      from "@server/MongoDB/DB_Instances";
+import DB_Instances           from "@server/MongoDB/DB_Instances";
+import { ServerLib }          from "@server/Lib/Server.Lib";
+import { QueryArkServer }     from "@server/Lib/ArkServerQuery.Lib";
+import { BC }                 from "@server/Lib/System.Lib";
+import { EServerState }       from "@shared/Enum/EServerState";
+import type { InstanceState } from "@app/Types/ArkSE";
 
-export default new JobTaskCycle<IMO_Instance>(
+export default new JobTaskCycle<Instance>(
 	"ServerState",
 
 	async( Self ) => {
-		const EmitData : Record<string, TMO_Instance> = {};
-		for await ( const Server of DB_Instances.find<IMO_Instance>() ) {
+		const EmitData : Record<string, Instance> = {};
+		for await ( const Server of DB_Instances.find<Instance>() ) {
 			const ServerClass = await ServerLib.build( Server.Instance );
 			if ( ServerClass.IsValid() ) {
 				EmitData[ Server.Instance ] = ServerClass.GetWithCluster();
@@ -31,8 +30,8 @@ export default new JobTaskCycle<IMO_Instance>(
 
 	async( CallIndex, Server ) => {
 		SystemLib.DebugLog(
-			"[TASKS] Running Task ", CallIndex,
-			SystemLib.ToBashColor( "Red" ),
+			"tasks", "Running Task ", CallIndex,
+			BC( "Red" ),
 			"ServerState"
 		);
 
@@ -44,9 +43,10 @@ export default new JobTaskCycle<IMO_Instance>(
 		if ( ServerL.IsValid() ) {
 			const InstanceData = ServerL.Get.ArkmanagerCfg;
 			const InstanceName = ServerL.Instance;
-			const InstanceState : Partial<IInstanceState> = {
+			const InstanceState : Partial<InstanceState> = {
+				allConfigs: Object.keys( ServerL.GetConfigFiles() ).filter( e => e !== "Arkmanager.cfg" ),
 				IsListen: false,
-				State: "NotInstalled",
+				State: EServerState.notInstalled,
 				Player: 0,
 				OnlinePlayerList: [],
 				ServerVersion: "0.0",
@@ -99,7 +99,7 @@ export default new JobTaskCycle<IMO_Instance>(
 			}
 
 			if ( IsInstalled ) {
-				InstanceState.State = "Offline";
+				InstanceState.State = EServerState.offline;
 				if ( fs.existsSync( VersionFile ) ) {
 					InstanceState.ServerVersion = fs
 						.readFileSync( VersionFile )
@@ -134,15 +134,15 @@ export default new JobTaskCycle<IMO_Instance>(
 					);
 					InstanceState.IsListen = QueryResult.Online;
 					InstanceState.State = QueryResult.Online
-						? "Online"
-						: "Running";
+						? EServerState.online
+						: EServerState.running;
 					InstanceState.Player = QueryResult.Players.length;
 					InstanceState.OnlinePlayerList = QueryResult.Players;
 				}
 			}
 
 			if ( InstanceState.ArkmanagerPID !== 0 ) {
-				InstanceState.State = "ActionInProgress";
+				InstanceState.State = EServerState.actionInProgress;
 			}
 
 			const Icon = `/img/maps/${ ServerL.GetConfig().serverMap }.jpg`;
@@ -150,7 +150,7 @@ export default new JobTaskCycle<IMO_Instance>(
 				ServerL.GetConfig().serverMap
 			}.jpg`;
 
-			await ServerL.SetServerState( InstanceState, {
+			await ServerL.SeEServerState( InstanceState, {
 				LOGO: fs.existsSync( path.join( __basedir, "public", Icon ) )
 					? Icon
 					: `/img/maps/TheIsland.jpg`,

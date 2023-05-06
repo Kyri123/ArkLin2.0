@@ -9,7 +9,7 @@
       "node"
     ],
     "target": "ESNext",
-    "module": "commonjs",
+    "module": "NodeNext",
     "strict": true,
     "moduleResolution": "Node",
     "importHelpers": true,
@@ -34,7 +34,36 @@
       "../src/Shared/Api"
     ],
     "sourceMap": true,
-    "baseUrl": "../"
+    "baseUrl": "../",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@app/*": [
+        "src/*"
+      ],
+      "@shared/*": [
+        "src/Shared/*"
+      ],
+      "@server/*": [
+        "server/src/*"
+      ],
+      "@hooks/*": [
+        "src/Hooks/*"
+      ],
+      "@comp/*": [
+        "src/Pages/Components/*"
+      ],
+      "@context/*": [
+        "src/Context/*"
+      ],
+      "@style/*": [
+        "src/styles/*"
+      ],
+      "@page/*": [
+        "src/Pages/*"
+      ]
+    }
   },
   "files": [
     "./src/Types/global.d.ts"

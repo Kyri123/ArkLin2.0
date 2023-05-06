@@ -1,20 +1,21 @@
-import { JobTask }       from "../TaskManager";
-import { ConfigManager } from "../../Lib/ConfigManager.Lib";
+import { JobTask }                    from "../TaskManager";
+import { ConfigManager }              from "@server/Lib/ConfigManager.Lib";
 import {
 	GetAllModIds,
 	QuerySteamAPI
-}                        from "../../Lib/SteamApi.Lib";
-import DB_SteamAPI_Mods  from "../../MongoDB/DB_SteamAPI_Mods";
-import { ISteamApiMod }  from "../../../../src/Types/SteamAPI";
+}                                     from "@server/Lib/SteamApi.Lib";
+import type { SteamMod } from "@server/MongoDB/DB_SteamAPI_Mods";
+import DB_SteamAPI_Mods from "@server/MongoDB/DB_SteamAPI_Mods";
+import { BC }                         from "@server/Lib/System.Lib";
 
 export default new JobTask(
-	ConfigManager.GetTaskConfig.DataCleanerInterval,
+	ConfigManager.GetTaskConfig.SteamAPIQuery,
 	"SteamAPI",
 	async() => {
 		// Clear old Sessions
-		SystemLib.DebugLog(
-			"[TASKS] Running Task",
-			SystemLib.ToBashColor( "Red" ),
+		SystemLib.DebugLog( "tasks",
+			" Running Task",
+			BC( "Red" ),
 			"SteamAPI"
 		);
 
@@ -32,7 +33,7 @@ export default new JobTask(
 
 			const ResultObject = JSON.parse( Response );
 			for ( const ModResult of ResultObject.response
-				.publishedfiledetails as ISteamApiMod[] ) {
+				.publishedfiledetails as SteamMod[] ) {
 				await DB_SteamAPI_Mods.findOneAndReplace(
 					{ publishedfileid: ModResult.publishedfileid },
 					ModResult,
@@ -41,7 +42,7 @@ export default new JobTask(
 			}
 
 			SystemLib.Log(
-				`[SteamAPI] Updated Mods from API ( Total: ${ ResultObject.response.publishedfiledetails.length } )`
+				`SteamAPI`, ` Updated Mods from API ( Total: ${ ResultObject.response.publishedfiledetails.length } )`
 			);
 			SocketIO.emit( "SteamApiUpdated" );
 		}

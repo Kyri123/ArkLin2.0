@@ -1,12 +1,12 @@
 import fs                  from "fs";
 import path                from "path";
-import * as core           from "express-serve-static-core";
+import type * as core      from "express-serve-static-core";
 import { SystemLib_Class } from "./Lib/System.Lib";
 
 if ( !global.SystemLib ) {
-	global.SystemLib = new SystemLib_Class( [ "Lin" ] );
+	global.SystemLib = new SystemLib_Class();
 }
- 
+
 export function InstallRoutings( Dir : string, Api : core.Express ) {
 	for ( const File of fs.readdirSync( Dir ) ) {
 		const DirTarget = path.join( Dir, File );

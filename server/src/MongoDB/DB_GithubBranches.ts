@@ -1,14 +1,24 @@
-import * as mongoose              from "mongoose";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import { IGithubBranche }         from "../../../src/Shared/Type/github";
+import * as mongoose      from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
+import { z }              from "zod";
 
-const Schema = new mongoose.Schema<IGithubBranche>( {
+const ZodGithubBranchSchema = z.object( {
+	name: z.string(),
+	url: z.string(),
+	sha: z.string(),
+	protected: z.boolean()
+} );
+
+const GithubBranchSchema = new mongoose.Schema( {
 	name: { type: String, unique: true },
 	url: { type: String },
 	sha: { type: String },
 	protected: { type: Boolean }
 } );
 
-Plugin_MongoDB_findOne( Schema );
-
-export default mongoose.model<IGithubBranche>( "github_branches", Schema );
+export type GithubBranch = z.infer<typeof ZodGithubBranchSchema> & MongoBase
+export default mongoose.model<GithubBranch>( "github_branches", GithubBranchSchema );
+export {
+	ZodGithubBranchSchema,
+	GithubBranchSchema
+};

@@ -1,8 +1,21 @@
-import * as mongoose              from "mongoose";
-import { IMO_Usage }              from "../../../src/Types/MongoDB";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
+import * as mongoose from "mongoose";
+import { z }         from "zod";
 
-const Schema = new mongoose.Schema<IMO_Usage>( {
+const ZodUsageSchema = z.object( {
+	CPU: z.number(),
+	MemMax: z.number(),
+	MemUsed: z.number(),
+	DiskMax: z.number(),
+	DiskUsed: z.number(),
+	PanelNeedUpdate: z.boolean(),
+	UpdateIsRunning: z.boolean(),
+	PanelVersionName: z.string(),
+	PanelBuildVersion: z.string(),
+	NextPanelBuildVersion: z.string(),
+	LogFiles: z.array( z.string() )
+} );
+
+const UsageSchema = new mongoose.Schema( {
 	CPU: { type: Number, required: true },
 	MemMax: { type: Number, required: true },
 	MemUsed: { type: Number, required: true },
@@ -11,9 +24,15 @@ const Schema = new mongoose.Schema<IMO_Usage>( {
 	PanelNeedUpdate: { type: Boolean, required: true },
 	PanelVersionName: { type: String, required: true },
 	PanelBuildVersion: { type: String, required: true },
-	NextPanelBuildVersion: { type: String }
+	NextPanelBuildVersion: { type: String },
+	UpdateIsRunning: { type: Boolean },
+	LogFiles: { type: [ String ], required: true }
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IMO_Usage>( "usage", Schema );
+export type SystemUsage = z.infer<typeof ZodUsageSchema>
+export default mongoose.model<SystemUsage>( "usage", UsageSchema );
+export {
+	ZodUsageSchema,
+	UsageSchema
+};

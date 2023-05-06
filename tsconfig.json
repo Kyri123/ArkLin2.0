@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "node",
-    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
     "removeComments": false,
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,15 +20,46 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
     "typeRoots": [
       "src/Shared/Type"
     ],
     "types": [
       "node"
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@app/*": [
+        "./src/*"
+      ],
+      "@shared/*": [
+        "./src/Shared/*"
+      ],
+      "@server/*": [
+        "./server/src/*"
+      ],
+      "@hooks/*": [
+        "./src/Hooks/*"
+      ],
+      "@comp/*": [
+        "./src/Components/*"
+      ],
+      "@context/*": [
+        "./src/Context/*"
+      ],
+      "@style/*": [
+        "./src/styles/*"
+      ],
+      "@page/*": [
+        "./src/Pages/*"
+      ]
+    }
   },
   "include": [
     "src",
+    "server",
     "src/Shared"
   ],
   "references": [

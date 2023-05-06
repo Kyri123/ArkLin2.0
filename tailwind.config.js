@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
+	corePlugins: {
+		preflight: true,
+	},
 	mode: 'jit',
 	content: [
 		'./index.html',
@@ -9,5 +12,6 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
+	important: true,
 	plugins: [],
 }

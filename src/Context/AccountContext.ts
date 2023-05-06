@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import FrontendUserLib   from "../Lib/User.Lib";
+import User              from "../Lib/User.Lib";
 
 export default createContext<{
-	Account : FrontendUserLib;
+	user : User;
 }>( {
-	Account: new FrontendUserLib( "" )
+	user: new User( "" )
 } );

@@ -1,6 +1,6 @@
-import DB_Instances       from "../MongoDB/DB_Instances";
-import * as https         from "https";
-import { RequestOptions } from "https";
+import DB_Instances            from "@server/MongoDB/DB_Instances";
+import type { RequestOptions } from "https";
+import * as https              from "https";
 
 export async function GetAllModIds() : Promise<number[]> {
 	let ModIdArray : number[] = [];

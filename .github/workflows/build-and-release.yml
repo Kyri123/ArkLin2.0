@@ -1,56 +1,50 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+name: 🔨 Build and Deploy
 
-name: Build, Deploy and Release App
-
-on: [ push ]
-
-env:
-  CI: true
-  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+on: [ push, pull_request ]
 
 jobs:
   test-docker:
-    name: "Test and Build as Docker"
+    name: 🔨 Build as Docker
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Build Docker Image
-        #continue-on-error: true
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: ⚡ Build as docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: false
           tags: user/app:latest
 
-  
   test-app:
-    name: "Test and Build as App"
+    name: 🔨 Test and Build
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [ 18.x, 19.x ]
+        node-version: [ 18.x, 19.x, 20.x ]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: 🔧 Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: yarn install --frozen-lockfile
-      - run: yarn tailwindcss
-      - run: yarn BuildServer
-      - run: yarn Client
+      - name: ✨ Install packages
+        run: yarn install
+      - name: ⚡ Build App
+        run: yarn build
 
   deploy:
     needs: [ test-app, test-docker ]
-    name: "Deploy to Test-Server"
+    name: 🚀 Deploy to Server
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/next'
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using password
+      - name: 📂 Execute update script on server
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.HOST }}
@@ -60,43 +54,46 @@ jobs:
           script: ~/KAdmin/ArkLin2.0/sh/update.sh "${{ github.head_ref || github.ref_name }}" "TRUE"
 
   read-for-release:
-    name: "Read and cache Version"
+    name: 🔍 Read and cache version
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     needs: deploy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     outputs:
       version: ${{ steps.version.outputs.out }}
       changelogfile: ${{ steps.changelogfile.outputs.out }}
     steps:
-      - uses: actions/checkout@v3
-      - id: version
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: 🚚 Get current version from package
+        id: version
         run: echo "out=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
-      - id: changelogfile
-        run: echo "out=./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+      - name: 🚚 Try to get changelog
+        run: echo "out=./changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
 
   release:
-    name: "Create release if Tag not exists"
+    name: ✨ Try to create release
     needs: read-for-release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: "Check Version"
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: 🏷️ Check if tag exists
         uses: mukunku/tag-exists-action@v1.2.0
         id: checkTag
         with:
           tag: '${{ needs.read-for-release.outputs.version }}'
 
-      - name: "Release!"
+      - name: ✨ Release!
         if: ${{ steps.checkTag.outputs.exists == 'false' }}
         id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
-          release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"
-          body_path: "${{ needs.read-for-release.outputs.changelogfile }}"
+          release_name: "✨ Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }} ✨"
+          body_path: "./changelogs/${{ needs.read-for-release.outputs.version }}.md"
           draft: false
           prerelease: false
 
-      - name: "No Release"
+      - name: ❌ No Release
         if: ${{ steps.checkTag.outputs.exists == 'true' }}
-        run: echo "Release canceled. Tag exsists."
+        run: echo "❌ No Release needed. Release for this version already exists."

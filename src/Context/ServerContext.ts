@@ -1,15 +1,15 @@
 import { createContext } from "react";
-import {
-	IMO_Cluster,
-	TMO_Instance
-}                        from "../Types/MongoDB";
+import type { Cluster }  from "@server/MongoDB/DB_Cluster";
+import type { Instance } from "@server/MongoDB/DB_Instances";
 
 export default createContext<{
-	ClusterData : Record<string, IMO_Cluster>;
-	InstanceData : Record<string, TMO_Instance>;
+	ClusterData : Record<string, Cluster>;
+	InstanceData : Record<string, Instance>;
 	HasData : boolean;
+	GetAllServer : () => Promise<void>
 }>( {
 	InstanceData: {},
 	ClusterData: {},
-	HasData: false
+	HasData: false,
+	GetAllServer: () => Promise.resolve()
 } );

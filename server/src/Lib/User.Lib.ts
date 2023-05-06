@@ -1,21 +1,15 @@
-import {
-	EPerm,
-	GetEnumValue,
-	TPermissions
-}                    from "../../../src/Shared/Enum/User.Enum";
-import DB_Accounts   from "../MongoDB/DB_Accounts";
-import {
-	IMO_Accounts,
-	IMO_Instance,
-	TMO_Instance
-}                    from "../../../src/Types/MongoDB";
-import DB_Instances  from "../MongoDB/DB_Instances";
-import * as crypto   from "crypto";
-import path          from "path";
-import fs            from "fs";
-import * as jwt      from "jsonwebtoken";
-import { ServerLib } from "./Server.Lib";
-import { If }        from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
+import type { UserAccount } from "@server/MongoDB/DB_Accounts";
+import * as crypto          from "crypto";
+import path                 from "path";
+import fs                   from "fs";
+import * as jwt             from "jsonwebtoken";
+import DB_SessionToken      from "@server/MongoDB/DB_SessionToken";
+import type User            from "@app/Lib/User.Lib";
+import { EPerm }            from "@shared/Enum/User.Enum";
+import type { Instance }    from "@server/MongoDB/DB_Instances";
+import DB_Instances         from "@server/MongoDB/DB_Instances";
+import type { Cluster }     from "@server/MongoDB/DB_Cluster";
+import DB_Cluster           from "@server/MongoDB/DB_Cluster";
 
 export function GetSecretAppToken() : string {
 	if ( global.__AppToken && typeof __AppToken === "string" ) {
@@ -34,92 +28,46 @@ export function GetSecretAppToken() : string {
 	return __AppToken as string;
 }
 
-export function GenerateAccessToken( UserData : IMO_Accounts, ExpireInDays = 1 ) {
-	return jwt.sign( UserData, GetSecretAppToken(), {
-		expiresIn: `${ ExpireInDays * 24 * 60 * 60 }s`
-	} );
+export async function CreateSession( User : Partial<UserAccount>, stayLoggedIn = false ) : Promise<string | undefined> {
+	delete User.salt;
+	delete User.hash;
+	try {
+		const Token = jwt.sign( User, GetSecretAppToken(), {
+			expiresIn: stayLoggedIn ? "28d" : "1d"
+		} );
+		const Decoded = jwt.verify( Token, GetSecretAppToken() ) as jwt.JwtPayload;
+		if ( Decoded ) {
+			await DB_SessionToken.deleteMany( { expire: { $lte: new Date() } } );
+			const session = await DB_SessionToken.create( {
+				token: Token,
+				userid: User._id,
+				expire: new Date( ( Decoded.exp || 0 ) * 1000 )
+			} );
+			return session.token;
+		}
+	}
+	catch ( e ) {
+		if ( e instanceof Error ) {
+			SystemLib.LogError( "api", e.message );
+		}
+	}
+	return undefined;
 }
 
-export class UserLib<Ready extends boolean = boolean> {
-	private UserData : If<Ready, IMO_Accounts> = null as If<Ready, IMO_Accounts>;
-	private UserID : If<Ready, string> = null as If<Ready, string>;
-
-	private constructor() {
+export async function GetAllServerWithPermission( user : User ) : Promise<Record<string, Instance>> {
+	const arr = user.HasPermission( EPerm.ManagePanel ) ? await DB_Instances.find<Instance>( {} ) : await DB_Instances.find<Instance>( { servers: user.Get.servers } );
+	const result : Record<string, Instance> = {};
+	for ( const instance of arr ) {
+		result[ instance.Instance ] = instance;
 	}
+	return result;
+}
 
-	static async build( JsonWebToken : string | IMO_Instance ) {
-		const User = new UserLib();
-		try {
-			const UserData = await DB_Accounts.findOne( { _id: ( JsonWebToken as IMO_Instance )._id || JsonWebToken } );
-			if ( UserData ) {
-				User.UserID = UserData._id;
-				User.UserData = UserData.toJSON();
-			}
-		}
-		catch ( e ) {
-		}
-		return User;
+export async function GetAllClusterWithPermission( user : User ) : Promise<Record<string, Cluster>> {
+	const arr = await DB_Cluster.find( { Instances: { $in: Object.keys( await GetAllServerWithPermission( user ) ) } } );
+	const result : Record<string, Cluster> = {};
+	for ( const cluster of arr ) {
+		result[ cluster._id ] = await cluster.toJSON();
 	}
-
-	public IsValid() : this is UserLib<true> {
-		return this.UserData !== null;
-	}
-
-	public GetDB() {
-		return this.UserData;
-	}
-
-	public GetId() {
-		return this.UserID;
-	}
-
-	public HasPermission( Permission : TPermissions ) : boolean {
-		return (
-			this.UserData?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) ||
-			this.UserData?.permissions?.includes( GetEnumValue( EPerm, Permission ) ) ||
-			false
-		);
-	}
-
-	public HasPermissionForServer( ServerName : string ) : boolean {
-		return (
-			this.UserData?.permissions?.includes( GetEnumValue( EPerm, EPerm.Super ) ) ||
-			this.UserData?.servers?.includes( ServerName ) ||
-			false
-		);
-	}
-
-	/**
-	 *  @return true if added, false if removed
-	 *  */
-	public async TogglePermissionForServer( ServerName : string ) : Promise<boolean> {
-		if ( this.UserData === null ) {
-			return false;
-		}
-
-		if ( this.UserData.servers.includes( ServerName ) ) {
-			this.UserData.servers.rm( ServerName, true );
-			DB_Accounts.findByIdAndUpdate( this.UserData._id, this.UserData );
-			return false;
-		}
-
-		this.UserData.servers.addAtIndex( ServerName );
-		DB_Accounts.findByIdAndUpdate( this.UserData._id, this.UserData );
-		return true;
-	}
-
-	public async GetAllServerWithPermission() : Promise<
-		Record<string, TMO_Instance>
-	> {
-		const Data : Record<string, TMO_Instance> = {};
-		for await ( const Instance of DB_Instances.find( {} ) ) {
-			if ( this.HasPermissionForServer( Instance.Instance ) ) {
-				const Server = await ServerLib.build( Instance.Instance );
-				if ( Server.IsValid() ) {
-					Data[ Server.Instance ] = Server.GetWithCluster();
-				}
-			}
-		}
-		return Data;
-	}
+	return result;
 }

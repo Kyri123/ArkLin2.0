@@ -1,44 +1,73 @@
-import * as mongoose              from "mongoose";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import { ISteamApiMod }           from "../../../src/Types/SteamAPI";
-import { IMongoDB }               from "../../../src/Types/MongoDB";
+import * as mongoose      from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
+import { z }              from "zod";
 
-const Schema = new mongoose.Schema<ISteamApiMod & IMongoDB>(
-	{
-		publishedfileid: { type: String, unique: true },
-		result: { type: Number },
-		creator: { type: String },
-		creator_app_id: { type: Number },
-		consumer_app_id: { type: Number },
-		filename: { type: String },
-		file_size: { type: Number },
-		file_url: { type: String },
-		hcontent_file: { type: String },
-		preview_url: { type: String },
-		hcontent_preview: { type: String },
-		title: { type: String },
-		description: { type: String },
-		time_created: { type: Number },
-		time_updated: { type: Number },
-		visibility: { type: Number },
-		banned: { type: Number },
-		ban_reason: { type: String },
-		subscriptions: { type: Number },
-		favorited: { type: Number },
-		lifetime_subscriptions: { type: Number },
-		lifetime_favorited: { type: Number },
-		views: { type: Number },
-		tags: {
-			type: [
-				{
-					tag: { type: String }
-				}
-			]
-		}
-	},
-	{ strict: true }
-);
+const ZodSteamModSchema = z.object( {
+	publishedfileid: z.string(),
+	creator: z.string(),
+	expire: z.string(),
+	filename: z.string(),
+	file_url: z.string(),
+	hcontent_file: z.string(),
+	preview_url: z.string(),
+	hcontent_preview: z.string(),
+	title: z.string(),
+	ban_reason: z.string(),
+	result: z.number(),
+	creator_app_id: z.number(),
+	consumer_app_id: z.number(),
+	file_size: z.number(),
+	time_created: z.number(),
+	time_updated: z.number(),
+	visibility: z.number(),
+	banned: z.number(),
+	favorited: z.number(),
+	lifetime_subscriptions: z.number(),
+	lifetime_favorited: z.number(),
+	views: z.number(),
+	tags: z.array( z.object( {
+		tag: z.string()
+	} ) )
+} );
 
-Plugin_MongoDB_findOne( Schema );
+const SteamModSchema = new mongoose.Schema( {
+	publishedfileid: { type: String, require: true, unique: true },
+	result: { type: Number, require: true },
+	creator: { type: String, require: true },
+	creator_app_id: { type: Number, require: true },
+	consumer_app_id: { type: Number, require: true },
+	filename: { type: String, require: true },
+	file_size: { type: Number, require: true },
+	file_url: { type: String, require: true },
+	hcontent_file: { type: String, require: true },
+	preview_url: { type: String, require: true },
+	hcontent_preview: { type: String, require: true },
+	title: { type: String, require: true },
+	description: { type: String, require: true },
+	time_created: { type: Number, require: true },
+	time_updated: { type: Number, require: true },
+	visibility: { type: Number, require: true },
+	banned: { type: Number, require: true },
+	ban_reason: { type: String, require: true },
+	subscriptions: { type: Number, require: true },
+	favorited: { type: Number, require: true },
+	lifetime_subscriptions: { type: Number, require: true },
+	lifetime_favorited: { type: Number, require: true },
+	views: { type: Number, require: true },
+	tags: {
+		type: [
+			{
+				tag: { type: String, require: true }
+			}
+		]
+	}
+} );
 
-export default mongoose.model<ISteamApiMod & IMongoDB>( "steamapi_mods", Schema );
+
+export type SteamMod = z.infer<typeof ZodSteamModSchema> & MongoBase
+export type SteamModTags = SteamMod[ "tags" ]
+export default mongoose.model<SteamMod>( "steamapi_mods", SteamModSchema );
+export {
+	ZodSteamModSchema,
+	SteamModSchema
+};

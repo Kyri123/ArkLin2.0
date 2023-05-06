@@ -1,5 +1,6 @@
-import fs   from "fs";
-import path from "path";
+import fs     from "fs";
+import path   from "path";
+import { BC } from "@server/Lib/System.Lib";
 
 export type TTasksRunner = "ServerState" | "Systeminformation" | "DataCleaner" | "Github" | "SteamAPI" | "Server";
 
@@ -22,7 +23,7 @@ export class JobTask {
 		this.TaskFunction = Task;
 		this.Task = setInterval( this.Tick.bind( this ), this.Interval );
 		this.Tick().then( () =>
-			SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
+			SystemLib.Log( "tasks", `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
 		);
 	}
 
@@ -34,7 +35,7 @@ export class JobTask {
 	public DestroyTask() {
 		clearInterval( this.Task );
 	}
-
+ 
 	public async ForceTask( ResetTime = false ) {
 		if ( this.IsRun ) {
 			this.RunNextTask = [ true, ResetTime ];
@@ -115,7 +116,7 @@ export class JobTaskCycle<T> extends JobTask {
 		this.JobName = JobName;
 		this.TaskFunction = Task;
 		this.Tick().then( () =>
-			SystemLib.Log( `Init run job:`, SystemLib.ToBashColor( "Red" ), this.JobName )
+			SystemLib.Log( "tasks", `Init run job:`, BC( "Red" ), this.JobName )
 		);
 	}
 }
@@ -139,9 +140,9 @@ export class TaskManagerClass {
 		}
 	}
 
-	RunTask( Task : TTasksRunner, ResetTimer = false ) {
+	async RunTask( Task : TTasksRunner, ResetTimer = false ) {
 		if ( this.Jobs[ Task ] ) {
-			this.Jobs[ Task ].ForceTask( ResetTimer );
+			await this.Jobs[ Task ].ForceTask( ResetTimer );
 		}
 	}
 }

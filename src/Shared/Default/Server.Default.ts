@@ -1,12 +1,16 @@
-import { IMO_Cluster }  from "../../Types/MongoDB";
-import {
-	IInstanceData,
-	IInstanceState,
-	IPanelServerConfig
-}                       from "../Type/ArkSE";
-import { ISystemUsage } from "../Type/Systeminformation";
+import type { Cluster }     from "@server/MongoDB/DB_Cluster";
+import type {
+	InstanceData,
+	InstanceState,
+	PanelServerConfig
+}                           from "@app/Types/ArkSE";
+import type { SystemUsage } from "@server/MongoDB/DB_Usage";
+import { EServerState }     from "@shared/Enum/EServerState";
 
-export const DefaultCluster : IMO_Cluster = {
+export const DefaultCluster : Cluster = {
+	created_at: "",
+	updated_at: "",
+	_id: "",
 	DisplayName: "",
 	Instances: [],
 	Master: "",
@@ -22,20 +26,22 @@ export const DefaultCluster : IMO_Cluster = {
 	SyncSettings: []
 };
 
-export function DefaultInstanceState() : IInstanceState {
-	return structuredClone<IInstanceState>( {
+export function DefaultInstanceState() : InstanceState {
+	return structuredClone<InstanceState>( {
+		allConfigs: [],
 		IsListen: false,
-		State: "NotInstalled",
+		State: EServerState.notInstalled,
 		Player: 0,
-		OnlinePlayerList: [],
+		OnlinePlayerList: [] as string[],
 		ServerVersion: "0.0",
 		ArkmanagerPID: 0,
 		ArkserverPID: 0
 	} );
 }
 
-export function DefaultSystemUsage() : ISystemUsage {
-	return structuredClone<ISystemUsage>( {
+export function DefaultSystemUsage() : SystemUsage {
+	return structuredClone<SystemUsage>( {
+		LogFiles: [],
 		UpdateIsRunning: false,
 		PanelBuildVersion: "",
 		PanelVersionName: "",
@@ -49,7 +55,7 @@ export function DefaultSystemUsage() : ISystemUsage {
 	} );
 }
 
-export function GetRawInstanceData() : IInstanceData {
+export function GetRawInstanceData() : InstanceData {
 	return {
 		arkMaxBackupSizeMB: 4096,
 		arkNoPortDecrement: true,
@@ -109,8 +115,8 @@ export function GetRawInstanceData() : IInstanceData {
 	};
 }
 
-export function GetDefaultPanelServerConfig() : IPanelServerConfig {
-	return structuredClone<IPanelServerConfig>( {
+export function GetDefaultPanelServerConfig() : PanelServerConfig {
+	return structuredClone<PanelServerConfig>( {
 		AutoUpdateEnabled: false,
 		AutoUpdateInterval: 1800000,
 		AutoUpdateParameters: [],

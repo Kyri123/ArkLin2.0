@@ -1,15 +1,15 @@
-import { ServerLib }     from "./Server.Lib";
-import { Rcon }          from "rcon-client";
-import { IServerStatus } from "../../../src/Shared/Type/ArkSE";
-import * as dgram        from "dgram";
+import { ServerLib }    from "./Server.Lib";
+import { Rcon }         from "rcon-client";
+import * as dgram       from "dgram";
+import type { ServerStatus } from "@app/Types/ArkSE";
 
 
 const socket = dgram.createSocket( "udp4" );
 socket.bind( parseInt( process.env.API_GAMEDIG_UDP || "33333" ) );
 
-export async function QueryArkServer( Server : ServerLib<true> ) : Promise<IServerStatus> {
-	return await new Promise<IServerStatus>( ( resolve ) => {
-		const Reso : IServerStatus = {
+export async function QueryArkServer( Server : ServerLib<true> ) : Promise<ServerStatus> {
+	return await new Promise<ServerStatus>( ( resolve ) => {
+		const Reso : ServerStatus = {
 			Online: false,
 			Players: []
 		};
@@ -100,7 +100,7 @@ export async function SendCommand(
 				Response.Successfuly = true;
 			}
 			catch ( e ) {
-				SystemLib.DebugLog( "[RCON]", e );
+				SystemLib.DebugLog( "RCON", e );
 				Response.Response = "Konnte keine verbindung zum RCON aufbauen.";
 			}
 		}

@@ -1,12 +1,26 @@
-import * as mongoose              from "mongoose";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
-import { IMO_AccountKeys }        from "../../../src/Types/MongoDB";
+import * as mongoose      from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
+import { z }              from "zod";
 
-const Schema = new mongoose.Schema<IMO_AccountKeys>( {
-	key: { type: String, unique: true, index: true, require: true },
-	AsSuperAdmin: { type: Boolean, default: false, require: true }
+const ZodAccountKeySchema = z.object( {
+	key: z.string(),
+	asSuperAdmin: z.boolean(),
+	isPasswordReset: z.boolean().optional(),
+	userId: z.string().optional()
 } );
 
-Plugin_MongoDB_findOne( Schema );
+const AccountKeySchema = new mongoose.Schema( {
+	key: { type: String, unique: true, require: true },
+	asSuperAdmin: { type: Boolean, default: false, require: true },
+	isPasswordReset: { type: Boolean, default: false, require: false },
+	userId: { type: String, unique: false, require: false }
+} );
 
-export default mongoose.model( "accountkey", Schema );
+export type AccountKey = z.infer<typeof ZodAccountKeySchema> & MongoBase
+
+
+export default mongoose.model<AccountKey>( "accountkey", AccountKeySchema );
+export {
+	AccountKeySchema,
+	ZodAccountKeySchema
+};

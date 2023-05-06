@@ -1,8 +1,24 @@
-import * as mongoose              from "mongoose";
-import { IMO_Cluster }            from "../../../src/Types/MongoDB";
-import { Plugin_MongoDB_findOne } from "../Lib/CrashSafe.Lib";
+import * as mongoose      from "mongoose";
+import type { MongoBase } from "@app/Types/MongoDB";
+import { z }              from "zod";
 
-const Schema = new mongoose.Schema<IMO_Cluster>( {
+const ZodClusterSchema = z.object( {
+	Instances: z.array( z.string() ),
+	SyncInis: z.array( z.string() ),
+	SyncSettings: z.array( z.string() ),
+	Master: z.string(),
+	DisplayName: z.string(),
+	NoTributeDownloads: z.boolean(),
+	NoTransferFromFiltering: z.boolean(),
+	PreventDownloadDinos: z.boolean(),
+	PreventDownloadItems: z.boolean(),
+	PreventDownloadSurvivors: z.boolean(),
+	PreventUploadDinos: z.boolean(),
+	PreventUploadItems: z.boolean(),
+	PreventUploadSurvivors: z.boolean()
+} );
+
+const ClusterSchema = new mongoose.Schema( {
 	Instances: { type: [ String ], required: true },
 	SyncInis: { type: [ String ], required: true },
 	SyncSettings: { type: [ String ], required: true },
@@ -18,6 +34,10 @@ const Schema = new mongoose.Schema<IMO_Cluster>( {
 	PreventUploadSurvivors: { type: Boolean, required: true }
 } );
 
-Plugin_MongoDB_findOne( Schema );
 
-export default mongoose.model<IMO_Cluster>( "kadmin_cluster", Schema );
+export type Cluster = z.infer<typeof ZodClusterSchema> & MongoBase
+export default mongoose.model<Cluster>( "kadmin_cluster", ClusterSchema );
+export {
+	ZodClusterSchema,
+	ClusterSchema
+};

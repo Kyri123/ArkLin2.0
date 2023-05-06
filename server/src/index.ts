@@ -1,38 +1,29 @@
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import "./InitDirs";
-import { InstallRoutings }  from "./Init";
-import * as path            from "path";
+import { InstallRoutings } from "./Init";
+import * as path           from "path";
 import "./Lib/System.Lib";
-import express              from "express";
-import * as http            from "http";
-import {
-	Server,
-	Socket
-}                           from "socket.io";
-import {
-	IEmitEvents,
-	IListenEvents
-}                           from "../../src/Shared/Type/Socket";
-import * as process         from "process";
-import fs                   from "fs";
+import express             from "express";
+import * as http           from "http";
+import { Server }          from "socket.io";
+import * as process        from "process";
+import fs                  from "fs";
 import {
 	ConfigManager,
 	SSHManager
-}                           from "./Lib/ConfigManager.Lib";
-import {
-	GetSecretAppToken,
-	UserLib
-}                           from "./Lib/User.Lib";
-import * as mongoose        from "mongoose";
-import AccountKey           from "./MongoDB/DB_AccountKey";
-import DB_AccountKey        from "./MongoDB/DB_AccountKey";
-import DB_Accounts          from "./MongoDB/DB_Accounts";
-import TaskManager          from "./Tasks/TaskManager";
-import * as jwt             from "jsonwebtoken";
-import { CreateUrl }        from "./Lib/PathBuilder.Lib";
-import { RunTest }          from "./Testing";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
-import fetch                from "node-fetch";
+}                          from "./Lib/ConfigManager.Lib";
+import * as mongoose       from "mongoose";
+import AccountKey          from "./MongoDB/DB_AccountKey";
+import DB_AccountKey       from "./MongoDB/DB_AccountKey";
+import DB_Accounts         from "./MongoDB/DB_Accounts";
+import TaskManager         from "./Tasks/TaskManager";
+import { RunTest }         from "./Testing";
+import fetch               from "node-fetch";
+import { BC }              from "@server/Lib/System.Lib";
+import type {
+	EmitEvents,
+	ListenEvents
+}                          from "@app/Types/Socket";
 
 "asdasd".contains( "asd" );
 
@@ -48,9 +39,9 @@ Files.sort( ( a, b ) => {
 } );
 Files.splice( 0, ConfigManager.GetDashboardConifg.LOG_MaxLogCount );
 for ( const LogFile of Files ) {
-	SystemLib.LogWarning(
+	SystemLib.LogWarning( "log",
 		"Remove Logfile because its over the limit:",
-		SystemLib.ToBashColor( "Red" ),
+		BC( "Red" ),
 		LogFile
 	);
 	fs.rmSync( path.join( __LogDir, LogFile ) );
@@ -58,7 +49,7 @@ for ( const LogFile of Files ) {
 
 global.Api = express();
 global.HttpServer = http.createServer( Api );
-global.SocketIO = new Server<IListenEvents, IEmitEvents>( HttpServer, {
+global.SocketIO = new Server<ListenEvents, EmitEvents>( HttpServer, {
 	cors: {
 		origin: "*",
 		methods: [ "GET", "POST" ]
@@ -69,14 +60,6 @@ global.SocketIO = new Server<IListenEvents, IEmitEvents>( HttpServer, {
 Api.use( express.json() );
 Api.use( express.static( path.join( __basedir, "build" ) ) );
 
-const Connection = async(
-	socket : Socket<IListenEvents, IEmitEvents, DefaultEventsMap, any>
-) => {
-	socket.emit( "Connect" );
-};
-
-SocketIO.on( "connection", Connection );
-
 Api.use( function( req, res, next ) {
 	res.setHeader( "Access-Control-Allow-Origin", "*" );
 	res.setHeader( "Access-Control-Allow-Methods", "GET, POST" );
@@ -86,57 +69,6 @@ Api.use( function( req, res, next ) {
 	);
 	res.setHeader( "Access-Control-Allow-Credentials", "true" );
 	next();
-} );
-
-Api.all( "*", async function( req, res, next ) {
-	req.body = {
-		...req.body,
-		...req.query
-	};
-
-	if ( !req.path.includes( CreateUrl( "" ) ) ) {
-		res.sendFile( path.join( __dirname, "../..", "build", "index.html" ) );
-		return;
-	}
-
-	if ( req.path.includes( "/auth/" ) ) {
-		next();
-		return;
-	}
-
-	const AuthHeader = req.headers[ "authorization" ];
-	const Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" );
-
-	if ( Token == null ) {
-		return;
-	}
-
-	jwt.verify( Token, GetSecretAppToken(), async( err, user : any ) => {
-		if ( err ) {
-			res.json( {
-				Auth: false,
-				Success: true
-			} );
-			return;
-		}
-
-		req.body.UserClass = await UserLib.build( user );
-
-		if ( req.body.UserClass.IsValid() ) {
-			next();
-			return;
-		}
-
-		res.json( {
-			Auth: false,
-			Success: false,
-			Message: {
-				AlertType: "danger",
-				Message: `Fehler beim verarbeiten der Daten.`,
-				Title: "Fehler!"
-			}
-		} );
-	} );
 } );
 
 InstallRoutings( path.join( __dirname, "Routings" ), Api );
@@ -150,15 +82,18 @@ mongoose
 		}
 	)
 	.then( async() => {
+		SystemLib.Log( "socketio", "Install socket listener" );
+		await import("@server/socketIO");
 		if ( ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs() !== "" ) {
 			global.__PublicIP = ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs();
 		}
 		else {
 			const IPResponse = await fetch( "http://api.ipify.org" );
 			global.__PublicIP = ( await IPResponse.text() ).clearWs();
-			SystemLib.Log( "Public IP: " + global.__PublicIP );
+			SystemLib.Log( "ip", "Public IP: " + global.__PublicIP );
 		}
 
+		await import( "@server/trpc/server" );
 		await SSHManager.Init();
 		// create an account key if no there and no user
 		if (
@@ -167,10 +102,10 @@ mongoose
 		) {
 			await AccountKey.create( {
 				key: "KAdmin-ArkLIN2",
-				AsSuperAdmin: true
+				asSuperAdmin: true
 			} );
 			SystemLib.Log(
-				"[DB] Create default AccountKey:" + SystemLib.ToBashColor( "Red" ),
+				"DB", "Create default AccountKey:" + SystemLib.ToBashColor( "Red" ),
 				"KAdmin-ArkLIN2"
 			);
 		}
@@ -178,13 +113,13 @@ mongoose
 		// start Tasks
 		await TaskManager.Init();
 		SystemLib.Log(
-			`[TASKS] All Jobs init (Total: ${ Object.keys( TaskManager.Jobs ).length })`
+			"TASKS", `All Jobs init (Total: ${ Object.keys( TaskManager.Jobs ).length })`
 		);
 
-		SystemLib.Log( "[DB] Connected... Start API and SOCKETIO" );
+		SystemLib.Log( "DB", "Connected... Start API and SOCKETIO" );
 		HttpServer.listen( process.env.API_EXPRESS_HTTP_PORT, () =>
 			SystemLib.Log(
-				"[API/SOCKETIO] API listen on port",
+				"API/SOCKETIO", "API listen on port",
 				process.env.API_EXPRESS_HTTP_PORT
 			)
 		);
