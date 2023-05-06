@@ -11,6 +11,7 @@ const ZodInstanceSchema = z.object( {
 	LastAutoUpdate: z.number(),
 	ArkmanagerCfg: z.any(),
 	State: z.object( {
+		allConfigs: z.array( z.string() ),
 		State: z.nativeEnum( EServerState ),
 		IsListen: z.boolean(),
 		Player: z.number(),
@@ -45,6 +46,7 @@ const InstanceSchema = new mongoose.Schema( {
 
 	State: {
 		type: {
+			allConfigs: { type: [ String ], required: false },
 			State: { type: String, required: true },
 			IsListen: { type: Boolean, required: true },
 			Player: { type: Number },

@@ -70,7 +70,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 
 	useEffect( () => {
 		if ( MasterServer ) {
-			setFileSync( Object.keys( MasterServer?.ArkmanagerCfg ).map<SelectOption>( e => ( {
+			setFileSync( ( MasterServer?.State.allConfigs || [] ).map<SelectOption>( e => ( {
 				label: e,
 				value: e
 			} ) ) );
@@ -139,6 +139,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			} ).catch( tRPC_handleError );
 			if ( result ) {
 				await refresh();
+				onHide();
 				fireSwalFromApi( result, true );
 			}
 			setIsSending( false );
@@ -148,6 +149,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			const result = await tRPC_Auth.server.clusterManagement.createCluster.mutate( { data } ).catch( tRPC_handleError );
 			if ( result ) {
 				await refresh();
+				onHide();
 				fireSwalFromApi( result, true );
 			}
 			setIsSending( false );
@@ -173,7 +175,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const ServerSelectOptions = useMemo( () => {
 		const options : SelectOption[] = [];
 		for ( const [ Instance, Data ] of Object.entries( InstanceData ) ) {
-			const IsInCluster = Data.Cluster !== null && Data.Cluster !== undefined && Data.Cluster.Instances.includes( Instance );
+			const IsInCluster = !!Data.Cluster && !Data.Cluster.Instances.includes( Instance );
 			options.push( {
 				value: Instance,
 				label: `${ Data.ArkmanagerCfg.ark_SessionName } ${ IsInCluster ? "(In einem Cluster)" : "" }`,

@@ -1,17 +1,17 @@
-import { JobTaskCycle }   from "../TaskManager";
+import { JobTaskCycle }       from "../TaskManager";
 import {
 	ConfigManager,
 	SSHManager
-}                         from "@server/Lib/ConfigManager.Lib";
-import fs                 from "fs";
-import path               from "path";
-import type { Instance }  from "@server/MongoDB/DB_Instances";
-import DB_Instances       from "@server/MongoDB/DB_Instances";
-import { ServerLib }      from "@server/Lib/Server.Lib";
-import { QueryArkServer } from "@server/Lib/ArkServerQuery.Lib";
-import { BC }             from "@server/Lib/System.Lib";
-import { EServerState }   from "@shared/Enum/EServerState";
-import type { InstanceState }  from "@app/Types/ArkSE";
+}                             from "@server/Lib/ConfigManager.Lib";
+import fs                     from "fs";
+import path                   from "path";
+import type { Instance }      from "@server/MongoDB/DB_Instances";
+import DB_Instances           from "@server/MongoDB/DB_Instances";
+import { ServerLib }          from "@server/Lib/Server.Lib";
+import { QueryArkServer }     from "@server/Lib/ArkServerQuery.Lib";
+import { BC }                 from "@server/Lib/System.Lib";
+import { EServerState }       from "@shared/Enum/EServerState";
+import type { InstanceState } from "@app/Types/ArkSE";
 
 export default new JobTaskCycle<Instance>(
 	"ServerState",
@@ -44,6 +44,7 @@ export default new JobTaskCycle<Instance>(
 			const InstanceData = ServerL.Get.ArkmanagerCfg;
 			const InstanceName = ServerL.Instance;
 			const InstanceState : Partial<InstanceState> = {
+				allConfigs: Object.keys( ServerL.GetConfigFiles() ).filter( e => e !== "Arkmanager.cfg" ),
 				IsListen: false,
 				State: EServerState.notInstalled,
 				Player: 0,

@@ -28,6 +28,7 @@ export const DefaultCluster : Cluster = {
 
 export function DefaultInstanceState() : InstanceState {
 	return structuredClone<InstanceState>( {
+		allConfigs: [],
 		IsListen: false,
 		State: EServerState.notInstalled,
 		Player: 0,
