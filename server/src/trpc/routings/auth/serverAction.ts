@@ -8,7 +8,10 @@ import {
 import { TRPCError }           from "@trpc/server";
 import { z }                   from "zod";
 import { EArkmanagerCommands } from "@app/Lib/serverUtils";
-import { EPerm }               from "@shared/Enum/User.Enum";
+import {
+	EPerm,
+	EPerm_Server
+}                              from "@shared/Enum/User.Enum";
 import { PanelConfigSchema }   from "@server/Lib/zodSchema";
 import type { Instance }       from "@server/MongoDB/DB_Instances";
 import DB_Instances            from "@server/MongoDB/DB_Instances";
@@ -16,7 +19,7 @@ import { CreateServer }        from "@server/Lib/Server.Lib";
 
 
 export const auth_serverAction = router( {
-	executeCommand: serverProcedure.input( z.object( {
+	executeCommand: serverProcedure.use( permissionMiddleware( EPerm_Server.ExecuteActions ) ).input( z.object( {
 		command: z.nativeEnum( EArkmanagerCommands ),
 		params: z.array( z.string() )
 	} ) ).mutation( async( { ctx, input } ) => {
