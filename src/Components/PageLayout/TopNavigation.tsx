@@ -55,7 +55,7 @@ export default function TopNavigation( Props : {
 			}
 		}
 	};
- 
+
 
 	const updatePanel = async() => {
 		const accept = await fireSwalFromApi( "Möchtest du wirklich das Panel updaten?", "question", {
@@ -125,7 +125,7 @@ export default function TopNavigation( Props : {
 									</button>
 									{ user.HasPermission( EPerm.PanelSettings ) && (
 										<Link
-											to="/paneladmin"
+											to="/app/paneladmin"
 											className="dropdown-item"
 											data-toggle="modal"
 											data-target="#panelControlerLogs"
@@ -198,7 +198,7 @@ export default function TopNavigation( Props : {
 							<ul className="list-unstyled d-flex flex-column gap-2 m-0">
 								<li>
 									<Link
-										to="/me"
+										to="/app/me"
 										className="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-2 px-3 lh-sm text-start"
 									>
 										<div>

@@ -175,7 +175,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const ServerSelectOptions = useMemo( () => {
 		const options : SelectOption[] = [];
 		for ( const [ Instance, Data ] of Object.entries( InstanceData ) ) {
-			const IsInCluster = !!Data.Cluster && !Data.Cluster.Instances.includes( Instance );
+			const IsInCluster = !!Data.Cluster && Data.Cluster.Instances.includes( Instance );
 			options.push( {
 				value: Instance,
 				label: `${ Data.ArkmanagerCfg.ark_SessionName } ${ IsInCluster ? "(In einem Cluster)" : "" }`,
@@ -226,7 +226,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 					        isClearable={ false } isDisabled={ SelectedServer.length === 0 }
 					        isOptionDisabled={ ( option ) => option.disabled === true || !SelectedServer.find( E => E.value === option.value ) }
 					        value={ SelectedMaster }
-					        options={ ServerSelectOptions }
+					        options={ SelectedServer }
 					/>
 				</InputGroup>
 

@@ -27,6 +27,10 @@ export async function onConfirm<PreConfirmResult = any>( msg : string, moreOptio
 	return !!accept?.isConfirmed;
 }
 
+export function successSwal( msg : string ) : void {
+	fireSwalFromApi( msg, "success" );
+}
+
 export function fireSwalFromApi<PreConfirmResult = any>( message : string[] | string | undefined, success? : boolean | SweetAlertIcon, moreOptions? : SweetAlertOptions<PreConfirmResult> ) {
 	if ( message && message.length >= 0 ) {
 		return Swal.fire<PreConfirmResult>( {

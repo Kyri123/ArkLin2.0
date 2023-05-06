@@ -11,9 +11,9 @@ import {
 }                          from "react-router";
 import StringMapLib        from "../../Lib/StringMap.Lib";
 
-const SPUser = React.lazy( () => import("./Subpage/me/SPUser") );
+const SPUser = React.lazy( () => import("../MainApp/Subpage/me/SPUser") );
 
-export default function PUsersettings() {
+export default function Me() {
 	const Location = useLocation();
 
 	return (

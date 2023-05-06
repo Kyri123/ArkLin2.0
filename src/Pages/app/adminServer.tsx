@@ -4,9 +4,11 @@ import {
 	useState
 }                                      from "react";
 import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
-import { Modal }                       from "react-bootstrap";
+import {
+	Modal,
+	Table
+}                                      from "react-bootstrap";
 import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
-import CLTEInput                       from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import ServerContext                   from "@context/ServerContext";
 import _                               from "lodash";
@@ -19,6 +21,7 @@ import {
 	tRPC_Auth,
 	tRPC_handleError
 }                                      from "@app/Lib/tRPC";
+import TableInput                      from "@comp/Elements/AdminLTE/TableInput";
 
 const Component : FC = () => {
 	const { InstanceData } = useContext( ServerContext );
@@ -61,39 +64,43 @@ const Component : FC = () => {
 			</div>
 
 			<Modal
-				size={ "lg" }
+				size={ "xl" }
 				show={ ShowNewServer }
 				onHide={ toggleShowNewServer }
 			>
 				<Modal.Header closeButton>Server Erstellen</Modal.Header>
-				<Modal.Body>
-					{ Object.entries( FormData ).map( ( [ Key, Value ], Idx ) => (
-						<CLTEInput
-							Type={
-								Array.isArray( Value )
-									? "text"
-									: typeof Value !== "string"
-										? "number"
-										: "text"
-							}
-							key={ "NEWSERVER" + Key + Idx }
-							Value={ Value }
-							OnValueSet={ ( Val ) => {
-								const Obj : Record<string, any> = {};
-								Obj[ Key ] = Val;
-								setFormData( {
-									...FormData,
-									...Obj
-								} );
-							} }
-							ValueKey={ Key }
-							InputSelectMask={ {
-								AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
-							} }
-						>
-							{ Key }
-						</CLTEInput>
-					) ) }
+				<Modal.Body className="p-0">
+					<Table className="p-0 m-0" striped>
+						<tbody>
+						{ Object.entries( FormData ).map( ( [ Key, Value ], Idx ) => (
+							<TableInput
+								Type={
+									Array.isArray( Value )
+										? "text"
+										: typeof Value !== "string"
+											? "number"
+											: "text"
+								}
+								key={ "NEWSERVER" + Key + Idx }
+								Value={ Value }
+								OnValueSet={ ( Val ) => {
+									const Obj : Record<string, any> = {};
+									Obj[ Key ] = Val;
+									setFormData( {
+										...FormData,
+										...Obj
+									} );
+								} }
+								ValueKey={ Key }
+								InputSelectMask={ {
+									AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
+								} }
+							>
+								{ Key }
+							</TableInput>
+						) ) }
+						</tbody>
+					</Table>
 				</Modal.Body>
 				<Modal.Footer>
 					<IconButton

@@ -1,8 +1,8 @@
 /** @format */
 
-import type { IChildrenBaseProps } from "./BaseTypes";
+import type { ChildrenBaseProps } from "./BaseTypes";
 
-export interface IPageCounterProps<T> extends IChildrenBaseProps {
+export interface IPageCounterProps<T> extends ChildrenBaseProps {
 	PerPage? : number;
 	OnSetPage : ( Value : T[] ) => void;
 	Data : T[];

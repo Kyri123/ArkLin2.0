@@ -12,14 +12,14 @@ import {
 import { useArkServer }                from "@hooks/useArkServer";
 import {
 	ButtonGroup,
-	Modal
+	Modal,
+	Table
 }                                      from "react-bootstrap";
 import { EPerm }                       from "@shared/Enum/User.Enum";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
 import UpdateSelectMask                from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerAction                    from "@comp/ServerAction";
-import CLTEInput                       from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
 import type { PanelServerConfig }      from "@app/Types/ArkSE";
 import useAccount                      from "@hooks/useAccount";
 import type { InputSelectMask }        from "@app/Types/Systeminformation";
@@ -30,6 +30,7 @@ import {
 	tRPC_handleError
 }                                      from "@app/Lib/tRPC";
 import _                               from "lodash";
+import TableInput                      from "@comp/Elements/AdminLTE/TableInput";
 
 export interface ServerAdminCardProps {
 	InstanceName : string;
@@ -258,7 +259,7 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 
 			{ user.HasPermission( EPerm.ManageServers ) && (
 				<Modal
-					size={ "lg" }
+					size={ "xl" }
 					show={ ShowEditServer }
 					onHide={ () => setShowEditServer( false ) }
 				>
@@ -266,34 +267,38 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 						Server Bearbeiten: [{ InstanceName }] -{ " " }
 						{ Server.Data.ark_SessionName }
 					</Modal.Header>
-					<Modal.Body>
-						{ Object.entries( FormData ).map( ( [ Key, Value ], Idx ) => (
-							<CLTEInput
-								Type={
-									Array.isArray( Value )
-										? "text"
-										: typeof Value !== "string"
-											? "number"
-											: "text"
-								}
-								key={ InstanceName + "EDIT" + Key + Idx }
-								Value={ Value }
-								OnValueSet={ ( Val ) => {
-									const Obj : Record<string, any> = {};
-									Obj[ Key ] = Val;
-									setFormData( {
-										...FormData,
-										...Obj
-									} );
-								} }
-								ValueKey={ Key }
-								InputSelectMask={ {
-									AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
-								} }
-							>
-								{ Key }
-							</CLTEInput>
-						) ) }
+					<Modal.Body className="p-0">
+						<Table className="p-0 m-0" striped>
+							<tbody>
+							{ Object.entries( FormData ).map( ( [ Key, Value ], Idx ) => (
+								<TableInput
+									Type={
+										Array.isArray( Value )
+											? "text"
+											: typeof Value !== "string"
+												? "number"
+												: "text"
+									}
+									key={ InstanceName + "EDIT" + Key + Idx }
+									Value={ Value }
+									OnValueSet={ ( Val ) => {
+										const Obj : Record<string, any> = {};
+										Obj[ Key ] = Val;
+										setFormData( {
+											...FormData,
+											...Obj
+										} );
+									} }
+									ValueKey={ Key }
+									InputSelectMask={ {
+										AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
+									} }
+								>
+									{ Key }
+								</TableInput>
+							) ) }
+							</tbody>
+						</Table>
 					</Modal.Body>
 					<Modal.Footer>
 						<IconButton

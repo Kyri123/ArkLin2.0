@@ -7,27 +7,27 @@ import type {
 import type { TPermissions } from "@shared/Enum/User.Enum";
 import type { Variant }      from "@shared/Type/AdminLTE";
 
-export interface IAdminLTEBase extends IChildrenBaseProps {
+export interface BootBase extends ChildrenBaseProps {
 	Color? : Variant;
 }
 
-export interface IAdminLTEBaseT<T> extends IChildrenBasePropsT<T> {
+export interface BootBaseT<T> extends ChildrenBasePropsT<T> {
 	BtnColor? : Variant;
 }
 
-export interface IChildrenBasePropsT<T> extends HTMLAttributes<T> {
+export interface ChildrenBasePropsT<T> extends HTMLAttributes<T> {
 	ref? : any;
 	Permission? : boolean;
 	Hide? : boolean;
 }
 
-export interface IChildrenBaseProps extends HTMLAttributes<HTMLDivElement> {
+export interface ChildrenBaseProps extends HTMLAttributes<HTMLDivElement> {
 	ref? : any;
 	Permission? : TPermissions;
 	Hide? : boolean;
 }
 
-export interface IPropsWithPermission extends PropsWithChildren {
+export interface PropsWithPermission extends PropsWithChildren {
 	Permission? : boolean;
 	Hide? : boolean;
 }

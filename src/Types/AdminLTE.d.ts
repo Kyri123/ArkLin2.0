@@ -4,13 +4,13 @@ import type { IconProp }                         from "@fortawesome/fontawesome-
 import type React, { HTMLAttributeAnchorTarget } from "react";
 import type { Variant }                          from "react-bootstrap/types";
 import type {
-	IChildrenBaseProps,
-	IPropsWithPermission
+	ChildrenBaseProps,
+	PropsWithPermission
 }                                                from "./BaseTypes";
 import type { Button }                           from "react-bootstrap";
 import type { CardProps }                        from "react-bootstrap/Card";
 
-export type IStateCardProps = CardProps & IPropsWithPermission & {
+export type IStateCardProps = CardProps & PropsWithPermission & {
 	Color : Variant;
 	BarPercent : number;
 	Title : string;
@@ -18,21 +18,21 @@ export type IStateCardProps = CardProps & IPropsWithPermission & {
 	BarColor : Variant;
 }
 
-export interface INavLinkProps extends IChildrenBaseProps {
+export interface INavLinkProps extends ChildrenBaseProps {
 	Disabled? : boolean;
 	Icon : IconProp;
 	To : string;
 	Target? : HTMLAttributeAnchorTarget | undefined;
 }
 
-export type IconButtonProps = IPropsWithPermission &
+export type IconButtonProps = PropsWithPermission &
 	Button.ButtonProps & {
 	IsLoading? : boolean;
 	ForceDisable? : boolean;
 	LoadingIcon? : IconProp;
 };
 
-export type ToggleButtonProps = IPropsWithPermission &
+export type ToggleButtonProps = PropsWithPermission &
 	Button.ButtonProps & {
 	Value? : boolean;
 	OnToggle? : ( Value : boolean ) => void;

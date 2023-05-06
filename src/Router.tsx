@@ -47,11 +47,28 @@ const rootRouter = createBrowserRouter( [
 					return loader( { request, params } );
 				},
 				children: [
+
 					{
 						index: true,
 						lazy: async() => await import("@page/app/Index"),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/index" );
+							return loader( { request, params } );
+						}
+					},
+					{
+						path: "/app/paneladmin",
+						lazy: async() => await import("@page/app/paneladmin"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/app/loader/paneladmin" );
+							return loader( { request, params } );
+						}
+					},
+					{
+						path: "/app/me",
+						lazy: async() => await import("@page/app/me"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/app/loader/me" );
 							return loader( { request, params } );
 						}
 					},

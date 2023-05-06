@@ -1,9 +1,9 @@
-import type { INavLinkProps }      from "../../../Types/AdminLTE";
-import { useContext }              from "react";
-import { FontAwesomeIcon }         from "@fortawesome/react-fontawesome";
-import type { IChildrenBaseProps } from "../../../Types/BaseTypes";
-import { Link }                    from "react-router-dom";
-import AccountContext              from "@context/AccountContext";
+import type { INavLinkProps }     from "../../../Types/AdminLTE";
+import { useContext }             from "react";
+import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import type { ChildrenBaseProps } from "../../../Types/BaseTypes";
+import { Link }                   from "react-router-dom";
+import AccountContext             from "@context/AccountContext";
 
 export function LTENavLink( Props : INavLinkProps ) {
 	const { Account } = useContext( AccountContext );
@@ -35,7 +35,7 @@ export function LTENavLink( Props : INavLinkProps ) {
 	);
 }
 
-export function LTENavDiv( Props : IChildrenBaseProps ) {
+export function LTENavDiv( Props : ChildrenBaseProps ) {
 	if ( Props.Hide ) {
 		return <></>;
 	}
