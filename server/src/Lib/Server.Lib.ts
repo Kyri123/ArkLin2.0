@@ -435,11 +435,21 @@ export class ServerLib<Ready extends boolean = boolean> {
 		return {};
 	}
 
-	GetConfigContentRaw( File : string ) : string {
+	GetConfigContentRaw( File : string | "arkmanager.cfg" ) : string {
 		try {
-			return fs.readFileSync( path.join( File ), "utf-8" ).toString();
+			if ( !File.startsWith( __basedir ) || File.toLowerCase().trim() === "arkmanager.cfg" ) {
+				throw new Error( "File not found" );
+			}
+			return fs.readFileSync( path.join( File ), "utf-8" );
 		}
 		catch ( e ) {
+			try {
+				if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
+					return fs.readFileSync( this.InstanceConfigFile, "utf-8" );
+				}
+			}
+			catch ( e ) {
+			}
 		}
 
 		return "";
@@ -450,7 +460,10 @@ export class ServerLib<Ready extends boolean = boolean> {
 		Content : string
 	) : boolean {
 		try {
-			if ( File !== "arkmanager.cfg" ) {
+			if ( !File.startsWith( __basedir ) || File.toLowerCase().trim() === "arkmanager.cfg" ) {
+				throw new Error( "File not found" );
+			}
+			if ( File.toLowerCase().trim() !== "arkmanager.cfg" ) {
 
 				const ConfigFile = path.join(
 					__server_dir,
@@ -462,8 +475,16 @@ export class ServerLib<Ready extends boolean = boolean> {
 				fs.writeFileSync( ConfigFile, Content );
 				return true;
 			}
+			else {
+			}
 		}
 		catch ( e ) {
+			try {
+				fs.writeFileSync( this.InstanceConfigFile, Content );
+				return true;
+			}
+			catch ( e ) {
+			}
 		}
 
 		return false;

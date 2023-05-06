@@ -17,6 +17,7 @@ import { auth_serverAction }      from "@server/trpc/routings/auth/serverAction"
 import { auth_user }              from "@server/trpc/routings/auth/user";
 import { auth_clusterManagement } from "@server/trpc/routings/auth/clusterManagement";
 import { auth_logs }              from "@server/trpc/routings/auth/logs";
+import { auth_serverConfig }      from "@server/trpc/routings/auth/config";
 
 
 const publicRouter = router( {
@@ -33,7 +34,8 @@ const authRouter = router( {
 	server: router( {
 		clusterManagement: auth_clusterManagement,
 		action: auth_serverAction,
-		log: auth_logs
+		log: auth_logs,
+		config: auth_serverConfig
 	} ),
 	admin: router( {
 		account: auth_accountManagement
