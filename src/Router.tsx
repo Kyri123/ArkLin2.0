@@ -65,8 +65,8 @@ const rootRouter = createBrowserRouter( [
 						}
 					},
 					{
-						path: "/app/me",
-						lazy: async() => await import("@page/app/me"),
+						path: "/app/account",
+						lazy: async() => await import("@page/app/account"),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/me" );
 							return loader( { request, params } );

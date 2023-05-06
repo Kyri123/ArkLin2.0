@@ -2,7 +2,7 @@ import type { FC }                        from "react";
 import { useState }                       from "react";
 import { ButtonGroup }                    from "react-bootstrap";
 import { FontAwesomeIcon }                from "@fortawesome/react-fontawesome";
-import { IconButton }                     from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }                     from "@comp/Elements/Buttons";
 import { useToggle }                      from "@kyri123/k-reactutils";
 import UserRow                            from "./pageComponents/userManagement/UserRow";
 import { useLoaderData }                  from "react-router-dom";

@@ -78,7 +78,7 @@ export function CLTECheckbox(
 	);
 }
 
-export default function CLTEInput( Props : ILTEInpute ) {
+export default function SmartInput( Props : ILTEInpute ) {
 	const ID = useId();
 	if ( Props.Hide ) {
 		return <></>;
@@ -91,7 +91,7 @@ export default function CLTEInput( Props : ILTEInpute ) {
 		Props.InputSelectMask[ Props.ValueKey ]
 	) {
 		// @ts-ignore
-		return <CLTEInputSelectMask { ...Props } />;
+		return <SmartInputSelectMask { ...Props } />;
 	}
 
 	if (
@@ -100,7 +100,7 @@ export default function CLTEInput( Props : ILTEInpute ) {
 		typeof Props.Value === "boolean"
 	) {
 		// @ts-ignore
-		return <CLTEInputBoolean { ...Props } />;
+		return <SmartInputBoolean { ...Props } />;
 	}
 
 	return (
@@ -129,7 +129,7 @@ export default function CLTEInput( Props : ILTEInpute ) {
 	);
 }
 
-export function CLTEInputSelectMask( Props : ILTESelect ) {
+export function SmartInputSelectMask( Props : ILTESelect ) {
 	const GetInputSelectMask = ( Value : string ) : InputSelectMask => {
 		let Mask : InputSelectMask = {
 			Value: "",
@@ -173,7 +173,7 @@ export function CLTEInputSelectMask( Props : ILTESelect ) {
 	}, [ SelectedValue ] );
 
 	if ( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
-		return <CLTEInputArray { ...Props } />;
+		return <SmartInputArray { ...Props } />;
 	}
 
 	const SetRow = ( Value = "" ) => {
@@ -287,11 +287,11 @@ export function CLTEInputSelectMask( Props : ILTESelect ) {
 	);
 }
 
-export function CLTEInputBoolean( Props : ILTEInpute<boolean> ) {
+export function SmartInputBoolean( Props : ILTEInpute<boolean> ) {
 	const ID = useId();
 
 	if ( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
-		return <CLTEInputArray { ...Props } />;
+		return <SmartInputArray { ...Props } />;
 	}
 
 	return (
@@ -310,12 +310,12 @@ export function CLTEInputBoolean( Props : ILTEInpute<boolean> ) {
 	);
 }
 
-export function CLTEInputArray( Props : ILTEInpute ) {
+export function SmartInputArray( Props : ILTEInpute ) {
 	const ID = useId();
 
 	if ( !Array.isArray( Props.Value ) && typeof Props.Value === "object" ) {
 		console.error(
-			`Found ${ typeof Props.Value } in CLTEInputArray!`,
+			`Found ${ typeof Props.Value } in SmartInputArray!`,
 			Props.Value
 		);
 		return <></>;
@@ -373,7 +373,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 						Props.InputSelectMask &&
 						Props.InputSelectMask[ Props.ValueKey ] ? (
 							// @ts-ignore
-							<CLTEInputSelectMask
+							<SmartInputSelectMask
 								{ ...Props }
 								Value={ Value }
 								ArraySupport={ true }
@@ -390,7 +390,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 										<FontAwesomeIcon icon={ "plus" }/>
 									</IconButton>
 								</ButtonGroup>
-							</CLTEInputSelectMask>
+							</SmartInputSelectMask>
 						) : (
 							<>
 								<input
@@ -422,7 +422,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 						Props.InputSelectMask &&
 						Props.InputSelectMask[ Props.ValueKey ] ? (
 							// @ts-ignore
-							<CLTEInputSelectMask
+							<SmartInputSelectMask
 								{ ...Props }
 								Value={ "" }
 								ArraySupport={ true }
@@ -433,7 +433,7 @@ export function CLTEInputArray( Props : ILTEInpute ) {
 										<FontAwesomeIcon icon={ "plus" }/>
 									</IconButton>
 								</ButtonGroup>
-							</CLTEInputSelectMask>
+							</SmartInputSelectMask>
 						) : (
 							<>
 								<input

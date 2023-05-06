@@ -13,7 +13,7 @@ import {
 	Card,
 	Table
 }                                     from "react-bootstrap";
-import { IconButton }                 from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }                 from "@comp/Elements/Buttons";
 import { FontAwesomeIcon }            from "@fortawesome/react-fontawesome";
 import StringMapLib                   from "../../Lib/StringMap.Lib";
 import type { InputSelectMask }       from "@app/Types/Systeminformation";
@@ -23,7 +23,7 @@ import {
 	tRPC_Auth,
 	tRPC_handleError
 }                                     from "@app/Lib/tRPC";
-import TableInput                     from "@comp/Elements/AdminLTE/TableInput";
+import TableInput                     from "@comp/Elements/TableInput";
 
 const CONFIGS = [ "API_BaseConfig", "Dashboard_BaseConfig", "Debug", "Tasks" ];
 

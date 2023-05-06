@@ -4,7 +4,7 @@ import {
 	useState
 }                                 from "react";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
-import { CLTECheckbox }           from "@comp/Elements/AdminLTE/AdminLTE_Inputs";
+import { CLTECheckbox }           from "@comp/Elements/SmartInput";
 import useAuth                    from "@hooks/useAuth";
 import {
 	Col,
@@ -12,7 +12,7 @@ import {
 	Form,
 	Row
 }                                 from "react-bootstrap";
-import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }             from "@comp/Elements/Buttons";
 import {
 	Link,
 	useNavigate

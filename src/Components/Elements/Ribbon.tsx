@@ -1,6 +1,6 @@
-import type { BootBase } from "../../../Types/BaseTypes";
+import type { BootBase } from "@app/Types/BaseTypes";
 
-export function LTERibbon( Props : BootBase ) {
+export function Ribbon( Props : BootBase ) {
 	if ( Props.Hide ) {
 		return <></>;
 	}

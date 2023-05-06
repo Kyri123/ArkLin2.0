@@ -12,7 +12,7 @@ import {
 	InputGroup,
 	Table
 }                                from "react-bootstrap";
-import { IconButton }            from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }            from "@comp/Elements/Buttons";
 import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
 import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
 import type { Socket }           from "socket.io-client";

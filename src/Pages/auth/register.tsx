@@ -11,7 +11,7 @@ import {
 	Form,
 	Row
 }                                 from "react-bootstrap";
-import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }             from "@comp/Elements/Buttons";
 import {
 	Link,
 	useNavigate

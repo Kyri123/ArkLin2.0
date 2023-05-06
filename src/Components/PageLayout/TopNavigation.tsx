@@ -198,7 +198,7 @@ export default function TopNavigation( Props : {
 							<ul className="list-unstyled d-flex flex-column gap-2 m-0">
 								<li>
 									<Link
-										to="/app/me"
+										to="/app/account"
 										className="btn btn-hover-light rounded-2 d-flex align-items-start gap-2 py-2 px-3 lh-sm text-start"
 									>
 										<div>

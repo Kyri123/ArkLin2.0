@@ -3,9 +3,9 @@ import {
 	useContext,
 	useState
 }                                  from "react";
-import PPClusterEditor             from "../MainApp/PageComponents/Cluster/PCClusterEditor";
-import PCClusterElement            from "../MainApp/PageComponents/Cluster/PCClusterElement";
-import { IconButton }              from "@comp/Elements/AdminLTE/Buttons";
+import PPClusterEditor             from "./pageComponents/Cluster/ClusterEditor";
+import ClusterElement              from "./pageComponents/Cluster/ClusterElement";
+import { IconButton }              from "@comp/Elements/Buttons";
 import { FontAwesomeIcon }         from "@fortawesome/react-fontawesome";
 import { Row }                     from "react-bootstrap";
 import { useToggle }               from "@kyri123/k-reactutils";
@@ -35,7 +35,7 @@ const Component : FunctionComponent = () => {
 			</IconButton>
 			<Row>
 				{ allClusters.map( cluster =>
-					<PCClusterElement key={ cluster._id } cluster={ cluster } refresh={ refresh }/>
+					<ClusterElement key={ cluster._id } cluster={ cluster } refresh={ refresh }/>
 				) }
 			</Row>
 			<PPClusterEditor refresh={ refresh } show={ showCreateCluster } onHide={ toggleCreateCluster }/>

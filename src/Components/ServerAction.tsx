@@ -1,25 +1,27 @@
-import { Modal }                from "react-bootstrap";
-import { IconButton }           from "@comp/Elements/AdminLTE/Buttons";
-import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
-import type { FC }              from "react";
+import { Modal }           from "react-bootstrap";
+import { IconButton }      from "@comp/Elements/Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { FC }         from "react";
 import {
 	useEffect,
 	useState
-}                               from "react";
-import CLTEInput                from "./Elements/AdminLTE/AdminLTE_Inputs";
+}                          from "react";
+import SmartInput          from "./Elements/SmartInput";
 import {
 	EArkmanagerCommands,
 	GetMaskFromCommand
-}                               from "../Lib/serverUtils";
-import Select                   from "react-select";
-import { useArkServer }         from "@hooks/useArkServer";
-import type { InputSelectMask } from "@app/Types/Systeminformation";
-import type { SingleOption }         from "@app/Types/Systeminformation";
+}                          from "../Lib/serverUtils";
+import Select              from "react-select";
+import { useArkServer }    from "@hooks/useArkServer";
+import type {
+	InputSelectMask,
+	SingleOption
+}                          from "@app/Types/Systeminformation";
 import {
 	fireSwalFromApi,
 	tRPC_Auth,
 	tRPC_handleError
-}                               from "@app/Lib/tRPC";
+}                          from "@app/Lib/tRPC";
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },
@@ -100,7 +102,7 @@ const ServerAction : FC<ServerActionProps> = ( { InstanceName, OnClose, Show } )
 				{ ParameterMask.para.length > 0 && Selected !== null && (
 					<>
 						<hr/>
-						<CLTEInput
+						<SmartInput
 							Value={ Parameter }
 							OnValueSet={ setParameter }
 							InputSelectMask={ ParameterMask }
@@ -108,7 +110,7 @@ const ServerAction : FC<ServerActionProps> = ( { InstanceName, OnClose, Show } )
 						>
 							{ " " }
 							Parameter{ " " }
-						</CLTEInput>
+						</SmartInput>
 					</>
 				) }
 			</Modal.Body>

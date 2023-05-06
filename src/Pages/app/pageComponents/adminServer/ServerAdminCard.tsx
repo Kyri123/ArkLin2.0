@@ -17,7 +17,7 @@ import {
 }                                      from "react-bootstrap";
 import { EPerm }                       from "@shared/Enum/User.Enum";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }                  from "@comp/Elements/Buttons";
 import UpdateSelectMask                from "@shared/SelectMask/Arkmanager_Command_Update.json";
 import ServerAction                    from "@comp/ServerAction";
 import type { PanelServerConfig }      from "@app/Types/ArkSE";
@@ -30,7 +30,7 @@ import {
 	tRPC_handleError
 }                                      from "@app/Lib/tRPC";
 import _                               from "lodash";
-import TableInput                      from "@comp/Elements/AdminLTE/TableInput";
+import TableInput                      from "@comp/Elements/TableInput";
 
 export interface ServerAdminCardProps {
 	InstanceName : string;

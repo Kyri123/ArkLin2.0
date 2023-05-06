@@ -16,8 +16,8 @@ import {
 }                              from "react-bootstrap";
 import type { SingleValue }    from "react-select";
 import Select                  from "react-select";
-import CLTEInput               from "../../../../Components/Elements/AdminLTE/AdminLTE_Inputs";
-import { IconButton }          from "@comp/Elements/AdminLTE/Buttons";
+import SmartInput              from "@comp/Elements/SmartInput";
+import { IconButton }          from "@comp/Elements/Buttons";
 import { useToggle }           from "@kyri123/k-reactutils";
 import { FontAwesomeIcon }     from "@fortawesome/react-fontawesome";
 import * as ini                from "ini";
@@ -322,7 +322,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 										return (
 											<tr key={ Key + Idx }>
 												<td className={ "text-dark pt-2 ps-4 pe-4" }>
-													<CLTEInput
+													<SmartInput
 														className={ "m-0" }
 														Value={ Value }
 														OnValueSet={ ( Value ) =>
@@ -336,7 +336,7 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 													>
 														{ " " }
 														{ Key }{ " " }
-													</CLTEInput>
+													</SmartInput>
 												</td>
 											</tr>
 										);

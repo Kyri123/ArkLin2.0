@@ -1,4 +1,3 @@
-import type { ServerAdminCardProps } from "@app/Types/Server";
 import {
 	useEffect,
 	useRef
@@ -8,6 +7,7 @@ import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
 import { ServerStateToColor }        from "@app/Lib/Conversion.Lib";
 import { Dropdown }                  from "react-bootstrap";
 import { Link }                      from "react-router-dom";
+import type { ServerAdminCardProps } from "@page/app/pageComponents/adminServer/ServerAdminCard";
 
 export default function CServerCard( Props : ServerAdminCardProps ) {
 	const CardRef = useRef<HTMLDivElement>( null );

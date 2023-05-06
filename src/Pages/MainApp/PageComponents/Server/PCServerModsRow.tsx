@@ -5,7 +5,7 @@ import { useArkServer }          from "@hooks/useArkServer";
 import { API_ServerLib }         from "@app/Lib/Api/API_Server.Lib";
 import { Link }                  from "react-router-dom";
 import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
-import { IconButton }            from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }            from "@comp/Elements/Buttons";
 import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
 
 interface IProps {

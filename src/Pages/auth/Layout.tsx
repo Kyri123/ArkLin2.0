@@ -10,7 +10,7 @@ import {
 	Link,
 	Outlet
 }                                 from "react-router-dom";
-import { LTERibbon }              from "@comp/Elements/AdminLTE/AdminLTE";
+import { Ribbon }                 from "@comp/Elements/Ribbon";
 import type { FunctionComponent } from "react";
 
 const Component : FunctionComponent = () => {
@@ -39,7 +39,7 @@ const Component : FunctionComponent = () => {
 					<h1 className="fw-bold mb-0 fs-2 p-2 text-center w-100">
 						KAdmin ArkLin 2.0
 					</h1>
-					<LTERibbon>Alpha</LTERibbon>
+					<Ribbon>Alpha</Ribbon>
 				</Modal.Header>
 				<Modal.Body className={ "p-3 pt-0" }>
 

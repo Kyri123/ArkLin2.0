@@ -9,7 +9,7 @@ import {
 	Modal,
 	Row
 }                          from "react-bootstrap";
-import { LTERibbon }       from "@comp/Elements/AdminLTE/AdminLTE";
+import { Ribbon }          from "@comp/Elements/Ribbon";
 import useAuth             from "@hooks/useAuth";
 
 const Component : FC = () => {
@@ -58,7 +58,7 @@ const Component : FC = () => {
 					<h1 className="fw-bold mb-0 fs-2 p-2 text-center w-100 text-danger">
 						Error: { statusCode }
 					</h1>
-					<LTERibbon>Alpha</LTERibbon>
+					<Ribbon>Alpha</Ribbon>
 				</Modal.Header>
 				<Modal.Body className={ "p-3 pt-0" }>
 					{ ErrorTest }

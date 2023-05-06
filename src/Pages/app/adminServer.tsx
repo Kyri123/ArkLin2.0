@@ -8,7 +8,7 @@ import {
 	Modal,
 	Table
 }                                      from "react-bootstrap";
-import { IconButton }                  from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }                  from "@comp/Elements/Buttons";
 import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import ServerContext                   from "@context/ServerContext";
 import _                               from "lodash";
@@ -21,7 +21,7 @@ import {
 	tRPC_Auth,
 	tRPC_handleError
 }                                      from "@app/Lib/tRPC";
-import TableInput                      from "@comp/Elements/AdminLTE/TableInput";
+import TableInput                      from "@comp/Elements/TableInput";
 
 const Component : FC = () => {
 	const { InstanceData } = useContext( ServerContext );

@@ -14,7 +14,7 @@ import { DefaultCluster }         from "@shared/Default/Server.Default";
 import {
 	IconButton,
 	ToggleButton
-}                                 from "@comp/Elements/AdminLTE/Buttons";
+}                                 from "@comp/Elements/Buttons";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
 import type {
 	MultiValue,

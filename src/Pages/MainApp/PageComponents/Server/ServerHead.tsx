@@ -11,7 +11,7 @@ import {
 }                                    from "../../../../Lib/Conversion.Lib";
 import { useArkServer }              from "../../../../Hooks/useArkServer";
 import { ButtonGroup }               from "react-bootstrap";
-import { IconButton }                from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }                from "@comp/Elements/Buttons";
 import { API_ServerLib }             from "../../../../Lib/Api/API_Server.Lib";
 import ServerAction                  from "@comp/ServerAction";
 import AccountContext                from "@context/AccountContext";

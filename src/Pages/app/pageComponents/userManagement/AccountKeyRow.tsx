@@ -1,7 +1,7 @@
 import type React          from "react";
 import { useState }        from "react";
 import { ButtonGroup }     from "react-bootstrap";
-import { IconButton }      from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }      from "@comp/Elements/Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCopy }         from "@kyri123/k-reactutils";
 import type { AccountKey } from "@server/MongoDB/DB_AccountKey";

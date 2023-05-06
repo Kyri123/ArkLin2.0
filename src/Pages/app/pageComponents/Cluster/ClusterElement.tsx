@@ -7,11 +7,11 @@ import {
 	Col,
 	Table
 }                                 from "react-bootstrap";
-import { useCluster }             from "../../../../Hooks/useCluster";
-import { useArkServer }           from "../../../../Hooks/useArkServer";
+import { useCluster }             from "@hooks/useCluster";
+import { useArkServer }           from "@hooks/useArkServer";
 import { MakeRandomString }       from "@kyri123/k-javascript-utils";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
-import PPClusterEditor            from "@page/MainApp/PageComponents/Cluster/PCClusterEditor";
+import PPClusterEditor            from "@page/app/pageComponents/Cluster/ClusterEditor";
 import { useToggle }              from "@kyri123/k-reactutils";
 import type { Cluster }           from "@server/MongoDB/DB_Cluster";
 import {
@@ -20,7 +20,7 @@ import {
 	tRPC_Auth,
 	tRPC_handleError
 }                                 from "@app/Lib/tRPC";
-import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
+import { IconButton }             from "@comp/Elements/Buttons";
 
 interface IPCServerClusterRow {
 	ServerName : string;
@@ -53,7 +53,7 @@ interface IPCClusterElementProps {
 	refresh : () => void;
 }
 
-const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { cluster, refresh } ) => {
+const ClusterElement : FunctionComponent<IPCClusterElementProps> = ( { cluster, refresh } ) => {
 	const [ showEditCluster, toggleEditCluster ] = useToggle( false );
 	const { Cluster, MasterServer, IsValid } = useCluster( cluster._id! );
 	const [ isSending, setIsSending ] = useState( false );
@@ -154,4 +154,4 @@ const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { cluster
 	);
 };
 
-export default PCClusterElement;
+export default ClusterElement;
