@@ -11,7 +11,7 @@ const watchedFile : Map<string, FSWatcher> = new Map();
 
 const watchPanelLog = () => {
 	for ( const key of SocketIO.sockets.adapter.rooms.keys() ) {
-		if ( key.startsWith( __basedir ) && fs.existsSync( key ) && !watchedFile.has( key ) && key.endsWith( ".log" ) ) {
+		if ( key.startsWith( __basedir ) && fs.existsSync( key ) && !watchedFile.has( key ) && ( key.endsWith( ".log" ) || key.endsWith( ".txt" ) ) ) {
 			const watcher = fs.watch( key, ( event, path ) => {
 				if ( event === "change" ) {
 					SocketIO.in( key ).emit( "onFileUpdated", key, fs

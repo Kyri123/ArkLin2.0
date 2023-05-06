@@ -4,7 +4,7 @@ import {
 	useRef,
 	useState
 }                              from "react";
-import { useArkServerConfigs } from "../../../../Hooks/useArkServerConfigs";
+import { useArkServerConfigs } from "@hooks/useArkServerConfigs";
 import {
 	Alert,
 	ButtonGroup,
@@ -27,20 +27,18 @@ import {
 	defaultSettingsGruvboxDark,
 	gruvboxDarkInit
 }                              from "@uiw/codemirror-theme-gruvbox-dark";
-import { API_ServerLib }       from "../../../../Lib/Api/API_Server.Lib";
+import { useParams }           from "react-router-dom";
 
-interface IProps {
-	InstanceName : string;
-}
 
-const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
+const Component = () => {
+	const { instanceName } = useParams();
 	const {
 		RequestConfigContent,
 		ConfigFiles,
 		ConfigContent,
 		CurrentFile,
 		Init
-	} = useArkServerConfigs( InstanceName );
+	} = useArkServerConfigs( instanceName! );
 	const [ FormIni, setFormIni ] = useState<Record<string, any>>( {} );
 	const [ SelectedSection, setSelectedSection ] = useState<string | undefined>(
 		undefined
@@ -142,14 +140,6 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 			const SendResult = IsArkmanagerCfg() ?
 				( UseTextEdtior ? JSON.parse( codeMirrorRef.current ) : FormIni ) :
 				( UseTextEdtior ? ini.parse( codeMirrorRef.current ) : FormIni );
-
-			const Response = await API_ServerLib.SetServerConfig(
-				InstanceName,
-				CurrentFile.split( "/" ).pop()!,
-				SendResult
-			);
-
-			DoSetAlert( Response );
 		}
 
 		setIsSending( false );
@@ -352,4 +342,4 @@ const SPServerConfig : React.FunctionComponent<IProps> = ( { InstanceName } ) =>
 	);
 };
 
-export default SPServerConfig;
+export { Component };

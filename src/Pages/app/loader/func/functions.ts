@@ -8,6 +8,8 @@ import {
 }                            from "@app/Lib/tRPC";
 import type { TPermissions } from "@shared/Enum/User.Enum";
 import User                  from "@app/Lib/User.Lib";
+import type {
+	Params} from "react-router-dom";
 import {
 	json,
 	redirect
@@ -34,5 +36,16 @@ export function sendWithPermission<T extends object>( data : T, permission : TPe
 	if ( !user.HasPermission( permission ) ) {
 		return redirect( "/error/401" );
 	}
+	return json<T>( data );
+}
+
+export function sendWithServerPermission<T extends object>( data : T, params : Params ) : Response {
+	const { instance } = params;
+	const user = new User( tRPC_token() );
+
+	if ( !user.HasPermissionForServer( instance || "NO!" ) ) {
+		return redirect( "/error/401" );
+	}
+
 	return json<T>( data );
 }

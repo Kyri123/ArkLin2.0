@@ -239,9 +239,9 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 					<div className="card-footer p-0">
 						<div className="row">
 							<div className="col-12">
-								<Link
-									to={ `/server/${ InstanceName }/logs` }
-									className="btn btn-sm btn-dark rounded-0 w-100"
+								<Link reloadDocument={ true }
+								      to={ `/app/server/${ InstanceName }/logs` }
+								      className="btn btn-sm btn-dark rounded-0 w-100"
 								>
 									ServerCenter
 								</Link>

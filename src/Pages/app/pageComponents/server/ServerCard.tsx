@@ -27,8 +27,8 @@ export default function CServerCard( Props : ServerAdminCardProps ) {
 		<>
 			<Dropdown.Divider className={ "m-0" }/>
 			<Dropdown.Item
-				as={ Link }
-				to={ `/server/${ Props.InstanceName }/logs` }
+				as={ Link } reloadDocument={ true }
+				to={ `/app/server/${ Props.InstanceName }/logs` }
 				className={ "p-2" }
 			>
 				<div className="d-flex">

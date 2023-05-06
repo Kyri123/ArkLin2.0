@@ -9,7 +9,7 @@ import { Link }             from "react-router-dom";
 import ServerContext        from "@context/ServerContext";
 import useAuth              from "@hooks/useAuth";
 import { EPerm }            from "@shared/Enum/User.Enum";
-import CServerCard          from "@page/MainApp/PageComponents/Server/ServerCard";
+import CServerCard          from "@page/app/pageComponents/server/ServerCard";
 import useAccount           from "@hooks/useAccount";
 import type { SystemUsage } from "@server/MongoDB/DB_Usage";
 import {

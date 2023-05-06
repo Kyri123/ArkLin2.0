@@ -8,6 +8,7 @@ import {
 	tRPC_Public,
 	tRPC_token
 }                              from "@app/Lib/tRPC";
+import { AUTHTOKEN }           from "@app/Lib/constance";
 
 export interface AuthLoaderProps {
 	hasAuth : boolean,
@@ -20,7 +21,19 @@ const loader : LoaderFunction = async( { request } ) => {
 	const token = tRPC_token().clearWs();
 	let hasAuth = token !== "";
 	if ( token !== "" ) {
-		hasAuth = !!( await tRPC_Public.validate.validateSession.query( { token } ).catch( tRPC_handleError ) );
+		const result = await tRPC_Public.validate.validateSession.query( { token } ).catch( tRPC_handleError );
+		if ( result ) {
+			if ( result.tokenValid ) {
+				hasAuth = true;
+			}
+			else {
+				window.localStorage.setItem( AUTHTOKEN, "" );
+				hasAuth = false;
+			}
+		}
+		else {
+			hasAuth = false;
+		}
 	}
 
 	if ( !hasAuth && ( !Url.pathname.startsWith( "/auth" ) && !Url.pathname.startsWith( "/error" ) ) ) {

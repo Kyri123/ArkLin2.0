@@ -1,38 +1,37 @@
-import type React                from "react";
+import type React            from "react";
 import {
 	useEffect,
 	useId,
 	useRef,
 	useState
-}                                from "react";
-import { useArkServer }          from "../../../../Hooks/useArkServer";
+}                            from "react";
+import { useArkServer }      from "@hooks/useArkServer";
 import {
 	Card,
 	FormControl,
 	InputGroup,
 	Table
-}                                from "react-bootstrap";
-import { IconButton }            from "@comp/Elements/Buttons";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
-import PCServerModsRow           from "../../PageComponents/Server/PCServerModsRow";
-import type { Socket }           from "socket.io-client";
-import io                        from "socket.io-client";
-import { SocketIOLib }           from "../../../../Lib/Api/SocketIO.Lib";
-import { API_SteamAPILib }       from "../../../../Lib/Api/API_SteamAPI.Lib";
-import type { ISteamApiMod }     from "../../../../Types/SteamAPI";
-import { API_ServerLib }         from "../../../../Lib/Api/API_Server.Lib";
-import { DefaultResponseFailed } from "@shared/Default/ApiRequest.Default";
-
-interface IProps {
-	InstanceName : string;
-}
+}                            from "react-bootstrap";
+import { IconButton }        from "@comp/Elements/Buttons";
+import { FontAwesomeIcon }   from "@fortawesome/react-fontawesome";
+import PCServerModsRow       from "../../pageComponents/server/PCServerModsRow";
+import type { Socket }       from "socket.io-client";
+import io                    from "socket.io-client";
+import { SocketIOLib }       from "@app/Lib/Api/SocketIO.Lib";
+import type { ISteamApiMod } from "@app/Types/SteamAPI";
+import { useParams }         from "react-router-dom";
+import type {
+	EmitEvents,
+	ListenEvents
+}                            from "@app/Types/Socket";
 
 const SocketIO : Socket<EmitEvents, ListenEvents> = io(
 	SocketIOLib.GetSpocketHost()
 );
-const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
+const Component = () => {
+	const { instanceName } = useParams();
 	const ID = useId();
-	const { Data, TempModify } = useArkServer( InstanceName );
+	const { Data } = useArkServer( instanceName! );
 	const [ IsSending, setIsSending ] = useState( false );
 	const InputRef = useRef<HTMLInputElement>( null );
 	const [ SteamMods, setSteamMods ] = useState<Record<number, ISteamApiMod>>( {} );
@@ -52,14 +51,6 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 
 		if ( !isNaN( Id ) ) {
 			if ( Data.ark_GameModIds.includes( Id ) ) {
-				DoSetAlert( {
-					...DefaultResponseFailed,
-					Message: {
-						Message: `Die Mod mit der ID ${ Id } existiert bereits.`,
-						Title: "Achtung!",
-						AlertType: "warning"
-					}
-				} );
 				setIsSending( false );
 				return;
 			}
@@ -70,28 +61,8 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 
 			CopyData.ark_GameModIds.push( Id );
 			CopyData.ark_GameModIds = [ ...new Set( CopyData.ark_GameModIds ) ];
-			const Result = await API_ServerLib.SetServerConfig(
-				InstanceName,
-				"Arkmanager.cfg",
-				CopyData
-			);
-			if ( Result.Success ) {
-				TempModify( ( Current ) => ( {
-					...Current,
-					ArkmanagerCfg: CopyData
-				} ) );
-			}
-			DoSetAlert( Result );
 		}
 		else {
-			DoSetAlert( {
-				...DefaultResponseFailed,
-				Message: {
-					Message: "Die eingabe war keine Nummer oder ein falscher Link!",
-					Title: "Fehler!",
-					AlertType: "danger"
-				}
-			} );
 		}
 
 		setIsSending( false );
@@ -99,7 +70,6 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 
 	useEffect( () => {
 		const QueryMods = () => {
-			API_SteamAPILib.GetMods( Data.ark_GameModIds ).then( setSteamMods );
 		};
 
 		QueryMods();
@@ -143,7 +113,7 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 					{ Data.ark_GameModIds.map( ( ModId, Index ) => (
 						<PCServerModsRow
 							key={ ID + ModId.toString() }
-							InstanceName={ InstanceName }
+							InstanceName={ instanceName! }
 							ModData={ SteamMods[ ModId ] }
 							ModId={ ModId }
 							ModIndex={ Index }
@@ -156,4 +126,4 @@ const SPServerMods : React.FunctionComponent<IProps> = ( { InstanceName } ) => {
 	);
 };
 
-export default SPServerMods;
+export { Component };

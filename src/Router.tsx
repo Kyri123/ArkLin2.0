@@ -57,6 +57,32 @@ const rootRouter = createBrowserRouter( [
 						}
 					},
 					{
+						path: "/app/server/:instanceName/",
+						lazy: async() => await import("@page/app/server/Layout"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/app/loader/server/Layout" );
+							return loader( { request, params } );
+						},
+						children: [
+							{
+								path: "/app/server/:instanceName/logs",
+								lazy: async() => await import("@page/app/server/[instanceName]/logs"),
+								loader: async( { request, params } ) => {
+									const { loader } = await import( "@page/app/loader/server/logs" );
+									return loader( { request, params } );
+								}
+							},
+							{
+								path: "/app/server/:instanceName/mods",
+								lazy: async() => await import("@page/app/server/[instanceName]/mods")
+							},
+							{
+								path: "/app/server/:instanceName/config",
+								lazy: async() => await import("@page/app/server/[instanceName]/config")
+							}
+						]
+					},
+					{
 						path: "/app/paneladmin",
 						lazy: async() => await import("@page/app/paneladmin"),
 						loader: async( { request, params } ) => {

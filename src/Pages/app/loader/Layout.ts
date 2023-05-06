@@ -14,7 +14,7 @@ export interface LayoutLoaderProps {
 	hasError? : boolean,
 }
 
-
+ 
 const loader : LoaderFunction = async() => {
 	const result = await fetchMainData();
 

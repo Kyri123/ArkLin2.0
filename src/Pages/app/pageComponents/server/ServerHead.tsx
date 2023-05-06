@@ -1,26 +1,44 @@
-import type { ServerAdminCardProps } from "../../../../Types/Server";
-import { Link }                      from "react-router-dom";
-import {
-	useContext,
-	useState
-}                                    from "react";
-import { FontAwesomeIcon }           from "@fortawesome/react-fontawesome";
+import { Link }                 from "react-router-dom";
+import type { FC }              from "react";
+import { useState }             from "react";
+import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
 import {
 	ServerStateToColor,
 	ServerStateToReadableString
-}                                    from "../../../../Lib/Conversion.Lib";
-import { useArkServer }              from "../../../../Hooks/useArkServer";
-import { ButtonGroup }               from "react-bootstrap";
-import { IconButton }                from "@comp/Elements/Buttons";
-import { API_ServerLib }             from "../../../../Lib/Api/API_Server.Lib";
-import ServerAction                  from "@comp/ServerAction";
-import AccountContext                from "@context/AccountContext";
+}                               from "@app/Lib/Conversion.Lib";
+import { useArkServer }         from "@hooks/useArkServer";
+import { ButtonGroup }          from "react-bootstrap";
+import { IconButton }           from "@comp/Elements/Buttons";
+import ServerAction             from "@comp/ServerAction";
+import {
+	fireSwalFromApi,
+	onConfirm,
+	tRPC_Auth,
+	tRPC_handleError
+}                               from "@app/Lib/tRPC";
+import useAccount               from "@hooks/useAccount";
+import type { ServerAdminCardProps } from "@page/app/pageComponents/adminServer/ServerAdminCard";
 
-export default function CServerHead( Props : ServerAdminCardProps ) {
-	const Account = useContext( AccountContext );
-	const Server = useArkServer( Props.InstanceName );
-	const [ SendCancel, setSendCancel ] = useState( false );
+const ServerHead : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
+	const { user } = useAccount();
+	const Server = useArkServer( InstanceName );
 	const [ ShowModals, setShowModal ] = useState( false );
+	const [ IsSending, setIsSending ] = useState( false );
+
+	const cancelAction = async() => {
+		setIsSending( true );
+		const confirm = await onConfirm( "Möchtest du wirklich diese Aktion abbrechen?" );
+		if ( confirm ) {
+			const result = await tRPC_Auth.server.action.killAction.mutate( {
+				instanceName: InstanceName,
+				killServer: false
+			} ).catch( tRPC_handleError );
+			if ( result ) {
+				fireSwalFromApi( result, true );
+			}
+		}
+		setIsSending( false );
+	};
 
 	return (
 		<>
@@ -115,7 +133,7 @@ export default function CServerHead( Props : ServerAdminCardProps ) {
 												<ButtonGroup>
 													<IconButton
 														disabled={
-															!Account.Account.HasPermissionForServer(
+															!user.HasPermissionForServer(
 																Server.InstanceName
 															)
 														}
@@ -126,22 +144,14 @@ export default function CServerHead( Props : ServerAdminCardProps ) {
 													</IconButton>
 													<IconButton
 														disabled={
-															!Account.Account.HasPermissionForServer(
+															!user.HasPermissionForServer(
 																Server.InstanceName
 															)
 														}
 														Hide={ Server.State.ArkmanagerPID <= 1 }
 														variant={ "danger" }
-														IsLoading={ SendCancel }
-														onClick={ async() => {
-															setSendCancel( true );
-															GAlert.DoSetAlert(
-																await API_ServerLib.CancelAction(
-																	Server.InstanceName
-																)
-															);
-															setSendCancel( false );
-														} }
+														IsLoading={ IsSending }
+														onClick={ cancelAction }
 													>
 														<FontAwesomeIcon icon={ "cancel" }/>
 													</IconButton>
@@ -173,4 +183,6 @@ export default function CServerHead( Props : ServerAdminCardProps ) {
 			/>
 		</>
 	);
-}
+};
+
+export default ServerHead;
