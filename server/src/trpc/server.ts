@@ -15,6 +15,7 @@ import { auth_panelAdmin }        from "@server/trpc/routings/auth/panelAdmin";
 import { auth_accountManagement } from "@server/trpc/routings/admin/accountManagement";
 import { auth_serverAction }      from "@server/trpc/routings/auth/serverAction";
 import { auth_user }              from "@server/trpc/routings/auth/user";
+import { auth_clusterManagement } from "@server/trpc/routings/auth/clusterManagement";
 
 
 const publicRouter = router( {
@@ -29,6 +30,7 @@ const authRouter = router( {
 	globaleState: auth_globalState,
 	panelAdmin: auth_panelAdmin,
 	server: router( {
+		clusterManagement: auth_clusterManagement,
 		action: auth_serverAction
 	} ),
 	admin: router( {

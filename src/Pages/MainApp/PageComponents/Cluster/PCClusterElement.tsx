@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import { useState }               from "react";
 import {
 	Button,
 	ButtonGroup,
@@ -10,6 +11,16 @@ import { useCluster }             from "../../../../Hooks/useCluster";
 import { useArkServer }           from "../../../../Hooks/useArkServer";
 import { MakeRandomString }       from "@kyri123/k-javascript-utils";
 import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+import PPClusterEditor            from "@page/MainApp/PageComponents/Cluster/PCClusterEditor";
+import { useToggle }              from "@kyri123/k-reactutils";
+import type { Cluster }           from "@server/MongoDB/DB_Cluster";
+import {
+	fireSwalFromApi,
+	onConfirm,
+	tRPC_Auth,
+	tRPC_handleError
+}                                 from "@app/Lib/tRPC";
+import { IconButton }             from "@comp/Elements/AdminLTE/Buttons";
 
 interface IPCServerClusterRow {
 	ServerName : string;
@@ -38,20 +49,34 @@ const PCServerClusterRow : FunctionComponent<IPCServerClusterRow> = ( { ServerNa
 
 
 interface IPCClusterElementProps {
-	ClusterID : string;
-	TriggerEdit : ( Id : string ) => void;
-	TriggerRemove : ( Id : string ) => void;
+	cluster : Cluster;
+	refresh : () => void;
 }
 
-const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { ClusterID, TriggerEdit, TriggerRemove } ) => {
-	const { Cluster, MasterServer, IsValid } = useCluster( ClusterID );
-	const { ServerMap, Data } = useArkServer( MasterServer[ 0 ] );
+const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { cluster, refresh } ) => {
+	const [ showEditCluster, toggleEditCluster ] = useToggle( false );
+	const { Cluster, MasterServer, IsValid } = useCluster( cluster._id! );
+	const [ isSending, setIsSending ] = useState( false );
+	const { ServerMap, Data } = useArkServer( MasterServer ? MasterServer[ 0 ] : "" );
+	const ClusterID = cluster._id!;
 
 	if ( !IsValid ) {
 		return (
 			<></>
 		);
 	}
+
+	const removeCluster = async() => {
+		if ( await onConfirm( "Möchtest du wirklich diesen Cluster löschen?" ) ) {
+			setIsSending( true );
+			const result = await tRPC_Auth.server.clusterManagement.removeCluster.mutate( ClusterID ).catch( tRPC_handleError );
+			if ( result ) {
+				await refresh();
+				fireSwalFromApi( result, true );
+			}
+			setIsSending( false );
+		}
+	};
 
 	return (
 		<Col md={ 6 }>
@@ -84,16 +109,13 @@ const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { Cluster
 						/>
 						<ButtonGroup className={ "w-100 h-100" }>
 							<Button className={ "flat me-5" } variant={ "dark" }
-							        onClick={ () => TriggerEdit( ClusterID ) }>
+							        onClick={ toggleEditCluster }>
 								<FontAwesomeIcon icon={ "edit" }/>
 							</Button>
-							<Button className={ "flat ms-5" } variant={ "danger" } onClick={ () => setAcceptAction( {
-								Payload: TriggerRemove,
-								PayloadArgs: [ ClusterID ],
-								ActionTitle: "Möchtest du wirklich diesen Cluster entfernen?"
-							} ) }>
+							<IconButton IsLoading={ isSending } className={ "flat ms-5" } variant={ "danger" }
+							            onClick={ removeCluster }>
 								<FontAwesomeIcon icon={ "trash-alt" }/>
-							</Button>
+							</IconButton>
 						</ButtonGroup>
 					</div>
 				</div>
@@ -109,6 +131,9 @@ const PCClusterElement : FunctionComponent<IPCClusterElementProps> = ( { Cluster
 					</Table>
 				</Card.Body>
 			</Card>
+
+			<PPClusterEditor refresh={ refresh } onHide={ toggleEditCluster } show={ showEditCluster }
+			                 ClusterID={ ClusterID }/>
 		</Col>
 	);
 };

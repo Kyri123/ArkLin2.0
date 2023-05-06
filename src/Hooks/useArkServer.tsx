@@ -42,18 +42,18 @@ export function useArkServer( InstanceName : string ) {
 	const ServerIsKillable = useMemo( () : boolean => {
 		return ( Instance?.State.ArkmanagerPID || 0 ) > 10;
 	}, [ Instance ] );
-
+ 
 	return {
 		IsValid: IsValid,
-		ServerMap: Instance.ServerMap || {
+		ServerMap: Instance?.ServerMap || {
 			LOGO: "",
 			BG: ""
 		},
 		Instance: Instance,
-		Data: Instance.ArkmanagerCfg || GetRawInstanceData(),
-		State: Instance.State || DefaultInstanceState(),
+		Data: Instance?.ArkmanagerCfg || GetRawInstanceData(),
+		State: Instance?.State || DefaultInstanceState(),
 		InstanceName: InstanceName,
-		PanelConfig: Instance.PanelConfig || GetDefaultPanelServerConfig(),
+		PanelConfig: Instance?.PanelConfig || GetDefaultPanelServerConfig(),
 		IsClusterSlave,
 		HasCluster,
 		ActionIsKillable,

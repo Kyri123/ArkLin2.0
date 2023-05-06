@@ -10,8 +10,6 @@ import {
 	InputGroup,
 	Modal
 }                                 from "react-bootstrap";
-import { useCluster }             from "../../../../Hooks/useCluster";
-import type { Cluster }           from "../../../../Types/MongoDB";
 import { DefaultCluster }         from "@shared/Default/Server.Default";
 import {
 	IconButton,
@@ -24,20 +22,21 @@ import type {
 }                                 from "react-select";
 import Select                     from "react-select";
 import ServerContext              from "@context/ServerContext";
-import { API_ServerLib }          from "../../../../Lib/Api/API_Server.Lib";
-import type { InstanceData }      from "@shared/Type/ArkSE";
-import type { IAPIResponseBase }  from "@app/Types/API_Response";
-import { API_ClusterLib }         from "../../../../Lib/Api/API_Cluster.Lib";
+import type { InstanceData }      from "@app/Types/ArkSE";
+import { useCluster }             from "@hooks/useCluster";
+import type { Cluster }           from "@server/MongoDB/DB_Cluster";
+import {
+	fireSwalFromApi,
+	tRPC_Auth,
+	tRPC_handleError
+}                                 from "@app/Lib/tRPC";
+import type { SelectOption }      from "@app/Types/Systeminformation";
 
 interface IPCClusterElementProps {
-	ClusterID : string | undefined;
-	Close : () => void;
-}
-
-export interface ISelectOption<T = string> {
-	value : T;
-	label : string;
-	disabled? : boolean;
+	show : boolean;
+	ClusterID? : string;
+	onHide : () => void;
+	refresh : () => void;
 }
 
 const DisabledOptions : ( keyof InstanceData )[] = [
@@ -48,23 +47,19 @@ const RemovedOptions : ( keyof InstanceData )[] = [
 	"_id", "__v", "panel_publicip", "ark_Port", "ark_QueryPort", "ark_RCONPort"
 ];
 
-const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterID, Close } ) => {
+const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterID, onHide, show, refresh } ) => {
 	const { InstanceData } = useContext( ServerContext );
 	const { Cluster, IsValid } = useCluster( ClusterID || "" );
 	const [ Form, setForm ] = useState<Cluster>( { ...DefaultCluster } );
 	const [ IsSending, setIsSending ] = useState<boolean>( false );
-
-	const [ SelectedServer, setSelectedServer ] = useState<MultiValue<ISelectOption<string>>>( [] );
-
-	const [ SelectedServerSettings, setSelectedServerSettings ] = useState<MultiValue<ISelectOption<string>>>( [] );
+	const [ SelectedServer, setSelectedServer ] = useState<MultiValue<SelectOption>>( [] );
+	const [ SelectedServerSettings, setSelectedServerSettings ] = useState<MultiValue<SelectOption>>( [] );
 
 	// ArkmanagerSync
-	const [ ArkmanagerSync, setArkmanagerSync ] = useState<MultiValue<ISelectOption<string>>>( [] );
+	const [ ArkmanagerSync, setArkmanagerSync ] = useState<MultiValue<SelectOption>>( [] );
 	// Ini sync
-	const [ FileSync, setFileSync ] = useState<MultiValue<ISelectOption<string>>>( [] );
-	const [ SelectedMaster, setSelectedMaster ] = useState<SingleValue<ISelectOption<string>>>( null );
-
-	const [ , setResponse ] = useState<IAPIResponseBase<true> | undefined>();
+	const [ FileSync, setFileSync ] = useState<MultiValue<SelectOption>>( [] );
+	const [ SelectedMaster, setSelectedMaster ] = useState<SingleValue<SelectOption>>( null );
 
 	const MasterServer = useMemo( () => {
 		if ( SelectedMaster && SelectedMaster.value !== "" && InstanceData[ SelectedMaster.value ] ) {
@@ -74,22 +69,15 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	}, [ SelectedMaster, InstanceData ] );
 
 	useEffect( () => {
-		const Get = async() => {
-			const Options : ISelectOption<string>[] = [];
-
-			if ( MasterServer ) {
-				const Configs = await API_ServerLib.GetConfigFiles( MasterServer.Instance );
-				for ( const Config of Object.keys( Configs ) ) {
-					Options.push( {
-						value: Config,
-						label: Config
-					} );
-				}
-			}
-
-			return Options;
-		};
-		Get().then( setFileSync );
+		if ( MasterServer ) {
+			setFileSync( Object.keys( MasterServer?.ArkmanagerCfg ).map<SelectOption>( e => ( {
+				label: e,
+				value: e
+			} ) ) );
+		}
+		else {
+			setFileSync( [] );
+		}
 	}, [ MasterServer ] );
 
 	useEffect( () => {
@@ -135,7 +123,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const Save = async() => {
 		setIsSending( true );
 
-		const RequestData : Cluster = {
+		const data : Cluster = {
 			...Form,
 			Master: SelectedMaster?.value || "",
 			Instances: SelectedServer.map( Instance => Instance.value ),
@@ -143,34 +131,33 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			SyncInis: SelectedServerSettings.map( Instance => Instance.value )
 		};
 
-		if ( RequestData.Master !== "" && ClusterID && ClusterID !== "" && IsValid ) {
-			const Response = await API_ClusterLib.SetCluster( ClusterID, RequestData );
-
-			if ( !Response.Success ) {
-				setResponse( Response );
+		if ( IsValid && !!ClusterID ) {
+			setIsSending( true );
+			const result = await tRPC_Auth.server.clusterManagement.editCluster.mutate( {
+				id: ClusterID!,
+				data
+			} ).catch( tRPC_handleError );
+			if ( result ) {
+				await refresh();
+				fireSwalFromApi( result, true );
 			}
-			if ( Response.Success ) {
-				DoSetAlert( Response );
-				Close();
-			}
+			setIsSending( false );
 		}
-		else if ( RequestData.Master !== "" ) {
-			const Response = await API_ClusterLib.CreateCluster( RequestData );
-
-			if ( !Response.Success ) {
-				setResponse( Response );
+		else {
+			setIsSending( true );
+			const result = await tRPC_Auth.server.clusterManagement.createCluster.mutate( { data } ).catch( tRPC_handleError );
+			if ( result ) {
+				await refresh();
+				fireSwalFromApi( result, true );
 			}
-			if ( Response.Success ) {
-				DoSetAlert( Response );
-				Close();
-			}
+			setIsSending( false );
 		}
 
 		setIsSending( false );
 	};
 
 	const ServerSettingsOptions = useMemo( () => {
-		let Options : ISelectOption<string>[] = [];
+		let Options : SelectOption[] = [];
 
 		if ( MasterServer ) {
 			Options = Object.keys( MasterServer.ArkmanagerCfg ).filter( E => !RemovedOptions.includes( E ) ).map( Key => ( {
@@ -184,7 +171,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	}, [ MasterServer ] );
 
 	const ServerSelectOptions = useMemo( () => {
-		const options : ISelectOption<string>[] = [];
+		const options : SelectOption[] = [];
 		for ( const [ Instance, Data ] of Object.entries( InstanceData ) ) {
 			const IsInCluster = Data.Cluster !== null && Data.Cluster !== undefined && Data.Cluster.Instances.includes( Instance );
 			options.push( {
@@ -197,7 +184,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	}, [ InstanceData ] );
 
 	return (
-		<Modal size="lg" centered show={ ClusterID !== undefined } onHide={ Close }>
+		<Modal size="lg" centered show={ show } onHide={ onHide }>
 			<Modal.Header closeButton>
 				<Modal.Title>
 					{ ClusterID !== "" && ClusterID ? "Edit Cluster" : "Add Cluster" }
@@ -353,7 +340,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 				            ForceDisable={ ( !SelectedMaster || SelectedMaster.value === "" ) || Form.DisplayName === "" }>
 					<FontAwesomeIcon icon={ "plus" }/> { ClusterID !== "" && ClusterID ? "Speichern" : "Erstellen" }
 				</IconButton>
-				<IconButton onClick={ Close } variant={ "danger" }>
+				<IconButton onClick={ onHide } variant={ "danger" }>
 					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
 				</IconButton>
 			</Modal.Footer>

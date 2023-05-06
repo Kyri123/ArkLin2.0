@@ -54,7 +54,7 @@ export const ToggleButton : React.FunctionComponent<ToggleButtonProps> = ( { OnT
 	return (
 		<Button
 			{ ...Props }
-			className={ Props.className || "btn-sm rounded-0" }
+			className={ `${ IsActive() ? "" : "px-3" } ${ Props.className || "btn-sm rounded-0" }` }
 			variant={ IsActive() ? "success" : "danger" }
 			onClick={ OnClick }
 		>

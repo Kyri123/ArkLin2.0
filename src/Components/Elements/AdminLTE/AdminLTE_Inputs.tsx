@@ -78,6 +78,36 @@ export function CLTECheckbox(
 	);
 }
 
+export function ICheckbox(
+	Props : {
+		label? : string;
+		Checked? : boolean;
+		OnValueChanges : ( IsChecked : boolean ) => void;
+	} & IAdminLTEBase
+) {
+	const ID = useId();
+	return (
+		<div
+			className={ `icheck-${ Props.Color || "primary" } w-6 p-0 ${
+				Props.className || ""
+			}` }
+		>
+			<input
+				ref={ Props.ref }
+				checked={ Props.Checked }
+				onChange={ ( Event ) => Props.OnValueChanges( Event.target.checked ) }
+				type="checkbox"
+				name="stayloggedin"
+				className="form-check-input"
+				id={ ID }
+			/>
+			<label htmlFor={ ID } className={ Props.label }>
+				{ Props.children }
+			</label>
+		</div>
+	);
+}
+
 export default function CLTEInput( Props : ILTEInpute ) {
 	const ID = useId();
 	if ( Props.Hide ) {

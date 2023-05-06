@@ -119,7 +119,7 @@ const Component : FunctionComponent = () => {
 	return (
 		<>
 			<ServerContext.Provider
-				value={ { InstanceData: Instances, HasData: HasData, ClusterData: Clusters } }
+				value={ { InstanceData: Instances, HasData: HasData, ClusterData: Clusters, GetAllServer } }
 			>
 				<main className="d-flex flex-nowrap w-100">
 					<LeftNavigation/>

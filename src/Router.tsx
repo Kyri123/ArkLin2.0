@@ -66,6 +66,14 @@ const rootRouter = createBrowserRouter( [
 					{
 						path: "/app/adminserver",
 						lazy: async() => await import("@page/app/adminServer")
+					},
+					{
+						path: "/app/cluster",
+						lazy: async() => await import("@page/app/cluster"),
+						loader: async( { request, params } ) => {
+							const { loader } = await import( "@page/app/loader/cluster" );
+							return loader( { request, params } );
+						}
 					}
 				]
 			},
