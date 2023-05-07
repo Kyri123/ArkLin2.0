@@ -8,13 +8,16 @@ import { MW_REST }          from "@server/trpc/middleware";
 import type { UserAccount } from "@server/MongoDB/DB_Accounts";
 import DB_Instances         from "@server/MongoDB/DB_Instances";
 import { dataResponse }     from "@server/Lib/openApi.response";
-import { EPerm }            from "@shared/Enum/User.Enum";
+import {
+	EPerm,
+	GetEnumValue
+}                           from "@shared/Enum/User.Enum";
 
 export default function( Api : core.Express ) {
 	let Url = CreateUrl( "open/server/all" );
 	Api.get( Url, MW_REST, async( request : Request<any, any, { user : UserAccount }>, response : Response ) => {
 		try {
-			if ( request.body.user.permissions.includes( EPerm.Super ) ) {
+			if ( request.body.user.permissions.includes( GetEnumValue( EPerm.Super ) ) ) {
 				const servers = await DB_Instances.find( {}, {
 					"ArkmanagerCfg.ark_ServerAdminPassword": 0,
 					"ArkmanagerCfg.ark_ServerPassword": 0,
@@ -31,7 +34,7 @@ export default function( Api : core.Express ) {
 			return response.json( dataResponse( servers ) );
 		}
 		catch ( e ) {
-
+			console.log( e );
 		}
 		return response.json( dataResponse( [] ) );
 	} );
@@ -41,7 +44,7 @@ export default function( Api : core.Express ) {
 		const { instance } = request.params;
 		try {
 			if ( instance?.length > 0 ) {
-				if ( request.body.user.permissions.includes( EPerm.Super ) ) {
+				if ( request.body.user.permissions.includes( GetEnumValue( EPerm.Super ) ) ) {
 					const servers = await DB_Instances.find( { Instance: instance }, {
 						"ArkmanagerCfg.ark_ServerAdminPassword": 0,
 						"ArkmanagerCfg.ark_ServerPassword": 0,
