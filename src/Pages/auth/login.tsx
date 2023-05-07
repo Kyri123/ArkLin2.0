@@ -29,6 +29,7 @@ const Component : FunctionComponent = () => {
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
 	const [ stayLoggedIn, setStayLoggedIn ] = useState( false );
 	const [ IsSending, setIsSending ] = useState( false );
+	const [ passwortUrl, setPasswortUrl ] = useState<string | null>( null );
 
 	const LoginRef = useRef<HTMLInputElement>( null );
 	const PasswordRef = useRef<HTMLInputElement>( null );
@@ -52,6 +53,7 @@ const Component : FunctionComponent = () => {
 		if ( Response ) {
 			console.log( Response );
 			if ( Response.passwordResetToken ) {
+				setPasswortUrl( () => `/auth/reset/${ Response.passwordResetToken }` );
 				navigate( `/auth/reset/${ Response.passwordResetToken }`, { replace: true } );
 				fireSwalFromApi( Response.message, true );
 			}
@@ -71,6 +73,7 @@ const Component : FunctionComponent = () => {
 
 	return (
 		<>
+
 			<FloatingLabel
 				controlId="login"
 				label="E-Mail / Benutzername"
@@ -86,6 +89,9 @@ const Component : FunctionComponent = () => {
 					isInvalid={ InputState[ 1 ] }
 				/>
 			</FloatingLabel>
+
+			{ passwortUrl && <Link to={ passwortUrl } className="btn btn-sm mb-3">Du wirst nicht Weitergeleitet? Klicke
+				hier!</Link> }
 
 			<Row>
 				<Col span={ 6 }>
