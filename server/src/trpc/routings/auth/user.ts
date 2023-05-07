@@ -25,8 +25,8 @@ export const auth_user = router( {
 
 	update: authProcedure.input( z.object( {
 		data: z.object( {
-			mail: z.string().min( 6, "Benutzername ist zu kurz" ).optional(),
-			username: z.string().email().optional(),
+			mail: z.string().email().optional(),
+			username: z.string().optional().min( 6, "Benutzername ist zu kurz" ),
 			password: z.string().min( 8, "password ist zu kurz" ).optional()
 		} )
 	} ) ).mutation( async( { ctx, input } ) => {
