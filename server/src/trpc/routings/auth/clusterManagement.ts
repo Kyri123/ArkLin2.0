@@ -47,8 +47,12 @@ export const auth_clusterManagement = router( {
 	} ) ).mutation( async( { input } ) => {
 		const { id, data } = input;
 		try {
+			console.log( input );
 			await DB_Cluster.findByIdAndUpdate( id, data );
-			await TManager.RunTask( "ServerState", true );
+			TManager.RunTask( "ServerState", true ).then( () => {
+			} );
+			TManager.RunTask( "Server", true ).then( () => {
+			} );
 			return "Cluster wurde bearbeitet";
 		}
 		catch ( e ) {

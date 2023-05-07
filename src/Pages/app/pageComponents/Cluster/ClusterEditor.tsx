@@ -81,26 +81,6 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	}, [ MasterServer ] );
 
 	useEffect( () => {
-		setIsSending( false );
-		setForm( () => IsValid ? { ...Cluster } : { ...DefaultCluster } );
-		setSelectedServer( () => IsValid ? Cluster.Instances.map( Instance => {
-			if ( InstanceData[ Instance ] ) {
-				return {
-					value: Instance,
-					label: InstanceData[ Instance ].ArkmanagerCfg.ark_SessionName
-				};
-			}
-			return {
-				value: Instance,
-				label: Instance
-			};
-		} ) : [] );
-		setSelectedServerSettings( !IsValid ? [] : Cluster.SyncInis.map( E => ( { label: E, value: E } ) ) );
-		setArkmanagerSync( !IsValid ? [] : Cluster.SyncSettings.map( E => ( { label: E, value: E } ) ) );
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ ClusterID, IsValid ] );
-
-	useEffect( () => {
 		if ( !SelectedServer ) {
 			return;
 		}
@@ -119,6 +99,28 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			setSelectedMaster( () => SelectedServer[ 0 ] );
 		}
 	}, [ SelectedServer, SelectedMaster, ClusterID ] );
+
+	useEffect( () => {
+		if ( !IsValid ) {
+			return;
+		}
+		setForm( () => IsValid ? { ...Cluster } : { ...DefaultCluster } );
+		setSelectedServer( () => IsValid ? Cluster.Instances.map( Instance => {
+			if ( InstanceData[ Instance ] ) {
+				return {
+					value: Instance,
+					label: InstanceData[ Instance ].ArkmanagerCfg.ark_SessionName
+				};
+			}
+			return {
+				value: Instance,
+				label: Instance
+			};
+		} ) : [] );
+		setSelectedServerSettings( () => Cluster.SyncInis.map( E => ( { label: E, value: E } ) ) );
+		setArkmanagerSync( () => Cluster.SyncSettings.map( E => ( { label: E, value: E } ) ) );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ ClusterID, IsValid ] );
 
 	const Save = async() => {
 		setIsSending( true );
