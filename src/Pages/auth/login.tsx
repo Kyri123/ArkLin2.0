@@ -51,7 +51,6 @@ const Component : FunctionComponent = () => {
 		} ).catch( tRPC_handleError );
 
 		if ( Response ) {
-			console.log( Response );
 			if ( Response.passwordResetToken ) {
 				setPasswortUrl( () => `/auth/reset/${ Response.passwordResetToken }` );
 				navigate( `/auth/reset/${ Response.passwordResetToken }`, { replace: true } );
@@ -90,9 +89,6 @@ const Component : FunctionComponent = () => {
 				/>
 			</FloatingLabel>
 
-			{ passwortUrl && <Link to={ passwortUrl } className="btn btn-sm mb-3">Du wirst nicht Weitergeleitet? Klicke
-				hier!</Link> }
-
 			<Row>
 				<Col span={ 6 }>
 					<CLTECheckbox OnValueChanges={ setStayLoggedIn } Checked={ stayLoggedIn }>
@@ -111,6 +107,11 @@ const Component : FunctionComponent = () => {
 					</IconButton>
 				</Col>
 			</Row>
+
+			{ passwortUrl &&
+				<Link to={ passwortUrl } className="btn btn-primary btn-sm mt-2 w-full">Du wirst nicht Weitergeleitet?
+					Klicke
+					hier!</Link> }
 
 			<hr className="my-4"/>
 			<Link className="w-100 mb-3 rounded-3 btn btn-dark" to={ "/auth/register" }>Account Erstellen</Link>
