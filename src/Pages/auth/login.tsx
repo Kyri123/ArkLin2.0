@@ -29,6 +29,7 @@ const Component : FunctionComponent = () => {
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
 	const [ stayLoggedIn, setStayLoggedIn ] = useState( false );
 	const [ IsSending, setIsSending ] = useState( false );
+	const [ passwortUrl, setPasswortUrl ] = useState<string | null>( null );
 
 	const LoginRef = useRef<HTMLInputElement>( null );
 	const PasswordRef = useRef<HTMLInputElement>( null );
@@ -51,8 +52,9 @@ const Component : FunctionComponent = () => {
 
 		if ( Response ) {
 			if ( Response.passwordResetToken ) {
+				setPasswortUrl( () => `/auth/reset/${ Response.passwordResetToken }` );
+				navigate( `/auth/reset/${ Response.passwordResetToken }`, { replace: true } );
 				fireSwalFromApi( Response.message, true );
-				navigate( `/auth/reset/${ Response.passwordResetToken }` );
 			}
 			else if ( Response.token ) {
 				SetToken( Response.token );
@@ -70,6 +72,7 @@ const Component : FunctionComponent = () => {
 
 	return (
 		<>
+
 			<FloatingLabel
 				controlId="login"
 				label="E-Mail / Benutzername"
@@ -104,6 +107,11 @@ const Component : FunctionComponent = () => {
 					</IconButton>
 				</Col>
 			</Row>
+
+			{ passwortUrl &&
+				<Link to={ passwortUrl } className="btn btn-primary btn-sm mt-2 w-full">Du wirst nicht Weitergeleitet?
+					Klicke
+					hier!</Link> }
 
 			<hr className="my-4"/>
 			<Link className="w-100 mb-3 rounded-3 btn btn-dark" to={ "/auth/register" }>Account Erstellen</Link>

@@ -39,7 +39,7 @@ export const public_validate =
 			try {
 				return {
 					tokenValid: !!( await DB_AccountKey.exists( {
-						token: input.token,
+						key: input.token,
 						isPasswordReset: true
 					} ) )
 				};

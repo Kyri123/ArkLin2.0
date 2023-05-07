@@ -12,7 +12,6 @@ const loader : LoaderFunction = async( { params } ) => {
 	const { token } = params;
 	const tokenCheck = await tRPC_Public.validate.validateResetToken.query( { token: token! } ).catch( tRPC_handleError );
 
-	console.log( tokenCheck );
 	if ( !tokenCheck?.tokenValid ) {
 		return redirect( "/auth/login" );
 	}

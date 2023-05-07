@@ -19,7 +19,7 @@ const AccountKeySchema = new mongoose.Schema( {
 export type AccountKey = z.infer<typeof ZodAccountKeySchema> & MongoBase
 
 
-export default mongoose.model<AccountKey>( "accountkey", AccountKeySchema );
+export default mongoose.model<AccountKey>( "accountkeys", AccountKeySchema );
 export {
 	AccountKeySchema,
 	ZodAccountKeySchema

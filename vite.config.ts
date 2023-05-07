@@ -22,7 +22,7 @@ const sweetalert = [ "sweetalert2", "sweetalert2-react-content" ];
 const codemirror = [ "@uiw/react-codemirror" ];
 const codemirroraddons = [ "@uiw/codemirror-theme-gruvbox-dark", "@codemirror/lang-json" ];
 
-export default defineConfig( ( { command, mode, ssrBuild } ) => {
+export default defineConfig( ( { mode } ) => {
 	const Paths : Record<string, string[]> = JSON.parse( fs.readFileSync( resolve( __dirname, "tsconfig.json" ), "utf-8" ).toString() ).compilerOptions.paths;
 	const alias = Object.entries( Paths ).map<Alias>( ( [ key, value ] ) => ( {
 		find: key.replace( "/*", "" ),
