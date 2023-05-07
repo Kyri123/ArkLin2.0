@@ -50,9 +50,10 @@ const Component : FunctionComponent = () => {
 		} ).catch( tRPC_handleError );
 
 		if ( Response ) {
+			console.log( Response );
 			if ( Response.passwordResetToken ) {
+				navigate( `/auth/reset/${ Response.passwordResetToken }`, { replace: true } );
 				fireSwalFromApi( Response.message, true );
-				navigate( `/auth/reset/${ Response.passwordResetToken }` );
 			}
 			else if ( Response.token ) {
 				SetToken( Response.token );
