@@ -122,6 +122,7 @@ export default new JobTask(
 					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
 						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
 							const MasterContent = Master.GetConfigContentRaw( Path );
+							SystemLib.DebugLog( "clustersync", "Sync Config:", Filename, `(${ Master.Instance } ---> ${ Server.Instance })` );
 							Server.SetServerConfigRaw( Filename, MasterContent );
 						}
 					}

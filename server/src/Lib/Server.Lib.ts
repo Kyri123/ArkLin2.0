@@ -469,8 +469,10 @@ export class ServerLib<Ready extends boolean = boolean> {
 		File : string | "arkmanager.cfg",
 		Content : string
 	) : boolean {
+		// make sure we have only a filename not a path!
+		File = File.split( "/" ).at( -1 )!;
 		try {
-			if ( !File.startsWith( __basedir ) || File.toLowerCase().trim() === "arkmanager.cfg" ) {
+			if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
 				throw new Error( "File not found" );
 			}
 			if ( File.toLowerCase().trim() !== "arkmanager.cfg" ) {
@@ -482,6 +484,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 					File
 				);
 
+				SystemLib.DebugLog( "Filewrite", "Saved Config:", ConfigFile );
 				fs.writeFileSync( ConfigFile, Content );
 				return true;
 			}
@@ -490,6 +493,7 @@ export class ServerLib<Ready extends boolean = boolean> {
 		}
 		catch ( e ) {
 			try {
+				SystemLib.DebugLog( "Filewrite", "Saved Config:", this.InstanceConfigFile );
 				fs.writeFileSync( this.InstanceConfigFile, Content );
 				return true;
 			}
