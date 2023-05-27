@@ -1,6 +1,6 @@
 # IDE
 .idea
-.vscode
+.vscode/sftp.json
 
 # APP
 app/json/serverinfo
