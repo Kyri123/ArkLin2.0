@@ -1,12 +1,12 @@
 import {
-    serverStateToColor,
-    serverStateToReadableString
+	serverStateToColor,
+	serverStateToReadableString
 } from "@app/Lib/Conversion.Lib";
 import {
-    apiAuth,
-    apiHandleError,
-    fireSwalFromApi,
-    onConfirm
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi,
+	onConfirm
 } from "@app/Lib/tRPC";
 import { IconButton } from "@comp/Elements/Buttons";
 import ServerAction from "@comp/ServerAction";
@@ -20,18 +20,18 @@ import { ButtonGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 
-const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
+const ServerHead: FC<ServerAdminCardProps> = ( { instanceName } ) => {
 	const { user } = useAccount();
-	const Server = useArkServer( InstanceName );
-	const [ ShowModals, setShowModal ] = useState( false );
-	const [ IsSending, setIsSending ] = useState( false );
+	const server = useArkServer( instanceName );
+	const [ showModals, setShowModal ] = useState( false );
+	const [ isSending, setIsSending ] = useState( false );
 
 	const cancelAction = async() => {
 		setIsSending( true );
 		const confirm = await onConfirm( "Möchtest du wirklich diese Aktion abbrechen?" );
 		if( confirm ) {
 			const result = await apiAuth.server.action.killAction.mutate( {
-				instanceName: InstanceName,
+				instanceName: instanceName,
 				killServer: false
 			} ).catch( apiHandleError );
 			if( result ) {
@@ -54,7 +54,7 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 					<div className="card card-widget widget-user item-box m-0">
 						<div className="widget-user-header rounded-0 text-white p-0"
 							style={ {
-								background: `url('${ Server.ServerMap.BG }') center right`
+								background: `url('${ server.serverMap.BG }') center right`
 							} }>
 							<div style={ {
 								backgroundColor: "rgba(66,66,66,0.30)",
@@ -62,29 +62,29 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 							} }
 							className="p-3">
 								<h3 className="widget-user-username text-center text-light left">
-									{ Server.Data.ark_SessionName }
+									{ server.data.ark_SessionName }
 								</h3>
 
-								{ Server.State.IsListen ? (
+								{ server.state.IsListen ? (
 									<h5 className="widget-user-desc text-center">
-										<Link to={ `steam://connect/${ Server.Data.panel_publicip }:${ Server.Data.ark_QueryPort }` }
+										<Link to={ `steam://connect/${ server.data.panel_publicip }:${ server.data.ark_QueryPort }` }
 											className="text-light">
-											{ Server.Data.panel_publicip }:{ Server.Data.ark_QueryPort }
+											{ server.data.panel_publicip }:{ server.data.ark_QueryPort }
 										</Link>
 									</h5>
 								) : (
 									<h5 className="widget-user-desc text-center text-light">
-										{ Server.Data.panel_publicip }:{ Server.Data.ark_QueryPort }
+										{ server.data.panel_publicip }:{ server.data.ark_QueryPort }
 									</h5>
 								) }
 							</div>
 							<div style={ { zIndex: 1000, height: 50 } }
 								className="position-relative">
-								<img src={ Server.ServerMap.LOGO }
+								<img src={ server.serverMap.LOGO }
 									className="position-absolute top-100 start-50 translate-middle"
 									style={ { height: 100, width: 100 } }
 									alt={
-										Server.Data.serverMap
+										server.data.serverMap
 									} />
 							</div>
 						</div>
@@ -95,10 +95,10 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text"> STATUS </span>
 											<h6 className={ `description-header text-${ serverStateToColor(
-												Server.State.State
+												server.state.State
 											) }` }>
 												{ " " }
-												{ serverStateToReadableString( Server.State.State ) }
+												{ serverStateToReadableString( server.state.State ) }
 											</h6>
 										</div>
 									</div>
@@ -109,7 +109,7 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 											<span className="description-text">SPIELER</span>
 											<h6 className="description-header">
 												{ " " }
-												{ Server.State.Player } / { Server.Data.ark_MaxPlayers }{ " " }
+												{ server.state.Player } / { server.data.ark_MaxPlayers }{ " " }
 											</h6>
 										</div>
 									</div>
@@ -122,21 +122,21 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 												<ButtonGroup>
 													<IconButton disabled={
 														!user.hasPermissionForServer(
-															Server.InstanceName
+															server.instanceName
 														)
 													}
-													IsLoading={ Server.State.ArkmanagerPID !== 0 }
+													IsLoading={ server.state.ArkmanagerPID !== 0 }
 													onClick={ () => setShowModal( true ) }>
 														Aktion
 													</IconButton>
 													<IconButton disabled={
 														!user.hasPermissionForServer(
-															Server.InstanceName
+															server.instanceName
 														)
 													}
-													Hide={ Server.State.ArkmanagerPID <= 1 }
+													Hide={ server.state.ArkmanagerPID <= 1 }
 													variant="danger"
-													IsLoading={ IsSending }
+													IsLoading={ isSending }
 													onClick={ cancelAction }>
 														<FontAwesomeIcon icon="cancel" />
 													</IconButton>
@@ -150,7 +150,7 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 										<div className="info-box-content pt-2 ps-3 text-center h-100 align-middle">
 											<span className="description-text">VERSION</span>
 											<h6 className="description-header">
-												<b>{ Server.State.ServerVersion }</b>
+												<b>{ server.state.ServerVersion }</b>
 											</h6>
 										</div>
 									</div>
@@ -161,8 +161,8 @@ const ServerHead: FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 				</div>
 			</div>
 
-			<ServerAction InstanceName={ Server.InstanceName }
-				Show={ ShowModals }
+			<ServerAction instanceName={ server.instanceName }
+				Show={ showModals }
 				onClose={ () => setShowModal( false ) } />
 		</>
 	);

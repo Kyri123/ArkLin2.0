@@ -1,11 +1,11 @@
 import {
-    apiAuth,
-    apiHandleError,
-    fireSwalFromApi
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi
 } from "@app/Lib/tRPC";
 import {
-    IconButton,
-    ToggleButton
+	IconButton,
+	ToggleButton
 } from "@comp/Elements/Buttons";
 import ServerContext from "@context/ServerContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,19 +13,19 @@ import useAccount from "@hooks/useAccount";
 import { useToggle } from "@kyri123/k-reactutils";
 import type { UserAccount } from "@server/MongoDB/MongoAccounts";
 import {
-    EPerm,
-    EPermServer
+	EPerm,
+	EPermServer
 } from "@shared/Enum/User.Enum";
 import type React from "react";
 import {
-    useContext,
-    useState
+	useContext,
+	useState
 } from "react";
 import {
-    ButtonGroup,
-    Card,
-    Modal,
-    Nav
+	ButtonGroup,
+	Card,
+	Modal,
+	Nav
 } from "react-bootstrap";
 
 
@@ -36,19 +36,19 @@ interface IProps {
 
 const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 	const { user } = useAccount();
-	const { InstanceData } = useContext( ServerContext );
-	const [ Form, setForm ] = useState<UserAccount>( () => User );
-	const [ IsSending, setIsSending ] = useState( false );
+	const { instanceData } = useContext( ServerContext );
+	const [ form, setForm ] = useState<UserAccount>( () => User );
+	const [ isSending, setIsSending ] = useState( false );
 	const [ serverModal, toggleServerModal ] = useToggle( false );
 	const [ permissionModal, togglePermissionModal ] = useToggle( false );
-	const [ SelectedPermission, setSelectedPermission ] = useState<any>( EPerm );
+	const [ selectedPermission, setSelectedPermission ] = useState<any>( EPerm );
 
-	const SetPermissions = async() => {
+	const setPermissions = async() => {
 		setIsSending( true );
 		const result = await apiAuth.admin.account.updatePermissions.mutate( {
 			accountId: User._id!,
-			permissions: Form.permissions,
-			servers: Form.servers
+			permissions: form.permissions,
+			servers: form.servers
 		} ).catch( apiHandleError );
 		if( result ) {
 			fireSwalFromApi( result, true );
@@ -57,11 +57,11 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 		setIsSending( false );
 	};
 
-	const SetAllowedServer = async() => {
-		await SetPermissions();
+	const setAllowedServer = async() => {
+		await setPermissions();
 	};
 
-	const RemoveUser = async() => {
+	const removeUser = async() => {
 		setIsSending( true );
 		const accept = await fireSwalFromApi( "Möchtest du wirklich diesen Benutzer löschen?", "question", {
 			showConfirmButton: true,
@@ -87,11 +87,11 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 				<td>{ User.username }</td>
 				<td>{ User.mail }</td>
 				<td>
-					{ user.getDBInformation()._id !== User._id && (
+					{ user.get._id !== User._id && (
 						<ButtonGroup>
-							<IconButton onClick={ RemoveUser }
+							<IconButton onClick={ removeUser }
 								className="btn-sm flat"
-								IsLoading={ IsSending }
+								IsLoading={ isSending }
 								variant="danger">
 								<FontAwesomeIcon icon="trash-alt" />
 							</IconButton>
@@ -125,7 +125,7 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 								Haupt Rechte
 							</Nav.Link>
 						</Nav.Item>
-						{ !Form.permissions?.includes( "Super" ) && (
+						{ !form.permissions?.includes( "Super" ) && (
 							<Nav.Item>
 								<Nav.Link onClick={ () => setSelectedPermission( EPermServer ) }>
 									Server Rechte
@@ -136,11 +136,11 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 					<table className="p-3 table m-0 table-striped">
 						<tbody>
 							{ Object.entries(
-								!Form.permissions?.includes( "Super" )
-									? SelectedPermission
+								!form.permissions?.includes( "Super" )
+									? selectedPermission
 									: EPerm
 							).map( ( [ Key, Text ] ) => {
-								if( Form.permissions?.includes( "Super" ) && "Super" !== Key ) {
+								if( form.permissions?.includes( "Super" ) && "Super" !== Key ) {
 									return undefined;
 								}
 
@@ -148,20 +148,20 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 									<tr key={ Key }>
 										<td className="p-0" style={ { width: 0 } }>
 											<ToggleButton className=" w-100 h-100 flat "
-												Value={ Form.permissions?.includes( Key ) || false }
+												Value={ form.permissions?.includes( Key ) || false }
 												onToggle={ ( Value: boolean ) =>
 													setForm( Current => {
-														let Permissions = [ ...Current.permissions! ];
+														let permissions = [ ...Current.permissions! ];
 														if( Value ) {
-															Permissions.push( Key );
+															permissions.push( Key );
 														} else {
-															Permissions = Permissions.filter(
+															permissions = permissions.filter(
 																E => E !== Key
 															);
 														}
 														return {
 															...Current,
-															permissions: Permissions
+															permissions: permissions
 														};
 													} ) } />
 										</td>
@@ -176,9 +176,9 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 					<Card className="m-0">
 						<div className="input-group">
 							<div className="input-group-append">
-								<IconButton onClick={ SetPermissions }
+								<IconButton onClick={ setPermissions }
 									className="btn-sm flat"
-									IsLoading={ IsSending }
+									IsLoading={ isSending }
 									variant="success">
 									<FontAwesomeIcon icon="check" /> Speichern
 								</IconButton>
@@ -211,27 +211,27 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 							</tr>
 						</thead>
 						<tbody>
-							{ Object.entries( InstanceData ).map( ( [ Instance, InstanceData ] ) => (
+							{ Object.entries( instanceData ).map( ( [ Instance, instanceData ] ) => (
 								<tr key={ "SERV" + Instance }>
 									<td style={ { width: 0 } } className="p-2">
 										<ButtonGroup>
-											<ToggleButton Value={ Form.servers.includes( Instance ) }
+											<ToggleButton Value={ form.servers.includes( Instance ) }
 												onToggle={ ( V: boolean ) =>
 													setForm( Current => {
-														const Cur = { ...Current };
+														const cur = { ...Current };
 														if( V ) {
-															Cur.servers.push( Instance );
+															cur.servers.push( Instance );
 														} else {
-															Cur.servers = Cur.servers.filter(
+															cur.servers = cur.servers.filter(
 																( E: string ) => E !== Instance
 															);
 														}
-														return Cur;
+														return cur;
 													} ) } />
 										</ButtonGroup>
 									</td>
 									<td>{ Instance }</td>
-									<td>{ InstanceData.ArkmanagerCfg.ark_SessionName }</td>
+									<td>{ instanceData.ArkmanagerCfg.ark_SessionName }</td>
 								</tr>
 							) ) }
 						</tbody>
@@ -241,9 +241,9 @@ const UserRow: React.FunctionComponent<IProps> = ( { User, refresh } ) => {
 					<Card className="m-0">
 						<div className="input-group">
 							<div className="input-group-append">
-								<IconButton onClick={ SetAllowedServer }
+								<IconButton onClick={ setAllowedServer }
 									className="btn-sm flat"
-									IsLoading={ IsSending }
+									IsLoading={ isSending }
 									variant="success">
 									<FontAwesomeIcon icon="check" /> Speichern
 								</IconButton>

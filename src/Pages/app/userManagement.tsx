@@ -1,6 +1,6 @@
 import {
-    apiAuth,
-    apiHandleError
+	apiAuth,
+	apiHandleError
 } from "@app/Lib/tRPC";
 import { IconButton } from "@comp/Elements/Buttons";
 import PageManager from "@comp/PageManager";
@@ -23,7 +23,7 @@ const Component: FC = () => {
 	const [ accounts, setAccounts ] = useState( () => accs );
 	const [ total, setTotal ] = useState( () => totalAccounts );
 
-	const [ ShowKeys, toggleShowKeys ] = useToggle( false );
+	const [ showKeys, toggleShowKeys ] = useToggle( false );
 
 	async function onPageChange( range: QueryRange ) {
 		await apiAuth.admin.account.getalluser.query( range )
@@ -63,9 +63,10 @@ const Component: FC = () => {
 			</table>
 
 			<PageManager MaxPage={ maxPage } Page={ currentPage } onPageChange={ setPage } />
-			<AccountKeyManager show={ ShowKeys } onHide={ toggleShowKeys } initKeys={ keys } initCount={ totalKeys } />
+			<AccountKeyManager show={ showKeys } onHide={ toggleShowKeys } initKeys={ keys } initCount={ totalKeys } />
 		</>
 	);
 };
 
 export { Component };
+

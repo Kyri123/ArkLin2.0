@@ -27,8 +27,8 @@ const PCServerModsRow: React.FunctionComponent<IProps> = ( {
 	InstanceName,
 	ModIndex
 } ) => {
-	const { Data } = useArkServer( InstanceName );
-	const RemoveMod = async() => {
+	const { data } = useArkServer( InstanceName );
+	const removeMod = async() => {
 		if( await onConfirm( "Möchtest du diese mod wirklich entfernen?" ) ) {
 			const mods = _.clone( allMods );
 			mods.splice( ModIndex, 1 );
@@ -36,7 +36,7 @@ const PCServerModsRow: React.FunctionComponent<IProps> = ( {
 		}
 	};
 
-	const MoveMod = async( IndexOffset: 1 | -1 ) => {
+	const moveMod = async( IndexOffset: 1 | -1 ) => {
 		if( ModIndex + IndexOffset >= 0 && ModIndex + IndexOffset < allMods.length ) {
 			const mods = _.clone( allMods );
 			mods.swapElements( ModIndex, ModIndex + IndexOffset );
@@ -51,14 +51,14 @@ const PCServerModsRow: React.FunctionComponent<IProps> = ( {
 				<IconButton IsLoading={ isSending }
 					variant="gray-dark"
 					ForceDisable={ !( ModIndex - 1 >= 0 ) }
-					onClick={ () => MoveMod( -1 ) }
+					onClick={ () => moveMod( -1 ) }
 					className="btn btn-sm flat text-bg-dark m-0">
 					<FontAwesomeIcon icon="arrow-up" />
 				</IconButton>
 				<IconButton IsLoading={ isSending }
 					variant="gray-dark"
-					onClick={ () => MoveMod( 1 ) }
-					ForceDisable={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
+					onClick={ () => moveMod( 1 ) }
+					ForceDisable={ ModIndex + 1 > data.ark_GameModIds.length - 1 }
 					className="btn btn-sm flat text-bg-dark m-0">
 					<FontAwesomeIcon icon="arrow-down" />
 				</IconButton>
@@ -92,7 +92,7 @@ const PCServerModsRow: React.FunctionComponent<IProps> = ( {
 				<div className="btn-group">
 					<IconButton IsLoading={ isSending }
 						className="btn btn-danger m-0 flat"
-						onClick={ RemoveMod }>
+						onClick={ removeMod }>
 						<FontAwesomeIcon icon="trash-alt" /> Entfernen
 					</IconButton>
 				</div>

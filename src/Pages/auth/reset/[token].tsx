@@ -1,45 +1,45 @@
 import {
-    apiHandleError,
-    apiPublic,
-    fireSwalFromApi
+	apiHandleError,
+	apiPublic,
+	fireSwalFromApi
 } from "@app/Lib/tRPC";
 import { IconButton } from "@comp/Elements/Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAuth from "@hooks/useAuth";
 import type { FunctionComponent } from "react";
 import {
-    useRef,
-    useState
+	useRef,
+	useState
 } from "react";
 import {
-    Col,
-    FloatingLabel,
-    Form,
-    Row
+	Col,
+	FloatingLabel,
+	Form,
+	Row
 } from "react-bootstrap";
 import {
-    Link,
-    useNavigate,
-    useParams
+	Link,
+	useNavigate,
+	useParams
 } from "react-router-dom";
 
 
 const Component: FunctionComponent = () => {
 	const { token } = useParams<{ token: string }>();
 	const navigate = useNavigate();
-	const { SetToken } = useAuth();
-	const [ InputState, setInputState ] = useState<boolean[]>( [] );
+	const { setToken } = useAuth();
+	const [ inputState, setInputState ] = useState<boolean[]>( [] );
 
-	const [ IsSending, setIsSending ] = useState( false );
+	const [ isSending, setIsSending ] = useState( false );
 
-	const PasswordRef = useRef<HTMLInputElement>( null );
-	const Password2Ref = useRef<HTMLInputElement>( null );
+	const passwordRef = useRef<HTMLInputElement>( null );
+	const password2Ref = useRef<HTMLInputElement>( null );
 
-	const OnReg = async() => {
+	const onPasswordReset = async() => {
 		setIsSending( true );
 		const target = {
-			password: PasswordRef.current?.value || "",
-			passwordagain: Password2Ref.current?.value || ""
+			password: passwordRef.current?.value || "",
+			passwordagain: password2Ref.current?.value || ""
 		};
 
 		setInputState( [
@@ -47,15 +47,15 @@ const Component: FunctionComponent = () => {
 			target.passwordagain.length < 7
 		] );
 
-		if( !InputState.find( e => e ) ) {
-			const Response = await apiPublic.password.mutate( {
+		if( !inputState.find( e => e ) ) {
+			const response = await apiPublic.password.mutate( {
 				key: token!,
 				password: target.password
 			} ).catch( apiHandleError );
 
-			if( Response ) {
-				SetToken( Response.sessionToken );
-				await fireSwalFromApi( Response.message, true );
+			if( response ) {
+				setToken( response.sessionToken );
+				await fireSwalFromApi( response.message, true );
 				navigate( "/app", { replace: true } );
 			}
 		}
@@ -67,24 +67,24 @@ const Component: FunctionComponent = () => {
 		<>
 			<FloatingLabel controlId="password1" label="Passwort" className="mb-3">
 				<Form.Control type="password"
-					ref={ PasswordRef }
-					isInvalid={ InputState[ 0 ] } />
+					ref={ passwordRef }
+					isInvalid={ inputState[ 0 ] } />
 			</FloatingLabel>
 
 			<FloatingLabel controlId="password2"
 				label="Passwort Wiederholen"
 				className="mb-3">
 				<Form.Control type="password"
-					ref={ Password2Ref }
-					isInvalid={ InputState[ 1 ] } />
+					ref={ password2Ref }
+					isInvalid={ inputState[ 1 ] } />
 			</FloatingLabel>
 
 			<Row>
 				<Col>
 					<IconButton className="w-100 mb-2 rounded-3"
-						onClick={ OnReg }
+						onClick={ onPasswordReset }
 						varian="primary"
-						IsLoading={ IsSending }>
+						IsLoading={ isSending }>
 						<FontAwesomeIcon icon="sign-in" className="pe-2" />
 						Passwort festlegen und Einloggen
 					</IconButton>
@@ -98,3 +98,4 @@ const Component: FunctionComponent = () => {
 };
 
 export { Component };
+

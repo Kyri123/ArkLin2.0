@@ -1,11 +1,11 @@
 import {
-    apiHandleError,
-    apiPublic
+	apiHandleError,
+	apiPublic
 } from "@app/Lib/tRPC";
 import type { LoaderFunction } from "react-router-dom";
 import {
-    json,
-    redirect
+	json,
+	redirect
 } from "react-router-dom";
 
 
@@ -21,3 +21,4 @@ const loader: LoaderFunction = async( { params } ) => {
 };
 
 export { loader };
+

@@ -1,7 +1,7 @@
 import {
-    apiAuth,
-    apiHandleError,
-    fireSwalFromApi
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi
 } from "@app/Lib/tRPC";
 import { IconButton } from "@comp/Elements/Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,10 +18,10 @@ interface IProps {
 }
 
 const UserRow: React.FunctionComponent<IProps> = ( { Key, refresh } ) => {
-	const [ IsSending, setIsSending ] = useState( false );
+	const [ isSending, setIsSending ] = useState( false );
 
 
-	const [ DoCopy, IsCopied ] = useCopy<string>( Key.key, 2000 );
+	const [ doCopy, isCopied ] = useCopy<string>( Key.key, 2000 );
 
 	const removeKey = async() => {
 		setIsSending( true );
@@ -50,16 +50,16 @@ const UserRow: React.FunctionComponent<IProps> = ( { Key, refresh } ) => {
 				<ButtonGroup>
 					<IconButton onClick={ removeKey }
 						className="btn-sm rounded-0"
-						IsLoading={ IsSending }
+						IsLoading={ isSending }
 						variant="danger">
 						<FontAwesomeIcon icon="trash-alt" />
 					</IconButton>
-					<IconButton disabled={ IsCopied( Key._id ) }
-						onClick={ () => DoCopy( Key.key!, Key._id ) }
+					<IconButton disabled={ isCopied( Key._id ) }
+						onClick={ () => doCopy( Key.key!, Key._id ) }
 						className="btn-sm rounded-0"
 						IsLoading={ false }
 						variant="success">
-						<FontAwesomeIcon icon={ IsCopied( Key._id ) ? "check" : "copy" } />
+						<FontAwesomeIcon icon={ isCopied( Key._id ) ? "check" : "copy" } />
 					</IconButton>
 				</ButtonGroup>
 			</td>

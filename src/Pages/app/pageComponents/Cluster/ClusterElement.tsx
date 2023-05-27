@@ -1,8 +1,10 @@
+import type { Cluster } from "@/server/src/MongoDB/MongoCluster";
+import PPClusterEditor from "@/src/Pages/app/pageComponents/Cluster/ClusterEditor";
 import {
-    apiAuth,
-    apiHandleError,
-    fireSwalFromApi,
-    onConfirm
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi,
+	onConfirm
 } from "@app/Lib/tRPC";
 import { IconButton } from "@comp/Elements/Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,26 +12,24 @@ import { useArkServer } from "@hooks/useArkServer";
 import { useCluster } from "@hooks/useCluster";
 import { MakeRandomString } from "@kyri123/k-javascript-utils";
 import { useToggle } from "@kyri123/k-reactutils";
-import PPClusterEditor from "@page/app/pageComponents/Cluster/ClusterEditor";
-import type { Cluster } from "@server/MongoDB/MongoCluster";
 import type { FunctionComponent } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
-    Button,
-    ButtonGroup,
-    Card,
-    Col,
-    Table
+	Button,
+	ButtonGroup,
+	Card,
+	Col,
+	Table
 } from "react-bootstrap";
 
 
 interface IPCServerClusterRow {
 	ServerName: string,
-	ClusterID: string
+	clusterID: string
 }
 
-const PCServerClusterRow: FunctionComponent<IPCServerClusterRow> = ( { ServerName } ) => {
-	const { isValid, ServerMap, Data } = useArkServer( ServerName );
+export const PCServerClusterRow: FunctionComponent<IPCServerClusterRow> = ( { ServerName } ) => {
+	const { isValid, serverMap, data } = useArkServer( ServerName );
 
 	if( !isValid() ) {
 		return (
@@ -38,9 +38,9 @@ const PCServerClusterRow: FunctionComponent<IPCServerClusterRow> = ( { ServerNam
 	} else {
 		return (
 			<tr>
-				<td className="w-0"><img alt={ Data.serverMap } src={ ServerMap.LOGO } className="w-10" />
+				<td className="w-0"><img alt={ data.serverMap } src={ serverMap.LOGO } className="w-10" />
 				</td>
-				<td className="w-100 align-middle">{ Data.ark_SessionName }</td>
+				<td className="w-100 align-middle">{ data.ark_SessionName }</td>
 			</tr>
 		);
 	}
@@ -48,16 +48,16 @@ const PCServerClusterRow: FunctionComponent<IPCServerClusterRow> = ( { ServerNam
 
 
 interface IPCClusterElementProps {
-	cluster: Cluster,
+	clusterData: Cluster,
 	refresh: () => void
 }
 
-const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { cluster, refresh } ) => {
+const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { clusterData, refresh } ) => {
 	const [ showEditCluster, toggleEditCluster ] = useToggle( false );
-	const { Cluster, MasterServer, isValid } = useCluster( cluster._id! );
+	const { cluster, masterServer, isValid } = useCluster( clusterData._id! );
 	const [ isSending, setIsSending ] = useState( false );
-	const { ServerMap, Data } = useArkServer( MasterServer ? MasterServer[ 0 ] : "" );
-	const ClusterID = cluster._id!;
+	const { serverMap, data } = useArkServer( masterServer ? masterServer[ 0 ] : "" );
+	const clusterID = useMemo( () => cluster._id!, [ cluster._id ] );
 
 	if( !isValid ) {
 		return (
@@ -66,9 +66,9 @@ const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { cluster, r
 	}
 
 	const removeCluster = async() => {
-		if( await onConfirm( "Möchtest du wirklich diesen Cluster löschen?" ) ) {
+		if( await onConfirm( "Möchtest du wirklich diesen cluster löschen?" ) ) {
 			setIsSending( true );
-			const result = await apiAuth.server.clusterManagement.removeCluster.mutate( ClusterID ).catch( apiHandleError );
+			const result = await apiAuth.server.clusterManagement.removeCluster.mutate( clusterID ).catch( apiHandleError );
 			if( result ) {
 				await refresh();
 				fireSwalFromApi( result, true );
@@ -78,9 +78,9 @@ const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { cluster, r
 	};
 
 	const wipeCluster = async() => {
-		if( await onConfirm( "Möchtest du wirklich diesen Cluster löschen?" ) ) {
+		if( await onConfirm( "Möchtest du wirklich diesen cluster löschen?" ) ) {
 			setIsSending( true );
-			const result = await apiAuth.server.clusterManagement.wipeCluster.mutate( ClusterID ).catch( apiHandleError );
+			const result = await apiAuth.server.clusterManagement.wipeCluster.mutate( clusterID ).catch( apiHandleError );
 			if( result ) {
 				fireSwalFromApi( result, true );
 			}
@@ -92,7 +92,7 @@ const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { cluster, r
 		<Col md={ 6 }>
 			<Card className="mt-3 rounded-0">
 				<Card.Header className="text-bg-dark rounded-0 text-center font-bold text-lg">
-					{ Cluster.DisplayName }
+					{ cluster.DisplayName }
 				</Card.Header>
 
 				<div className="rounded-0 widget-user-header text-white"
@@ -103,11 +103,11 @@ const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { cluster, r
 						className="position-relative">
 					</div>
 					<div className="text-bg-dark position-relative" style={ { height: 40 } }>
-						<img src={ ServerMap.LOGO }
+						<img src={ serverMap.LOGO }
 							className="position-absolute bottom-0 start-50 translate-middle-x"
 							style={ { height: 100, width: 100, zIndex: 2 } }
 							alt={
-								Data.serverMap
+								data.serverMap
 							} />
 						<ButtonGroup className="w-100 h-100">
 							<Button className="flat me-5" variant="dark"
@@ -125,22 +125,22 @@ const ClusterElement: FunctionComponent<IPCClusterElementProps> = ( { cluster, r
 				<Card.Body className="rounded-0 p-0">
 					<Table className="table table-striped m-0">
 						<tbody>
-							{ Cluster.Instances.map( Instance => (
+							{ cluster.Instances.map( Instance => (
 								<PCServerClusterRow key={ MakeRandomString( 30, "-" ) } ServerName={ Instance }
-							                    ClusterID={ ClusterID } />
+							                    clusterID={ clusterID } />
 							) ) }
 						</tbody>
 					</Table>
 					<IconButton IsLoading={ isSending } className="flat w-full" variant="danger"
 					            onClick={ wipeCluster }>
 						<FontAwesomeIcon icon="trash-alt" className="me-2" />
-						wipe Cluster
+						wipe cluster
 					</IconButton>
 				</Card.Body>
 			</Card>
 
 			<PPClusterEditor refresh={ refresh } onHide={ toggleEditCluster } show={ showEditCluster }
-			                 ClusterID={ ClusterID } />
+			                 clusterID={ clusterID } />
 		</Col>
 	);
 };

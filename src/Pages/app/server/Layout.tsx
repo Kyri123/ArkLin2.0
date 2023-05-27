@@ -1,23 +1,23 @@
-import type { FunctionComponent }       from "react";
-import {
-	Link,
-	Outlet,
-	useLoaderData,
-	useLocation
-}                                       from "react-router-dom";
-import CServerHead                      from "@page/app/pageComponents/server/ServerHead";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { ServerLayoutLoaderProps } from "@page/app/loader/server/Layout";
+import CServerHead from "@page/app/pageComponents/server/ServerHead";
+import type { FunctionComponent } from "react";
 import {
 	Col,
 	Nav,
 	Navbar,
 	Row
-}                                       from "react-bootstrap";
-import { FontAwesomeIcon }              from "@fortawesome/react-fontawesome";
-import type { ServerLayoutLoaderProps } from "@page/app/loader/server/Layout";
+} from "react-bootstrap";
+import {
+	Link,
+	Outlet,
+	useLoaderData,
+	useLocation
+} from "react-router-dom";
 
 
 const Component: FunctionComponent = () => {
-	const Location = useLocation();
+	const { pathname } = useLocation();
 	const { instanceName } = useLoaderData() as ServerLayoutLoaderProps;
 
 	const handleOnMouseEnter = ( Event: React.MouseEvent<HTMLDivElement, MouseEvent> ) => {
@@ -30,7 +30,7 @@ const Component: FunctionComponent = () => {
 
 	return (
 		<>
-			<CServerHead InstanceName={ instanceName } />
+			<CServerHead instanceName={ instanceName } />
 
 			<Navbar bg="dark"
 				variant="dark"
@@ -38,30 +38,30 @@ const Component: FunctionComponent = () => {
 				<Nav className="me-auto ms-3">
 					<Nav.Link as={ Link }
 						to={ `/app/server/${ instanceName }/logs` }
-						active={ Location.pathname.endsWith( "/logs" ) }
+						active={ pathname.endsWith( "/logs" ) }
 						onMouseEnter={ handleOnMouseEnter }
 						onMouseLeave={ handleOnMouseLeave }>
 						<FontAwesomeIcon className="me-2" icon="list" />
-						{ !Location.pathname.endsWith( "/logs" ) ? <span className="d-none">Logs</span> : "Logs" }
+						{ !pathname.endsWith( "/logs" ) ? <span className="d-none">Logs</span> : "Logs" }
 					</Nav.Link>
 
 					<Nav.Link as={ Link }
 						to={ `/app/server/${ instanceName }/config` }
-						active={ Location.pathname.endsWith( "/config" ) }
+						active={ pathname.endsWith( "/config" ) }
 						onMouseEnter={ handleOnMouseEnter }
 						onMouseLeave={ handleOnMouseLeave }>
 						<FontAwesomeIcon className="me-2" icon="cogs" />
-						{ !Location.pathname.endsWith( "/config" ) ?
+						{ !pathname.endsWith( "/config" ) ?
 							<span className="d-none">Konfiguration</span> : "Konfiguration" }
 					</Nav.Link>
 
 					<Nav.Link as={ Link }
 						to={ `/app/server/${ instanceName }/mods` }
-						active={ Location.pathname.endsWith( "/mods" ) }
+						active={ pathname.endsWith( "/mods" ) }
 						onMouseEnter={ handleOnMouseEnter }
 						onMouseLeave={ handleOnMouseLeave }>
 						<FontAwesomeIcon className="me-2" icon="star" />
-						{ !Location.pathname.endsWith( "/mods" ) ?
+						{ !pathname.endsWith( "/mods" ) ?
 							<span className="d-none">Modifikationen</span> : "Modifikationen" }
 					</Nav.Link>
 				</Nav>
@@ -77,3 +77,4 @@ const Component: FunctionComponent = () => {
 };
 
 export { Component };
+

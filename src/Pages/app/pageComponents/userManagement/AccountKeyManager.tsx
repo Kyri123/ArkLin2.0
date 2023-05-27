@@ -1,11 +1,11 @@
 import {
-    apiAuth,
-    apiHandleError,
-    fireSwalFromApi
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi
 } from "@app/Lib/tRPC";
 import {
-    IconButton,
-    ToggleButton
+	IconButton,
+	ToggleButton
 } from "@comp/Elements/Buttons";
 import PageManager from "@comp/PageManager";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,8 +16,8 @@ import type { AccountKey } from "@server/MongoDB/MongoAccountKey";
 import type { FunctionComponent } from "react";
 import { useState } from "react";
 import {
-    Card,
-    Modal
+	Card,
+	Modal
 } from "react-bootstrap";
 
 
@@ -29,7 +29,7 @@ interface AccountKeyManagerProps {
 }
 
 const AccountKeyManager: FunctionComponent<AccountKeyManagerProps> = ( { show, onHide, initKeys, initCount } ) => {
-	const [ IsSending, setIsSending ] = useState( false );
+	const [ isSending, setIsSending ] = useState( false );
 	const [ keys, setKeys ] = useState( () => initKeys );
 	const [ total, setTotal ] = useState( () => initCount );
 	const [ asAdminKey, toggleAsAdminKey ] = useState( false );
@@ -89,7 +89,7 @@ const AccountKeyManager: FunctionComponent<AccountKeyManagerProps> = ( { show, o
 							</ToggleButton>
 							<IconButton onClick={ createAccountKey }
 								className="btn-sm flat"
-								IsLoading={ IsSending }
+								IsLoading={ isSending }
 								variant="success">
 								<FontAwesomeIcon icon="plus" /> Key Erstellen
 							</IconButton>

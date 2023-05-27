@@ -1,6 +1,6 @@
 import {
-    apiAuth,
-    apiHandleError
+	apiAuth,
+	apiHandleError
 } from "@app/Lib/tRPC";
 import { IconButton } from "@comp/Elements/Buttons";
 import ServerContext from "@context/ServerContext";
@@ -9,8 +9,8 @@ import { useToggle } from "@kyri123/k-reactutils";
 import type { ClusterLoaderProps } from "@page/app/loader/cluster";
 import type { FunctionComponent } from "react";
 import {
-    useContext,
-    useState
+	useContext,
+	useState
 } from "react";
 import { Row } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
@@ -36,7 +36,7 @@ const Component: FunctionComponent = () => {
 			</IconButton>
 			<Row>
 				{ allClusters.map( cluster =>
-					<ClusterElement key={ cluster._id } cluster={ cluster } refresh={ refresh } />
+					<ClusterElement key={ cluster._id } clusterData={ cluster } refresh={ refresh } />
 				) }
 			</Row>
 			<PPClusterEditor refresh={ refresh } show={ showCreateCluster } onHide={ toggleCreateCluster } />
@@ -45,3 +45,4 @@ const Component: FunctionComponent = () => {
 };
 
 export { Component };
+

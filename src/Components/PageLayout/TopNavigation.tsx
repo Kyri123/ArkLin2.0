@@ -153,7 +153,7 @@ export default function TopNavigation( Props: {
 							</Dropdown.Item>
 
 							{ Object.keys( instanceData ).map( Instance => (
-								<CServerCard InstanceName={ Instance } key={ ID + Instance } />
+								<CServerCard instanceName={ Instance } key={ ID + Instance } />
 							) ) }
 							<Dropdown.Divider className="m-0" />
 							<Dropdown.Item as={ Link }

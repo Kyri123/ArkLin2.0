@@ -1,13 +1,14 @@
 /** @format */
 
-import { SocketIOLib } from "@app/Lib/Api/SocketIO.Lib";
+import type { SystemUsage } from "@/server/src/MongoDB/MongoUsage";
+import { SocketIOLib } from "@/src/Lib/Api/SocketIO.Lib";
 import {
-    apiAuth,
-    fireSwalFromApi
+	apiAuth,
+	fireSwalFromApi
 } from "@app/Lib/tRPC";
 import type {
-    EmitEvents,
-    ListenEvents
+	EmitEvents,
+	ListenEvents
 } from "@app/Types/Socket";
 import Foother from "@comp/PageLayout/Foother";
 import LeftNavigation from "@comp/PageLayout/LeftNavigation";
@@ -22,23 +23,22 @@ import type { LayoutLoaderProps } from "@page/app/loader/Layout";
 import { fetchMainData } from "@page/app/loader/func/functions";
 import type { Cluster } from "@server/MongoDB/MongoCluster";
 import type { Instance } from "@server/MongoDB/MongoInstances";
-import type { SystemUsage } from "@server/MongoDB/MongoUsage";
 import { EPerm } from "@shared/Enum/User.Enum";
 import type { FunctionComponent } from "react";
 import {
-    useCallback,
-    useEffect,
-    useState
+	useCallback,
+	useEffect,
+	useState
 } from "react";
 import {
-    Outlet,
-    useLoaderData
+	Outlet,
+	useLoaderData
 } from "react-router-dom";
 import type { Socket } from "socket.io-client";
 import io from "socket.io-client";
 
 
-const SocketIO: Socket<EmitEvents, ListenEvents> = io(
+const socket: Socket<EmitEvents, ListenEvents> = io(
 	SocketIOLib.getSocketHost()
 );
 
@@ -46,12 +46,12 @@ const Component: FunctionComponent = () => {
 	const { cluster, server, usage, globalState, hasError } = useLoaderData() as LayoutLoaderProps;
 	const { user } = useAccount();
 	const [ showLog, toggleshowLog ] = useToggle( false );
-	const [ [ GameServerOnline, GameServerOffline, GameServerTotal ], setGameServerState ] = useState<number[]>( () => globalState );
-	const [ SystemUsage, setSystemUsage ] = useState<SystemUsage>( () => usage );
-	const [ HasData, setHasData ] = useState( () => !hasError );
+	const [ [ gameServerOnline, gameServerOffline, gameServerTotal ], setGameServerState ] = useState<number[]>( () => globalState );
+	const [ systemUsage, setSystemUsage ] = useState<SystemUsage>( () => usage );
+	const [ hasData, setHasData ] = useState( () => !hasError );
 
-	const [ Instances, setInstances ] = useState<Record<string, Instance>>( () => server );
-	const [ Clusters, setClusters ] = useState<Record<string, Cluster>>( () => cluster );
+	const [ instances, setInstances ] = useState<Record<string, Instance>>( () => server );
+	const [ clusters, setClusters ] = useState<Record<string, Cluster>>( () => cluster );
 
 	const getAllServer = useCallback( async() => {
 		if( hasError ) {
@@ -75,39 +75,39 @@ const Component: FunctionComponent = () => {
 			return;
 		}
 
-		SocketIO.on( "onSystemUpdate", Usage => {
+		socket.on( "onSystemUpdate", Usage => {
 			setSystemUsage( () => Usage );
 			apiAuth.globaleState.state.query().then( setGameServerState ).catch( () => {
 			} );
 		} );
 
-		SocketIO.on( "onServerUpdated", R =>
+		socket.on( "onServerUpdated", R =>
 			setInstances( I => ( {
 				...I,
 				...R
 			} ) )
 		);
 
-		SocketIO.on( "onClusterUpdated", R =>
+		socket.on( "onClusterUpdated", R =>
 			setClusters( I => ( {
 				...I,
 				...R
 			} ) )
 		);
 
-		SocketIO.on( "onClusterRemoved", getAllServer );
-		SocketIO.on( "onServerRemoved", getAllServer );
-		SocketIO.on( "connect", getAllServer );
-		SocketIO.on( "disconnect", () => setHasData( false ) );
+		socket.on( "onClusterRemoved", getAllServer );
+		socket.on( "onServerRemoved", getAllServer );
+		socket.on( "connect", getAllServer );
+		socket.on( "disconnect", () => setHasData( false ) );
 
 		return () => {
-			SocketIO.off( "onClusterRemoved", getAllServer );
-			SocketIO.off( "onClusterUpdated" );
-			SocketIO.off( "connect" );
-			SocketIO.off( "disconnect" );
-			SocketIO.off( "onServerUpdated" );
-			SocketIO.off( "onServerRemoved", getAllServer );
-			SocketIO.off( "onSystemUpdate" );
+			socket.off( "onClusterRemoved", getAllServer );
+			socket.off( "onClusterUpdated" );
+			socket.off( "connect" );
+			socket.off( "disconnect" );
+			socket.off( "onServerUpdated" );
+			socket.off( "onServerRemoved", getAllServer );
+			socket.off( "onSystemUpdate" );
 		};
 	}, [ getAllServer, hasError ] );
 
@@ -119,14 +119,14 @@ const Component: FunctionComponent = () => {
 
 	return (
 		<>
-			<ServerContext.Provider value={ { InstanceData: Instances, HasData: HasData, ClusterData: Clusters, getAllServer } }>
+			<ServerContext.Provider value={ { instanceData: instances, hasData, clusterData: clusters, getAllServer } }>
 				<main className="d-flex flex-nowrap w-100">
 					<LeftNavigation />
 					<div className="flex-fill d-flex flex-column w-100">
 						<div className="flex-grow-0">
 							<TopNavigation showLog={ toggleshowLog }
-								ServerState={ [ GameServerOnline, GameServerOffline ] }
-								SystemUsage={ SystemUsage } />
+								ServerState={ [ gameServerOnline, gameServerOffline ] }
+								SystemUsage={ systemUsage } />
 						</div>
 
 						<div className="flex-grow-0">
@@ -136,11 +136,11 @@ const Component: FunctionComponent = () => {
 						<div className="flex-auto h-100 overflow-y-scroll overflow-x-hidden">
 							<section className="content p-3 h-100 pt-0 pb-0">
 								<div className="py-3">
-									<Traffics SystemUsage={ SystemUsage }
+									<Traffics SystemUsage={ systemUsage }
 										ServerState={ [
-											GameServerOnline,
-											GameServerOffline,
-											GameServerTotal
+											gameServerOnline,
+											gameServerOffline,
+											gameServerTotal
 										] } />
 
 									<Outlet />
@@ -149,13 +149,13 @@ const Component: FunctionComponent = () => {
 						</div>
 
 						<div className="flex-grow-0">
-							<Foother SystemUsage={ SystemUsage } />
+							<Foother SystemUsage={ systemUsage } />
 						</div>
 					</div>
 				</main>
 
 				{ user.hasPermission( EPerm.PanelLog ) &&
-					<PanelLog usage={ SystemUsage } Show={ showLog } onHide={ toggleshowLog } /> }
+					<PanelLog usage={ systemUsage } Show={ showLog } onHide={ toggleshowLog } /> }
 			</ServerContext.Provider>
 		</>
 	);

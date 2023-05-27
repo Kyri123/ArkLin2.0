@@ -36,7 +36,7 @@ export function useArkServerConfigs(
 	}, [ InstanceName ] );
 
 	return {
-		RequestConfigContent: setReqConfigFile,
+		requestConfigContent: setReqConfigFile,
 		configFiles,
 		currentFile: reqConfigFile,
 		configContent

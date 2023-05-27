@@ -15,14 +15,14 @@ const lineColor = ( Line: string ): Variant => {
 	return color;
 };
 
-export default function Formatlog( Props: { LogContent: string } ) {
+export default function Formatlog( Props: { logContent: string } ) {
 	const ID = useId();
 
 	return (
 		<>
 			<table>
 				<tbody>
-					{ Props.LogContent.split( "\n" )
+					{ Props.logContent.split( "\n" )
 						.reverse()
 						.filter( e => e.replaceAll( " ", "" ).trim() !== "" )
 						.map( ( Content, Idx ) => (

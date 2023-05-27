@@ -3,22 +3,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useArkServer } from "@hooks/useArkServer";
 import type { ServerAdminCardProps } from "@page/app/pageComponents/adminServer/ServerAdminCard";
 import {
-    useEffect,
-    useRef
+	useEffect,
+	useRef
 } from "react";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 
 export default function CServerCard( Props: ServerAdminCardProps ) {
-	const CardRef = useRef<HTMLDivElement>( null );
-	const { Data, isValid, ServerMap, State } = useArkServer( Props.InstanceName );
+	const cardRef = useRef<HTMLDivElement>( null );
+	const { data, isValid, serverMap, state } = useArkServer( Props.instanceName );
 
 	useEffect( () => {
-		if( CardRef.current ) {
-			CardRef.current.style.setProperty( "border-width", "4px", "important" );
+		if( cardRef.current ) {
+			cardRef.current.style.setProperty( "border-width", "4px", "important" );
 		}
-	}, [ Data ] );
+	}, [ data ] );
 
 	if( !isValid() ) {
 		return <></>;
@@ -28,18 +28,18 @@ export default function CServerCard( Props: ServerAdminCardProps ) {
 		<>
 			<Dropdown.Divider className="m-0" />
 			<Dropdown.Item as={ Link } reloadDocument={ true }
-				to={ `/app/server/${ Props.InstanceName }/logs` }
+				to={ `/app/server/${ Props.instanceName }/logs` }
 				className="p-2">
 				<div className="d-flex">
 					<div className="flex-shrink-0">
-						<img src={ ServerMap.LOGO } alt={ Data.serverMap } width={ 65 } />
+						<img src={ serverMap.LOGO } alt={ data.serverMap } width={ 65 } />
 					</div>
 					<div className="flex-grow-1 pe-1 ps-2">
-						<h6 className="dropdown-item-title">{ Data.ark_SessionName }</h6>
+						<h6 className="dropdown-item-title">{ data.ark_SessionName }</h6>
 						<p className="fs-7 text-muted mt-1">
 							<FontAwesomeIcon icon="users" className="me-1" />{ " " }
-							{ State.Player } / { Data.ark_MaxPlayers }
-							<span className={ `float-end text-${ serverStateToColor( State.State ) }` }>
+							{ state.Player } / { data.ark_MaxPlayers }
+							<span className={ `float-end text-${ serverStateToColor( state.State ) }` }>
 								<FontAwesomeIcon icon="server" />
 							</span>
 						</p>

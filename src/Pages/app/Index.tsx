@@ -1,10 +1,10 @@
-import type { FC }               from "react";
-import { useState }              from "react";
-import { Button }                from "react-bootstrap";
-import { useLoaderData }         from "react-router-dom";
-import { FontAwesomeIcon }       from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { IndexLoaderProps } from "@page/app/loader";
-import ReactMarkdown             from "react-markdown";
+import type { FC } from "react";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
+import ReactMarkdown from "react-markdown";
+import { useLoaderData } from "react-router-dom";
 
 
 const Component: FC = () => {
@@ -57,3 +57,4 @@ const Component: FC = () => {
 };
 
 export { Component };
+

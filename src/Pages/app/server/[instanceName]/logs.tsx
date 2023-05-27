@@ -1,14 +1,15 @@
 
+import { SocketIOLib } from "@/src/Lib/Api/SocketIO.Lib";
 import type {
-    SelectOption,
-    SingleOption
+	SelectOption,
+	SingleOption
 } from "@app/Types/Systeminformation";
 import FormatLog from "@comp/FormatLog";
 import type { ServerLogsLoaderProps } from "@page/app/loader/server/logs";
 import {
-    useEffect,
-    useMemo,
-    useState
+	useEffect,
+	useMemo,
+	useState
 } from "react";
 import { Card } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
@@ -22,16 +23,16 @@ const Component = () => {
 		label: fileName
 	} ) ), [ logFiles ] );
 	const [ selectedFile, setSelectedFile ] = useState<SingleOption>( () => ( options.find( e => e.label === "panel.txt" ) || options.at( 0 ) || null ) );
-	const [ LogContent, setLogContent ] = useState<string>( "" );
+	const [ logContent, setLogContent ] = useState<string>( "" );
 
 	useEffect( () => {
 		if( selectedFile ) {
-			const Socket = getSocket( selectedFile?.value || "/room" );
+			const socket = SocketIOLib.getSocket( selectedFile?.value || "/room" );
 			const onFileUpdated = ( path: string, data: string[] ) => setLogContent( () => data.filter( ( e, i ) => i < 501 ).join( "\n" ) );
-			Socket.on( "onFileUpdated", onFileUpdated );
+			socket.on( "onFileUpdated", onFileUpdated );
 			return () => {
-				Socket.off( "onFileUpdated", onFileUpdated );
-				Socket.close();
+				socket.off( "onFileUpdated", onFileUpdated );
+				socket.close();
 			};
 		} else {
 			setLogContent( () => "" );
@@ -55,10 +56,11 @@ const Component = () => {
 			</Card.Header>
 			<Card.Body className="bg-dark text-light p-0"
 				style={ { overflowX: "hidden", overflowY: "scroll", maxHeight: 750 } }>
-				<FormatLog LogContent={ LogContent } />
+				<FormatLog logContent={ logContent } />
 			</Card.Body>
 		</Card>
 	);
 };
 
 export { Component };
+

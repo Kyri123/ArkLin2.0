@@ -1,7 +1,7 @@
 import {
-    apiAuth,
-    apiHandleError,
-    fireSwalFromApi
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi
 } from "@app/Lib/tRPC";
 import type { InputSelectMask } from "@app/Types/Systeminformation";
 import { IconButton } from "@comp/Elements/Buttons";
@@ -15,25 +15,25 @@ import UpdateSelectMask from "@shared/SelectMask/Arkmanager_Command_Update.json"
 import _ from "lodash";
 import type { FC } from "react";
 import {
-    useContext,
-    useState
+	useContext,
+	useState
 } from "react";
 import {
-    Modal,
-    Table
+	Modal,
+	Table
 } from "react-bootstrap";
 
 
 const Component: FC = () => {
-	const { InstanceData } = useContext( ServerContext );
-	const [ ShowNewServer, toggleShowNewServer ] = useToggle( false );
-	const [ FormData, setFormData ] = useState( () => _.cloneDeep( getDefaultPanelServerConfig() ) );
-	const [ IsSending, setIsSending ] = useState( false );
+	const { instanceData } = useContext( ServerContext );
+	const [ showNewServer, toggleShowNewServer ] = useToggle( false );
+	const [ formData, setFormData ] = useState( () => _.cloneDeep( getDefaultPanelServerConfig() ) );
+	const [ isSending, setIsSending ] = useState( false );
 
 	const createServer = async() => {
 		setIsSending( true );
 		const result = await apiAuth.server.action.createServer.mutate( {
-			config: _.cloneDeep( FormData )
+			config: _.cloneDeep( formData )
 		} ).catch( apiHandleError );
 		if( result ) {
 			fireSwalFromApi( result, true );
@@ -46,9 +46,9 @@ const Component: FC = () => {
 	return (
 		<>
 			<div className="row" id="serverControlCenterContainer">
-				{ Object.entries( InstanceData ).map( ( [ InstanceName, Instance ] ) => (
-					<ServerAdminCard InstanceName={ InstanceName }
-						key={ Instance._id } />
+				{ Object.entries( instanceData ).map( ( [ instanceName, instance ] ) => (
+					<ServerAdminCard instanceName={ instanceName }
+						key={ instance._id } />
 				) ) }
 
 				<span className="col-lg-6 col-xl-4 mt-3">
@@ -61,13 +61,13 @@ const Component: FC = () => {
 			</div>
 
 			<Modal size="xl"
-				show={ ShowNewServer }
+				show={ showNewServer }
 				onHide={ toggleShowNewServer }>
 				<Modal.Header closeButton>Server Erstellen</Modal.Header>
 				<Modal.Body className="p-0">
 					<Table className="p-0 m-0" striped>
 						<tbody>
-							{ Object.entries( FormData ).map( ( [ Key, Value ], Idx ) => (
+							{ Object.entries( formData ).map( ( [ Key, Value ], Idx ) => (
 								<TableInput Type={
 									Array.isArray( Value )
 										? "text"
@@ -78,11 +78,11 @@ const Component: FC = () => {
 								key={ "NEWSERVER" + Key + Idx }
 								Value={ Value }
 								onValueSet={ Val => {
-									const Obj: Record<string, any> = {};
-									Obj[ Key ] = Val;
+									const obj: Record<string, any> = {};
+									obj[ Key ] = Val;
 									setFormData( {
-										...FormData,
-										...Obj
+										...formData,
+										...obj
 									} );
 								} }
 								ValueKey={ Key }
@@ -97,7 +97,7 @@ const Component: FC = () => {
 				</Modal.Body>
 				<Modal.Footer>
 					<IconButton variant="success"
-						IsLoading={ IsSending }
+						IsLoading={ isSending }
 						onClick={ createServer }>
 						<FontAwesomeIcon icon="save" /> Erstellen
 					</IconButton>
