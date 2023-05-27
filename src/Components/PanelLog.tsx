@@ -54,7 +54,7 @@ const PanelLog: FC<IPanelLogProps> = ( { Show, onHide, usage } ) => {
 			</Modal.Header>
 			<Modal.Body className="bg-dark p-0"
 				style={ { height: 700, overflow: "auto" } }>
-				<FormatLog LogContent={ [ ...logData ].reverse().join( "\n" ) } />
+				<FormatLog logContent={ [ ...logData ].reverse().join( "\n" ) } />
 			</Modal.Body>
 			<Modal.Footer>
 				<Select className="w-full" value={ selected } options={ options } onChange={ setSelected } />

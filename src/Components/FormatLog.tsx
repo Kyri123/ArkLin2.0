@@ -15,7 +15,7 @@ const lineColor = ( Line: string ): Variant => {
 	return color;
 };
 
-export default function Formatlog( Props: { logContent: string } ) {
+export default function FormatLog( Props: { logContent: string } ) {
 	const ID = useId();
 
 	return (
@@ -27,14 +27,10 @@ export default function Formatlog( Props: { logContent: string } ) {
 						.filter( e => e.replaceAll( " ", "" ).trim() !== "" )
 						.map( ( Content, Idx ) => (
 							<tr key={ ID + Idx }>
-								<td align="center"
-									valign="middle"
-									style={ { width: 0 } }
-									className="p-1 ps-2 pe-2 border-right border-info text-info">
+								<td align="center" valign="middle" style={ { width: 0 } } className="p-1 ps-2 pe-2 border-right border-info text-info">
 									{ Idx }
 								</td>
-								<td valign="middle"
-									className={ `p-1 ps-2 pe-2 text-${ lineColor( Content ) }` }>
+								<td valign="middle" className={ `p-1 ps-2 pe-2 text-${ lineColor( Content ) }` }>
 									{ Content.replaceAll( "....", "" ) }
 								</td>
 							</tr>
