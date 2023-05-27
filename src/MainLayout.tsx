@@ -1,11 +1,11 @@
+import User from "@app/Lib/User.Lib";
+import type { AuthLoaderProps } from "@app/MainLayout_Loader";
+import AccountContext from "@context/AccountContext";
 import type { FunctionComponent } from "react";
 import {
 	Outlet,
 	useLoaderData
-}                                 from "react-router-dom";
-import type { AuthLoaderProps }        from "@app/MainLayout_Loader";
-import AccountContext             from "@context/AccountContext";
-import User                       from "@app/Lib/User.Lib";
+} from "react-router-dom";
 
 
 const Component: FunctionComponent = () => {
@@ -19,3 +19,4 @@ const Component: FunctionComponent = () => {
 };
 
 export { Component };
+

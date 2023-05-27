@@ -189,8 +189,8 @@ export class ServerLib {
 
 	public getWithCluster(): Instance {
 		return ( {
-			...this.mongoDocument,
-			cluster: this.getCluster
+			...this.mongoDocument?.toJSON(),
+			cluster: this.getCluster?.toJSON()
 		} as Instance );
 	}
 
@@ -258,34 +258,16 @@ export class ServerLib {
 
 	async modifySubDocument(
 		subDocumentKey: keyof Instance,
-		Data: Partial<any>,
-		Overwrite = true
+		Data: Partial<any>
 	) {
-		if( await this.init() ) {
-			const doc = await MongoInstances.findById( this.mongoDocument?._id );
-			if( doc ) {
-				if( !Overwrite ) {
-					for( const [ key, value ] of Object.entries( Data ) ) {
-						doc[ subDocumentKey ][ key ] = value;
-						doc.markModified( `${ subDocumentKey }.${ key }` );
-					}
+		if( this.mongoDocument ) {
+			if( this.mongoDocument ) {
+				for( const [ key, value ] of Object.entries( Data ) ) {
+					this.mongoDocument[ subDocumentKey ][ key ] = value;
+					this.mongoDocument.markModified( `${ subDocumentKey }.${ key }` );
 				}
 
-				// Overwrite is faster as the for loop
-				else {
-					Data._id = doc[ subDocumentKey ]._id;
-					// @ts-ignore
-					doc[ subDocumentKey ] = Data;
-					doc.markModified( `${ subDocumentKey }` );
-				}
-
-				if( await doc.save() ) {
-					const data = await this.getDb();
-					if( data ) {
-						SocketIO.emit( "onServerUpdated", { [ this.instanceId ]: data.toJSON() } );
-					}
-				}
-				await this.init();
+				await this.mongoDocument.save();
 			}
 		}
 	}
@@ -313,9 +295,9 @@ export class ServerLib {
 			await this.modifySubDocument( "State", newState );
 			await this.modifySubDocument( "ServerMap", newMap );
 
-			return this.mongoDocument !== null;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	async removeServer() {

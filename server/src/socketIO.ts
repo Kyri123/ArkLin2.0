@@ -20,7 +20,7 @@ const watchPanelLog = () => {
 						.toString()
 						.split( "\n" )
 						.reverse() );
-				} else if( event === "rename" ) {
+				} else if( event === "rename" && path ) {
 					if( !SocketIO.sockets.adapter.rooms.has( path ) ) {
 						watcher.close();
 						SystemLib.log( "watcher", "Close watching file " + BC( "Green" ), path );

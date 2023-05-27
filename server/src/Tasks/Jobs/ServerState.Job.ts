@@ -25,7 +25,8 @@ export default new JobTaskCycle<Instance>(
 				emitData[ server.Instance ] = serverClass.getWithCluster();
 			}
 		}
-		Self.updatetickTime( configManager.getTaskConfig.ServerStateInterval / Math.max( Object.values( emitData ).length, 1 ) );
+		Self.updateTickTime( configManager.getTaskConfig.ServerStateInterval / Math.max( Object.values( emitData ).length, 1 ) );
+		SocketIO.emit( "onServerUpdated", emitData );
 		return Object.values( emitData );
 	},
 

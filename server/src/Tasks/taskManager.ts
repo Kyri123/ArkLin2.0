@@ -28,7 +28,7 @@ export class JobTask {
 		);
 	}
 
-	public updatetickTime( NewTime: number ) {
+	public updateTickTime( NewTime: number ) {
 		clearInterval( this.Task );
 		this.Task = setInterval( this.tick.bind( this ), NewTime );
 	}

@@ -1,8 +1,8 @@
+import "@kyri123/k-javascript-utils/lib/useAddons";
 import "./initDirs";
 
 import { BC } from "@/server/src/Lib/system.Lib";
 import { createHttpServer, installErrorHandler } from "@/server/src/trpc/middleware";
-import "@kyri123/k-javascript-utils/lib/useAddons";
 import type {
 	Request,
 	Response
