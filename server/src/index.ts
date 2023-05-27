@@ -1,81 +1,49 @@
+import { BC } from "@/server/src/Lib/system.Lib";
+import { createHttpServer, installErrorHandler } from "@/server/src/trpc/middleware";
 import "@kyri123/k-javascript-utils/lib/useAddons";
-import "./InitDirs";
-import { InstallRoutings } from "./Init";
-import * as path           from "path";
-import "./Lib/System.Lib";
 import type {
 	Request,
 	Response
-}                          from "express";
-import express             from "express";
-import * as http           from "http";
-import { Server }          from "socket.io";
-import * as process        from "process";
-import fs                  from "fs";
+} from "express";
+import fs from "fs";
+import * as mongoose from "mongoose";
+import fetch from "node-fetch";
+import * as path from "path";
+import * as process from "process";
 import {
-	ConfigManager,
-	SSHManager
-}                          from "./Lib/ConfigManager.Lib";
-import * as mongoose       from "mongoose";
-import AccountKey          from "./MongoDB/DB_AccountKey";
-import DB_AccountKey       from "./MongoDB/DB_AccountKey";
-import DB_Accounts         from "./MongoDB/DB_Accounts";
-import TaskManager         from "./Tasks/TaskManager";
-import { RunTest }         from "./Testing";
-import fetch               from "node-fetch";
-import { BC }              from "@server/Lib/System.Lib";
-import type {
-	EmitEvents,
-	ListenEvents
-}                          from "@app/Types/Socket";
+	configManager,
+	sshManager
+} from "./Lib/configManager.Lib";
+import "./Lib/system.Lib";
+import { default as AccountKey, default as MongoAccountKey } from "./MongoDB/MongoAccountKey";
+import MongoAccounts from "./MongoDB/MongoAccounts";
+import taskManager from "./Tasks/taskManager";
+import { runTest } from "./Testing";
+import "./initDirs";
 
-"asdasd".contains( "asd" );
 
 // Small fix if the cert fails!
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = String( 0 );
-global.__PANNELUPDATE = false;
+global.PANELUPDATE = false;
 
-const Files = fs.readdirSync( __LogDir );
-Files.sort( ( a, b ) => {
+const files = fs.readdirSync( LOGDIR );
+files.sort( ( a, b ) => {
 	const A = Number( a.replaceAll( ".log", "" ) );
 	const B = Number( b.replaceAll( ".log", "" ) );
 	return A < B ? 1 : -1;
 } );
-Files.splice( 0, ConfigManager.GetDashboardConifg.LOG_MaxLogCount );
-for ( const LogFile of Files ) {
-	SystemLib.LogWarning( "log",
+files.splice( 0, configManager.getDashboardConfig.LOG_MaxLogCount );
+for( const logFile of files ) {
+	SystemLib.logWarning( "log",
 		"Remove Logfile because its over the limit:",
 		BC( "Red" ),
-		LogFile
+		logFile
 	);
-	fs.rmSync( path.join( __LogDir, LogFile ) );
+	fs.rmSync( path.join( LOGDIR, logFile ) );
 }
 
-global.Api = express();
-global.HttpServer = http.createServer( Api );
-global.SocketIO = new Server<ListenEvents, EmitEvents>( HttpServer, {
-	cors: {
-		origin: "*",
-		methods: [ "GET", "POST" ]
-	}
-} );
-
-// Api should use JsonOnly!
-Api.use( express.json() );
-Api.use( express.static( path.join( __basedir, "build" ) ) );
-
-Api.use( function( req, res, next ) {
-	res.setHeader( "Access-Control-Allow-Origin", "*" );
-	res.setHeader( "Access-Control-Allow-Methods", "GET, POST" );
-	res.setHeader(
-		"Access-Control-Allow-Headers",
-		"X-Requested-With,content-type"
-	);
-	res.setHeader( "Access-Control-Allow-Credentials", "true" );
-	next();
-} );
-
-InstallRoutings( path.join( __dirname, "Routings" ), Api );
+// create SocketIO server, Express Server and install all routings
+createHttpServer();
 
 mongoose
 	.connect(
@@ -86,52 +54,52 @@ mongoose
 		}
 	)
 	.then( async() => {
-		SystemLib.Log( "socketio", "Install socket listener" );
+		SystemLib.log( "socketio", "Install socket listener" );
 
-		await import("@server/socketIO");
+		await import( "@server/socketIO" );
 
-		if ( ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs() !== "" ) {
-			global.__PublicIP = ConfigManager.GetDashboardConifg.PANEL_ArkServerIp.clearWs();
-		}
-		else {
-			const IPResponse = await fetch( "http://api.ipify.org" );
-			global.__PublicIP = ( await IPResponse.text() ).clearWs();
-			SystemLib.Log( "ip", "Public IP: " + global.__PublicIP );
+		if( configManager.getDashboardConfig.PANEL_ArkServerIp.clearWs() !== "" ) {
+			global.SERVERIP = configManager.getDashboardConfig.PANEL_ArkServerIp.clearWs();
+		} else {
+			const ipResponse = await fetch( "http://api.ipify.org" );
+			global.SERVERIP = ( await ipResponse.text() ).clearWs();
+			SystemLib.log( "ip", "Public IP: " + global.SERVERIP );
 		}
 
 		await import( "@server/trpc/server" );
 
-		Api.use( "*", ( req : Request, res : Response ) => res.sendFile( path.join( __basedir, "build/index.html" ) ) );
-		
-		await SSHManager.Init();
+		Api.use( "*", ( req: Request, res: Response ) => res.sendFile( path.join( BASEDIR, "build/index.html" ) ) );
+
+		await sshManager.init();
 		// create an account key if no there and no user
-		if (
-			( await DB_Accounts.count() ) <= 0 &&
-			( await DB_AccountKey.count() ) <= 0
+		if(
+			( await MongoAccounts.count() ) <= 0 &&
+			( await MongoAccountKey.count() ) <= 0
 		) {
 			await AccountKey.create( {
 				key: "KAdmin-ArkLIN2",
 				asSuperAdmin: true
 			} );
-			SystemLib.Log(
-				"DB", "Create default AccountKey:" + SystemLib.ToBashColor( "Red" ),
+			SystemLib.log(
+				"DB", "Create default AccountKey:" + SystemLib.toBashColor( "Red" ),
 				"KAdmin-ArkLIN2"
 			);
 		}
 
 
 		// start Tasks
-		await TaskManager.Init();
-		SystemLib.Log(
-			"TASKS", `All Jobs init (Total: ${ Object.keys( TaskManager.Jobs ).length })`
+		await taskManager.init();
+		SystemLib.log(
+			"TASKS", `All Jobs init (Total: ${ Object.keys( taskManager.Jobs ).length })`
 		);
 
-		SystemLib.Log( "DB", "Connected... Start API and SOCKETIO" );
-		HttpServer.listen( process.env.API_EXPRESS_HTTP_PORT, () =>
-			SystemLib.Log(
+		installErrorHandler();
+		SystemLib.log( "DB", "Connected... Start API and SOCKETIO" );
+		HTTPSERVER.listen( process.env.API_EXPRESS_HTTP_PORT, () =>
+			SystemLib.log(
 				"API/SOCKETIO", "API listen on port",
 				process.env.API_EXPRESS_HTTP_PORT
 			)
 		);
-		await RunTest();
+		await runTest();
 	} );

@@ -5,6 +5,7 @@ import Arkmanager_Command_Update         from "@shared/SelectMask/Arkmanager_Com
 import Arkmanager_Command_Start          from "@shared/SelectMask/Arkmanager_Command_Start.json";
 import type { InputSelectMask }          from "@app/Types/Systeminformation";
 
+
 export enum EArkmanagerCommands {
 	start = "start",
 	stop = "stop",
@@ -21,12 +22,12 @@ export enum EArkmanagerCommands {
 	saveworld = "saveworld",
 	status = "status",
 	printconfig = "printconfig",
-	getpid = "getpid",
+	getpid = "getpid"
 }
 
 export function GetMaskFromCommand(
-	Command : EArkmanagerCommands
-) : InputSelectMask[] {
+	Command: EArkmanagerCommands
+): InputSelectMask[] {
 	switch ( Command ) {
 		case EArkmanagerCommands.start:
 			return Arkmanager_Command_Start as InputSelectMask[];

@@ -1,7 +1,8 @@
 import type { BootBase } from "@app/Types/BaseTypes";
 
-export function Ribbon( Props : BootBase ) {
-	if ( Props.Hide ) {
+
+export function Ribbon( Props: BootBase ) {
+	if( Props.Hide ) {
 		return <></>;
 	}
 

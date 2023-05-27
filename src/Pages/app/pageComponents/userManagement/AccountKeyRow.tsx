@@ -1,22 +1,23 @@
-import type React          from "react";
-import { useState }        from "react";
-import { ButtonGroup }     from "react-bootstrap";
-import { IconButton }      from "@comp/Elements/Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCopy }         from "@kyri123/k-reactutils";
-import type { AccountKey } from "@server/MongoDB/DB_AccountKey";
 import {
-	fireSwalFromApi,
-	tRPC_Auth,
-	tRPC_handleError
-}                          from "@app/Lib/tRPC";
+    apiAuth,
+    apiHandleError,
+    fireSwalFromApi
+} from "@app/Lib/tRPC";
+import { IconButton } from "@comp/Elements/Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCopy } from "@kyri123/k-reactutils";
+import type { AccountKey } from "@server/MongoDB/MongoAccountKey";
+import type React from "react";
+import { useState } from "react";
+import { ButtonGroup } from "react-bootstrap";
+
 
 interface IProps {
-	Key : AccountKey;
-	refresh : () => void;
+	Key: AccountKey,
+	refresh: () => void
 }
 
-const UserRow : React.FunctionComponent<IProps> = ( { Key, refresh } ) => {
+const UserRow: React.FunctionComponent<IProps> = ( { Key, refresh } ) => {
 	const [ IsSending, setIsSending ] = useState( false );
 
 
@@ -31,9 +32,9 @@ const UserRow : React.FunctionComponent<IProps> = ( { Key, refresh } ) => {
 			cancelButtonText: "Nein",
 			timer: 5000
 		} );
-		if ( accept?.isConfirmed ) {
-			const result = await tRPC_Auth.admin.account.removeAccountKey.mutate( Key._id! ).catch( tRPC_handleError );
-			if ( result ) {
+		if( accept?.isConfirmed ) {
+			const result = await apiAuth.admin.account.removeAccountKey.mutate( Key._id! ).catch( apiHandleError );
+			if( result ) {
 				fireSwalFromApi( result, true );
 				await refresh();
 			}
@@ -47,24 +48,18 @@ const UserRow : React.FunctionComponent<IProps> = ( { Key, refresh } ) => {
 			<td>{ Key.asSuperAdmin ? "Super Admin" : "Member" }</td>
 			<td style={ { width: 0 } } className="p-2">
 				<ButtonGroup>
-					<IconButton
-						onClick={ removeKey }
-						className={ "btn-sm rounded-0" }
+					<IconButton onClick={ removeKey }
+						className="btn-sm rounded-0"
 						IsLoading={ IsSending }
-						variant="danger"
-					>
-						<FontAwesomeIcon icon={ "trash-alt" }/>
+						variant="danger">
+						<FontAwesomeIcon icon="trash-alt" />
 					</IconButton>
-					<IconButton
-						disabled={ IsCopied( Key._id ) }
+					<IconButton disabled={ IsCopied( Key._id ) }
 						onClick={ () => DoCopy( Key.key!, Key._id ) }
-						className={ "btn-sm rounded-0" }
+						className="btn-sm rounded-0"
 						IsLoading={ false }
-						variant="success"
-					>
-						<FontAwesomeIcon
-							icon={ IsCopied( Key._id ) ? "check" : "copy" }
-						/>
+						variant="success">
+						<FontAwesomeIcon icon={ IsCopied( Key._id ) ? "check" : "copy" } />
 					</IconButton>
 				</ButtonGroup>
 			</td>

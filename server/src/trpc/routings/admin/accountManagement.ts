@@ -1,26 +1,26 @@
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import type { AccountKey } from "@server/MongoDB/MongoAccountKey";
+import MongoAccountKey from "@server/MongoDB/MongoAccountKey";
+import type { UserAccount } from "@server/MongoDB/MongoAccounts";
+import MongoAccounts from "@server/MongoDB/MongoAccounts";
 import {
 	handleTRCPErr,
 	router,
 	superAdminProcedure
-}                           from "@server/trpc/trpc";
-import { TRPCError }        from "@trpc/server";
-import type { UserAccount } from "@server/MongoDB/DB_Accounts";
-import DB_Accounts          from "@server/MongoDB/DB_Accounts";
-import { z }                from "zod";
-import type { AccountKey }  from "@server/MongoDB/DB_AccountKey";
-import DB_AccountKey        from "@server/MongoDB/DB_AccountKey";
-import { MakeRandomString } from "@kyri123/k-javascript-utils";
+} from "@server/trpc/trpc";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
-export const auth_accountManagement = router( {
+
+export const authAccountManagement = router( {
 	createAccountKey: superAdminProcedure.input( z.boolean().optional() ).mutation( async( { input } ) => {
 		try {
-			await DB_AccountKey.create( {
+			await MongoAccountKey.create( {
 				key: MakeRandomString( input ? 40 : 20, "-", 10 ),
 				asSuperAdmin: !!input
 			} );
 			return "Accountschlüssel wurde erstellt";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -28,10 +28,9 @@ export const auth_accountManagement = router( {
 
 	removeAccountKey: superAdminProcedure.input( z.string() ).mutation( async( { input } ) => {
 		try {
-			await DB_AccountKey.findByIdAndDelete( input );
+			await MongoAccountKey.findByIdAndDelete( input );
 			return "Accountschlüssel wurde entfernt";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -39,10 +38,9 @@ export const auth_accountManagement = router( {
 
 	removeAccount: superAdminProcedure.input( z.string() ).mutation( async( { input } ) => {
 		try {
-			await DB_Accounts.findByIdAndDelete( input );
+			await MongoAccounts.findByIdAndDelete( input );
 			return "Account wurde entfernt";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -55,10 +53,9 @@ export const auth_accountManagement = router( {
 	} ) ).mutation( async( { input } ) => {
 		const { accountId, servers, permissions } = input;
 		try {
-			await DB_Accounts.findByIdAndUpdate( accountId, { servers, permissions } );
+			await MongoAccounts.findByIdAndUpdate( accountId, { servers, permissions } );
 			return "Account wurde bearbeitet";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -70,14 +67,13 @@ export const auth_accountManagement = router( {
 	} ) ).query( async( { input } ) => {
 		const { skip, limit } = input;
 		try {
-			const accounts : UserAccount[] = await DB_Accounts.find<UserAccount>( {}, {
+			const accounts: UserAccount[] = await MongoAccounts.find<UserAccount>( {}, {
 				password: 0,
 				hash: 0,
 				salt: 0
 			}, { skip, limit } );
-			return { accounts, total: await DB_Accounts.count() };
-		}
-		catch ( e ) {
+			return { accounts, total: await MongoAccounts.count() };
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -89,13 +85,12 @@ export const auth_accountManagement = router( {
 	} ) ).query( async( { input } ) => {
 		const { skip, limit } = input;
 		try {
-			const keys = await DB_AccountKey.find<AccountKey>( { isPasswordReset: { $ne: true } }, {}, {
+			const keys = await MongoAccountKey.find<AccountKey>( { isPasswordReset: { $ne: true } }, {}, {
 				skip,
 				limit
 			} );
-			return { keys, total: await DB_AccountKey.count( { isPasswordReset: { $ne: true } } ) };
-		}
-		catch ( e ) {
+			return { keys, total: await MongoAccountKey.count( { isPasswordReset: { $ne: true } } ) };
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

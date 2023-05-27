@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 export const filterSchema = z.object( {
 	name: z.string().optional(),
 	sortBy: z.object( {
@@ -11,7 +12,7 @@ export const filterSchema = z.object( {
 	onlyVanilla: z.boolean().optional()
 } );
 
-export const PanelConfigSchema = z.object( {
+export const panelConfigSchema = z.object( {
 	BackupEnabled: z.boolean(),
 	MaxBackupfolderSize: z.number(),
 	BackupInterval: z.number(),

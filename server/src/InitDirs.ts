@@ -1,17 +1,18 @@
 import path from "path";
 
-global.__basedir = path.join( __dirname, "./../.." );
-global.__LogDir = path.join( __basedir, "/mount/PanelLogs/" );
-global.__LogFile = path.join(
-	__LogDir,
+
+global.BASEDIR = path.join( __dirname, "./../.." );
+global.LOGDIR = path.join( BASEDIR, "/mount/PanelLogs/" );
+global.LOGFILE = path.join(
+	LOGDIR,
 	`${ Math.round( new Date().getTime() / 1000 ) }.log`
 );
-global.__configdir = path.join( __basedir, "mount/config" );
-global.__PackageJson = require( path.join( __basedir, "package.json" ) );
-global.__server_dir = path.join( __basedir, "mount/Server" );
-global.__cluster_dir = path.join( __basedir, "mount/Server/cluster" );
-global.__server_arkmanager = path.join( __basedir, "mount/Arkmanager" );
-global.__server_logs = path.join( __basedir, "mount/Logs" );
-global.__server_backups = path.join( __basedir, "mount/Backups" );
-global.__SteamCMD = path.join( __basedir, "mount/steamCMD" );
-global.__git_dir = path.join( __basedir, "mount/Git/" );
+global.CONFIGDIR = path.join( BASEDIR, "mount/config" );
+global.PACKAGE = require( path.join( BASEDIR, "package.json" ) );
+global.SERVERDIR = path.join( BASEDIR, "mount/Server" );
+global.CLUSTERDIR = path.join( BASEDIR, "mount/Server/cluster" );
+global.SERVERARKMANAGER = path.join( BASEDIR, "mount/Arkmanager" );
+global.SERVERLOGSDIR = path.join( BASEDIR, "mount/Logs" );
+global.SERVERBACKUPDIR = path.join( BASEDIR, "mount/Backups" );
+global.STEAMCMDDIR = path.join( BASEDIR, "mount/steamCMD" );
+global.GITDIR = path.join( BASEDIR, "mount/Git/" );

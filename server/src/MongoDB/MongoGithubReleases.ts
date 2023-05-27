@@ -1,8 +1,9 @@
-import * as mongoose      from "mongoose";
 import type { MongoBase } from "@app/Types/MongoDB";
-import { z }              from "zod";
+import * as mongoose from "mongoose";
+import { z } from "zod";
 
-const ZodGithubReleaseSchema = z.object( {
+
+const zodGithubReleaseSchema = z.object( {
 	assets_url: z.string(),
 	body: z.string(),
 	created_at: z.string(),
@@ -12,8 +13,8 @@ const ZodGithubReleaseSchema = z.object( {
 	name: z.string(),
 	node_id: z.string(),
 	prerelease: z.boolean(),
-	sha: z.string(),
-	protected: z.boolean(),
+	//sha: z.string(),
+	//protected: z.boolean(),
 	published_at: z.string(),
 	tag_name: z.string(),
 	target_commitish: z.string(),
@@ -21,7 +22,7 @@ const ZodGithubReleaseSchema = z.object( {
 	url: z.string()
 } );
 
-const GithubReleaseSchema = new mongoose.Schema( {
+const githubReleaseSchema = new mongoose.Schema( {
 	assets_url: { type: String },
 	body: { type: String },
 	created_at: { type: String },
@@ -39,9 +40,9 @@ const GithubReleaseSchema = new mongoose.Schema( {
 } );
 
 
-export type GithubRelease = z.infer<typeof ZodGithubReleaseSchema> & MongoBase
-export default mongoose.model<GithubRelease>( "github_releases", GithubReleaseSchema );
+export type GithubRelease = z.infer<typeof zodGithubReleaseSchema> & MongoBase;
+export default mongoose.model<GithubRelease>( "github_releases", githubReleaseSchema );
 export {
-	ZodGithubReleaseSchema,
-	GithubReleaseSchema
+	githubReleaseSchema, zodGithubReleaseSchema
 };
+

@@ -1,22 +1,22 @@
 import {
+	getAllClusterWithPermission,
+	getAllServerWithPermission
+} from "@/server/src/Lib/user.Lib";
+import type { SystemUsage } from "@server/MongoDB/MongoUsage";
+import MongoUsage from "@server/MongoDB/MongoUsage";
+import {
 	authProcedure,
 	handleTRCPErr,
 	router
-}                           from "@server/trpc/trpc";
-import { TRPCError }        from "@trpc/server";
-import {
-	GetAllClusterWithPermission,
-	GetAllServerWithPermission
-}                           from "@server/Lib/User.Lib";
-import type { SystemUsage } from "@server/MongoDB/DB_Usage";
-import DB_Usage             from "@server/MongoDB/DB_Usage";
+} from "@server/trpc/trpc";
+import { TRPCError } from "@trpc/server";
 
-export const auth_globalState = router( {
+
+export const authGlobalState = router( {
 	getallserver: authProcedure.query( async( { ctx } ) => {
 		try {
-			return await GetAllServerWithPermission( ctx.userClass );
-		}
-		catch ( e ) {
+			return await getAllServerWithPermission( ctx.userClass );
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -24,9 +24,8 @@ export const auth_globalState = router( {
 
 	getallcluster: authProcedure.query( async( { ctx } ) => {
 		try {
-			return await GetAllClusterWithPermission( ctx.userClass );
-		}
-		catch ( e ) {
+			return await getAllClusterWithPermission( ctx.userClass );
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -34,18 +33,17 @@ export const auth_globalState = router( {
 
 	state: authProcedure.query( async( { ctx } ) => {
 		try {
-			let [ Online, Offline, Total ] = [ 0, 0, 0 ];
-			for ( const InstanceData of Object.values( await GetAllServerWithPermission( ctx.userClass ) ) ) {
-				Total++;
-				if ( InstanceData.State.IsListen ) {
-					Online++;
+			let [ online, offline, total ] = [ 0, 0, 0 ];
+			for( const instanceData of Object.values( await getAllServerWithPermission( ctx.userClass ) ) ) {
+				total++;
+				if( instanceData.State.IsListen ) {
+					online++;
 					continue;
 				}
-				Offline++;
+				offline++;
 			}
-			return [ Online, Offline, Total ];
-		}
-		catch ( e ) {
+			return [ online, offline, total ];
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -53,9 +51,8 @@ export const auth_globalState = router( {
 
 	systemUsage: authProcedure.query( async() => {
 		try {
-			return ( await DB_Usage.findOne( {} ) )!.toJSON() as SystemUsage;
-		}
-		catch ( e ) {
+			return ( await MongoUsage.findOne( {} ) )!.toJSON() as SystemUsage;
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

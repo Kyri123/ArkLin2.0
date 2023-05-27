@@ -1,145 +1,143 @@
-import fs                              from "fs";
-import path                            from "path";
-import { EArkmanagerCommands }         from "@app/Lib/serverUtils";
-import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
 import {
-	ConfigToJSON,
-	FillWithDefaultValues
-}                                      from "@server/Lib/Arkmanager.Lib";
-import { ConfigManager }               from "@server/Lib/ConfigManager.Lib";
-import { ToRealDir }                   from "@server/Lib/PathBuilder.Lib";
+	configToJSON,
+	fillWithDefaultValues
+} from "@/server/src/Lib/arkmanager.Lib";
+import { configManager } from "@/server/src/Lib/configManager.Lib";
+import { toRealDir } from "@/server/src/Lib/pathBuilder.Lib";
 import {
-	CreateServer,
-	ServerLib
-}                                      from "@server/Lib/Server.Lib";
-import DB_Instances                    from "@server/MongoDB/DB_Instances";
-import { JobTask }                     from "../TaskManager";
-import { BC }                          from "@server/Lib/System.Lib";
-import type { InstanceData }           from "@app/Types/ArkSE";
-import { EServerState }                from "@shared/Enum/EServerState";
+	ServerLib,
+	createServer
+} from "@/server/src/Lib/server.Lib";
+import { BC } from "@/server/src/Lib/system.Lib";
+import { EArkmanagerCommands } from "@app/Lib/serverUtils";
+import type { InstanceData } from "@app/Types/ArkSE";
+import MongoInstances from "@server/MongoDB/MongoInstances";
+import { getDefaultPanelServerConfig } from "@shared/Default/Server.Default";
+import { EServerState } from "@shared/Enum/EServerState";
+import fs from "fs";
+import path from "path";
+import { JobTask } from "../taskManager";
+
 
 export default new JobTask(
-	ConfigManager.GetTaskConfig.ServerTasksInterval,
+	configManager.getTaskConfig.ServerTasksInterval,
 	"Server",
 	async() => {
-		SystemLib.DebugLog(
+		SystemLib.debugLog(
 			"TASKS", "Running Task",
 			BC( "Red" ),
 			"Server"
 		);
 
 		// Read and save all Instances
-		const InstancesFolder = path.join( __server_arkmanager, "instances" );
-		const ServerData : Record<string, InstanceData> = {};
-		for ( const Instance of fs.readdirSync( InstancesFolder ) ) {
-			if ( Instance.endsWith( ".cfg" ) ) {
-				const Server = Instance.replace( ".cfg", "" );
-				const FilePath = path.join(
-					__server_arkmanager,
+		const instancesFolder = path.join( SERVERARKMANAGER, "instances" );
+		const serverData: Record<string, InstanceData> = {};
+		for( const instance of fs.readdirSync( instancesFolder ) ) {
+			if( instance.endsWith( ".cfg" ) ) {
+				const server = instance.replace( ".cfg", "" );
+				const filePath = path.join(
+					SERVERARKMANAGER,
 					"instances",
-					`${ Instance }`
+					`${ instance }`
 				);
-				const ConfigContent = fs.readFileSync( FilePath ).toString();
-				const InstanceData = ConfigToJSON( ConfigContent );
-				ServerData[ Server ] = FillWithDefaultValues( Server, InstanceData );
+				const configContent = fs.readFileSync( filePath ).toString();
+				const instanceData = configToJSON( configContent );
+				serverData[ server ] = fillWithDefaultValues( server, instanceData );
 
-				ServerData[ Server ].Instance = Server;
-				if ( ( await DB_Instances.exists( { Instance: Server } ) ) !== null ) {
-					const ServerL = await ServerLib.build( Server );
-					if ( ServerL.IsValid() ) {
-						await ServerL.SetServerConfig( "arkmanager.cfg", ServerData[ Server ] );
+				serverData[ server ].Instance = server;
+				if( ( await MongoInstances.exists( { Instance: server } ) ) !== null ) {
+					const serverL = await ServerLib.build( server );
+					if( serverL.isValid() ) {
+						await serverL.setServerConfig( "arkmanager.cfg", serverData[ server ] );
 					}
-				}
-				else {
-					await CreateServer( GetDefaultPanelServerConfig(), Server );
+				} else {
+					await createServer( getDefaultPanelServerConfig(), server );
 				}
 			}
 		}
 
-		for await ( const ServerData of DB_Instances.find() ) {
-			const Server = await ServerLib.build( ServerData.Instance );
-			if ( Server.IsValid() ) {
-				const Cfg = Server.Get!;
-				const PanelConfig = Cfg.PanelConfig;
+		for await ( const serverData of MongoInstances.find() ) {
+			const server = await ServerLib.build( serverData.Instance );
+			if( server.isValid() ) {
+				const cfg = server.get!;
+				const panelConfig = cfg.PanelConfig;
 
-				if ( PanelConfig.AutoUpdateEnabled && ( ( Cfg.LastAutoUpdate || 0 ) + PanelConfig.AutoUpdateInterval ) <= Date.now() && Cfg.State.State !== EServerState.actionInProgress ) {
-					await Server.ExecuteCommand( EArkmanagerCommands.update, PanelConfig.AutoUpdateParameters );
-					await Server.Update( {
+				if( panelConfig.AutoUpdateEnabled && ( ( cfg.LastAutoUpdate || 0 ) + panelConfig.AutoUpdateInterval ) <= Date.now() && cfg.State.State !== EServerState.actionInProgress ) {
+					await server.executeCommand( EArkmanagerCommands.update, panelConfig.AutoUpdateParameters );
+					await server.update( {
 						LastAutoUpdate: Date.now()
 					} );
 				}
 
-				if ( PanelConfig.BackupEnabled && ( ( Cfg.LastAutoBackup || 0 ) + PanelConfig.BackupInterval ) <= Date.now() && Cfg.State.State !== EServerState.actionInProgress ) {
-					await Server.ExecuteCommand( EArkmanagerCommands.backup );
-					await Server.Update( {
+				if( panelConfig.BackupEnabled && ( ( cfg.LastAutoBackup || 0 ) + panelConfig.BackupInterval ) <= Date.now() && cfg.State.State !== EServerState.actionInProgress ) {
+					await server.executeCommand( EArkmanagerCommands.backup );
+					await server.update( {
 						LastAutoBackup: Date.now()
 					} );
 				}
 			}
 
-			if ( Server.IsInCluster() ) {
-				const Cluster = Server.GetCluster;
-				if ( Cluster ) {
-					const CurrentConfig = Server.GetConfig();
+			if( server.isInCluster() ) {
+				const cluster = server.getCluster;
+				if( cluster ) {
+					const currentConfig = server.getConfig();
 
-					CurrentConfig[ "NoTransferFromFiltering" ] = Cluster.NoTransferFromFiltering;
-					CurrentConfig[ "NoTributeDownloads" ] = Cluster.NoTributeDownloads;
-					CurrentConfig[ "PreventDownloadDinos" ] = Cluster.PreventDownloadDinos;
-					CurrentConfig[ "PreventDownloadItems" ] = Cluster.PreventDownloadItems;
-					CurrentConfig[ "PreventDownloadSurvivors" ] = Cluster.PreventDownloadSurvivors;
-					CurrentConfig[ "PreventUploadDinos" ] = Cluster.PreventUploadDinos;
-					CurrentConfig[ "PreventUploadSurvivors" ] = Cluster.PreventUploadSurvivors;
-					CurrentConfig[ "PreventUploadItems" ] = Cluster.PreventUploadItems;
-					CurrentConfig.Options[ "clusterid" ] = Cluster._id!;
-					CurrentConfig.Options[ "ClusterDirOverride" ] = ToRealDir( __cluster_dir );
+					currentConfig[ "NoTransferFromFiltering" ] = cluster.NoTransferFromFiltering;
+					currentConfig[ "NoTributeDownloads" ] = cluster.NoTributeDownloads;
+					currentConfig[ "PreventDownloadDinos" ] = cluster.PreventDownloadDinos;
+					currentConfig[ "PreventDownloadItems" ] = cluster.PreventDownloadItems;
+					currentConfig[ "PreventDownloadSurvivors" ] = cluster.PreventDownloadSurvivors;
+					currentConfig[ "PreventUploadDinos" ] = cluster.PreventUploadDinos;
+					currentConfig[ "PreventUploadSurvivors" ] = cluster.PreventUploadSurvivors;
+					currentConfig[ "PreventUploadItems" ] = cluster.PreventUploadItems;
+					currentConfig.Options[ "clusterid" ] = cluster._id!;
+					currentConfig.Options[ "ClusterDirOverride" ] = toRealDir( CLUSTERDIR );
 
-					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
+					await server.setServerConfig( "arkmanager.cfg", currentConfig );
 				}
-			}
-			else {
-				const CurrentConfig = ( Server as ServerLib<true> ).GetConfig();
+			} else {
+				const currentConfig = server.getConfig();
 
-				delete CurrentConfig[ "NoTransferFromFiltering" ];
-				delete CurrentConfig[ "NoTributeDownloads" ];
-				delete CurrentConfig[ "PreventDownloadDinos" ];
-				delete CurrentConfig[ "PreventDownloadItems" ];
-				delete CurrentConfig[ "PreventDownloadSurvivors" ];
-				delete CurrentConfig[ "PreventUploadDinos" ];
-				delete CurrentConfig[ "PreventUploadSurvivors" ];
-				delete CurrentConfig[ "PreventUploadItems" ];
-				delete CurrentConfig.Options[ "clusterid" ];
-				delete CurrentConfig.Options[ "ClusterDirOverride" ];
+				delete currentConfig[ "NoTransferFromFiltering" ];
+				delete currentConfig[ "NoTributeDownloads" ];
+				delete currentConfig[ "PreventDownloadDinos" ];
+				delete currentConfig[ "PreventDownloadItems" ];
+				delete currentConfig[ "PreventDownloadSurvivors" ];
+				delete currentConfig[ "PreventUploadDinos" ];
+				delete currentConfig[ "PreventUploadSurvivors" ];
+				delete currentConfig[ "PreventUploadItems" ];
+				delete currentConfig.Options[ "clusterid" ];
+				delete currentConfig.Options[ "ClusterDirOverride" ];
 
-				await ( Server as ServerLib<true> ).SetServerConfig( "arkmanager.cfg", CurrentConfig );
+				await server.setServerConfig( "arkmanager.cfg", currentConfig );
 				continue;
 			}
 
 
-			if ( !Server.IsMaster && Server.IsInCluster() ) {
-				const Cluster = Server.GetCluster;
-				const Master = await Server.GetClusterMaster();
-				if ( Master && Cluster ) {
-					for ( const [ Filename, Path ] of Object.entries( Master.GetConfigFiles() ) ) {
-						if ( Cluster.SyncSettings.includes( Filename ) && Filename.toLowerCase() !== "arkmanager.cfg" ) {
-							const MasterContent = Master.GetConfigContentRaw( Path );
-							SystemLib.DebugLog( "clustersync", "Sync Config:", Filename, `(${ Master.Instance } ---> ${ Server.Instance })` );
-							Server.SetServerConfigRaw( Filename, MasterContent );
+			if( !server.isMaster && server.isInCluster() ) {
+				const cluster = server.getCluster;
+				const master = await server.getClusterMaster();
+				if( master && cluster ) {
+					for( const [ filename, path ] of Object.entries( master.getConfigFiles() ) ) {
+						if( cluster.SyncSettings.includes( filename ) && filename.toLowerCase() !== "arkmanager.cfg" ) {
+							const masterContent = master.getConfigContentRaw( path );
+							SystemLib.debugLog( "clustersync", "Sync Config:", filename, `(${ master.instanceId } ---> ${ server.instanceId })` );
+							server.setServerConfigRaw( filename, masterContent );
 						}
 					}
 
-					const CurrentConfig = Server.GetConfig();
-					const CurrentMasterConfig = Master.GetConfig();
-					for ( const Setting of Cluster.SyncInis ) {
-						if ( CurrentMasterConfig[ Setting ] ) {
-							CurrentConfig[ Setting ] = CurrentMasterConfig[ Setting ];
-						}
-						else if ( CurrentConfig[ Setting ] ) {
-							delete CurrentConfig[ Setting ];
+					const currentConfig = server.getConfig();
+					const currentMasterConfig = master.getConfig();
+					for( const setting of cluster.SyncInis ) {
+						if( currentMasterConfig[ setting ] ) {
+							currentConfig[ setting ] = currentMasterConfig[ setting ];
+						} else if( currentConfig[ setting ] ) {
+							delete currentConfig[ setting ];
 						}
 					}
 
-					await Server.SetServerConfig( "arkmanager.cfg", CurrentConfig );
-					Server.EmitUpdate();
+					await server.setServerConfig( "arkmanager.cfg", currentConfig );
+					server.emitUpdate();
 				}
 			}
 		}

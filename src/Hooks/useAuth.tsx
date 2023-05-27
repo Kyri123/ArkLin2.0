@@ -1,33 +1,30 @@
-import { useLocalStorage } from "@kyri123/k-reactutils";
-import { AUTHTOKEN }       from "@app/Lib/constance";
-import { useNavigate }     from "react-router-dom";
+import { AUTHTOKEN } from "@app/Lib/constance";
 import {
-	fireSwalFromApi,
-	tRPC_Auth
-}                          from "@app/Lib/tRPC";
+	apiAuth,
+	fireSwalFromApi
+} from "@app/Lib/tRPC";
+import { useLocalStorage } from "@kyri123/k-reactutils";
+import { useNavigate } from "react-router-dom";
+
 
 export default function useAuth() {
 	const navigate = useNavigate();
-	const { Storage, SetStorage, ResetStorage } = useLocalStorage(
-		AUTHTOKEN,
-		""
-	);
+	const localStorage = useLocalStorage( AUTHTOKEN, "" );
 
-	const Logout = async() => {
+	const logout = async() => {
 		try {
-			await tRPC_Auth.user.logout.mutate();
+			await apiAuth.user.logout.mutate();
 			fireSwalFromApi( "Du wurdest ausgeloggt!", true );
-		}
-		catch ( e ) {
+		} catch( e ) {
 			console.error( e );
 		}
-		ResetStorage();
+		localStorage.ResetStorage();
 		navigate( "/auth/login" );
 	};
 
 	return {
-		Token: Storage,
-		SetToken: SetStorage,
-		Logout
+		token: localStorage.Storage,
+		setToken: localStorage.SetStorage,
+		logout
 	};
 }

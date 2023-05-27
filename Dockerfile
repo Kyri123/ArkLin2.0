@@ -1,13 +1,13 @@
 FROM node:alpine
 
-WORKDIR ./
+WORKDIR /
 
 # Copy main configs
 COPY *.lock ./
 COPY *.html ./
 COPY *.ts ./
 COPY *.json ./
-COPY *.js ./
+COPY *.cjs ./
 
 # Copy source folder
 COPY ./src ./src

@@ -1,52 +1,52 @@
-import { JobTask }                    from "../TaskManager";
-import { ConfigManager }              from "@server/Lib/ConfigManager.Lib";
+import { configManager } from "@/server/src/Lib/configManager.Lib";
 import {
-	GetAllModIds,
-	QuerySteamAPI
-}                                     from "@server/Lib/SteamApi.Lib";
-import type { SteamMod } from "@server/MongoDB/DB_SteamAPI_Mods";
-import DB_SteamAPI_Mods from "@server/MongoDB/DB_SteamAPI_Mods";
-import { BC }                         from "@server/Lib/System.Lib";
+	getAllModIds,
+	querySteamAPI
+} from "@/server/src/Lib/steamApi.Lib";
+import { BC } from "@/server/src/Lib/system.Lib";
+import type { SteamMod } from "@server/MongoDB/MongoSteamAPIMods";
+import MongoSteamAPIMods from "@server/MongoDB/MongoSteamAPIMods";
+import { JobTask } from "../taskManager";
+
 
 export default new JobTask(
-	ConfigManager.GetTaskConfig.SteamAPIQuery,
+	configManager.getTaskConfig.SteamAPIQuery,
 	"SteamAPI",
 	async() => {
 		// Clear old Sessions
-		SystemLib.DebugLog( "tasks",
+		SystemLib.debugLog( "tasks",
 			" Running Task",
 			BC( "Red" ),
 			"SteamAPI"
 		);
 
 		// Do Query Steam API Mods
-		const ModsIds = await GetAllModIds();
+		const modsIds = await getAllModIds();
 
 		try {
-			const Response = await QuerySteamAPI(
+			const response = await querySteamAPI(
 				"/ISteamRemoteStorage/GetPublishedFileDetails/v1",
 				{
-					itemcount: ModsIds.length,
-					publishedfileids: ModsIds
+					itemcount: modsIds.length,
+					publishedfileids: modsIds
 				}
 			);
 
-			const ResultObject = JSON.parse( Response );
-			for ( const ModResult of ResultObject.response
+			const resultObject = JSON.parse( response );
+			for( const modResult of resultObject.response
 				.publishedfiledetails as SteamMod[] ) {
-				await DB_SteamAPI_Mods.findOneAndReplace(
-					{ publishedfileid: ModResult.publishedfileid },
-					ModResult,
+				await MongoSteamAPIMods.findOneAndReplace(
+					{ publishedfileid: modResult.publishedfileid },
+					modResult,
 					{ upsert: true }
 				);
 			}
 
-			SystemLib.Log(
-				`SteamAPI`, ` Updated Mods from API ( Total: ${ ResultObject.response.publishedfiledetails.length } )`
+			SystemLib.log(
+				`SteamAPI`, ` Updated Mods from API ( Total: ${ resultObject.response.publishedfiledetails.length } )`
 			);
-			SocketIO.emit( "SteamApiUpdated" );
-		}
-		catch ( e ) {
+			SocketIO.emit( "onSteamApiUpdated" );
+		} catch( e ) {
 		}
 	}
 );

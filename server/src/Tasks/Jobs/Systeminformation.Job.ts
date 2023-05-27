@@ -1,51 +1,45 @@
-import { JobTask }          from "../TaskManager";
-import * as Si              from "systeminformation";
-import { ConfigManager }    from "@server/Lib/ConfigManager.Lib";
-import type { SystemUsage } from "@server/MongoDB/DB_Usage";
-import DB_Usage             from "@server/MongoDB/DB_Usage";
-import { BC }               from "@server/Lib/System.Lib";
-import fs                   from "fs";
-import path                 from "path";
+import { configManager } from "@/server/src/Lib/configManager.Lib";
+import { BC } from "@/server/src/Lib/system.Lib";
+import MongoUsage from "@server/MongoDB/MongoUsage";
+import fs from "fs";
+import path from "path";
+import * as Si from "systeminformation";
+import { JobTask } from "../taskManager";
+
 
 export default new JobTask(
-	ConfigManager.GetTaskConfig.SystemInformationInterval,
+	configManager.getTaskConfig.SystemInformationInterval,
 	"Systeminformation",
 	async() => {
-		SystemLib.DebugLog(
+		SystemLib.debugLog(
 			"TASKS", "Running Task",
 			BC( "Red" ),
 			"Systeminformation"
 		);
 
-		const space = fs.statfsSync( __server_dir );
+		const space = fs.statfsSync( SERVERDIR );
 
 		const CPU = await Si.currentLoad();
 		const MEM = await Si.mem();
 
-		const Usage = ( await DB_Usage.findOne() )?.toJSON() || ( {} as any );
-		delete Usage._id;
-		delete Usage.createdAt;
-		delete Usage.updatedAt;
-		delete Usage.__v;
+		let usage = await MongoUsage.findOne();
+		if( !usage ) {
+			usage = new MongoUsage();
+		}
 
-		const NewUsage : SystemUsage = {
-			...Usage,
-			UpdateIsRunning: false,
-			NextPanelBuildVersion: Usage.NextPanelBuildVersion || "",
-			PanelBuildVersion: process.env.npm_package_version,
-			PanelVersionName: `${ process.env.npm_package_version }`,
-			CPU: CPU.currentLoad,
-			DiskMax: space.bsize * space.bfree,
-			DiskUsed: space.bsize * space.bfree - space.bsize * space.bavail,
-			MemMax: MEM.total,
-			MemUsed: MEM.total - MEM.available,
-			LogFiles: fs.readdirSync( __LogDir ).map( e => path.join( __LogDir, e ) ).reverse(),
-			PanelNeedUpdate: __PANNELUPDATE
-		};
+		usage.UpdateIsRunning = false;
+		usage.NextPanelBuildVersion = usage.NextPanelBuildVersion || "",
+		usage.PanelBuildVersion = process.env.npm_package_version || "2.0.0",
+		usage.PanelVersionName = `${ process.env.npm_package_version }`,
+		usage.CPU = CPU.currentLoad,
+		usage.DiskMax = space.bsize * space.bfree,
+		usage.DiskUsed = space.bsize * space.bfree - space.bsize * space.bavail,
+		usage.MemMax = MEM.total,
+		usage.MemUsed = MEM.total - MEM.available,
+		usage.LogFiles = fs.readdirSync( LOGDIR ).map( e => path.join( LOGDIR, e ) ).reverse(),
+		usage.PanelNeedUpdate = PANELUPDATE;
 
-		await DB_Usage.findOneAndReplace( {}, NewUsage, {
-			upsert: true
-		} );
-		SocketIO.emit( "OnSystemUpdate", NewUsage );
+		await usage.save();
+		SocketIO.emit( "onSystemUpdate", usage );
 	}
 );

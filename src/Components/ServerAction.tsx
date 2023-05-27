@@ -1,27 +1,28 @@
-import { Modal }           from "react-bootstrap";
-import { IconButton }      from "@comp/Elements/Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { FC }         from "react";
 import {
-	useEffect,
-	useState
-}                          from "react";
-import SmartInput          from "./Elements/SmartInput";
-import {
-	EArkmanagerCommands,
-	GetMaskFromCommand
-}                          from "../Lib/serverUtils";
-import Select              from "react-select";
-import { useArkServer }    from "@hooks/useArkServer";
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi
+} from "@app/Lib/tRPC";
 import type {
 	InputSelectMask,
 	SingleOption
-}                          from "@app/Types/Systeminformation";
+} from "@app/Types/Systeminformation";
+import { IconButton } from "@comp/Elements/Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useArkServer } from "@hooks/useArkServer";
+import type { FC } from "react";
 import {
-	fireSwalFromApi,
-	tRPC_Auth,
-	tRPC_handleError
-}                          from "@app/Lib/tRPC";
+	useEffect,
+	useState
+} from "react";
+import { Modal } from "react-bootstrap";
+import Select from "react-select";
+import {
+	EArkmanagerCommands,
+	GetMaskFromCommand
+} from "../Lib/serverUtils";
+import SmartInput from "./Elements/SmartInput";
+
 
 const options = [
 	{ value: EArkmanagerCommands.install, label: "Installieren" },
@@ -43,19 +44,19 @@ const options = [
 ];
 
 interface ServerActionProps {
-	InstanceName : string;
-	Show : boolean;
-	OnClose : () => void;
+	instanceName: string,
+	Show: boolean,
+	onClose: () => void
 }
 
-const ServerAction : FC<ServerActionProps> = ( { InstanceName, OnClose, Show } ) => {
-	const { State } = useArkServer( InstanceName );
-	const [ IsSending, setIsSending ] = useState( false );
-	const [ Parameter, setParameter ] = useState<string[]>( [] );
-	const [ ParameterMask, setParameterMask ] = useState<
-		Record<string, InputSelectMask[]>
+const ServerAction: FC<ServerActionProps> = ( { instanceName, onClose, Show } ) => {
+	const { state } = useArkServer( instanceName );
+	const [ isSending, setIsSending ] = useState( false );
+	const [ parameter, setParameter ] = useState<string[]>( [] );
+	const [ parameterMask, setParameterMask ] = useState<
+	Record<string, InputSelectMask[]>
 	>( { para: [] } );
-	const [ Selected, setSelected ] = useState<SingleOption<EArkmanagerCommands>>( null );
+	const [ selected, setSelected ] = useState<SingleOption<EArkmanagerCommands>>( null );
 
 	const onShow = () => {
 		setParameter( [] );
@@ -64,66 +65,59 @@ const ServerAction : FC<ServerActionProps> = ( { InstanceName, OnClose, Show } )
 	};
 
 	useEffect( () => {
-		if ( Selected ) {
-			setParameterMask( { para: GetMaskFromCommand( Selected.value ) } );
+		if( selected ) {
+			setParameterMask( { para: GetMaskFromCommand( selected.value ) } );
 		}
-	}, [ State.State, Selected ] );
+	}, [ selected ] );
 
-	const SendCommand = async() => {
-		if ( Selected ) {
+	const sendCommand = async() => {
+		if( selected ) {
 			setIsSending( true );
-			const result = await tRPC_Auth.server.action.executeCommand.mutate( {
-				instanceName: InstanceName,
-				command: Selected.value,
-				params: Parameter
-			} ).catch( tRPC_handleError );
-			if ( result ) {
+			const result = await apiAuth.server.action.executeCommand.mutate( {
+				instanceName: instanceName,
+				command: selected.value,
+				params: parameter
+			} ).catch( apiHandleError );
+			if( result ) {
 				fireSwalFromApi( result, true );
 			}
-			OnClose();
+			onClose();
 		}
 	};
 
 	return (
 		<Modal onShow={ onShow }
-		       onHide={ OnClose }
-		       show={ Show && State.ArkmanagerPID === 0 }
+		       onHide={ onClose }
+		       show={ Show && state.ArkmanagerPID === 0 }
 		       centered
-		       size={ "lg" }
-		>
+		       size="lg">
 			<Modal.Header closeButton>Server Aktion</Modal.Header>
 			<Modal.Body>
-				<Select
-					defaultValue={ Selected }
+				<Select defaultValue={ selected }
 					onChange={ setSelected }
 					options={ options }
-					isClearable={ true }
-				/>
-				{ ParameterMask.para.length > 0 && Selected !== null && (
+					isClearable={ true } />
+				{ parameterMask.para.length > 0 && selected !== null && (
 					<>
-						<hr/>
-						<SmartInput
-							Value={ Parameter }
-							OnValueSet={ setParameter }
-							InputSelectMask={ ParameterMask }
-							ValueKey={ "para" }
-						>
+						<hr />
+						<SmartInput Value={ parameter }
+							onValueSet={ setParameter }
+							InputSelectMask={ parameterMask }
+							ValueKey="para">
 							{ " " }
-							Parameter{ " " }
+							parameter{ " " }
 						</SmartInput>
 					</>
 				) }
 			</Modal.Body>
 			<Modal.Footer>
-				<IconButton
-					onClick={ SendCommand }
-					disabled={ Selected === null }
-					IsLoading={ IsSending }
-				>
-					<FontAwesomeIcon icon={ "terminal" }/> Ausführen
+				<IconButton onClick={ sendCommand }
+					disabled={ selected === null }
+					IsLoading={ isSending }>
+					<FontAwesomeIcon icon="terminal" /> Ausführen
 				</IconButton>
-				<IconButton variant={ "danger" } onClick={ OnClose }>
-					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
+				<IconButton variant="danger" onClick={ onClose }>
+					<FontAwesomeIcon icon="cancel" /> Abbrechen
 				</IconButton>
 			</Modal.Footer>
 		</Modal>

@@ -1,32 +1,34 @@
-import { z }                      from "zod";
-import * as jwt                   from "jsonwebtoken";
+import { getSecretAppToken } from "@/server/src/Lib/user.Lib";
+import MongoAccountKey from "@server/MongoDB/MongoAccountKey";
+import type { ClientUserAccount } from "@server/MongoDB/MongoAccounts";
+import MongoAccounts from "@server/MongoDB/MongoAccounts";
+import MongoSessionToken from "@server/MongoDB/MongoSessionToken";
 import {
 	publicProcedure,
 	router
-}                                 from "@server/trpc/trpc";
-import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
-import DB_Accounts                from "@server/MongoDB/DB_Accounts";
-import DB_SessionToken            from "@server/MongoDB/DB_SessionToken";
-import DB_AccountKey              from "@server/MongoDB/DB_AccountKey";
-import { GetSecretAppToken }      from "@server/Lib/User.Lib";
+} from "@server/trpc/trpc";
+import * as jwt from "jsonwebtoken";
+import { z } from "zod";
 
-export const public_validate =
+
+export const publicValidate =
 	router( {
 		validateSession: publicProcedure.input( z.object( {
 			token: z.string()
 		} ) ).query<{
-			tokenValid : boolean;
+			tokenValid: boolean
 		}>( async( { input } ) => {
 			try {
-				const result = await jwt.verify( input.token, GetSecretAppToken() ) as ClientUserAccount;
-				const userAccountExsists = !!( await DB_Accounts.exists( { _id: result._id } ) );
-				if ( !userAccountExsists ) {
-					DB_SessionToken.deleteMany( { userid: result._id } );
+				const result = await jwt.verify( input.token, getSecretAppToken() ) as ClientUserAccount;
+				const userAccountExsists = !!( await MongoAccounts.exists( { _id: result._id } ) );
+				if( !userAccountExsists ) {
+					MongoSessionToken.deleteMany( { userid: result._id } );
 				}
-				return { tokenValid: !!( await DB_SessionToken.exists( { token: input.token } ) ) && userAccountExsists };
-			}
-			catch ( e ) {
-				console.log( e );
+				return { tokenValid: !!( await MongoSessionToken.exists( { token: input.token } ) ) && userAccountExsists };
+			} catch( e ) {
+				if( e instanceof Error ) {
+					SystemLib.debugLog( "api", e.message );
+				}
 			}
 			return { tokenValid: false };
 		} ),
@@ -34,17 +36,19 @@ export const public_validate =
 		validateResetToken: publicProcedure.input( z.object( {
 			token: z.string()
 		} ) ).query<{
-			tokenValid : boolean;
+			tokenValid: boolean
 		}>( async( { input } ) => {
 			try {
 				return {
-					tokenValid: !!( await DB_AccountKey.exists( {
+					tokenValid: !!( await MongoAccountKey.exists( {
 						key: input.token,
 						isPasswordReset: true
 					} ) )
 				};
-			}
-			catch ( e ) {
+			} catch( e ) {
+				if( e instanceof Error ) {
+					SystemLib.debugLog( "api", e.message );
+				}
 			}
 			return { tokenValid: false };
 		} )

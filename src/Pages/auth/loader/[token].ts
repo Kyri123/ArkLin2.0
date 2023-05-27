@@ -1,18 +1,19 @@
+import {
+    apiHandleError,
+    apiPublic
+} from "@app/Lib/tRPC";
 import type { LoaderFunction } from "react-router-dom";
 import {
-	json,
-	redirect
-}                              from "react-router-dom";
-import {
-	tRPC_handleError,
-	tRPC_Public
-}                              from "@app/Lib/tRPC";
+    json,
+    redirect
+} from "react-router-dom";
 
-const loader : LoaderFunction = async( { params } ) => {
+
+const loader: LoaderFunction = async( { params } ) => {
 	const { token } = params;
-	const tokenCheck = await tRPC_Public.validate.validateResetToken.query( { token: token! } ).catch( tRPC_handleError );
+	const tokenCheck = await apiPublic.validate.validateResetToken.query( { token: token! } ).catch( apiHandleError );
 
-	if ( !tokenCheck?.tokenValid ) {
+	if( !tokenCheck?.tokenValid ) {
 		return redirect( "/auth/login" );
 	}
 

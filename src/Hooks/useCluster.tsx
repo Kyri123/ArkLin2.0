@@ -1,50 +1,49 @@
+import type { Instance } from "@server/MongoDB/MongoInstances";
 import {
 	useContext,
 	useEffect,
 	useMemo,
 	useState
-}                    from "react";
+} from "react";
 import ServerContext from "../Context/ServerContext";
-import type { Instance }  from "@server/MongoDB/DB_Instances";
 
-export function useCluster( InstanceName : string ) {
-	const { ClusterData, InstanceData } = useContext( ServerContext );
-	const [ Cluster, setCluster ] = useState( ClusterData[ InstanceName ] );
+
+export function useCluster( InstanceName: string ) {
+	const { clusterData, instanceData } = useContext( ServerContext );
+	const [ cluster, setCluster ] = useState( clusterData[ InstanceName ] );
 
 	useEffect( () => {
-		setCluster( () => ClusterData[ InstanceName ] );
-	}, [ InstanceName, ClusterData ] );
+		setCluster( () => clusterData[ InstanceName ] );
+	}, [ InstanceName, clusterData ] );
 
-	const Servers = useMemo( () : Record<string, Instance> => {
-		const Return : Record<string, Instance> = {};
-		if ( Cluster !== undefined ) {
-			for ( const Instance of Cluster.Instances ) {
-				if ( InstanceData[ Instance ] ) {
-					Return[ Instance ] = InstanceData[ Instance ];
+	const servers = useMemo( (): Record<string, Instance> => {
+		const result: Record<string, Instance> = {};
+		if( cluster !== undefined ) {
+			for( const instance of cluster.Instances ) {
+				if( instanceData[ instance ] ) {
+					result[ instance ] = instanceData[ instance ];
 				}
 			}
 		}
-		return Return;
-	}, [ Cluster, InstanceData ] );
+		return result;
+	}, [ cluster, instanceData ] );
 
-	const MasterServer = useMemo( () : [ string, Instance ] | undefined => {
-		if ( Cluster !== undefined ) {
-			if ( Servers[ Cluster.Master ] ) {
-				return [ Cluster.Master, Servers[ Cluster.Master ] ];
+	const masterServer = useMemo( (): [ string, Instance ] | undefined => {
+		if( cluster !== undefined ) {
+			if( servers[ cluster.Master ] ) {
+				return [ cluster.Master, servers[ cluster.Master ] ];
 			}
 		}
 		return undefined;
-	}, [ Cluster, Servers ] );
+	}, [ cluster, servers ] );
 
-	const IsValid = useMemo( () : boolean => {
-		return Cluster !== undefined && MasterServer !== undefined;
-	}, [ Cluster, MasterServer ] );
+	const isValid = useMemo( (): boolean => cluster !== undefined && masterServer !== undefined, [ cluster, masterServer ] );
 
 	return {
-		IsValid: IsValid,
-		TempModify: setCluster,
-		Cluster,
-		Servers,
-		MasterServer: MasterServer!
+		isValid: isValid,
+		tempModify: setCluster,
+		cluster,
+		servers,
+		masterServer: masterServer!
 	};
 }

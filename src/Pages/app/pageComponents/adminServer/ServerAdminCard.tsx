@@ -1,110 +1,111 @@
-import { Link }                        from "react-router-dom";
-import type { FC }                     from "react";
+import { getDefaultPanelServerConfig } from "@/src/Shared/Default/Server.Default";
+import {
+	serverStateToColor,
+	serverStateToReadableString
+} from "@app/Lib/Conversion.Lib";
+import {
+	apiAuth,
+	apiHandleError,
+	fireSwalFromApi,
+	onConfirm
+} from "@app/Lib/tRPC";
+import type { PanelServerConfig } from "@app/Types/ArkSE";
+import type { InputSelectMask } from "@app/Types/Systeminformation";
+import { IconButton } from "@comp/Elements/Buttons";
+import TableInput from "@comp/Elements/TableInput";
+import ServerAction from "@comp/ServerAction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAccount from "@hooks/useAccount";
+import { useArkServer } from "@hooks/useArkServer";
+import { EPerm } from "@shared/Enum/User.Enum";
+import UpdateSelectMask from "@shared/SelectMask/Arkmanager_Command_Update.json";
+import _ from "lodash";
+import type { FC } from "react";
 import {
 	useEffect,
 	useState
-}                                      from "react";
-import { FontAwesomeIcon }             from "@fortawesome/react-fontawesome";
-import {
-	ServerStateToColor,
-	ServerStateToReadableString
-}                                      from "@app/Lib/Conversion.Lib";
-import { useArkServer }                from "@hooks/useArkServer";
+} from "react";
 import {
 	ButtonGroup,
 	Modal,
 	Table
-}                                      from "react-bootstrap";
-import { EPerm }                       from "@shared/Enum/User.Enum";
-import { GetDefaultPanelServerConfig } from "@shared/Default/Server.Default";
-import { IconButton }                  from "@comp/Elements/Buttons";
-import UpdateSelectMask                from "@shared/SelectMask/Arkmanager_Command_Update.json";
-import ServerAction                    from "@comp/ServerAction";
-import type { PanelServerConfig }      from "@app/Types/ArkSE";
-import useAccount                      from "@hooks/useAccount";
-import type { InputSelectMask }        from "@app/Types/Systeminformation";
-import {
-	fireSwalFromApi,
-	onConfirm,
-	tRPC_Auth,
-	tRPC_handleError
-}                                      from "@app/Lib/tRPC";
-import _                               from "lodash";
-import TableInput                      from "@comp/Elements/TableInput";
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+
 
 export interface ServerAdminCardProps {
-	InstanceName : string;
+	instanceName: string
 }
 
-const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
+const ServerAdminCard: FC<ServerAdminCardProps> = ( { instanceName } ) => {
 	const { user } = useAccount();
-	const Server = useArkServer( InstanceName );
-	const [ ShowEditServer, setShowEditServer ] = useState( false );
-	const [ ShowAction, setShowAction ] = useState( false );
-	const [ IsSending, setIsSending ] = useState( {
+	const server = useArkServer( instanceName );
+	const [ showEditServer, setShowEditServer ] = useState( false );
+	const [ showAction, setShowAction ] = useState( false );
+	const [ isSending, setIsSending ] = useState( {
 		Edit: false,
 		Delete: false,
 		Cancel: false
 	} );
-	const [ FormData, setFormData ] = useState( GetDefaultPanelServerConfig() );
+	const [ formData, setFormData ] = useState( getDefaultPanelServerConfig() );
 
-	const RemoveServer = async() => {
-		setIsSending( { ...IsSending, Delete: true } );
+	const removeServer = async() => {
+		setIsSending( { ...isSending, Delete: true } );
 		const confirm = await onConfirm( "Möchtest du wirklich diese Aktion abbrechen?" );
-		if ( confirm ) {
-			const result = await tRPC_Auth.server.action.removeServer.mutate( {
-				instanceName: InstanceName
-			} ).catch( tRPC_handleError );
-			if ( result ) {
+		if( confirm ) {
+			const result = await apiAuth.server.action.removeServer.mutate( {
+				instanceName: instanceName
+			} ).catch( apiHandleError );
+			if( result ) {
 				fireSwalFromApi( result, true );
 			}
 		}
-		setIsSending( { ...IsSending, Delete: false } );
+		setIsSending( { ...isSending, Delete: false } );
 	};
 
-	const SavePanelConfig = async() => {
-		const config : PanelServerConfig = _.cloneDeep( FormData );
+	const savePanelConfig = async() => {
+		const config: PanelServerConfig = _.cloneDeep( formData );
 		config.AutoUpdateParameters = config.AutoUpdateParameters.filter(
-			( e ) => e.replaceAll( " ", "" ).trim() !== ""
+			e => e.replaceAll( " ", "" ).trim() !== ""
 		);
 
-		setIsSending( { ...IsSending, Edit: true } );
-		const result = await tRPC_Auth.server.action.updatePanelConfig.mutate( {
-			instanceName: InstanceName,
+		setIsSending( { ...isSending, Edit: true } );
+		const result = await apiAuth.server.action.updatePanelConfig.mutate( {
+			instanceName: instanceName,
 			config: config
-		} ).catch( tRPC_handleError );
-		if ( result ) {
+		} ).catch( apiHandleError );
+		if( result ) {
 			fireSwalFromApi( result, true );
 		}
-		setIsSending( { ...IsSending, Edit: false } );
+		setIsSending( { ...isSending, Edit: false } );
 
-		setFormData( { ..._.cloneDeep( FormData ), ...config } );
+		setFormData( { ..._.cloneDeep( formData ), ...config } );
 		setShowEditServer( false );
 	};
 
 	useEffect( () => {
-		if ( !ShowEditServer ) {
-			setFormData( Server.PanelConfig );
+		if( !showEditServer ) {
+			setFormData( server.panelConfig );
 		}
-	}, [ Server.PanelConfig, ShowEditServer ] );
+	}, [ server.panelConfig, showEditServer ] );
 
-	if ( !Server.IsValid() ) {
+	if( !server.isValid() ) {
 		return null;
 	}
 
 	const cancelAction = async() => {
-		setIsSending( { ...IsSending, Cancel: true } );
+		setIsSending( { ...isSending, Cancel: true } );
 		const confirm = await onConfirm( "Möchtest du wirklich diese Aktion abbrechen?" );
-		if ( confirm ) {
-			const result = await tRPC_Auth.server.action.killAction.mutate( {
-				instanceName: InstanceName,
+		if( confirm ) {
+			const result = await apiAuth.server.action.killAction.mutate( {
+				instanceName: instanceName,
 				killServer: false
-			} ).catch( tRPC_handleError );
-			if ( result ) {
+			} ).catch( apiHandleError );
+			if( result ) {
 				fireSwalFromApi( result, true );
 			}
 		}
-		setIsSending( { ...IsSending, Cancel: false } );
+		setIsSending( { ...isSending, Cancel: false } );
 	};
 
 	return (
@@ -115,50 +116,40 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 						<div className="row p-2">
 							<div className="col-12 text-center">
 								<h5 className="text-center left d-inline pt-3 ps-0 m-0 text-light">
-									{ Server.Data.ark_SessionName }
+									{ server.data.ark_SessionName }
 								</h5>
 							</div>
 						</div>
 					</div>
-					<div
-						className="rounded-0 widget-user-header text-white"
+					<div className="rounded-0 widget-user-header text-white"
 						style={ {
 							background: "url('/img/backgrounds/sc.jpg') center center"
-						} }
-					>
-						<div
-							style={ { zIndex: 1000, height: 150 } }
-							className={ "position-relative" }
-						>
-							<img
-								src={ Server.ServerMap.LOGO }
+						} }>
+						<div style={ { zIndex: 1000, height: 150 } }
+							className="position-relative">
+							<img src={ server.serverMap.LOGO }
 								className="position-absolute top-100 start-50 translate-middle"
 								style={ { height: 75, width: 75 } }
 								alt={
-									Server.Data.serverMap
-								} /*style="border-top-width: 3px!important;height: 90px;width: 90px;background-color: #001f3f"*/
-							/>
+									server.data.serverMap
+								} />
 						</div>
 					</div>
 
 					<div className="d-flex bd-highlight">
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
-							<button
-								disabled={ !user.HasPermission( EPerm.ManageServers ) }
+							<button disabled={ !user.hasPermission( EPerm.ManageServers ) }
 								onClick={ () => setShowEditServer( true ) }
-								className="w-100 pe-5 rounded-0 btn btn-dark"
-							>
-								<FontAwesomeIcon icon={ "cogs" }/>
+								className="w-100 pe-5 rounded-0 btn btn-dark">
+								<FontAwesomeIcon icon="cogs" />
 							</button>
 						</div>
 						<div className="rounded-0 p-0 flex-fill bd-highlight">
-              <span
-	              onClick={ RemoveServer }
+							<span onClick={ removeServer }
 	              className="w-100 ps-5 rounded-0 text-white btn btn-danger"
-	              data-toggle="modal"
-              >
-                <FontAwesomeIcon icon={ "trash-alt" }/>
-              </span>
+	              data-toggle="modal">
+								<FontAwesomeIcon icon="trash-alt" />
+							</span>
 						</div>
 					</div>
 
@@ -168,12 +159,10 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 								<div className="info-box mb-0 p-3 rounded-0 h-100">
 									<div className="info-box-content pt-2 ps-3 text-center">
 										<span className="description-text"> STATUS </span>
-										<h6
-											className={ `description-header text-${ ServerStateToColor(
-												Server.State.State
-											) }` }
-										>
-											{ ServerStateToReadableString( Server.State.State ) }
+										<h6 className={ `description-header text-${ serverStateToColor(
+											server.state.State
+										) }` }>
+											{ serverStateToReadableString( server.state.State ) }
 										</h6>
 									</div>
 								</div>
@@ -181,31 +170,27 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 							<div className="col-sm-6 border-sm-right ps-sm-0 rounded-0">
 								<div className="info-box mb-0 p-3 rounded-0 h-100">
 									<div className="info-box-content pt-2 ps-3 text-center">
-										<span className="description-text">AKTION</span> <br/>
+										<span className="description-text">AKTION</span> <br />
 										<ButtonGroup>
-											<IconButton
-												disabled={
-													!user.HasPermissionForServer(
-														Server.InstanceName
-													)
-												}
-												IsLoading={ Server.State.ArkmanagerPID !== 0 }
-												onClick={ () => setShowAction( true ) }
-											>
+											<IconButton disabled={
+												!user.hasPermissionForServer(
+													server.instanceName
+												)
+											}
+											IsLoading={ server.state.ArkmanagerPID !== 0 }
+											onClick={ () => setShowAction( true ) }>
 												Aktion
 											</IconButton>
-											<IconButton
-												disabled={
-													!user.HasPermissionForServer(
-														Server.InstanceName
-													)
-												}
-												Hide={ Server.State.ArkmanagerPID <= 1 }
-												variant={ "danger" }
-												IsLoading={ IsSending.Cancel }
-												onClick={ cancelAction }
-											>
-												<FontAwesomeIcon icon={ "cancel" }/>
+											<IconButton disabled={
+												!user.hasPermissionForServer(
+													server.instanceName
+												)
+											}
+											Hide={ server.state.ArkmanagerPID <= 1 }
+											variant="danger"
+											IsLoading={ isSending.Cancel }
+											onClick={ cancelAction }>
+												<FontAwesomeIcon icon="cancel" />
 											</IconButton>
 										</ButtonGroup>
 									</div>
@@ -218,7 +203,7 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 										<h6 className="description-header">
 											<b>
 												{ " " }
-												{ Server.State.Player } / { Server.Data.ark_MaxPlayers }{ " " }
+												{ server.state.Player } / { server.data.ark_MaxPlayers }{ " " }
 											</b>
 										</h6>
 									</div>
@@ -229,7 +214,7 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 									<div className="info-box-content pt-2 ps-3 text-center">
 										<span className="description-text">VERSION</span>
 										<h6 className="description-header">
-											<b>{ Server.State.ServerVersion }</b>
+											<b>{ server.state.ServerVersion }</b>
 										</h6>
 									</div>
 								</div>
@@ -240,9 +225,8 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 						<div className="row">
 							<div className="col-12">
 								<Link reloadDocument={ true }
-								      to={ `/app/server/${ InstanceName }/logs` }
-								      className="btn btn-sm btn-dark rounded-0 w-100"
-								>
+								      to={ `/app/server/${ instanceName }/logs` }
+								      className="btn btn-sm btn-dark rounded-0 w-100">
 									ServerCenter
 								</Link>
 							</div>
@@ -251,68 +235,51 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 				</div>
 			</div>
 
-			<ServerAction
-				InstanceName={ Server.InstanceName }
-				Show={ ShowAction }
-				OnClose={ () => setShowAction( false ) }
-			/>
+			<ServerAction instanceName={ server.instanceName }
+				Show={ showAction }
+				onClose={ () => setShowAction( false ) } />
 
-			{ user.HasPermission( EPerm.ManageServers ) && (
-				<Modal
-					size={ "xl" }
-					show={ ShowEditServer }
-					onHide={ () => setShowEditServer( false ) }
-				>
+			{ user.hasPermission( EPerm.ManageServers ) && (
+				<Modal size="xl"
+					show={ showEditServer }
+					onHide={ () => setShowEditServer( false ) }>
 					<Modal.Header closeButton>
-						Server Bearbeiten: [{ InstanceName }] -{ " " }
-						{ Server.Data.ark_SessionName }
+						server Bearbeiten: [{ instanceName }] -{ " " }
+						{ server.data.ark_SessionName }
 					</Modal.Header>
 					<Modal.Body className="p-0">
 						<Table className="p-0 m-0" striped>
 							<tbody>
-							{ Object.entries( FormData ).map( ( [ Key, Value ], Idx ) => (
-								<TableInput
-									Type={
+								{ Object.entries( formData ).map( ( [ Key, Value ], Idx ) => (
+									<TableInput Type={
 										Array.isArray( Value )
 											? "text"
 											: typeof Value !== "string"
 												? "number"
 												: "text"
 									}
-									key={ InstanceName + "EDIT" + Key + Idx }
+									key={ instanceName + "EDIT" + Key + Idx }
 									Value={ Value }
-									OnValueSet={ ( Val ) => {
-										const Obj : Record<string, any> = {};
-										Obj[ Key ] = Val;
-										setFormData( {
-											...FormData,
-											...Obj
-										} );
-									} }
+									onValueSet={ Val => setFormData( curr => ( { ...curr, [ Key ]: Val } ) ) }
 									ValueKey={ Key }
 									InputSelectMask={ {
 										AutoUpdateParameters: UpdateSelectMask as InputSelectMask[]
-									} }
-								>
-									{ Key }
-								</TableInput>
-							) ) }
+									} }>
+										{ Key }
+									</TableInput>
+								) ) }
 							</tbody>
 						</Table>
 					</Modal.Body>
 					<Modal.Footer>
-						<IconButton
-							variant={ "success" }
-							IsLoading={ IsSending.Edit }
-							onClick={ SavePanelConfig }
-						>
-							<FontAwesomeIcon icon={ "save" }/> Speichern
+						<IconButton variant="success"
+							IsLoading={ isSending.Edit }
+							onClick={ savePanelConfig }>
+							<FontAwesomeIcon icon="save" /> Speichern
 						</IconButton>
-						<IconButton
-							variant={ "danger" }
-							onClick={ () => setShowEditServer( false ) }
-						>
-							<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
+						<IconButton variant="danger"
+							onClick={ () => setShowEditServer( false ) }>
+							<FontAwesomeIcon icon="cancel" /> Abbrechen
 						</IconButton>
 					</Modal.Footer>
 				</Modal>
@@ -322,3 +289,4 @@ const ServerAdminCard : FC<ServerAdminCardProps> = ( { InstanceName } ) => {
 };
 
 export { ServerAdminCard };
+

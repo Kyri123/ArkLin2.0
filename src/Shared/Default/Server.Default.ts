@@ -1,13 +1,14 @@
-import type { Cluster }     from "@server/MongoDB/DB_Cluster";
 import type {
 	InstanceData,
 	InstanceState,
 	PanelServerConfig
-}                           from "@app/Types/ArkSE";
-import type { SystemUsage } from "@server/MongoDB/DB_Usage";
-import { EServerState }     from "@shared/Enum/EServerState";
+} from "@app/Types/ArkSE";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import type { SystemUsage } from "@server/MongoDB/MongoUsage";
+import { EServerState } from "@shared/Enum/EServerState";
 
-export const DefaultCluster : Cluster = {
+
+export const defaultCluster: Cluster = {
 	created_at: "",
 	updated_at: "",
 	_id: "",
@@ -26,7 +27,7 @@ export const DefaultCluster : Cluster = {
 	SyncSettings: []
 };
 
-export function DefaultInstanceState() : InstanceState {
+export function defaultInstanceState(): InstanceState {
 	return structuredClone<InstanceState>( {
 		allConfigs: [],
 		IsListen: false,
@@ -39,7 +40,7 @@ export function DefaultInstanceState() : InstanceState {
 	} );
 }
 
-export function DefaultSystemUsage() : SystemUsage {
+export function defaultSystemUsage(): SystemUsage {
 	return structuredClone<SystemUsage>( {
 		LogFiles: [],
 		UpdateIsRunning: false,
@@ -55,7 +56,7 @@ export function DefaultSystemUsage() : SystemUsage {
 	} );
 }
 
-export function GetRawInstanceData() : InstanceData {
+export function getRawInstanceData(): InstanceData {
 	return {
 		arkMaxBackupSizeMB: 4096,
 		arkNoPortDecrement: true,
@@ -115,7 +116,7 @@ export function GetRawInstanceData() : InstanceData {
 	};
 }
 
-export function GetDefaultPanelServerConfig() : PanelServerConfig {
+export function getDefaultPanelServerConfig(): PanelServerConfig {
 	return structuredClone<PanelServerConfig>( {
 		AutoUpdateEnabled: false,
 		AutoUpdateInterval: 1800000,

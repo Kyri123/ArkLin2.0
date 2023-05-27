@@ -1,76 +1,74 @@
 import type {
 	BootBase,
 	ChildrenBaseProps
-}                               from "@app/Types/BaseTypes";
+} from "@app/Types/BaseTypes";
+import type { InputSelectMask } from "@app/Types/Systeminformation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import _ from "lodash";
 import type {
 	ChangeEvent,
 	HTMLInputTypeAttribute
-}                               from "react";
+} from "react";
 import {
 	useEffect,
 	useId,
 	useState
-}                               from "react";
-import { ButtonGroup }          from "react-bootstrap";
+} from "react";
+import { ButtonGroup } from "react-bootstrap";
+import Select from "react-select";
 import {
 	IconButton,
 	ToggleButton
-}                               from "./Buttons";
-import { FontAwesomeIcon }      from "@fortawesome/react-fontawesome";
-import Select                   from "react-select";
-import type { InputSelectMask } from "@app/Types/Systeminformation";
+} from "./Buttons";
+
 
 export type TInputAlert = "" | "is-valid" | "is-invalid" | "is-warn";
 
 export interface ILTEInpute<
 	T =
-			| string
-		| boolean
-		| number
-		| ReadonlyArray<string>
-		| number[]
-		| string[]
-		| undefined
-		| Date
+	| string
+	| boolean
+	| number
+	| readonly string[]
+	| number[]
+	| string[]
+	| undefined
+	| Date
 > extends ChildrenBaseProps {
-	Type? : HTMLInputTypeAttribute;
-	Value : T;
-	OnValueSet : ( Value : any ) => void;
-	ValueKey? : string;
-	InputSelectMask? : Record<string, InputSelectMask[]>;
-	InputAlert? : TInputAlert;
-	NumMin? : number;
-	NumMax? : number;
+	Type?: HTMLInputTypeAttribute,
+	Value: T,
+	onValueSet: ( Value: any ) => void,
+	ValueKey?: string,
+	InputSelectMask?: Record<string, InputSelectMask[]>,
+	InputAlert?: TInputAlert,
+	NumMin?: number,
+	NumMax?: number
 }
 
 export interface ILTESelect extends ILTEInpute {
-	ArraySupport? : boolean;
-	ValueKey : string;
-	InputSelectMask : Record<string, InputSelectMask[]>;
+	ArraySupport?: boolean,
+	ValueKey: string,
+	InputSelectMask: Record<string, InputSelectMask[]>
 }
 
-export function CLTECheckbox(
-	Props : {
-		Checked? : boolean;
-		OnValueChanges : ( IsChecked : boolean ) => void;
+export function Checkbox(
+	Props: {
+		Checked?: boolean,
+		onValueChanges: ( IsChecked: boolean ) => void
 	} & BootBase
 ) {
 	const ID = useId();
 	return (
-		<div
-			className={ `icheck-${ Props.Color || "primary" } p-0 ${
-				Props.className || ""
-			}` }
-		>
-			<input
-				ref={ Props.ref }
+		<div className={ `icheck-${ Props.Color || "primary" } p-0 ${
+			Props.className || ""
+		}` }>
+			<input ref={ Props.ref }
 				checked={ Props.Checked }
-				onChange={ ( Event ) => Props.OnValueChanges( Event.target.checked ) }
+				onChange={ Event => Props.onValueChanges( Event.target.checked ) }
 				type="checkbox"
 				name="stayloggedin"
 				className="form-check-input"
-				id={ ID }
-			/>
+				id={ ID } />
 			<label className="form-check-label" htmlFor={ ID }>
 				{ Props.children }
 			</label>
@@ -78,13 +76,13 @@ export function CLTECheckbox(
 	);
 }
 
-export default function SmartInput( Props : ILTEInpute ) {
+export default function SmartInput( Props: ILTEInpute ) {
 	const ID = useId();
-	if ( Props.Hide ) {
+	if( Props.Hide ) {
 		return <></>;
 	}
 
-	if (
+	if(
 		!Array.isArray( Props.Value ) &&
 		Props.ValueKey &&
 		Props.InputSelectMask &&
@@ -94,7 +92,7 @@ export default function SmartInput( Props : ILTEInpute ) {
 		return <SmartInputSelectMask { ...Props } />;
 	}
 
-	if (
+	if(
 		Array.isArray( Props.Value ) ||
 		typeof Props.Value === "object" ||
 		typeof Props.Value === "boolean"
@@ -109,56 +107,53 @@ export default function SmartInput( Props : ILTEInpute ) {
 				{ Props.children }
 			</label>
 			<div className="col-sm-9">
-				<input
-					min={ Props.NumMin || 0 }
+				<input min={ Props.NumMin || 0 }
 					max={ Props.NumMax }
 					id={ ID }
 					type={ Props.Type }
 					className={ `form-control ${ Props.InputAlert || "" }` }
 					value={ Props.Value as string }
-					onChange={ ( Event ) =>
-						Props.OnValueSet(
+					onChange={ Event =>
+						Props.onValueSet(
 							typeof Props.Value === "number"
 								? parseInt( Event.target.value )
 								: Event.target.value
-						)
-					}
-				/>
+						) } />
 			</div>
 		</div>
 	);
 }
 
-export function SmartInputSelectMask( Props : ILTESelect ) {
-	const GetInputSelectMask = ( Value : string ) : InputSelectMask => {
-		let Mask : InputSelectMask = {
+export function SmartInputSelectMask( Props: ILTESelect ) {
+	const getInputSelectMask = ( Value: string ): InputSelectMask => {
+		let mask: InputSelectMask = {
 			Value: "",
 			Text: "",
 			PreAndSuffix: ""
 		};
 
-		if ( SelectedValue ) {
+		if( selectedValue ) {
 			const fMask = Props.InputSelectMask[ Props.ValueKey ].find(
-				( E ) => E.Value === Value
+				E => E.Value === Value
 			);
-			if ( fMask ) {
-				Mask = fMask;
+			if( fMask ) {
+				mask = fMask;
 			}
 		}
 
-		return Mask;
+		return mask;
 	};
 
-	const [ SelectedValue, setSelectedValue ] = useState<{
-		value : string;
-		label : string;
+	const [ selectedValue, setSelectedValue ] = useState<{
+		value: string,
+		label: string
 	} | null>( null );
-	const [ ParameterValue, setParameterValue ] = useState<string>(
+	const [ parameterValue, setParameterValue ] = useState<string>(
 		( Props.Value as string ).split( "=" )[ 1 ]
 			? ( Props.Value as string )
 				.split( "=" )[ 1 ]
 				.replaceAll(
-					GetInputSelectMask( ( Props.Value as string ).split( "=" )[ 0 ] ).PreAndSuffix,
+					getInputSelectMask( ( Props.Value as string ).split( "=" )[ 0 ] ).PreAndSuffix,
 					""
 				)
 			: ""
@@ -166,84 +161,78 @@ export function SmartInputSelectMask( Props : ILTESelect ) {
 	const ID = useId();
 
 	useEffect( () => {
-		if ( SelectedValue ) {
-			SetRow( SelectedValue.value );
+		if( selectedValue ) {
+			setRow( selectedValue.value );
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ SelectedValue ] );
+	}, [ selectedValue ] );
 
-	if ( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
+	if( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
 		return <SmartInputArray { ...Props } />;
 	}
 
-	const SetRow = ( Value = "" ) => {
-		if ( SelectedValue ) {
-			const Row : InputSelectMask = GetInputSelectMask( SelectedValue.value );
-			if ( Row.HasValue ) {
-				Props.OnValueSet(
-					`${ Value }=${ Row.PreAndSuffix }${ ParameterValue }${ Row.PreAndSuffix }`
+	const setRow = ( Value = "" ) => {
+		if( selectedValue ) {
+			const row: InputSelectMask = getInputSelectMask( selectedValue.value );
+			if( row.HasValue ) {
+				Props.onValueSet(
+					`${ Value }=${ row.PreAndSuffix }${ parameterValue }${ row.PreAndSuffix }`
 				);
+			} else {
+				Props.onValueSet( row.Value );
 			}
-			else {
-				Props.OnValueSet( Row.Value );
-			}
-		}
-		else {
-			Props.OnValueSet( "" );
+		} else {
+			Props.onValueSet( "" );
 		}
 	};
 
-	const OnParameterChanges = ( Event : ChangeEvent<HTMLInputElement> ) => {
+	const onParameterChanges = ( Event: ChangeEvent<HTMLInputElement> ) => {
 		setParameterValue( Event.target.value );
 	};
 
-	const GetOptions = () : { value : string; label : string }[] => {
-		const Options : { value : string; label : string }[] = [];
+	const getOptions = (): { value: string, label: string }[] => {
+		const options: { value: string, label: string }[] = [];
 
-		for ( let Idx = 0; Idx < Props.InputSelectMask[ Props.ValueKey ].length; ++Idx ) {
-			Options.push( {
-				value: Props.InputSelectMask[ Props.ValueKey ][ Idx ].Value,
-				label: Props.InputSelectMask[ Props.ValueKey ][ Idx ].Text
+		for( let i = 0; i < Props.InputSelectMask[ Props.ValueKey ].length; ++i ) {
+			options.push( {
+				value: Props.InputSelectMask[ Props.ValueKey ][ i ].Value,
+				label: Props.InputSelectMask[ Props.ValueKey ][ i ].Text
 			} );
 		}
 
-		return Options;
+		return options;
 	};
 
-	const GetCurrentValue = () : { value : string; label : string } | null => {
-		const Found = GetOptions().find(
-			( E ) => E.value === ( Props.Value as string ).split( "=" )[ 0 ]
+	const getCurrentValue = (): { value: string, label: string } | null => {
+		const found = getOptions().find(
+			E => E.value === ( Props.Value as string ).split( "=" )[ 0 ]
 		);
-		if ( Found ) {
-			return Found;
+		if( found ) {
+			return found;
 		}
 		return null;
 	};
 
-	if ( Props.ArraySupport ) {
+	if( Props.ArraySupport ) {
 		return (
 			<>
 				<div className="d-flex bd-highlight w-100">
-					<Select
-						className={ `pe-3 flex-grow-1 bd-highlight` }
-						value={ GetCurrentValue() }
+					<Select className="pe-3 flex-grow-1 bd-highlight"
+						value={ getCurrentValue() }
 						onChange={ setSelectedValue }
-						options={ GetOptions() }
-						isClearable={ false }
-					/>
-					{ SelectedValue && GetInputSelectMask( SelectedValue.value ).HasValue && (
+						options={ getOptions() }
+						isClearable={ false } />
+					{ selectedValue && getInputSelectMask( selectedValue.value ).HasValue && (
 						<div className="flex-grow-1 bd-highlight ps-2 pe-2">
-							<input
-								type="text"
+							<input type="text"
 								className={ `form-control ${ Props.InputAlert || "" }` }
 								value={ ( Props.Value as string )
 									.split( "=" )[ 1 ]
 									?.replaceAll(
-										GetInputSelectMask( SelectedValue.value ).PreAndSuffix,
+										getInputSelectMask( selectedValue.value ).PreAndSuffix,
 										""
 									) }
-								onChange={ OnParameterChanges }
-							/>
+								onChange={ onParameterChanges } />
 						</div>
 					) }
 					<div className="bd-highlight">{ Props.children }</div>
@@ -259,26 +248,22 @@ export function SmartInputSelectMask( Props : ILTESelect ) {
 			</label>
 			<div className="col-sm-9">
 				<div className="d-flex bd-highlight w-100">
-					<Select
-						className={ `pe-3 flex-grow-1 bd-highlight` }
-						value={ GetCurrentValue() }
+					<Select className="pe-3 flex-grow-1 bd-highlight"
+						value={ getCurrentValue() }
 						onChange={ setSelectedValue }
-						options={ GetOptions() }
-						isClearable={ true }
-					/>
-					{ SelectedValue && GetInputSelectMask( SelectedValue.value ).HasValue && (
+						options={ getOptions() }
+						isClearable={ true } />
+					{ selectedValue && getInputSelectMask( selectedValue.value ).HasValue && (
 						<div className="flex-grow-1 bd-highlight ps-2 pe-2">
-							<input
-								type="text"
+							<input type="text"
 								className={ `form-control ${ Props.InputAlert || "" }` }
 								value={ ( Props.Value as string )
 									.split( "=" )[ 1 ]
 									?.replaceAll(
-										GetInputSelectMask( SelectedValue.value ).PreAndSuffix,
+										getInputSelectMask( selectedValue.value ).PreAndSuffix,
 										""
 									) }
-								onChange={ OnParameterChanges }
-							/>
+								onChange={ onParameterChanges } />
 						</div>
 					) }
 				</div>
@@ -287,21 +272,19 @@ export function SmartInputSelectMask( Props : ILTESelect ) {
 	);
 }
 
-export function SmartInputBoolean( Props : ILTEInpute<boolean> ) {
+export function SmartInputBoolean( Props: ILTEInpute<boolean> ) {
 	const ID = useId();
 
-	if ( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
+	if( Array.isArray( Props.Value ) || typeof Props.Value === "object" ) {
 		return <SmartInputArray { ...Props } />;
 	}
 
 	return (
 		<div className={ "form-group row " + ( Props.className || "" ) }>
-			<div className={ "col-sm-1" }>
-				<ToggleButton
-					className={ "w-100" }
+			<div className="col-sm-1">
+				<ToggleButton className="w-100"
 					Value={ Props.Value as boolean }
-					OnToggle={ Props.OnValueSet }
-				/>
+					onToggle={ Props.onValueSet } />
 			</div>
 			<label htmlFor={ ID } className="col-sm-11 col-form-label">
 				{ Props.children }
@@ -310,56 +293,51 @@ export function SmartInputBoolean( Props : ILTEInpute<boolean> ) {
 	);
 }
 
-export function SmartInputArray( Props : ILTEInpute ) {
+export function SmartInputArray( Props: ILTEInpute ) {
 	const ID = useId();
 
-	if ( !Array.isArray( Props.Value ) && typeof Props.Value === "object" ) {
+	if( !Array.isArray( Props.Value ) && typeof Props.Value === "object" ) {
 		console.error(
-			`Found ${ typeof Props.Value } in SmartInputArray!`,
+			`found ${ typeof Props.Value } in SmartInputArray!`,
 			Props.Value
 		);
 		return <></>;
 	}
 
-	const OnValueChanged = ( Value : string | number, Index : number ) => {
-		const Copy = structuredClone<string[] | number[]>(
-			Props.Value as string[] | number[]
-		);
+	const onValueChanged = ( Value: string | number, Index: number ) => {
+		const copy = _.cloneDeep( Props.Value as string[] | number[] );
 
-		if ( Copy && Array.isArray( Copy ) ) {
-			if ( Copy[ Index ] !== undefined ) {
-				Copy[ Index ] =
+		if( copy && Array.isArray( copy ) ) {
+			if( copy[ Index ] !== undefined ) {
+				copy[ Index ] =
 					Props.Type === "number" ? parseInt( Value.toString() ) : Value;
-				Props.OnValueSet( Copy );
-			}
-			else if ( Index === 0 && Copy.length <= 0 ) {
-				Props.OnValueSet( [ Value ] );
+				Props.onValueSet( copy );
+			} else if( Index === 0 && copy.length <= 0 ) {
+				Props.onValueSet( [ Value ] );
 			}
 		}
 	};
 
-	const OnRemoveIndex = ( Index : number ) => {
-		const Copy = structuredClone<string[] | number[]>(
-			Props.Value as string[] | number[]
-		);
-		if ( Copy && Array.isArray( Copy ) && Copy[ Index ] !== undefined ) {
-			Copy.splice( Index, 1 );
-			Props.OnValueSet( Copy );
+	const onRemoveIndex = ( Index: number ) => {
+		const copy = _.cloneDeep( Props.Value as string[] | number[] );
+		if( copy && Array.isArray( copy ) && copy[ Index ] !== undefined ) {
+			copy.splice( Index, 1 );
+			Props.onValueSet( copy );
 		}
 	};
 
-	const OnAddIndex = () => {
-		const Copy = structuredClone<string[] | number[]>(
+	const onAddIndex = () => {
+		const copy = structuredClone<string[] | number[]>(
 			Props.Value as string[] | number[]
 		);
-		if ( Copy && Array.isArray( Copy ) ) {
-			if ( Copy.length <= 0 ) {
+		if( copy && Array.isArray( copy ) ) {
+			if( copy.length <= 0 ) {
 				// @ts-ignore
-				Copy.push( Props.Type === "number" ? 0 : "" );
+				copy.push( Props.Type === "number" ? 0 : "" );
 			}
 			// @ts-ignore
-			Copy.push( Props.Type === "number" ? 0 : "" );
-			Props.OnValueSet( Copy );
+			copy.push( Props.Type === "number" ? 0 : "" );
+			Props.onValueSet( copy );
 		}
 	};
 
@@ -373,47 +351,39 @@ export function SmartInputArray( Props : ILTEInpute ) {
 						Props.InputSelectMask &&
 						Props.InputSelectMask[ Props.ValueKey ] ? (
 							// @ts-ignore
-							<SmartInputSelectMask
-								{ ...Props }
-								Value={ Value }
-								ArraySupport={ true }
-								OnValueSet={ ( V ) => OnValueChanged( V, Idx ) }
-							>
-								<ButtonGroup>
-									<IconButton
-										onClick={ () => OnRemoveIndex( Idx ) }
-										variant={ "danger" }
-									>
-										<FontAwesomeIcon icon={ "trash-alt" }/>
-									</IconButton>
-									<IconButton onClick={ OnAddIndex }>
-										<FontAwesomeIcon icon={ "plus" }/>
-									</IconButton>
-								</ButtonGroup>
-							</SmartInputSelectMask>
-						) : (
-							<>
-								<input
-									type={ Props.Type }
-									className={ `form-control ${ Props.InputAlert || "" }` }
-									value={ Value }
-									onChange={ ( Event ) => OnValueChanged( Event.target.value, Idx ) }
-								/>
-								<div className="input-group-append">
+								<SmartInputSelectMask { ...Props }
+									Value={ Value }
+									ArraySupport={ true }
+									onValueSet={ V => onValueChanged( V, Idx ) }>
 									<ButtonGroup>
-										<IconButton
-											onClick={ () => OnRemoveIndex( Idx ) }
-											variant={ "danger" }
-										>
-											<FontAwesomeIcon icon={ "trash-alt" }/>
+										<IconButton onClick={ () => onRemoveIndex( Idx ) }
+											variant="danger">
+											<FontAwesomeIcon icon="trash-alt" />
 										</IconButton>
-										<IconButton onClick={ OnAddIndex }>
-											<FontAwesomeIcon icon={ "plus" }/>
+										<IconButton onClick={ onAddIndex }>
+											<FontAwesomeIcon icon="plus" />
 										</IconButton>
 									</ButtonGroup>
-								</div>
-							</>
-						) }
+								</SmartInputSelectMask>
+							) : (
+								<>
+									<input type={ Props.Type }
+										className={ `form-control ${ Props.InputAlert || "" }` }
+										value={ Value }
+										onChange={ Event => onValueChanged( Event.target.value, Idx ) } />
+									<div className="input-group-append">
+										<ButtonGroup>
+											<IconButton onClick={ () => onRemoveIndex( Idx ) }
+												variant="danger">
+												<FontAwesomeIcon icon="trash-alt" />
+											</IconButton>
+											<IconButton onClick={ onAddIndex }>
+												<FontAwesomeIcon icon="plus" />
+											</IconButton>
+										</ButtonGroup>
+									</div>
+								</>
+							) }
 					</div>
 				) ) }
 				{ ( Props.Value as string[] | number[] ).length <= 0 && (
@@ -422,35 +392,31 @@ export function SmartInputArray( Props : ILTEInpute ) {
 						Props.InputSelectMask &&
 						Props.InputSelectMask[ Props.ValueKey ] ? (
 							// @ts-ignore
-							<SmartInputSelectMask
-								{ ...Props }
-								Value={ "" }
-								ArraySupport={ true }
-								OnValueSet={ ( V ) => OnValueChanged( V, 0 ) }
-							>
-								<ButtonGroup>
-									<IconButton onClick={ OnAddIndex }>
-										<FontAwesomeIcon icon={ "plus" }/>
-									</IconButton>
-								</ButtonGroup>
-							</SmartInputSelectMask>
-						) : (
-							<>
-								<input
-									type={ Props.Type }
-									className={ `form-control ${ Props.InputAlert || "" }` }
-									value={ "" }
-									onChange={ ( Event ) => OnValueChanged( Event.target.value, 0 ) }
-								/>
-								<div className="input-group-append">
+								<SmartInputSelectMask { ...Props }
+									Value=""
+									ArraySupport={ true }
+									onValueSet={ V => onValueChanged( V, 0 ) }>
 									<ButtonGroup>
-										<IconButton onClick={ OnAddIndex }>
-											<FontAwesomeIcon icon={ "plus" }/>
+										<IconButton onClick={ onAddIndex }>
+											<FontAwesomeIcon icon="plus" />
 										</IconButton>
 									</ButtonGroup>
-								</div>
-							</>
-						) }
+								</SmartInputSelectMask>
+							) : (
+								<>
+									<input type={ Props.Type }
+										className={ `form-control ${ Props.InputAlert || "" }` }
+										value=""
+										onChange={ Event => onValueChanged( Event.target.value, 0 ) } />
+									<div className="input-group-append">
+										<ButtonGroup>
+											<IconButton onClick={ onAddIndex }>
+												<FontAwesomeIcon icon="plus" />
+											</IconButton>
+										</ButtonGroup>
+									</div>
+								</>
+							) }
 					</div>
 				) }
 			</div>

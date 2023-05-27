@@ -1,35 +1,34 @@
+import { createServer } from "@/server/src/Lib/server.Lib";
+import { EArkmanagerCommands } from "@app/Lib/serverUtils";
+import { panelConfigSchema } from "@server/Lib/zodSchema";
+import type { Instance } from "@server/MongoDB/MongoInstances";
+import MongoInstances from "@server/MongoDB/MongoInstances";
 import {
 	authProcedure,
 	handleTRCPErr,
 	permissionMiddleware,
 	router,
 	serverProcedure
-}                              from "@server/trpc/trpc";
-import { TRPCError }           from "@trpc/server";
-import { z }                   from "zod";
-import { EArkmanagerCommands } from "@app/Lib/serverUtils";
+} from "@server/trpc/trpc";
 import {
 	EPerm,
-	EPerm_Server
-}                              from "@shared/Enum/User.Enum";
-import { PanelConfigSchema }   from "@server/Lib/zodSchema";
-import type { Instance }       from "@server/MongoDB/DB_Instances";
-import DB_Instances            from "@server/MongoDB/DB_Instances";
-import { CreateServer }        from "@server/Lib/Server.Lib";
+	EPermServer
+} from "@shared/Enum/User.Enum";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
 
-export const auth_serverAction = router( {
-	executeCommand: serverProcedure.use( permissionMiddleware( EPerm_Server.ExecuteActions ) ).input( z.object( {
+export const authServerAction = router( {
+	executeCommand: serverProcedure.use( permissionMiddleware( EPermServer.ExecuteActions ) ).input( z.object( {
 		command: z.nativeEnum( EArkmanagerCommands ),
 		params: z.array( z.string() )
 	} ) ).mutation( async( { ctx, input } ) => {
 		const { server } = ctx;
 		const { command, params } = input;
 		try {
-			await server.ExecuteCommand( command, params );
+			await server.executeCommand( command, params );
 			return "Befehl wurde an den Server gesendet";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -42,17 +41,16 @@ export const auth_serverAction = router( {
 		const { server } = ctx;
 		const { killServer } = input;
 		try {
-			const State = server.GetState();
-			const PID = killServer ? State.ArkserverPID : State.ArkmanagerPID;
-			if ( PID >= 10 ) {
-				await SSHManagerLib.Exec( "kill", [ PID.toString() ] ).catch( () => {
+			const state = server.getState();
+			const PID = killServer ? state.ArkserverPID : state.ArkmanagerPID;
+			if( PID >= 10 ) {
+				await sshManagerLib.exec( "kill", [ PID.toString() ] ).catch( () => {
 				} );
-				await TManager.RunTask( "ServerState", true );
+				await TManager.runTask( "ServerState", true );
 				return killServer ? "Server wurde beendet!" : "Arkmanager aktion wurde beendet!";
 			}
 			throw new TRPCError( { message: "Keine Aktion in gang!", code: "INTERNAL_SERVER_ERROR" } );
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -62,11 +60,10 @@ export const auth_serverAction = router( {
 	removeServer: serverProcedure.use( permissionMiddleware( EPerm.ManageServers ) ).mutation( async( { ctx } ) => {
 		const { server } = ctx;
 		try {
-			await server.RemoveServer();
-			await TManager.RunTask( "ServerState", true );
+			await server.removeServer();
+			await TManager.runTask( "ServerState", true );
 			return "Server wurde entfernt!";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -74,7 +71,7 @@ export const auth_serverAction = router( {
 
 
 	updatePanelConfig: serverProcedure.use( permissionMiddleware( EPerm.ManageServers ) ).input( z.object( {
-		config: PanelConfigSchema
+		config: panelConfigSchema
 	} ) ).mutation( async( {
 		ctx,
 		input
@@ -82,11 +79,10 @@ export const auth_serverAction = router( {
 		const { server } = ctx;
 		const { config } = input;
 		try {
-			await server.SetPanelConfig( config );
-			await TManager.RunTask( "ServerState", true );
+			await server.setPanelConfig( config );
+			await TManager.runTask( "ServerState", true );
 			return "Panel config wurde bearbeitet!";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -94,43 +90,42 @@ export const auth_serverAction = router( {
 
 
 	createServer: authProcedure.use( permissionMiddleware( EPerm.ManageServers ) ).input( z.object( {
-		config: PanelConfigSchema
+		config: panelConfigSchema
 	} ) ).mutation( async( { input } ) => {
 		const { config } = input;
 		try {
-			const allServers = await DB_Instances.find<Instance>();
-			const QueryPorts = allServers.map( s => s.ArkmanagerCfg.ark_QueryPort );
-			const GamePorts = allServers.map( s => s.ArkmanagerCfg.ark_Port ).concat( allServers.map( s => s.ArkmanagerCfg.ark_QueryPort + 1 ) );
-			const RconPorts = allServers.map( s => s.ArkmanagerCfg.ark_RCONPort );
+			const allServers = await MongoInstances.find<Instance>();
+			const queryPorts = allServers.map( s => s.ArkmanagerCfg.ark_QueryPort );
+			const gamePorts = allServers.map( s => s.ArkmanagerCfg.ark_Port ).concat( allServers.map( s => s.ArkmanagerCfg.ark_QueryPort + 1 ) );
+			const rconPorts = allServers.map( s => s.ArkmanagerCfg.ark_RCONPort );
 
-			let ark_QueryPort = 27015;
-			let ark_Port = 7778;
-			let ark_RCONPort = 29020;
+			let arkQueryPort = 27015;
+			let arkPort = 7778;
+			let arkRCONPort = 29020;
 
-			while ( QueryPorts.includes( ark_QueryPort ) ) {
-				ark_QueryPort++;
+			while( queryPorts.includes( arkQueryPort ) ) {
+				arkQueryPort++;
 			}
 
-			while ( GamePorts.includes( ark_Port ) ) {
-				ark_Port += 2;
+			while( gamePorts.includes( arkPort ) ) {
+				arkPort += 2;
 			}
 
-			while ( RconPorts.includes( ark_RCONPort ) ) {
-				ark_RCONPort++;
+			while( rconPorts.includes( arkRCONPort ) ) {
+				arkRCONPort++;
 			}
 
-			const server = await CreateServer( config, undefined, {
-				ark_Port,
-				ark_QueryPort,
-				ark_RCONPort
+			const server = await createServer( config, undefined, {
+				ark_Port: arkPort,
+				ark_QueryPort: arkQueryPort,
+				ark_RCONPort: arkRCONPort
 			} );
-			await TManager.RunTask( "ServerState", true );
+			await TManager.runTask( "ServerState", true );
 
-			if ( server?.IsValid() ) {
+			if( server?.isValid() ) {
 				return "Ark-Server wurde erfolgreich erstellt";
 			}
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

@@ -1,22 +1,22 @@
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import MongoAccounts from "@server/MongoDB/MongoAccounts";
+import MongoSessionToken from "@server/MongoDB/MongoSessionToken";
 import {
 	authProcedure,
 	handleTRCPErr,
 	router
-}                           from "@server/trpc/trpc";
-import { TRPCError }        from "@trpc/server";
-import DB_SessionToken      from "@server/MongoDB/DB_SessionToken";
-import DB_Accounts          from "@server/MongoDB/DB_Accounts";
-import { z }                from "zod";
-import { MakeRandomString } from "@kyri123/k-javascript-utils";
+} from "@server/trpc/trpc";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
-export const auth_user = router( {
+
+export const authUser = router( {
 	logout: authProcedure.mutation( async( { ctx } ) => {
 		const { token } = ctx;
 		try {
-			await DB_SessionToken.findOneAndDelete( { token } );
+			await MongoSessionToken.findOneAndDelete( { token } );
 			return;
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -33,19 +33,18 @@ export const auth_user = router( {
 		const { data } = input;
 		const { userClass } = ctx;
 		try {
-			const account = await DB_Accounts.findById( userClass.Get._id );
-			if ( data.password ) {
+			const account = await MongoAccounts.findById( userClass.get._id );
+			if( data.password ) {
 				account.setPassword( data.password );
 			}
 			data.mail && ( account.mail = data.mail );
 			data.username && ( account.mail = data.username );
 
-			if ( await account.save() ) {
-				await DB_SessionToken.deleteMany( { userid: userClass.Get._id } );
+			if( await account.save() ) {
+				await MongoSessionToken.deleteMany( { userid: userClass.get._id } );
 				return "Account bearbeitet. deine Session wurde entfernt du wirst nun ausgeloggt.";
 			}
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -56,12 +55,11 @@ export const auth_user = router( {
 		const { userClass } = ctx;
 		try {
 			const apiKey = MakeRandomString( 30 );
-			const account = await DB_Accounts.findByIdAndUpdate( userClass.Get._id, { apiKey }, { new: true } );
-			if ( account ) {
+			const account = await MongoAccounts.findByIdAndUpdate( userClass.get._id, { apiKey }, { new: true } );
+			if( account ) {
 				return apiKey;
 			}
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

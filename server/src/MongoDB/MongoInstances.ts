@@ -1,11 +1,12 @@
-import * as mongoose         from "mongoose";
-import type { MongoBase }    from "@app/Types/MongoDB";
 import type { InstanceData } from "@app/Types/ArkSE";
-import type { Cluster }      from "@server/MongoDB/DB_Cluster";
-import { z }                 from "zod";
-import { EServerState }      from "@shared/Enum/EServerState";
+import type { MongoBase } from "@app/Types/MongoDB";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import { EServerState } from "@shared/Enum/EServerState";
+import * as mongoose from "mongoose";
+import { z } from "zod";
 
-const ZodInstanceSchema = z.object( {
+
+const zodInstanceSchema = z.object( {
 	Instance: z.string(),
 	LastAutoBackup: z.number(),
 	LastAutoUpdate: z.number(),
@@ -34,7 +35,7 @@ const ZodInstanceSchema = z.object( {
 	} )
 } );
 
-const InstanceSchema = new mongoose.Schema( {
+const instanceSchema = new mongoose.Schema( {
 	Instance: { type: String, required: true, unique: true },
 	LastAutoBackup: { type: Number, required: false },
 	LastAutoUpdate: { type: Number, required: false },
@@ -77,16 +78,22 @@ const InstanceSchema = new mongoose.Schema( {
 		},
 		required: false,
 		default: { BG: "", LOGO: "" }
-	}
+	},
+
+	cluster: { type: [ mongoose.Schema.Types.ObjectId ], ref: 'kadmin_cluster', required: false }
 } );
 
 
-export interface InstanceInterface extends z.infer<typeof ZodInstanceSchema> {
-	ArkmanagerCfg : InstanceData & Record<string, any>;
+export interface InstanceInterface extends z.infer<typeof zodInstanceSchema> {
+	ArkmanagerCfg: InstanceData & Record<string, any>
 }
+
+export type InstanceWithClusterId = InstanceInterface & MongoBase & {
+	cluster?: string
+};
 
 export type Instance = InstanceInterface & MongoBase & {
-	Cluster? : Cluster
-}
+	cluster?: Cluster
+};
 
-export default mongoose.model<InstanceInterface>( "instances", InstanceSchema );
+export default mongoose.model<InstanceInterface>( "instances", instanceSchema );

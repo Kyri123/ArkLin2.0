@@ -1,15 +1,16 @@
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import type { Instance } from "@server/MongoDB/MongoInstances";
 import { createContext } from "react";
-import type { Cluster }  from "@server/MongoDB/DB_Cluster";
-import type { Instance } from "@server/MongoDB/DB_Instances";
+
 
 export default createContext<{
-	ClusterData : Record<string, Cluster>;
-	InstanceData : Record<string, Instance>;
-	HasData : boolean;
-	GetAllServer : () => Promise<void>
+	clusterData: Record<string, Cluster>,
+	instanceData: Record<string, Instance>,
+	hasData: boolean,
+	getAllServer: () => Promise<void>
 }>( {
-	InstanceData: {},
-	ClusterData: {},
-	HasData: false,
-	GetAllServer: () => Promise.resolve()
-} );
+			clusterData: {},
+			instanceData: {},
+			hasData: false,
+			getAllServer: () => Promise.resolve()
+		} );

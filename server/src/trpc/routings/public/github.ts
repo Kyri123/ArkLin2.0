@@ -1,22 +1,22 @@
-import { TRPCError }                       from "@trpc/server";
+import type { GithubBranch } from "@server/MongoDB/MongoGithubBranches";
+import MongoGithubBranches from "@server/MongoDB/MongoGithubBranches";
+import type { GithubRelease } from "@server/MongoDB/MongoGithubReleases";
+import MongoGithubReleases from "@server/MongoDB/MongoGithubReleases";
 import {
 	handleTRCPErr,
 	publicProcedure,
 	router
-}                                          from "@server/trpc/trpc";
-import type { GithubRelease }              from "@server/MongoDB/DB_GithubReleases";
-import DB_GithubReleases                   from "@server/MongoDB/DB_GithubReleases";
-import { z }                               from "zod";
-import type { GithubBranch } from "@server/MongoDB/DB_GithubBranches";
-import DB_GithubBranches from "@server/MongoDB/DB_GithubBranches";
+} from "@server/trpc/trpc";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
-export const public_github = router( {
+
+export const publicGithub = router( {
 	branches: publicProcedure.query( async() => {
 		try {
-			const branches = await DB_GithubBranches.find<GithubBranch>();
+			const branches = await MongoGithubBranches.find<GithubBranch>();
 			return { branches };
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -24,10 +24,9 @@ export const public_github = router( {
 
 	changelogs: publicProcedure.query( async() => {
 		try {
-			const changelogs = await DB_GithubReleases.find<GithubRelease>();
+			const changelogs = await MongoGithubReleases.find<GithubRelease>();
 			return { changelogs };
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -38,10 +37,9 @@ export const public_github = router( {
 	} ) ).query( async( { input } ) => {
 		const { tag_name } = input;
 		try {
-			const changelog = ( await DB_GithubReleases.findOne( { tag_name } ) )!.toJSON() as GithubRelease;
+			const changelog = ( await MongoGithubReleases.findOne( { tag_name } ) )!.toJSON() as GithubRelease;
 			return { changelog };
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

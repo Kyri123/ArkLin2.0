@@ -1,1 +1,1 @@
-export const AUTHTOKEN = "session.authtoken"; 
+export const AUTHTOKEN = "session.authtoken";

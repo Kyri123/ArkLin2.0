@@ -1,43 +1,44 @@
+import { apiAuth } from "@app/Lib/tRPC";
 import {
 	useEffect,
 	useState
-}                    from "react";
-import { tRPC_Auth } from "@app/Lib/tRPC";
+} from "react";
+
 
 export function useArkServerConfigs(
-	InstanceName : string
+	InstanceName: string
 ) {
-	const [ ConfigFiles, setConfigFiles ] = useState<Record<string, string>>(
+	const [ configFiles, setConfigFiles ] = useState<Record<string, string>>(
 		() => ( {} )
 	);
-	const [ ConfigContent, setConfigContent ] = useState<string>( "" );
-	const [ ReqConfigFile, setReqConfigFile ] = useState( () => "" );
+	const [ configContent, setConfigContent ] = useState<string>( "" );
+	const [ reqConfigFile, setReqConfigFile ] = useState( () => "" );
 
 	useEffect( () => {
-		const GetConfigFiles = async() => {
-			await tRPC_Auth.server.config.getConfigClearText.query( {
-				file: ReqConfigFile,
+		const getConfigFiles = async() => {
+			await apiAuth.server.config.getConfigClearText.query( {
+				file: reqConfigFile,
 				instanceName: InstanceName
 			} ).then( setConfigContent ).catch( () => {
 			} );
 		};
 
-		GetConfigFiles();
-	}, [ InstanceName, ReqConfigFile ] );
+		getConfigFiles();
+	}, [ InstanceName, reqConfigFile ] );
 
 	useEffect( () => {
-		const GetConfigFiles = async() => {
-			await tRPC_Auth.server.config.getConfigs.query( { instanceName: InstanceName } ).then( setConfigFiles ).catch( () => {
+		const getConfigFiles = async() => {
+			await apiAuth.server.config.getConfigs.query( { instanceName: InstanceName } ).then( setConfigFiles ).catch( () => {
 			} );
 		};
 
-		GetConfigFiles();
+		getConfigFiles();
 	}, [ InstanceName ] );
 
 	return {
 		RequestConfigContent: setReqConfigFile,
-		ConfigFiles,
-		CurrentFile: ReqConfigFile,
-		ConfigContent
+		configFiles,
+		currentFile: reqConfigFile,
+		configContent
 	};
 }

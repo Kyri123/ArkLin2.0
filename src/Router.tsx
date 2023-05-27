@@ -3,10 +3,11 @@ import {
 	Navigate
 } from "react-router-dom";
 
+
 const rootRouter = createBrowserRouter( [
 	{
 		path: "/",
-		lazy: async() => await import("@app/MainLayout"),
+		lazy: async() => await import( "@app/MainLayout" ),
 		loader: async( { request, params } ) => {
 			const { loader } = await import( "@app/MainLayout_Loader" );
 			return loader( { request, params } );
@@ -15,19 +16,19 @@ const rootRouter = createBrowserRouter( [
 			// start auth --------------------------------
 			{
 				path: "/auth/",
-				lazy: async() => await import("@page/auth/Layout"),
+				lazy: async() => await import( "@page/auth/Layout" ),
 				children: [
 					{
 						path: "/auth/login",
-						lazy: async() => await import("@page/auth/login")
+						lazy: async() => await import( "@page/auth/login" )
 					},
 					{
 						path: "/auth/register",
-						lazy: async() => await import("@page/auth/register")
+						lazy: async() => await import( "@page/auth/register" )
 					},
 					{
 						path: "/auth/reset/:token",
-						lazy: async() => await import("@page/auth/reset/[token]"),
+						lazy: async() => await import( "@page/auth/reset/[token]" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/auth/loader/[token]" );
 							return loader( { request, params } );
@@ -41,7 +42,7 @@ const rootRouter = createBrowserRouter( [
 			// start App --------------------------------
 			{
 				path: "/app/",
-				lazy: async() => await import("@page/app/Layout"),
+				lazy: async() => await import( "@page/app/Layout" ),
 				loader: async( { request, params } ) => {
 					const { loader } = await import( "@page/app/loader/Layout" );
 					return loader( { request, params } );
@@ -50,7 +51,7 @@ const rootRouter = createBrowserRouter( [
 
 					{
 						index: true,
-						lazy: async() => await import("@page/app/Index"),
+						lazy: async() => await import( "@page/app/Index" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/index" );
 							return loader( { request, params } );
@@ -58,7 +59,7 @@ const rootRouter = createBrowserRouter( [
 					},
 					{
 						path: "/app/server/:instanceName/",
-						lazy: async() => await import("@page/app/server/Layout"),
+						lazy: async() => await import( "@page/app/server/Layout" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/server/Layout" );
 							return loader( { request, params } );
@@ -66,7 +67,7 @@ const rootRouter = createBrowserRouter( [
 						children: [
 							{
 								path: "/app/server/:instanceName/logs",
-								lazy: async() => await import("@page/app/server/[instanceName]/logs"),
+								lazy: async() => await import( "@page/app/server/[instanceName]/logs" ),
 								loader: async( { request, params } ) => {
 									const { loader } = await import( "@page/app/loader/server/logs" );
 									return loader( { request, params } );
@@ -74,7 +75,7 @@ const rootRouter = createBrowserRouter( [
 							},
 							{
 								path: "/app/server/:instanceName/mods",
-								lazy: async() => await import("@page/app/server/[instanceName]/mods"),
+								lazy: async() => await import( "@page/app/server/[instanceName]/mods" ),
 								loader: async( { request, params } ) => {
 									const { loader } = await import( "@page/app/loader/server/mods" );
 									return loader( { request, params } );
@@ -82,13 +83,13 @@ const rootRouter = createBrowserRouter( [
 							},
 							{
 								path: "/app/server/:instanceName/config",
-								lazy: async() => await import("@page/app/server/[instanceName]/config")
+								lazy: async() => await import( "@page/app/server/[instanceName]/config" )
 							}
 						]
 					},
 					{
 						path: "/app/paneladmin",
-						lazy: async() => await import("@page/app/paneladmin"),
+						lazy: async() => await import( "@page/app/paneladmin" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/paneladmin" );
 							return loader( { request, params } );
@@ -96,7 +97,7 @@ const rootRouter = createBrowserRouter( [
 					},
 					{
 						path: "/app/account",
-						lazy: async() => await import("@page/app/account"),
+						lazy: async() => await import( "@page/app/account" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/me" );
 							return loader( { request, params } );
@@ -104,7 +105,7 @@ const rootRouter = createBrowserRouter( [
 					},
 					{
 						path: "/app/userManagement",
-						lazy: async() => await import("@page/app/userManagement"),
+						lazy: async() => await import( "@page/app/userManagement" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/userManagement" );
 							return loader( { request, params } );
@@ -112,11 +113,11 @@ const rootRouter = createBrowserRouter( [
 					},
 					{
 						path: "/app/adminserver",
-						lazy: async() => await import("@page/app/adminServer")
+						lazy: async() => await import( "@page/app/adminServer" )
 					},
 					{
 						path: "/app/cluster",
-						lazy: async() => await import("@page/app/cluster"),
+						lazy: async() => await import( "@page/app/cluster" ),
 						loader: async( { request, params } ) => {
 							const { loader } = await import( "@page/app/loader/cluster" );
 							return loader( { request, params } );
@@ -127,11 +128,11 @@ const rootRouter = createBrowserRouter( [
 			// end App ----------------------------------
 			{
 				path: "*",
-				element: <Navigate to={ "/error/404" }/>
+				element: <Navigate to="/error/404" />
 			},
 			{
 				path: "/error/:statusCode",
-				lazy: async() => await import("@page/error/[statusCode]")
+				lazy: async() => await import( "@page/error/[statusCode]" )
 			}
 		]
 	}

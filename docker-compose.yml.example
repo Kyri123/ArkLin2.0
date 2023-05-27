@@ -50,9 +50,9 @@ services:
     volumes:
       - '../mount/mongodb:/data/db'
     environment:
-      MONGO_INITDB_DATABASE: arklin2
-      MONGO_INITDB_ROOT_USERNAME: kadmin
-      MONGO_INITDB_ROOT_PASSWORD: arklin2
+      MONGO_INITMongoDATABASE: arklin2
+      MONGO_INITMongoROOT_USERNAME: kadmin
+      MONGO_INITMongoROOT_PASSWORD: arklin2
     networks:
       - arklin2
 

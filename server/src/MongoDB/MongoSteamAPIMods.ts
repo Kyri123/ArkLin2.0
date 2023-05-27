@@ -1,8 +1,9 @@
-import * as mongoose      from "mongoose";
 import type { MongoBase } from "@app/Types/MongoDB";
-import { z }              from "zod";
+import * as mongoose from "mongoose";
+import { z } from "zod";
 
-const ZodSteamModSchema = z.object( {
+
+const zodSteamModSchema = z.object( {
 	publishedfileid: z.string(),
 	creator: z.string(),
 	expire: z.string(),
@@ -30,7 +31,7 @@ const ZodSteamModSchema = z.object( {
 	} ) )
 } );
 
-const SteamModSchema = new mongoose.Schema( {
+const steamModSchema = new mongoose.Schema( {
 	publishedfileid: { type: String, require: true, unique: true },
 	result: { type: Number, require: true },
 	creator: { type: String, require: true },
@@ -64,10 +65,10 @@ const SteamModSchema = new mongoose.Schema( {
 } );
 
 
-export type SteamMod = z.infer<typeof ZodSteamModSchema> & MongoBase
-export type SteamModTags = SteamMod[ "tags" ]
-export default mongoose.model<SteamMod>( "steamapi_mods", SteamModSchema );
+export type SteamMod = z.infer<typeof zodSteamModSchema> & MongoBase;
+export type SteamModTags = SteamMod[ "tags" ];
+export default mongoose.model<SteamMod>( "steamapi_mods", steamModSchema );
 export {
-	ZodSteamModSchema,
-	SteamModSchema
+	steamModSchema, zodSteamModSchema
 };
+

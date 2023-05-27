@@ -1,18 +1,19 @@
 import type { Response } from "express-serve-static-core";
-import superjson         from "superjson";
+import superjson from "superjson";
+
 
 interface OpenApiErrorResponse {
-	"message" : string,
-	"code" : number,
-	"data" : {
-		"code" : string,
-		"httpStatus" : number,
-		"path" : string
+	"message": string,
+	"code": number,
+	"data": {
+		"code": string,
+		"httpStatus": number,
+		"path": string
 	}
 }
 
-export function errorResponse( message : string | undefined, res : Response ) : any {
-	const Resp : OpenApiErrorResponse = {
+export function errorResponse( message: string | undefined, res: Response ): any {
+	const resp: OpenApiErrorResponse = {
 		"message": message || "something went wrong",
 		"code": -32603,
 		"data": {
@@ -21,9 +22,9 @@ export function errorResponse( message : string | undefined, res : Response ) : 
 			"path": res.req.path
 		}
 	};
-	return { error: JSON.parse( superjson.stringify( Resp ) ) };
+	return { error: JSON.parse( superjson.stringify( resp ) ) };
 }
 
-export function dataResponse<T>( data : T ) : any {
+export function dataResponse<T>( data: T ): any {
 	return { result: { data: JSON.parse( superjson.stringify( data ) ) } };
 }

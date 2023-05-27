@@ -1,41 +1,40 @@
+import { ServerLib } from "@/server/src/Lib/server.Lib";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import MongoCluster, { zodClusterSchema } from "@server/MongoDB/MongoCluster";
 import {
 	authProcedure,
 	handleTRCPErr,
 	permissionMiddleware,
 	router
-}                                       from "@server/trpc/trpc";
-import { TRPCError }                    from "@trpc/server";
-import { EPerm }                        from "@shared/Enum/User.Enum";
-import type { Cluster }                 from "@server/MongoDB/DB_Cluster";
-import DB_Cluster, { ZodClusterSchema } from "@server/MongoDB/DB_Cluster";
-import { z }                            from "zod";
-import path                             from "path";
-import fs                               from "fs";
-import { ServerLib }                    from "@server/Lib/Server.Lib";
+} from "@server/trpc/trpc";
+import { EPerm } from "@shared/Enum/User.Enum";
+import { TRPCError } from "@trpc/server";
+import fs from "fs";
+import path from "path";
+import { z } from "zod";
+
 
 export const clusterProcedure = authProcedure.use( permissionMiddleware( EPerm.ManageCluster ) );
 
-export const auth_clusterManagement = router( {
+export const authClusterManagement = router( {
 	getAllCluster: clusterProcedure.query( async() => {
 		try {
-			return await DB_Cluster.find<Cluster>( {} );
-		}
-		catch ( e ) {
+			return await MongoCluster.find<Cluster>( {} );
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
 	} ),
 
 	createCluster: clusterProcedure.input( z.object( {
-		data: ZodClusterSchema
+		data: zodClusterSchema
 	} ) ).mutation( async( { input } ) => {
 		const { data } = input;
 		try {
-			await DB_Cluster.create( data );
-			await TManager.RunTask( "ServerState", true );
+			await MongoCluster.create( data );
+			await TManager.runTask( "ServerState", true );
 			return "Cluster wurde erstellt";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -43,19 +42,17 @@ export const auth_clusterManagement = router( {
 
 	editCluster: clusterProcedure.input( z.object( {
 		id: z.string(),
-		data: ZodClusterSchema
+		data: zodClusterSchema
 	} ) ).mutation( async( { input } ) => {
 		const { id, data } = input;
 		try {
-			console.log( input );
-			await DB_Cluster.findByIdAndUpdate( id, data );
-			TManager.RunTask( "ServerState", true ).then( () => {
+			await MongoCluster.findByIdAndUpdate( id, data );
+			TManager.runTask( "ServerState", true ).then( () => {
 			} );
-			TManager.RunTask( "Server", true ).then( () => {
+			TManager.runTask( "Server", true ).then( () => {
 			} );
 			return "Cluster wurde bearbeitet";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -63,11 +60,10 @@ export const auth_clusterManagement = router( {
 
 	removeCluster: clusterProcedure.input( z.string() ).mutation( async( { input } ) => {
 		try {
-			await DB_Cluster.findByIdAndDelete( input );
-			await TManager.RunTask( "ServerState", true );
+			await MongoCluster.findByIdAndDelete( input );
+			await TManager.runTask( "ServerState", true );
 			return "Cluster wurde gelöscht";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -75,19 +71,18 @@ export const auth_clusterManagement = router( {
 
 	wipeCluster: clusterProcedure.input( z.string() ).mutation( async( { input } ) => {
 		try {
-			const cluster = await DB_Cluster.findById( input );
-			if ( cluster ) {
-				for ( const Instance of cluster.Instances ) {
-					const server = await ServerLib.build( Instance );
-					if ( server?.IsValid() ) {
-						await server.Wipe();
+			const cluster = await MongoCluster.findById( input );
+			if( cluster ) {
+				for( const instance of cluster.Instances ) {
+					const server = await ServerLib.build( instance );
+					if( server?.isValid() ) {
+						await server.wipe();
 					}
 				}
-				fs.rmSync( path.join( __cluster_dir, cluster._id.toString() ), { recursive: true, force: true } );
+				fs.rmSync( path.join( CLUSTERDIR, cluster._id.toString() ), { recursive: true, force: true } );
 				return "Cluster wurde ge-wiped und alle Server runtergefahren";
 			}
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

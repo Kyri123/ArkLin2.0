@@ -1,56 +1,57 @@
+import {
+    apiAuth,
+    apiHandleError,
+    fireSwalFromApi
+} from "@app/Lib/tRPC";
+import type { InstanceData } from "@app/Types/ArkSE";
+import type { SelectOption } from "@app/Types/Systeminformation";
+import {
+    IconButton,
+    ToggleButton
+} from "@comp/Elements/Buttons";
+import ServerContext from "@context/ServerContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCluster } from "@hooks/useCluster";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import { defaultCluster } from "@shared/Default/Server.Default";
 import type { FunctionComponent } from "react";
 import {
-	useContext,
-	useEffect,
-	useMemo,
-	useState
-}                                 from "react";
+    useContext,
+    useEffect,
+    useMemo,
+    useState
+} from "react";
 import {
-	FormControl,
-	InputGroup,
-	Modal
-}                                 from "react-bootstrap";
-import { DefaultCluster }         from "@shared/Default/Server.Default";
-import {
-	IconButton,
-	ToggleButton
-}                                 from "@comp/Elements/Buttons";
-import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
+    FormControl,
+    InputGroup,
+    Modal
+} from "react-bootstrap";
 import type {
-	MultiValue,
-	SingleValue
-}                                 from "react-select";
-import Select                     from "react-select";
-import ServerContext              from "@context/ServerContext";
-import type { InstanceData }      from "@app/Types/ArkSE";
-import { useCluster }             from "@hooks/useCluster";
-import type { Cluster }           from "@server/MongoDB/DB_Cluster";
-import {
-	fireSwalFromApi,
-	tRPC_Auth,
-	tRPC_handleError
-}                                 from "@app/Lib/tRPC";
-import type { SelectOption }      from "@app/Types/Systeminformation";
+    MultiValue,
+    SingleValue
+} from "react-select";
+import Select from "react-select";
+
 
 interface IPCClusterElementProps {
-	show : boolean;
-	ClusterID? : string;
-	onHide : () => void;
-	refresh : () => void;
+	show: boolean,
+	ClusterID?: string,
+	onHide: () => void,
+	refresh: () => void
 }
 
-const DisabledOptions : ( keyof InstanceData )[] = [
+const DisabledOptions: ( keyof InstanceData )[] = [
 	"arkserverexec", "logdir", "arkserverroot", "arkbackupdir", "arkStagingDir", "Instance"
 ];
 
-const RemovedOptions : ( keyof InstanceData )[] = [
+const RemovedOptions: ( keyof InstanceData )[] = [
 	"_id", "__v", "panel_publicip", "ark_Port", "ark_QueryPort", "ark_RCONPort"
 ];
 
-const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterID, onHide, show, refresh } ) => {
+const PPClusterEditor: FunctionComponent<IPCClusterElementProps> = ( { ClusterID, onHide, show, refresh } ) => {
 	const { InstanceData } = useContext( ServerContext );
-	const { Cluster, IsValid } = useCluster( ClusterID || "" );
-	const [ Form, setForm ] = useState<Cluster>( { ...DefaultCluster } );
+	const { Cluster, isValid } = useCluster( ClusterID || "" );
+	const [ Form, setForm ] = useState<Cluster>( { ...defaultCluster } );
 	const [ IsSending, setIsSending ] = useState<boolean>( false );
 	const [ SelectedServer, setSelectedServer ] = useState<MultiValue<SelectOption>>( [] );
 	const [ SelectedServerSettings, setSelectedServerSettings ] = useState<MultiValue<SelectOption>>( [] );
@@ -62,51 +63,50 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	const [ SelectedMaster, setSelectedMaster ] = useState<SingleValue<SelectOption>>( null );
 
 	const MasterServer = useMemo( () => {
-		if ( SelectedMaster && SelectedMaster.value !== "" && InstanceData[ SelectedMaster.value ] ) {
+		if( SelectedMaster && SelectedMaster.value !== "" && InstanceData[ SelectedMaster.value ] ) {
 			return InstanceData[ SelectedMaster.value ];
 		}
 		return undefined;
 	}, [ SelectedMaster, InstanceData ] );
 
 	useEffect( () => {
-		if ( MasterServer ) {
+		if( MasterServer ) {
 			setFileSync( ( MasterServer?.State.allConfigs || [] ).map<SelectOption>( e => ( {
 				label: e,
 				value: e
 			} ) ) );
-		}
-		else {
+		} else {
 			setFileSync( [] );
 		}
 	}, [ MasterServer ] );
 
 	useEffect( () => {
-		if ( !SelectedServer ) {
+		if( !SelectedServer ) {
 			return;
 		}
 
-		if ( SelectedServer.length === 0 && SelectedMaster?.value !== "" ) {
+		if( SelectedServer.length === 0 && SelectedMaster?.value !== "" ) {
 			setSelectedMaster( () => ( { value: "", label: "" } ) );
 			setArkmanagerSync( () => [] );
 			setSelectedServerSettings( () => [] );
 		}
 
-		if ( ( SelectedMaster?.value === "" ) && SelectedServer.length !== 0 ) {
+		if( ( SelectedMaster?.value === "" ) && SelectedServer.length !== 0 ) {
 			setSelectedMaster( () => SelectedServer[ 0 ] );
 		}
 
-		if ( SelectedServer.find( E => E.value === SelectedMaster!.value ) === undefined && SelectedServer.length !== 0 ) {
+		if( SelectedServer.find( E => E.value === SelectedMaster!.value ) === undefined && SelectedServer.length !== 0 ) {
 			setSelectedMaster( () => SelectedServer[ 0 ] );
 		}
 	}, [ SelectedServer, SelectedMaster, ClusterID ] );
 
 	useEffect( () => {
-		if ( !IsValid ) {
+		if( !isValid ) {
 			return;
 		}
-		setForm( () => IsValid ? { ...Cluster } : { ...DefaultCluster } );
-		setSelectedServer( () => IsValid ? Cluster.Instances.map( Instance => {
-			if ( InstanceData[ Instance ] ) {
+		setForm( () => isValid ? { ...Cluster } : { ...defaultCluster } );
+		setSelectedServer( () => isValid ? Cluster.Instances.map( Instance => {
+			if( InstanceData[ Instance ] ) {
 				return {
 					value: Instance,
 					label: InstanceData[ Instance ].ArkmanagerCfg.ark_SessionName
@@ -120,12 +120,12 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 		setSelectedServerSettings( () => Cluster.SyncInis.map( E => ( { label: E, value: E } ) ) );
 		setArkmanagerSync( () => Cluster.SyncSettings.map( E => ( { label: E, value: E } ) ) );
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ ClusterID, IsValid ] );
+	}, [ ClusterID, isValid ] );
 
 	const Save = async() => {
 		setIsSending( true );
 
-		const data : Cluster = {
+		const data: Cluster = {
 			...Form,
 			Master: SelectedMaster?.value || "",
 			Instances: SelectedServer.map( Instance => Instance.value ),
@@ -133,23 +133,22 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 			SyncInis: SelectedServerSettings.map( Instance => Instance.value )
 		};
 
-		if ( IsValid && !!ClusterID ) {
+		if( isValid && !!ClusterID ) {
 			setIsSending( true );
-			const result = await tRPC_Auth.server.clusterManagement.editCluster.mutate( {
+			const result = await apiAuth.server.clusterManagement.editCluster.mutate( {
 				id: ClusterID!,
 				data
-			} ).catch( tRPC_handleError );
-			if ( result ) {
+			} ).catch( apiHandleError );
+			if( result ) {
 				await refresh();
 				onHide();
 				fireSwalFromApi( result, true );
 			}
 			setIsSending( false );
-		}
-		else {
+		} else {
 			setIsSending( true );
-			const result = await tRPC_Auth.server.clusterManagement.createCluster.mutate( { data } ).catch( tRPC_handleError );
-			if ( result ) {
+			const result = await apiAuth.server.clusterManagement.createCluster.mutate( { data } ).catch( apiHandleError );
+			if( result ) {
 				await refresh();
 				onHide();
 				fireSwalFromApi( result, true );
@@ -161,9 +160,9 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	};
 
 	const ServerSettingsOptions = useMemo( () => {
-		let Options : SelectOption[] = [];
+		let Options: SelectOption[] = [];
 
-		if ( MasterServer ) {
+		if( MasterServer ) {
 			Options = Object.keys( MasterServer.ArkmanagerCfg ).filter( E => !RemovedOptions.includes( E ) ).map( Key => ( {
 				label: Key,
 				value: Key,
@@ -175,13 +174,13 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 	}, [ MasterServer ] );
 
 	const ServerSelectOptions = useMemo( () => {
-		const options : SelectOption[] = [];
-		for ( const [ Instance, Data ] of Object.entries( InstanceData ) ) {
-			const IsInCluster = !!Data.Cluster && Data.Cluster.Instances.includes( Instance );
+		const options: SelectOption[] = [];
+		for( const [ Instance, Data ] of Object.entries( InstanceData ) ) {
+			const isInCluster = !!Data.Cluster && Data.cluster.Instances.includes( Instance );
 			options.push( {
 				value: Instance,
-				label: `${ Data.ArkmanagerCfg.ark_SessionName } ${ IsInCluster ? "(In einem Cluster)" : "" }`,
-				disabled: IsInCluster
+				label: `${ Data.ArkmanagerCfg.ark_SessionName } ${ isInCluster ? "(In einem Cluster)" : "" }`,
+				disabled: isInCluster
 			} );
 		}
 		return options;
@@ -203,7 +202,7 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 					<FormControl value={ Form.DisplayName } type="text" onChange={ E => setForm( Cur => ( {
 						...Cur,
 						DisplayName: E.target.value
-					} ) ) }/>
+					} ) ) } />
 				</InputGroup>
 
 
@@ -211,141 +210,137 @@ const PPClusterEditor : FunctionComponent<IPCClusterElementProps> = ( { ClusterI
 					<InputGroup.Text>
 						Server im Cluster
 					</InputGroup.Text>
-					<Select onChange={ setSelectedServer } className={ "flex-1" }
+					<Select onChange={ setSelectedServer } className="flex-1"
 					        isClearable={ true }
 					        isMulti={ true }
-					        isOptionDisabled={ ( option ) => option.disabled === true }
+					        isOptionDisabled={ option => option.disabled === true }
 					        value={ SelectedServer }
-					        options={ ServerSelectOptions }
-					/>
+					        options={ ServerSelectOptions } />
 				</InputGroup>
 
 				<InputGroup className="mb-2">
 					<InputGroup.Text>
 						Master Server
 					</InputGroup.Text>
-					<Select onChange={ setSelectedMaster } className={ "flex-1" }
+					<Select onChange={ setSelectedMaster } className="flex-1"
 					        isClearable={ false } isDisabled={ SelectedServer.length === 0 }
-					        isOptionDisabled={ ( option ) => option.disabled === true || !SelectedServer.find( E => E.value === option.value ) }
+					        isOptionDisabled={ option => option.disabled === true || !SelectedServer.find( E => E.value === option.value ) }
 					        value={ SelectedMaster }
-					        options={ SelectedServer }
-					/>
+					        options={ SelectedServer } />
 				</InputGroup>
 
 				<InputGroup className="mb-2">
 					<InputGroup.Text>
 						Sync Konfigurationen
 					</InputGroup.Text>
-					<Select onChange={ setArkmanagerSync } className={ "flex-1" }
+					<Select onChange={ setArkmanagerSync } className="flex-1"
 					        isClearable={ true }
 					        isMulti={ true } isDisabled={ SelectedMaster?.value === "" || !SelectedMaster }
-					        isOptionDisabled={ ( option ) => option.disabled === true }
+					        isOptionDisabled={ option => option.disabled === true }
 					        value={ ArkmanagerSync }
-					        options={ FileSync }
-					/>
+					        options={ FileSync } />
 				</InputGroup>
 
 				<InputGroup className="mb-2">
 					<InputGroup.Text>
 						Sync Arkmanager Einstellungen
 					</InputGroup.Text>
-					<Select onChange={ setSelectedServerSettings } className={ "flex-1" }
+					<Select onChange={ setSelectedServerSettings } className="flex-1"
 					        isClearable={ true }
 					        isMulti={ true } isDisabled={ SelectedMaster?.value === "" || !SelectedMaster }
-					        isOptionDisabled={ ( option ) => option.disabled === true }
+					        isOptionDisabled={ option => option.disabled === true }
 					        value={ SelectedServerSettings }
-					        options={ ServerSettingsOptions }
-					/>
+					        options={ ServerSettingsOptions } />
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						NoTransferFromFiltering: !Cur.NoTransferFromFiltering
-					} ) ) } Value={ Form.NoTransferFromFiltering }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.NoTransferFromFiltering } />
+					<InputGroup.Text className="flex-1">
 						NoTransferFromFiltering
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						NoTributeDownloads: !Cur.NoTributeDownloads
-					} ) ) } Value={ Form.NoTributeDownloads }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.NoTributeDownloads } />
+					<InputGroup.Text className="flex-1">
 						NoTributeDownloads
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventDownloadDinos: !Cur.PreventDownloadDinos
-					} ) ) } Value={ Form.PreventDownloadDinos }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.PreventDownloadDinos } />
+					<InputGroup.Text className="flex-1">
 						PreventDownloadDinos
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventDownloadItems: !Cur.PreventDownloadItems
-					} ) ) } Value={ Form.PreventDownloadItems }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.PreventDownloadItems } />
+					<InputGroup.Text className="flex-1">
 						PreventDownloadItems
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventDownloadSurvivors: !Cur.PreventDownloadSurvivors
-					} ) ) } Value={ Form.PreventDownloadSurvivors }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.PreventDownloadSurvivors } />
+					<InputGroup.Text className="flex-1">
 						PreventDownloadSurvivors
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventUploadDinos: !Cur.PreventUploadDinos
-					} ) ) } Value={ Form.PreventUploadDinos }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.PreventUploadDinos } />
+					<InputGroup.Text className="flex-1">
 						PreventUploadDinos
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventUploadItems: !Cur.PreventUploadItems
-					} ) ) } Value={ Form.PreventUploadItems }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.PreventUploadItems } />
+					<InputGroup.Text className="flex-1">
 						PreventUploadItems
 					</InputGroup.Text>
 				</InputGroup>
 
 				<InputGroup className="mb-2">
-					<ToggleButton className={ "btn" } OnToggle={ () => setForm( Cur => ( {
+					<ToggleButton className="btn" onToggle={ () => setForm( Cur => ( {
 						...Cur,
 						PreventUploadSurvivors: !Cur.PreventUploadSurvivors
-					} ) ) } Value={ Form.PreventUploadSurvivors }/>
-					<InputGroup.Text className={ "flex-1" }>
+					} ) ) } Value={ Form.PreventUploadSurvivors } />
+					<InputGroup.Text className="flex-1">
 						PreventUploadSurvivors
 					</InputGroup.Text>
 				</InputGroup>
 			</Modal.Body>
 
 			<Modal.Footer>
-				<IconButton IsLoading={ IsSending } onClick={ Save } variant={ "success" }
+				<IconButton IsLoading={ IsSending } onClick={ Save } variant="success"
 				            ForceDisable={ ( !SelectedMaster || SelectedMaster.value === "" ) || Form.DisplayName === "" }>
-					<FontAwesomeIcon icon={ "plus" }/> { ClusterID !== "" && ClusterID ? "Speichern" : "Erstellen" }
+					<FontAwesomeIcon icon="plus" /> { ClusterID !== "" && ClusterID ? "Speichern" : "Erstellen" }
 				</IconButton>
-				<IconButton onClick={ onHide } variant={ "danger" }>
-					<FontAwesomeIcon icon={ "cancel" }/> Abbrechen
+				<IconButton onClick={ onHide } variant="danger">
+					<FontAwesomeIcon icon="cancel" /> Abbrechen
 				</IconButton>
 			</Modal.Footer>
 		</Modal>

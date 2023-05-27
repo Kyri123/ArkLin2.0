@@ -2,15 +2,16 @@ import {
 	handleTRCPErr,
 	router,
 	serverProcedure
-}                    from "@server/trpc/trpc";
+} from "@server/trpc/trpc";
 import { TRPCError } from "@trpc/server";
+import _ from "lodash";
 import {
 	string,
 	z
-}                    from "zod";
-import _             from "lodash";
+} from "zod";
 
-export const auth_serverConfig = router( {
+
+export const authServerConfig = router( {
 	updateConfigClearText: serverProcedure.input( z.object( {
 		file: string(),
 		content: string()
@@ -18,10 +19,9 @@ export const auth_serverConfig = router( {
 		const { file, content } = input;
 		const { server } = ctx;
 		try {
-			server.SetServerConfigRaw( file, content );
+			server.setServerConfigRaw( file, content );
 			return "Konfiguration wurde erfolgreich gespeichert";
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -33,14 +33,13 @@ export const auth_serverConfig = router( {
 		const { mods } = input;
 		const { server } = ctx;
 		try {
-			const config = _.cloneDeep( server.GetConfig() );
+			const config = _.cloneDeep( server.getConfig() );
 			config.ark_GameModIds = mods;
 
-			if ( await server.SetServerConfig( "arkmanager.cfg", config ) ) {
+			if( await server.setServerConfig( "arkmanager.cfg", config ) ) {
 				return "Mods bearbeitet";
 			}
-		}
-		catch ( e ) {
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -53,9 +52,8 @@ export const auth_serverConfig = router( {
 		const { file } = input;
 		const { server } = ctx;
 		try {
-			return server.GetConfigContentRaw( file );
-		}
-		catch ( e ) {
+			return server.getConfigContentRaw( file );
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );
@@ -65,9 +63,8 @@ export const auth_serverConfig = router( {
 	getConfigs: serverProcedure.query( async( { ctx } ) => {
 		const { server } = ctx;
 		try {
-			return server.GetConfigFiles();
-		}
-		catch ( e ) {
+			return server.getConfigFiles();
+		} catch( e ) {
 			handleTRCPErr( e );
 		}
 		throw new TRPCError( { message: "Etwas ist schief gelaufen...", code: "INTERNAL_SERVER_ERROR" } );

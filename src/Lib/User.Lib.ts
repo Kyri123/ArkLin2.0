@@ -1,61 +1,50 @@
-import type { TPermissions }      from "@shared/Enum/User.Enum";
+import type { ClientUserAccount } from "@server/MongoDB/MongoAccounts";
+import type { TPermissions } from "@shared/Enum/User.Enum";
 import {
 	EPerm,
 	GetEnumValue
-}                                 from "@shared/Enum/User.Enum";
-import jwt                        from "jwt-decode";
-import type { ClientUserAccount } from "@server/MongoDB/DB_Accounts";
+} from "@shared/Enum/User.Enum";
+import jwt from "jwt-decode";
+
 
 export default class User {
-	private Token : string;
-	private readonly Data : ClientUserAccount;
-	private readonly LoggedIn : boolean;
+	private token: string;
+	private readonly data: ClientUserAccount;
+	private readonly loggedIn: boolean;
 
-	constructor( Token : string ) {
-		this.Token = Token;
-		if ( Token !== "" ) {
+	constructor( Token: string ) {
+		this.token = Token;
+		if( Token !== "" ) {
 			try {
-				const Decode = jwt<ClientUserAccount>( Token );
-				if ( Decode ) {
-					this.Data = Decode as ClientUserAccount;
-					this.LoggedIn = true;
+				const decode = jwt<ClientUserAccount>( Token );
+				if( decode ) {
+					this.data = decode as ClientUserAccount;
+					this.loggedIn = true;
 					return;
 				}
-			}
-			catch ( e ) {
+			} catch( e ) {
 				console.error( e, Token );
 			}
 		}
-		this.Data = { _id: "", created_at: "", permissions: [], updated_at: "", mail: "", servers: [], username: "" };
-		this.LoggedIn = false;
+		this.data = { _id: "", created_at: "", permissions: [], updated_at: "", mail: "", servers: [], username: "" };
+		this.loggedIn = false;
 	}
 
-	GetDBInformation() : ClientUserAccount {
-		return this.Data;
+	get get(): ClientUserAccount {
+		return this.data;
 	}
 
-	get Get() : ClientUserAccount {
-		return this.Data;
-	}
-
-	public HasPermission( Permission : TPermissions ) : boolean {
+	public hasPermission( Permission: TPermissions ): boolean {
 		return (
-			this.Data?.permissions?.includes( GetEnumValue( EPerm.Super ) ) ||
-			this.Data?.permissions?.includes( GetEnumValue( Permission ) )
+			this.data?.permissions?.includes( GetEnumValue( EPerm.Super ) ) ||
+			this.data?.permissions?.includes( GetEnumValue( Permission ) )
 		);
 	}
 
-	public HasPermissionForServer( ServerName : string ) : boolean {
+	public hasPermissionForServer( ServerName: string ): boolean {
 		return (
-			this.Data?.permissions?.includes( GetEnumValue( EPerm.Super ) ) ||
-			this.Data?.servers?.includes( ServerName )
+			this.data?.permissions?.includes( GetEnumValue( EPerm.Super ) ) ||
+			this.data?.servers?.includes( ServerName )
 		);
-	}
-
-	IsLoggedIn() {
-		if ( this.LoggedIn ) {
-			return ( this.Data.exp || 0 ) >= Date.now() / 1000;
-		}
-		return false;
 	}
 }

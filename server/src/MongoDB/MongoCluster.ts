@@ -1,8 +1,10 @@
-import * as mongoose      from "mongoose";
+import MongoInstances from "@/server/src/MongoDB/MongoInstances";
 import type { MongoBase } from "@app/Types/MongoDB";
-import { z }              from "zod";
+import * as mongoose from "mongoose";
+import { z } from "zod";
 
-const ZodClusterSchema = z.object( {
+
+const zodClusterSchema = z.object( {
 	Instances: z.array( z.string() ),
 	SyncInis: z.array( z.string() ),
 	SyncSettings: z.array( z.string() ),
@@ -18,11 +20,11 @@ const ZodClusterSchema = z.object( {
 	PreventUploadSurvivors: z.boolean()
 } );
 
-const ClusterSchema = new mongoose.Schema( {
-	Instances: { type: [ String ], required: true },
+const clusterSchema = new mongoose.Schema( {
+	Instances: { type: [ String ], ref: 'instances', required: true },
 	SyncInis: { type: [ String ], required: true },
 	SyncSettings: { type: [ String ], required: true },
-	Master: { type: String, required: true },
+	Master: { type: String, ref: 'instances', required: true },
 	DisplayName: { type: String, required: true },
 	NoTributeDownloads: { type: Boolean, required: true },
 	NoTransferFromFiltering: { type: Boolean, required: true },
@@ -34,10 +36,14 @@ const ClusterSchema = new mongoose.Schema( {
 	PreventUploadSurvivors: { type: Boolean, required: true }
 } );
 
+clusterSchema.post( 'save', doc => {
+	MongoInstances.updateMany( { Instance: doc.Instances }, { cluster: doc._id } );
+} );
 
-export type Cluster = z.infer<typeof ZodClusterSchema> & MongoBase
-export default mongoose.model<Cluster>( "kadmin_cluster", ClusterSchema );
+export type Cluster = z.infer<typeof zodClusterSchema> & MongoBase;
+
+export default mongoose.model<Cluster>( "kadmin_cluster", clusterSchema );
 export {
-	ZodClusterSchema,
-	ClusterSchema
+	clusterSchema, zodClusterSchema
 };
+

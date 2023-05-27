@@ -1,57 +1,55 @@
-import { MakeRandomString }    from "@kyri123/k-javascript-utils";
-import type {
-	ExplIf,
-	If
-}                              from "@kyri123/k-javascript-utils/lib/Types/Conditionals";
-import fs                      from "fs";
-import * as ini                from "ini";
-import path                    from "path";
 import { EArkmanagerCommands } from "@app/Lib/serverUtils";
-import {
-	DefaultInstanceState,
-	GetDefaultPanelServerConfig
-}                              from "@shared/Default/Server.Default";
-import { EBashScript }         from "../Enum/EBashScript";
-import type { Cluster }        from "@server/MongoDB/DB_Cluster";
-import DB_Cluster              from "@server/MongoDB/DB_Cluster";
-import type { Instance }       from "@server/MongoDB/DB_Instances";
-import DB_Instances            from "@server/MongoDB/DB_Instances";
-import { rm }                  from "fs/promises";
-import {
-	FillWithDefaultValues,
-	GetDefaultInstanceData,
-	JSONtoConfig
-}                              from "./Arkmanager.Lib";
-import { SSHManager }          from "./ConfigManager.Lib";
 import type {
 	InstanceData,
 	InstanceState,
 	PanelServerConfig
-}                              from "@app/Types/ArkSE";
+} from "@app/Types/ArkSE";
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import MongoCluster from "@server/MongoDB/MongoCluster";
+import type { Instance } from "@server/MongoDB/MongoInstances";
+import MongoInstances from "@server/MongoDB/MongoInstances";
+import {
+	defaultInstanceState,
+	getDefaultPanelServerConfig
+} from "@shared/Default/Server.Default";
+import fs from "fs";
+import { rm } from "fs/promises";
+import * as ini from "ini";
+import type { HydratedDocument } from "mongoose";
+import path from "path";
+import { EBashScript } from "../Enum/EBashScript";
+import {
+	fillWithDefaultValues,
+	getDefaultInstanceData,
+	jsonToConfig
+} from "./arkmanager.Lib";
+import { sshManager } from "./configManager.Lib";
 
-export async function CreateServer(
-	PanelConfig : PanelServerConfig,
-	InstanceName? : string,
-	DefaultConfig? : Partial<InstanceData>
-) : Promise<ServerLib<true> | undefined> {
-	const InstanceID = InstanceName || MakeRandomString( 20, "-" );
-	const ConfigFile = path.join(
-		__server_arkmanager,
+
+export async function createServer(
+	PanelConfig: PanelServerConfig,
+	InstanceName?: string,
+	DefaultConfig?: Partial<InstanceData>
+): Promise<ServerLib | undefined> {
+	const instanceId = InstanceName || MakeRandomString( 20, "-" );
+	const configFile = path.join(
+		SERVERARKMANAGER,
 		"instances",
-		InstanceID + ".cfg"
+		instanceId + ".cfg"
 	);
 
-	if ( ( await DB_Instances.exists( { Instance: InstanceID } ) ) === null ) {
-		let Config : InstanceData = {
-			...GetDefaultInstanceData( InstanceID ),
+	if( ( await MongoInstances.exists( { Instance: instanceId } ) ) === null ) {
+		let config: InstanceData = {
+			...getDefaultInstanceData( instanceId ),
 			...DefaultConfig
 		};
-		Config = FillWithDefaultValues( InstanceID, Config );
-		fs.writeFileSync( ConfigFile, JSONtoConfig( Config ) );
-		await DB_Instances.create( {
-			Instance: InstanceID,
-			ArkmanagerCfg: Config,
-			State: DefaultInstanceState(),
+		config = fillWithDefaultValues( instanceId, config );
+		fs.writeFileSync( configFile, jsonToConfig( config ) );
+		await MongoInstances.create( {
+			Instance: instanceId,
+			ArkmanagerCfg: config,
+			State: defaultInstanceState(),
 			PanelConfig: PanelConfig,
 			ServerMap: {
 				BG: `/img/maps/TheIsland.jpg`,
@@ -59,491 +57,493 @@ export async function CreateServer(
 			}
 		} );
 
-		const Lib = await ServerLib.build( InstanceID );
-		if ( Lib.IsValid() ) {
-			return Lib;
+		const lib = await ServerLib.build( instanceId );
+		if( lib.isValid() ) {
+			return lib;
 		}
 	}
 
 	return undefined;
 }
 
-export class ServerLib<Ready extends boolean = boolean> {
-	public readonly Instance : string;
-	public readonly InstanceConfigFile : string;
-	private MongoDBData : ExplIf<Ready, Instance | null, null> = null as ExplIf<Ready, Instance>;
-	private cluster : ExplIf<Ready, Cluster | null, undefined> = undefined as ExplIf<Ready, Cluster, undefined>;
+export class ServerLib {
+	public readonly instanceId: string;
+	public readonly instanceConfigFile: string;
+	private mongoDocument: HydratedDocument<Instance> | null = null;
+	private cluster: HydratedDocument<Cluster> | null = null;
 
-	private constructor( ServerInstance : string ) {
-		this.Instance = ServerInstance;
-		this.InstanceConfigFile = path.join(
-			__server_arkmanager,
+	private constructor( ServerInstance: string ) {
+		this.instanceId = ServerInstance;
+		this.instanceConfigFile = path.join(
+			SERVERARKMANAGER,
 			"instances",
-			`${ this.Instance }.cfg`
+			`${ this.instanceId }.cfg`
 		);
 	}
 
-	static async build( ServerInstance : string ) : Promise<ServerLib<true>> {
-		const Server = new ServerLib( ServerInstance );
+	static async build( ServerInstance: string ): Promise<ServerLib> {
+		const server = new ServerLib( ServerInstance );
 		try {
-			await Server.Init();
+			await server.init();
+		} catch( e ) {
+			if( e instanceof Error ) {
+				SystemLib.debugLog( "server", e.message );
+			}
 		}
-		catch ( e ) {
-		}
-		return Server;
+		return server;
 	}
 
-	get Get() : If<Ready, Instance, undefined> {
-		return this.GetWithCluster();
+	get get() {
+		return this.getWithCluster()!;
 	}
 
-	private async Init() : Promise<boolean> {
+	private async init(): Promise<boolean> {
 		try {
-			this.MongoDBData = ( await DB_Instances.findOne( {
-				Instance: this.Instance
-			} ) )!.toJSON() as ExplIf<Ready, Instance>;
+			this.mongoDocument = await MongoInstances.findOne( {
+				Instance: this.instanceId
+			} ).populate( "cluster" );
 
-			const Cluster = await DB_Cluster.findOne( { Instances: this.Instance } );
-			this.cluster = ( Cluster ? Cluster.toJSON() : null ) as ExplIf<Ready, Cluster, undefined>;
-		}
-		catch ( e ) {
+			if( ( this.mongoDocument?.cluster?._id?.length ?? 0 ) > 0 ) {
+				this.cluster = await MongoCluster.findById( this.mongoDocument!.cluster!._id! );
+			}
+		} catch( e ) {
+			if( e instanceof Error ) {
+				SystemLib.debugLog( "server", e.message );
+			}
 		}
 
-		return this.IsValid();
+		return this.isValid();
 	}
 
-	public async Wipe() : Promise<boolean> {
+	public async refresh(): Promise<boolean> {
+		return await this.init();
+	}
+
+	public async wipe(): Promise<boolean> {
 		try {
-			await this.ExecuteCommand( EArkmanagerCommands.stop, [ "--force" ] );
-			fs.rmSync( path.join( __server_dir, this.Instance, "/ShooterGame/Saved/SavedArks" ), {
+			await this.executeCommand( EArkmanagerCommands.stop, [ "--force" ] );
+			fs.rmSync( path.join( SERVERDIR, this.instanceId, "/ShooterGame/Saved/SavedArks" ), {
 				recursive: true,
 				force: true
 			} );
-		}
-		catch ( e ) {
+		} catch( e ) {
+			if( e instanceof Error ) {
+				SystemLib.debugLog( "server", e.message );
+			}
 		}
 
 		return false;
 	}
 
-	public IsInCluster() : this is ServerLib<true> {
-		return this.cluster !== null && this.IsValid();
+	public isInCluster() {
+		return !!this.cluster && this.isValid();
 	}
 
 	/*
 	 * @return {Cluster | null} return null if not in a cluster
 	 */
-	public get GetCluster() : ExplIf<Ready, Cluster | null, undefined> {
-		return this.cluster;
+	public get getCluster() {
+		return this.cluster!;
 	}
 
 	/*
 	 * @return {ServerLib | undefined} return undefined if not in a cluster
 	 */
-	public async GetClusterMaster() : Promise<ServerLib<true> | undefined> {
-		if ( !this.IsValid() ) {
+	public async getClusterMaster(): Promise<ServerLib | undefined> {
+		if( !this.isValid() ) {
 			return undefined;
 		}
 
-		if ( this.IsMaster ) {
+		if( this.isMaster ) {
 			// we return self if we are the master
 			return this;
-		}
-		else if ( this.IsInCluster() ) {
-			const Cluster = this.GetCluster!;
-			const MasterServer = await ServerLib.build( Cluster.Master );
-			if ( MasterServer.IsValid() ) {
-				if ( MasterServer.IsInCluster() && MasterServer.IsMaster ) {
+		} else if( this.isInCluster() ) {
+			const cluster = this.getCluster;
+			const masterServer = await ServerLib.build( cluster.Master.toString() );
+			if( masterServer.isValid() ) {
+				if( masterServer.isInCluster() && masterServer.isMaster ) {
 					// we only want to return a init master to we make sure it's the master and it's valid
-					return MasterServer;
+					return masterServer;
 				}
 			}
 		}
 		return undefined;
 	}
 
-	public get IsMaster() : boolean {
-		if ( !this.IsValid() ) {
+	public get isMaster(): boolean {
+		if( !this.isValid() ) {
 			return false;
 		}
 
-		const Cluster = this.GetCluster;
-		if ( Cluster ) {
-			return Cluster.Master === this.Instance;
+		if( this.getCluster ) {
+			return this.getCluster.Master.toString() === this.instanceId;
 		}
 		return false;
 	}
 
-	public EmitUpdate() {
-		if ( this.IsValid() ) {
-			SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: this.GetWithCluster() as Instance } );
+	public emitUpdate() {
+		if( this.isValid() ) {
+			SocketIO.emit( "onServerUpdated", { [ this.instanceId ]: this.getWithCluster() as Instance } );
 		}
 	}
 
-	public GetWithCluster() : If<Ready, Instance, undefined> {
-		if ( this.IsValid() ) {
-			return ( {
-				...this.MongoDBData,
-				Cluster: this.GetCluster
-			} as Instance ) as If<Ready, Instance, undefined>;
+	public getWithCluster(): Instance {
+		return ( {
+			...this.mongoDocument,
+			cluster: this.getCluster
+		} as Instance );
+	}
+
+	public isValid(): boolean {
+		return fs.existsSync( this.instanceConfigFile ) && this.mongoDocument !== null;
+	}
+
+	getConfig(): InstanceData {
+		if( !this.isValid() ) {
+			return getDefaultInstanceData( this.instanceId );
 		}
-		return undefined as If<Ready, Instance, undefined>;
+		return this.mongoDocument?.ArkmanagerCfg!;
 	}
 
-	public IsValid() : this is ServerLib<true> {
-		return fs.existsSync( this.InstanceConfigFile ) && this.MongoDBData !== null;
+	async getDb(): Promise<HydratedDocument<Instance> | null> {
+		await this.refresh();
+		return this.mongoDocument;
 	}
 
-	GetConfig() : InstanceData {
-		if ( !this.IsValid() ) {
-			return GetDefaultInstanceData( this.Instance );
-		}
-		return this.MongoDBData?.ArkmanagerCfg!;
-	}
-
-	async GetDb() : Promise<Instance | null> {
-		return ( await DB_Instances.findById( this.MongoDBData!._id ).catch( () => {
-		} ) )?.toJSON() as Instance || null;
-	}
-
-	async ExecuteCommand(
-		Command : EArkmanagerCommands,
-		Params : string[] = []
-	) : Promise<boolean> {
-		const State = await this.GetState();
-		if ( State.ArkmanagerPID === 0 ) {
+	async executeCommand(
+		Command: EArkmanagerCommands,
+		Params: string[] = []
+	): Promise<boolean> {
+		const state = await this.getState();
+		if( state.ArkmanagerPID === 0 ) {
 			Params.addAtIndex( "--dots" );
-			fs.mkdirSync( path.join( __server_dir, this.Instance ), { recursive: true } );
-			fs.mkdirSync( path.join( __server_logs, this.Instance ), {
+			fs.mkdirSync( path.join( SERVERDIR, this.instanceId ), { recursive: true } );
+			fs.mkdirSync( path.join( SERVERLOGSDIR, this.instanceId ), {
 				recursive: true
 			} );
-			fs.mkdirSync( path.join( __server_backups, this.Instance ), {
+			fs.mkdirSync( path.join( SERVERBACKUPDIR, this.instanceId ), {
 				recursive: true
 			} );
 
-			await this.ModifySubDocument( "State", {
-				...this.MongoDBData!.State,
+			await this.modifySubDocument( "State", {
+				...this.mongoDocument!.State,
 				State: "ActionInProgress",
 				ArkmanagerPID: 1
 			} );
 
-			SystemLib.Log( "CMD", "Executing:", `'${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"'` );
-			SSHManager.ExecCommand(
+			SystemLib.log( "CMD", "Executing:", `'${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.instanceId }"'` );
+			sshManager.execCommand(
 				[
-					`${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"`
+					`${ EBashScript.arkmanger } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.instanceId }"`
 				].join( " " )
 			).then( () => {
 			} );
-			this.EmitUpdate();
+			this.emitUpdate();
 			return true;
-			/*SSHManager.ExecCommand( [ "screen", '-dmS', this.Instance, 'bash', '-c', `'${ path.join( process.env.APPEND_BASEDIR, __basedir, "sh/arkmanager.sh" ) } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.Instance }"'` ].join( " " ) ).then( () => {} );
+			/*sshManager.execCommand( [ "screen", '-dmS', this.instanceId, 'bash', '-c', `'${ path.join( process.env.APPEND_BASEDIR, BASEDIR, "sh/arkmanager.sh" ) } "arkmanager ${ Command } ${ Params.join( " " ) }" "${ this.instanceId }"'` ].join( " " ) ).then( () => {} );
 			 return true;*/
 		}
 		return false;
 	}
 
-	GetPanelConfig() : PanelServerConfig {
-		if ( this.IsValid() && this.MongoDBData ) {
+	getPanelConfig(): PanelServerConfig {
+		if( this.isValid() && this.mongoDocument ) {
 			return {
-				...GetDefaultPanelServerConfig(),
-				...this.MongoDBData.PanelConfig
+				...getDefaultPanelServerConfig(),
+				...this.mongoDocument.PanelConfig
 			};
 		}
-		return GetDefaultPanelServerConfig();
+		return getDefaultPanelServerConfig();
 	}
 
-	async ModifySubDocument(
-		SubDocumentKey : keyof Instance,
-		Data : Partial<any>,
+	async modifySubDocument(
+		subDocumentKey: keyof Instance,
+		Data: Partial<any>,
 		Overwrite = true
 	) {
-		if ( await this.Init() ) {
-			const Document = await DB_Instances.findById( this.MongoDBData?._id );
-			if ( Document ) {
-				if ( !Overwrite ) {
-					for ( const [ Key, Value ] of Object.entries( Data ) ) {
-						Document[ SubDocumentKey ][ Key ] = Value;
-						Document.markModified( `${ SubDocumentKey }.${ Key }` );
+		if( await this.init() ) {
+			const doc = await MongoInstances.findById( this.mongoDocument?._id );
+			if( doc ) {
+				if( !Overwrite ) {
+					for( const [ key, value ] of Object.entries( Data ) ) {
+						doc[ subDocumentKey ][ key ] = value;
+						doc.markModified( `${ subDocumentKey }.${ key }` );
 					}
-				}
-				// Overwrite is faster as the for loop
-				else {
-					Data._id = Document[ SubDocumentKey ]._id;
-					// @ts-ignore
-					Document[ SubDocumentKey ] = Data;
-					Document.markModified( `${ SubDocumentKey }` );
 				}
 
-				if ( await Document.save() ) {
-					const data = await this.GetDb();
-					if ( data ) {
-						SocketIO.emit( "OnServerUpdated", { [ this.Instance ]: data } );
+				// Overwrite is faster as the for loop
+				else {
+					Data._id = doc[ subDocumentKey ]._id;
+					// @ts-ignore
+					doc[ subDocumentKey ] = Data;
+					doc.markModified( `${ subDocumentKey }` );
+				}
+
+				if( await doc.save() ) {
+					const data = await this.getDb();
+					if( data ) {
+						SocketIO.emit( "onServerUpdated", { [ this.instanceId ]: data.toJSON() } );
 					}
 				}
-				await this.Init();
+				await this.init();
 			}
 		}
 	}
 
-	async SetPanelConfig( Config : Partial<PanelServerConfig> ) {
-		if ( await this.Init() ) {
-			await this.ModifySubDocument( "PanelConfig", Config );
-			return this.MongoDBData !== null;
+	async setPanelConfig( Config: Partial<PanelServerConfig> ) {
+		if( await this.init() ) {
+			await this.modifySubDocument( "PanelConfig", Config );
+			return this.mongoDocument !== null;
 		}
 		return true;
 	}
 
-	async SeEServerState( State : Partial<InstanceState>, MapData? : any ) {
-		if ( await this.Init() ) {
-			const NewState : Partial<InstanceState> = {
-				...this.MongoDBData?.State,
+	async setServerState( State: Partial<InstanceState>, MapData?: any ) {
+		if( await this.init() ) {
+			const newState: Partial<InstanceState> = {
+				...this.mongoDocument?.State,
 				...State
 			};
 
-			const NewMap : any = {
-				...this.MongoDBData?.ServerMap,
+			const newMap: any = {
+				...this.mongoDocument?.ServerMap,
 				...MapData
 			};
 
-			await this.ModifySubDocument( "State", NewState );
-			await this.ModifySubDocument( "ServerMap", NewMap );
-			return this.MongoDBData !== null;
+			await this.modifySubDocument( "State", newState );
+			await this.modifySubDocument( "ServerMap", newMap );
+
+			return this.mongoDocument !== null;
 		}
 		return true;
 	}
 
-	async RemoveServer() {
-		if ( !( await this.Init() ) ) {
+	async removeServer() {
+		if( !( await this.init() ) ) {
 			return;
 		}
 
-		const Config = this.GetConfig();
-		const State = await this.GetState();
+		const config = this.getConfig();
+		const state = await this.getState();
 
 		try {
 			await Promise.all( [
-				SSHManager.Exec( "kill", [ State.ArkmanagerPID.toString() ] ).catch( () => {
+				sshManager.exec( "kill", [ state.ArkmanagerPID.toString() ] ).catch( () => {
 				} ),
-				SSHManager.Exec( "kill", [ State.ArkserverPID.toString() ] ).catch( () => {
+				sshManager.exec( "kill", [ state.ArkserverPID.toString() ] ).catch( () => {
 				} ),
-				SSHManager.Exec( "arkmanager", [ "stop", `@${ this.Instance }` ] ).catch( () => {
+				sshManager.exec( "arkmanager", [ "stop", `@${ this.instanceId }` ] ).catch( () => {
 				} )
 			] );
 
 			await Promise.all( [
-				SSHManager.Exec( "rm", [ "-R", Config.logdir ] ).catch( () => {
+				sshManager.exec( "rm", [ "-R", config.logdir ] ).catch( () => {
 				} ),
-				SSHManager.Exec( "rm", [ "-R", Config.arkserverroot ] ).catch( () => {
+				sshManager.exec( "rm", [ "-R", config.arkserverroot ] ).catch( () => {
 				} ),
-				rm( path.join( __server_arkmanager, "instances", this.Instance + ".cfg" ) ).catch( () => {
+				rm( path.join( SERVERARKMANAGER, "instances", this.instanceId + ".cfg" ) ).catch( () => {
 				} ),
-				DB_Instances.findByIdAndRemove( this.MongoDBData?._id )
+				MongoInstances.findByIdAndRemove( this.mongoDocument?._id )
 			] );
 
-			SystemLib.LogWarning(
+			SystemLib.logWarning(
 				"SERVER", "Server Removed:",
-				this.MongoDBData?.Instance
+				this.mongoDocument?.Instance
 			);
 
-			SocketIO.emit( "OnServerRemoved" );
-		}
-		catch ( e ) {
-			SystemLib.LogError( "SERVER", "RemoveServer:", e );
+			SocketIO.emit( "onServerRemoved" );
+		} catch( e ) {
+			SystemLib.logError( "SERVER", "removeServer:", e );
 		}
 	}
 
-	GetState() : InstanceState {
-		if ( this.IsValid() && this.MongoDBData ) {
+	getState(): InstanceState {
+		if( this.isValid() && this.mongoDocument ) {
 			return {
-				...DefaultInstanceState(),
-				...this.MongoDBData.State
+				...defaultInstanceState(),
+				...this.mongoDocument.State
 			};
 		}
-		return DefaultInstanceState();
+		return defaultInstanceState();
 	}
 
-	GetLogFiles() : Record<string, string> {
-		const Logs : Record<string, string> = {};
+	getLogFiles(): Record<string, string> {
+		const logs: Record<string, string> = {};
 
-		let PanelDirPath = path.join( __server_logs, this.Instance );
-		if ( fs.existsSync( PanelDirPath ) ) {
-			for ( const File of fs.readdirSync( PanelDirPath ) ) {
-				const FilePath = path.join( PanelDirPath, File );
-				const Stats = fs.statSync( FilePath );
-				if ( Stats.isFile() ) {
-					Logs[ File ] = FilePath;
+		let panelDirPath = path.join( SERVERLOGSDIR, this.instanceId );
+		if( fs.existsSync( panelDirPath ) ) {
+			for( const file of fs.readdirSync( panelDirPath ) ) {
+				const filePath = path.join( panelDirPath, file );
+				const stats = fs.statSync( filePath );
+				if( stats.isFile() ) {
+					logs[ file ] = filePath;
 				}
 			}
 		}
 
-		PanelDirPath = path.join(
-			__server_dir,
-			this.Instance,
+		panelDirPath = path.join(
+			SERVERDIR,
+			this.instanceId,
 			"ShooterGame/Saved/Logs"
 		);
-		if ( fs.existsSync( PanelDirPath ) ) {
-			for ( const File of fs.readdirSync( PanelDirPath ) ) {
-				const FilePath = path.join( PanelDirPath, File );
-				const Stats = fs.statSync( FilePath );
-				if ( Stats.isFile() ) {
-					Logs[ File ] = FilePath;
+		if( fs.existsSync( panelDirPath ) ) {
+			for( const file of fs.readdirSync( panelDirPath ) ) {
+				const filePath = path.join( panelDirPath, file );
+				const stats = fs.statSync( filePath );
+				if( stats.isFile() ) {
+					logs[ file ] = filePath;
 				}
 			}
 		}
 
-		return Logs;
+		return logs;
 	}
 
-	GetLogContent( File : string ) : string {
-		let Content = "";
+	getLogContent( File: string ): string {
+		let content = "";
 
 		try {
-			Content = SystemLib.ClearANSI(
+			content = SystemLib.clearANSI(
 				fs.readFileSync( path.join( File ) ).toString()
 			);
-		}
-		catch ( e ) {
+		} catch( e ) {
+			if( e instanceof Error ) {
+				SystemLib.logError( "SERVER", "getLogContent:", e.message );
+			}
 		}
 
-		return Content;
+		return content;
 	}
 
-	GetConfigFiles() : Record<string, string> {
-		const Logs : Record<string, string> = {
+	getConfigFiles(): Record<string, string> {
+		const logs: Record<string, string> = {
 			"Arkmanager.cfg": "Arkmanager.cfg"
 		};
 
-		const PanelDirPath = path.join(
-			__server_dir,
-			this.Instance,
+		const panelDirPath = path.join(
+			SERVERDIR,
+			this.instanceId,
 			"ShooterGame/Saved/Config/LinuxServer"
 		);
-		if ( fs.existsSync( PanelDirPath ) ) {
-			for ( const File of fs.readdirSync( PanelDirPath ) ) {
-				const FilePath = path.join( PanelDirPath, File );
-				const Stats = fs.statSync( FilePath );
-				if ( Stats.isFile() ) {
-					Logs[ File ] = FilePath;
+		if( fs.existsSync( panelDirPath ) ) {
+			for( const file of fs.readdirSync( panelDirPath ) ) {
+				const filePath = path.join( panelDirPath, file );
+				const stats = fs.statSync( filePath );
+				if( stats.isFile() ) {
+					logs[ file ] = filePath;
 				}
 			}
 		}
 
-		return Logs;
+		return logs;
 	}
 
-	GetConfigContent( File : string ) : Record<string, any> {
-		if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
-			return this.GetConfig();
+	getConfigContent( File: string ): Record<string, any> {
+		if( File.toLowerCase().trim() === "arkmanager.cfg" ) {
+			return this.getConfig();
 		}
 
 		try {
 			return ini.decode( fs.readFileSync( path.join( File ), "utf-8" ).toString() );
-		}
-		catch ( e ) {
+		} catch( e ) {
 		}
 
 		return {};
 	}
 
-	GetConfigContentRaw( File : string | "arkmanager.cfg" ) : string {
+	getConfigContentRaw( File: string | "arkmanager.cfg" ): string {
 		try {
-			if ( !File.startsWith( __basedir ) || File.toLowerCase().trim() === "arkmanager.cfg" ) {
+			if( !File.startsWith( BASEDIR ) || File.toLowerCase().trim() === "arkmanager.cfg" ) {
 				throw new Error( "File not found" );
 			}
 			return fs.readFileSync( path.join( File ), "utf-8" );
-		}
-		catch ( e ) {
+		} catch( e ) {
 			try {
-				if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
-					return fs.readFileSync( this.InstanceConfigFile, "utf-8" );
+				if( File.toLowerCase().trim() === "arkmanager.cfg" ) {
+					return fs.readFileSync( this.instanceConfigFile, "utf-8" );
 				}
-			}
-			catch ( e ) {
+			} catch( e ) {
 			}
 		}
 
 		return "";
 	}
 
-	SetServerConfigRaw(
-		File : string | "arkmanager.cfg",
-		Content : string
-	) : boolean {
+	setServerConfigRaw(
+		File: string | "arkmanager.cfg",
+		Content: string
+	): boolean {
 		// make sure we have only a filename not a path!
 		File = File.split( "/" ).at( -1 )!;
 		try {
-			if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
+			if( File.toLowerCase().trim() === "arkmanager.cfg" ) {
 				throw new Error( "File not found" );
 			}
-			if ( File.toLowerCase().trim() !== "arkmanager.cfg" ) {
+			if( File.toLowerCase().trim() !== "arkmanager.cfg" ) {
 
-				const ConfigFile = path.join(
-					__server_dir,
-					this.Instance,
+				const configFile = path.join(
+					SERVERDIR,
+					this.instanceId,
 					"ShooterGame/Saved/Config/LinuxServer",
 					File
 				);
 
-				SystemLib.DebugLog( "Filewrite", "Saved Config:", ConfigFile );
-				fs.writeFileSync( ConfigFile, Content );
+				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
+				fs.writeFileSync( configFile, Content );
 				return true;
+			} else {
 			}
-			else {
-			}
-		}
-		catch ( e ) {
+		} catch( e ) {
 			try {
-				SystemLib.DebugLog( "Filewrite", "Saved Config:", this.InstanceConfigFile );
-				fs.writeFileSync( this.InstanceConfigFile, Content );
+				SystemLib.debugLog( "Filewrite", "Saved Config:", this.instanceConfigFile );
+				fs.writeFileSync( this.instanceConfigFile, Content );
 				return true;
-			}
-			catch ( e ) {
+			} catch( e ) {
 			}
 		}
 
 		return false;
 	}
 
-	async SetServerConfig(
-		File : string | "arkmanager.cfg",
-		Content : any
-	) : Promise<boolean> {
-		if ( typeof Content === "object" && Object.keys( Content ).length > 0 ) {
-			if ( File.toLowerCase() === "arkmanager.cfg" ) {
-				fs.writeFileSync( this.InstanceConfigFile, JSONtoConfig( Content ) );
-				await this.ModifySubDocument( "ArkmanagerCfg", Content );
+	async setServerConfig(
+		File: string | "arkmanager.cfg",
+		Content: any
+	): Promise<boolean> {
+		if( typeof Content === "object" && Object.keys( Content ).length > 0 ) {
+			if( File.toLowerCase() === "arkmanager.cfg" ) {
+				fs.writeFileSync( this.instanceConfigFile, jsonToConfig( Content ) );
+				await this.modifySubDocument( "ArkmanagerCfg", Content );
 				return true;
 			}
 
-			const ConfigFile = path.join(
-				__server_dir,
-				this.Instance,
+			const configFile = path.join(
+				SERVERDIR,
+				this.instanceId,
 				"ShooterGame/Saved/Config/LinuxServer",
 				File
 			);
 
-			if ( fs.existsSync( ConfigFile ) ) {
-				fs.writeFileSync( ConfigFile, ini.stringify( Content ) );
+			if( fs.existsSync( configFile ) ) {
+				fs.writeFileSync( configFile, ini.stringify( Content ) );
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public async Update( Data : Partial<Instance> ) {
-		if ( !this.IsValid() ) {
+	public async update( Data: Partial<Instance> ) {
+		if( !this.isValid() ) {
 			return;
 		}
 
-		for ( const [ Key, Value ] of Object.entries( Data ) ) {
-			if ( typeof Value === "object" ) {
-				await this.ModifySubDocument( Key as keyof Instance, Value );
-			}
-			else {
-				await DB_Instances.findByIdAndUpdate( this.MongoDBData!._id, { [ Key ]: Value } );
+		for( const [ key, value ] of Object.entries( Data ) ) {
+			if( typeof value === "object" ) {
+				await this.modifySubDocument( key as keyof Instance, value );
+			} else {
+				await MongoInstances.findByIdAndUpdate( this.mongoDocument!._id, { [ key ]: value } );
 			}
 		}
 
-		this.EmitUpdate();
+		this.emitUpdate();
 	}
 }

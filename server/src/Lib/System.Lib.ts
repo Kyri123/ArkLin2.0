@@ -1,17 +1,18 @@
-import process           from "process";
-import Util              from "util";
-import fs                from "fs";
-import * as console      from "console";
-import * as dotenv       from "dotenv";
-import { ConfigManager } from "@server/Lib/ConfigManager.Lib";
-import { EBashScript }   from "@server/Enum/EBashScript";
+import { configManager } from "@/server/src/Lib/configManager.Lib";
+import { EBashScript } from "@server/Enum/EBashScript";
+import * as console from "console";
+import * as dotenv from "dotenv";
+import fs from "fs";
+import process from "process";
+import Util from "util";
 
-export async function RunUpdate() {
-	SystemLib.Log( "Update", "Running Update..." );
 
-	const config = ConfigManager.GetDashboardConifg;
+export async function runUpdate() {
+	SystemLib.log( "Update", "Running Update..." );
 
-	await SSHManagerLib.ExecCommandInScreen( "kadminupdate", `${ EBashScript.update } '${ config.PANEL_Branch }'` );
+	const config = configManager.getDashboardConfig;
+
+	await sshManagerLib.execCommandInScreen( "kadminupdate", `${ EBashScript.update } '${ config.PANEL_Branch }'` );
 }
 
 
@@ -33,39 +34,38 @@ export type BashColorString =
 	| "Light Cyan"
 	| "White";
 
-export class SystemLib_Class {
-	public readonly IsDevMode : boolean;
-	private readonly UseDebug : boolean;
+export class SystemLibClass {
+	public readonly isDevMode: boolean;
+	private readonly UseDebug: boolean;
 
-	static IsDev() : boolean {
-		return process.env.NODE_ENV !== "production" || ConfigManager.GetDebugConfig.UseDebug;
+	static isDev(): boolean {
+		return process.env.NODE_ENV !== "production" || configManager.getDebugConfig.UseDebug;
 	}
 
 	constructor() {
-		this.IsDevMode = SystemLib_Class.IsDev();
-		this.UseDebug = SystemLib_Class.IsDev();
+		this.isDevMode = SystemLibClass.isDev();
+		this.UseDebug = SystemLibClass.isDev();
 
-		this.DebugLog( "SYSTEM", "Try to load:", ".env" );
+		this.debugLog( "SYSTEM", "Try to load:", ".env" );
 		dotenv.config();
-		if ( SystemLib_Class.IsDev() ) {
-			this.DebugLog( "SYSTEM", "Try to load:", ".env.development" );
+		if( SystemLibClass.isDev() ) {
+			this.debugLog( "SYSTEM", "Try to load:", ".env.development" );
 			dotenv.config( {
 				path: ".env.development"
 			} );
-		}
-		else {
-			this.DebugLog( "SYSTEM", "Try to load:", ".env.local" );
+		} else {
+			this.debugLog( "SYSTEM", "Try to load:", ".env.local" );
 			dotenv.config( {
 				path: ".env.local"
 			} );
 		}
 	}
 
-	public DebugMode() : boolean {
+	public debugMode(): boolean {
 		return this.UseDebug;
 	}
 
-	static TBC( String : BashColorString ) {
+	static TBC( String: BashColorString ) {
 		switch ( String ) {
 			case "Black":
 				return "\x1B[30m";
@@ -102,92 +102,92 @@ export class SystemLib_Class {
 		}
 	}
 
-	public ToBashColor( String : BashColorString ) {
-		return SystemLib_Class.TBC( String );
+	public toBashColor( String: BashColorString ) {
+		return SystemLibClass.TBC( String );
 	}
 
-	public ClearANSI( Log : string ) : string {
+	public clearANSI( Log: string ): string {
 		return Log.replaceAll(
 			/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
 			""
 		);
 	}
 
-	public WriteStringToLog( ...Log : any[] ) : void {
+	public writeStringTolog( ...Log: any[] ): void {
 		Log.push( "\n" );
-		const OutLog : string = Util.format( ...Log );
+		const outLog: string = Util.format( ...Log );
 
-		let CurrentLog = "";
-		if ( fs.existsSync( __LogFile ) ) {
-			CurrentLog = fs.readFileSync( __LogFile ).toString();
+		let currentLog = "";
+		if( fs.existsSync( LOGFILE ) ) {
+			currentLog = fs.readFileSync( LOGFILE ).toString();
 		}
-		CurrentLog = CurrentLog + OutLog;
-		fs.writeFileSync( __LogFile, this.ClearANSI( CurrentLog ) );
+		currentLog = currentLog + outLog;
+		fs.writeFileSync( LOGFILE, this.clearANSI( currentLog ) );
 	}
 
-	public DebugLog( Prefix : string, ...data : any[] ) {
-		if ( this.DebugMode() ) {
-			if ( ConfigManager.GetDebugConfig.FilterDebug.some( e => `[${ Prefix.toUpperCase() }]`.includes( `[${ e }]`.toUpperCase() ) ) ) {
+	public debugLog( Prefix: string, ...data: any[] ) {
+		if( this.debugMode() ) {
+			if( configManager.getDebugConfig.FilterDebug.some( e => `[${ Prefix.toUpperCase() }]`.includes( `[${ e }]`.toUpperCase() ) ) ) {
 				return;
 			}
 
 			data.addAtIndex(
-				`${ this.ToBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
+				`${ this.toBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
 			);
 			data.addAtIndex(
-				this.ToBashColor( "Magenta" ) +
+				this.toBashColor( "Magenta" ) +
 				`[${ new Date().toUTCString() }][DEBUG]\x1B[0m`
 			);
 			console.log( ...data );
-			this.WriteStringToLog( ...data );
+			this.writeStringTolog( ...data );
 		}
 	}
 
-	public Log( Prefix : string, ...data : any[] ) {
+	public log( Prefix: string, ...data: any[] ) {
 		data.addAtIndex(
-			`${ this.ToBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
+			`${ this.toBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
 		);
 		data.addAtIndex(
-			this.ToBashColor( "Cyan" ) + `[${ new Date().toUTCString() }][LOG]\x1B[0m`
+			this.toBashColor( "Cyan" ) + `[${ new Date().toUTCString() }][LOG]\x1B[0m`
 		);
 		console.log( ...data );
-		this.WriteStringToLog( ...data );
+		this.writeStringTolog( ...data );
 	}
 
-	public LogError( Prefix : string, ...data : any[] ) {
+	public logError( Prefix: string, ...data: any[] ) {
 		data.addAtIndex(
-			this.ToBashColor( "Light Red" ) +
+			this.toBashColor( "Light Red" ) +
 			`[${ new Date().toUTCString() }][ERROR]\x1B[0m`
 		);
 		data.addAtIndex(
-			`${ this.ToBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
+			`${ this.toBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
 		);
 		console.error( ...data );
-		this.WriteStringToLog( ...data );
+		this.writeStringTolog( ...data );
 	}
 
-	public LogWarning( Prefix : string, ...data : any[] ) {
+	public logWarning( Prefix: string, ...data: any[] ) {
 		data.addAtIndex(
-			`${ this.ToBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
+			`${ this.toBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
 		);
 		data.addAtIndex(
-			this.ToBashColor( "Yellow" ) + `[${ new Date().toUTCString() }][WARN]\x1B[0m`
+			this.toBashColor( "Yellow" ) + `[${ new Date().toUTCString() }][WARN]\x1B[0m`
 		);
 		console.warn( ...data );
-		this.WriteStringToLog( ...data );
+		this.writeStringTolog( ...data );
 	}
 
-	public LogFatal( Prefix : string, ...data : any[] ) {
+	public logFatal( Prefix: string, ...data: any[] ) {
 		data.addAtIndex(
-			`${ this.ToBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
+			`${ this.toBashColor( "Red" ) }[${ Prefix.toUpperCase() }]\x1B[0m`
 		);
 		data.addAtIndex(
-			this.ToBashColor( "Red" ) + `[${ new Date().toUTCString() }][FATAL]\x1B[0m`
+			this.toBashColor( "Red" ) + `[${ new Date().toUTCString() }][FATAL]\x1B[0m`
 		);
 		console.error( ...data );
-		this.WriteStringToLog( ...data );
+		this.writeStringTolog( ...data );
 		process.exit();
 	}
 }
 
-export const BC = SystemLib_Class.TBC;
+export const BC = SystemLibClass.TBC;

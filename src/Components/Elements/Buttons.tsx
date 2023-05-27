@@ -1,13 +1,13 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button }          from "react-bootstrap";
 import type {
 	IconButtonProps,
 	ToggleButtonProps
-}                          from "@app/Types/AdminLTE";
-import type React          from "react";
+} from "@app/Types/AdminLTE";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type React from "react";
+import { Button } from "react-bootstrap";
 
 
-export const IconButton : React.FunctionComponent<IconButtonProps> = ( {
+export const IconButton: React.FunctionComponent<IconButtonProps> = ( {
 	Permission,
 	IsLoading,
 	Hide,
@@ -15,14 +15,14 @@ export const IconButton : React.FunctionComponent<IconButtonProps> = ( {
 	ForceDisable,
 	...Props
 } ) => {
-	if ( Hide || ( Permission !== undefined && !Permission ) ) {
+	if( Hide || ( Permission !== undefined && !Permission ) ) {
 		return <></>;
 	}
 
 	return (
 		<Button { ...Props } disabled={ IsLoading || ForceDisable }>
 			{ Props.IsLoading ? (
-				<FontAwesomeIcon icon={ LoadingIcon || "spinner" } spin={ true }/>
+				<FontAwesomeIcon icon={ LoadingIcon || "spinner" } spin={ true } />
 			) : (
 				Props.children
 			) }
@@ -30,35 +30,33 @@ export const IconButton : React.FunctionComponent<IconButtonProps> = ( {
 	);
 };
 
-export const ToggleButton : React.FunctionComponent<ToggleButtonProps> = ( { OnToggle, Value, Ref, ...Props } ) => {
-	if ( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
+export const ToggleButton: React.FunctionComponent<ToggleButtonProps> = ( { onToggle, Value, Ref, ...Props } ) => {
+	if( Props.Hide || ( Props.Permission !== undefined && !Props.Permission ) ) {
 		return <></>;
 	}
 
-	const OnClick = () => {
-		if ( OnToggle ) {
-			OnToggle( !Value );
+	const onClick = () => {
+		if( onToggle ) {
+			onToggle( !Value );
 		}
-		if ( Ref ) {
+		if( Ref ) {
 			Ref.current = !Props.Ref.current;
 		}
 	};
 
-	const IsActive = () => {
-		if ( Value === undefined ) {
+	const isActive = () => {
+		if( Value === undefined ) {
 			return Ref?.current;
 		}
 		return Value;
 	};
 
 	return (
-		<Button
-			{ ...Props }
-			className={ `${ IsActive() ? "" : "px-3" } ${ Props.className || "btn-sm rounded-0" }` }
-			variant={ IsActive() ? "success" : "danger" }
-			onClick={ OnClick }
-		>
-			<FontAwesomeIcon icon={ IsActive() ? "check" : "times" }/>{ " " }
+		<Button { ...Props }
+			className={ `${ isActive() ? "" : "px-3" } ${ Props.className || "btn-sm rounded-0" }` }
+			variant={ isActive() ? "success" : "danger" }
+			onClick={ onClick }>
+			<FontAwesomeIcon icon={ isActive() ? "check" : "times" } />{ " " }
 			{ Props.children }
 		</Button>
 	);

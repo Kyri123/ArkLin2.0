@@ -1,72 +1,71 @@
-import type { UserAccount } from "@server/MongoDB/DB_Accounts";
-import * as crypto          from "crypto";
-import path                 from "path";
-import fs                   from "fs";
-import * as jwt             from "jsonwebtoken";
-import DB_SessionToken      from "@server/MongoDB/DB_SessionToken";
-import type User            from "@app/Lib/User.Lib";
-import { EPerm }            from "@shared/Enum/User.Enum";
-import type { Instance }    from "@server/MongoDB/DB_Instances";
-import DB_Instances         from "@server/MongoDB/DB_Instances";
-import type { Cluster }     from "@server/MongoDB/DB_Cluster";
-import DB_Cluster           from "@server/MongoDB/DB_Cluster";
+import type User from "@app/Lib/User.Lib";
+import type { UserAccount } from "@server/MongoDB/MongoAccounts";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import MongoCluster from "@server/MongoDB/MongoCluster";
+import type { Instance } from "@server/MongoDB/MongoInstances";
+import MongoInstances from "@server/MongoDB/MongoInstances";
+import MongoSessionToken from "@server/MongoDB/MongoSessionToken";
+import { EPerm } from "@shared/Enum/User.Enum";
+import * as crypto from "crypto";
+import fs from "fs";
+import * as jwt from "jsonwebtoken";
+import path from "path";
 
-export function GetSecretAppToken() : string {
-	if ( global.__AppToken && typeof __AppToken === "string" ) {
-		return __AppToken;
+
+export function getSecretAppToken(): string {
+	if( global.APPTOKEN && typeof APPTOKEN === "string" ) {
+		return APPTOKEN;
 	}
 
-	let Token = crypto.randomBytes( 64 ).toString( "hex" );
-	const TokenFile = path.join( __configdir, "app.token" );
-	if ( fs.existsSync( TokenFile ) ) {
-		Token = fs.readFileSync( TokenFile ).toString().trim();
+	let token = crypto.randomBytes( 64 ).toString( "hex" );
+	const tokenFile = path.join( CONFIGDIR, "app.token" );
+	if( fs.existsSync( tokenFile ) ) {
+		token = fs.readFileSync( tokenFile ).toString().trim();
+	} else {
+		fs.writeFileSync( tokenFile, token );
 	}
-	else {
-		fs.writeFileSync( TokenFile, Token );
-	}
-	global.__AppToken = Token;
-	return __AppToken as string;
+	global.APPTOKEN = token;
+	return APPTOKEN as string;
 }
 
-export async function CreateSession( User : Partial<UserAccount>, stayLoggedIn = false ) : Promise<string | undefined> {
+export async function createSession( User: Partial<UserAccount>, stayLoggedIn = false ): Promise<string | undefined> {
 	delete User.salt;
 	delete User.hash;
 	try {
-		const Token = jwt.sign( User, GetSecretAppToken(), {
+		const token = jwt.sign( User, getSecretAppToken(), {
 			expiresIn: stayLoggedIn ? "28d" : "1d"
 		} );
-		const Decoded = jwt.verify( Token, GetSecretAppToken() ) as jwt.JwtPayload;
-		if ( Decoded ) {
-			await DB_SessionToken.deleteMany( { expire: { $lte: new Date() } } );
-			const session = await DB_SessionToken.create( {
-				token: Token,
+		const decoded = jwt.verify( token, getSecretAppToken() ) as jwt.JwtPayload;
+		if( decoded ) {
+			await MongoSessionToken.deleteMany( { expire: { $lte: new Date() } } );
+			const session = await MongoSessionToken.create( {
+				token,
 				userid: User._id,
-				expire: new Date( ( Decoded.exp || 0 ) * 1000 )
+				expire: new Date( ( decoded.exp || 0 ) * 1000 )
 			} );
 			return session.token;
 		}
-	}
-	catch ( e ) {
-		if ( e instanceof Error ) {
-			SystemLib.LogError( "api", e.message );
+	} catch( e ) {
+		if( e instanceof Error ) {
+			SystemLib.logError( "api", e.message );
 		}
 	}
 	return undefined;
 }
 
-export async function GetAllServerWithPermission( user : User ) : Promise<Record<string, Instance>> {
-	const arr = user.HasPermission( EPerm.ManagePanel ) ? await DB_Instances.find<Instance>( {} ) : await DB_Instances.find<Instance>( { servers: user.Get.servers } );
-	const result : Record<string, Instance> = {};
-	for ( const instance of arr ) {
+export async function getAllServerWithPermission( user: User ): Promise<Record<string, Instance>> {
+	const arr = user.hasPermission( EPerm.ManagePanel ) ? await MongoInstances.find<Instance>( {} ) : await MongoInstances.find<Instance>( { servers: user.get.servers } );
+	const result: Record<string, Instance> = {};
+	for( const instance of arr ) {
 		result[ instance.Instance ] = instance;
 	}
 	return result;
 }
 
-export async function GetAllClusterWithPermission( user : User ) : Promise<Record<string, Cluster>> {
-	const arr = await DB_Cluster.find( { Instances: { $in: Object.keys( await GetAllServerWithPermission( user ) ) } } );
-	const result : Record<string, Cluster> = {};
-	for ( const cluster of arr ) {
+export async function getAllClusterWithPermission( user: User ): Promise<Record<string, Cluster>> {
+	const arr = await MongoCluster.find( { Instances: { $in: Object.keys( await getAllServerWithPermission( user ) ) } } );
+	const result: Record<string, Cluster> = {};
+	for( const cluster of arr ) {
 		result[ cluster._id ] = await cluster.toJSON();
 	}
 	return result;

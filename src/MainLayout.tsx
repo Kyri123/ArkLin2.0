@@ -7,12 +7,13 @@ import type { AuthLoaderProps }        from "@app/MainLayout_Loader";
 import AccountContext             from "@context/AccountContext";
 import User                       from "@app/Lib/User.Lib";
 
-const Component : FunctionComponent = () => {
+
+const Component: FunctionComponent = () => {
 	const { token } = useLoaderData() as AuthLoaderProps;
 
 	return (
 		<AccountContext.Provider value={ { user: new User( token ) } }>
-			<Outlet/>
+			<Outlet />
 		</AccountContext.Provider>
 	);
 };

@@ -1,16 +1,17 @@
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import type { Instance } from "@server/MongoDB/MongoInstances";
+import type { SystemUsage } from "@server/MongoDB/MongoUsage";
 import type { DefaultEventsMap } from "socket.io/dist/typed-events";
-import type { SystemUsage }      from "@server/MongoDB/DB_Usage";
-import type { Instance }         from "@server/MongoDB/DB_Instances";
-import type { Cluster }          from "@server/MongoDB/DB_Cluster";
+
 
 interface EmitEvents extends DefaultEventsMap {
-	OnSystemUpdate : ( Usage : SystemUsage ) => void;
-	onFileUpdated : ( File : string, Log : string[] ) => void;
-	OnServerUpdated : ( Updated : Record<string, Instance> ) => void;
-	OnServerRemoved : () => void;
-	OnClusterUpdated : ( Updated : Record<string, Cluster> ) => void;
-	OnClusterRemoved : () => void;
-	SteamApiUpdated : () => void;
+	onSystemUpdate: ( Usage: SystemUsage ) => void,
+	onFileUpdated: ( File: string, Log: string[] ) => void,
+	onServerUpdated: ( Updated: Record<string, Instance> ) => void,
+	onServerRemoved: () => void,
+	onClusterUpdated: ( Updated: Record<string, Cluster> ) => void,
+	onClusterRemoved: () => void,
+	onSteamApiUpdated: () => void
 }
 
 type ListenEvents = DefaultEventsMap;

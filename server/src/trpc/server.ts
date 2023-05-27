@@ -1,56 +1,56 @@
-import * as trpcExpress           from "@trpc/server/adapters/express";
-import { public_validate }        from "@server/trpc/routings/public/validate";
-import { public_login }           from "@server/trpc/routings/public/login";
-import { public_createAccount }   from "@server/trpc/routings/public/createAccount";
+import { BC } from "@/server/src/Lib/system.Lib";
+import { expressMiddlewareAuth } from "@server/trpc/middleware";
+import { authAccountManagement } from "@server/trpc/routings/admin/accountManagement";
+import { authClusterManagement } from "@server/trpc/routings/auth/clusterManagement";
+import { authServerConfig } from "@server/trpc/routings/auth/config";
+import { authGlobalState } from "@server/trpc/routings/auth/globalState";
+import { authLogs } from "@server/trpc/routings/auth/logs";
+import { authPanelAdmin } from "@server/trpc/routings/auth/panelAdmin";
+import { authServerAction } from "@server/trpc/routings/auth/serverAction";
+import { authSteamapi } from "@server/trpc/routings/auth/steamapi";
+import { authUser } from "@server/trpc/routings/auth/user";
+import { publicCreateAccount } from "@server/trpc/routings/public/createAccount";
+import { publicGithub } from "@server/trpc/routings/public/github";
+import { publicLogin } from "@server/trpc/routings/public/login";
+import { publicResetPassword } from "@server/trpc/routings/public/resetPassword";
+import { publicValidate } from "@server/trpc/routings/public/validate";
 import {
 	createContext,
 	router
-}                                 from "@server/trpc/trpc";
-import { MW_Auth }                from "@server/trpc/middleware";
-import { BC }                     from "@server/Lib/System.Lib";
-import { public_resetPassword }   from "@server/trpc/routings/public/resetPassword";
-import { public_github }          from "@server/trpc/routings/public/github";
-import { auth_globalState }       from "@server/trpc/routings/auth/globalState";
-import { auth_panelAdmin }        from "@server/trpc/routings/auth/panelAdmin";
-import { auth_accountManagement } from "@server/trpc/routings/admin/accountManagement";
-import { auth_serverAction }      from "@server/trpc/routings/auth/serverAction";
-import { auth_user }              from "@server/trpc/routings/auth/user";
-import { auth_clusterManagement } from "@server/trpc/routings/auth/clusterManagement";
-import { auth_logs }              from "@server/trpc/routings/auth/logs";
-import { auth_serverConfig }      from "@server/trpc/routings/auth/config";
-import { auth_steamapi }          from "@server/trpc/routings/auth/steamapi";
+} from "@server/trpc/trpc";
+import * as trpcExpress from "@trpc/server/adapters/express";
 
 
 const publicRouter = router( {
-	validate: public_validate,
-	login: public_login,
-	register: public_createAccount,
-	password: public_resetPassword,
-	github: public_github
+	validate: publicValidate,
+	login: publicLogin,
+	register: publicCreateAccount,
+	password: publicResetPassword,
+	github: publicGithub
 } );
 const authRouter = router( {
-	user: auth_user,
-	globaleState: auth_globalState,
-	panelAdmin: auth_panelAdmin,
+	user: authUser,
+	globaleState: authGlobalState,
+	panelAdmin: authPanelAdmin,
 	server: router( {
-		clusterManagement: auth_clusterManagement,
-		action: auth_serverAction,
-		log: auth_logs,
-		config: auth_serverConfig,
-		api: auth_steamapi
+		clusterManagement: authClusterManagement,
+		action: authServerAction,
+		log: authLogs,
+		config: authServerConfig,
+		api: authSteamapi
 	} ),
 	admin: router( {
-		account: auth_accountManagement
+		account: authAccountManagement
 	} )
 } );
 
 
-SystemLib.Log( "start", "register TRCP on", BC( "Red" ), "/api/v2/*" );
+SystemLib.log( "start", "register TRCP on", BC( "Red" ), "/api/v2/*" );
 Api.use( "/api/v2/public", trpcExpress.createExpressMiddleware( {
 	router: publicRouter,
 	createContext
 } ) );
-Api.use( "/api/v2/auth", MW_Auth, trpcExpress.createExpressMiddleware( {
+Api.use( "/api/v2/auth", expressMiddlewareAuth, trpcExpress.createExpressMiddleware( {
 	router: authRouter,
 	createContext
 } ) );

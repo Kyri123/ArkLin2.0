@@ -1,19 +1,20 @@
+import Config from "@shared/StringMap/Config.json";
 import Navigation from "@shared/StringMap/Navigation.json";
-import Config     from "@shared/StringMap/Config.json";
+
 
 export default class StringMapLib {
-	static Nav( Location : string ) : string {
+	static nav( Location: string ): string {
 		return (
 			( Navigation.MainPage as Record<string, string> )[ Location ] ||
-			this.SubNav( Location )
+			this.subNav( Location )
 		);
 	}
 
-	static SubNav( Location : string ) : string {
+	static subNav( Location: string ): string {
 		return ( Navigation.Subpage as Record<string, string> )[ Location ] || Location;
 	}
 
-	static Config( Key : string ) : string {
+	static config( Key: string ): string {
 		return ( Config as Record<string, string> )[ Key ] || Key;
 	}
 

@@ -1,4 +1,4 @@
-export async function RunTest() {
-	SystemLib.DebugLog( "test", "Running test script!" );
-	//QuerySteamAPI_Mods();
+export async function runTest() {
+	SystemLib.debugLog( "test", "Running test script!" );
+	//querySteamAPI_Mods();
 }

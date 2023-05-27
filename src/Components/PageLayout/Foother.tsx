@@ -1,8 +1,9 @@
-import { FontAwesomeIcon }  from "@fortawesome/react-fontawesome";
-import { Link }             from "react-router-dom";
-import type { SystemUsage } from "@server/MongoDB/DB_Usage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { SystemUsage } from "@server/MongoDB/MongoUsage";
+import { Link } from "react-router-dom";
 
-export default function Foother( Props : { SystemUsage : SystemUsage } ) {
+
+export default function Foother( Props: { SystemUsage: SystemUsage } ) {
 	return (
 		<>
 			<div className="bottom-0">
@@ -12,47 +13,47 @@ export default function Foother( Props : { SystemUsage : SystemUsage } ) {
 
 					<a href="/"
 					   className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-						<img src="/img/logo/logo.png" alt="Logo" className="w-10"/>
+						<img src="/img/logo/logo.png" alt="Logo" className="w-10" />
 					</a>
 
 					<ul className="nav col-md-4 justify-content-end">
 						<li className="nav-item">
-							<Link to={ "/app" }
+							<Link to="/app"
 							      className="nav-link px-2 text-body-secondary">
 								{ Props.SystemUsage.PanelVersionName }
-								<FontAwesomeIcon size={ "lg" } icon={ "book" } className={ "ms-3" }/>
+								<FontAwesomeIcon size="lg" icon="book" className="ms-3" />
 							</Link>
 						</li>
 
 						<li className="nav-item">
-							<Link to={ "https://getbootstrap.com/" } target="_blank"
+							<Link to="https://getbootstrap.com/" target="_blank"
 							      className="nav-link px-2 text-body-secondary">
-								<FontAwesomeIcon size={ "lg" }
-								                 icon={ [ "fab", "bootstrap" ] }/>
+								<FontAwesomeIcon size="lg"
+								                 icon={ [ "fab", "bootstrap" ] } />
 							</Link>
 						</li>
 
 						<li className="nav-item">
-							<Link to={ "https://github.com/Kyri123/ArkLin2.0/issues" } target="_blank"
+							<Link to="https://github.com/Kyri123/ArkLin2.0/issues" target="_blank"
 							      className="nav-link px-2 text-body-secondary">
-								<FontAwesomeIcon size={ "lg" }
-								                 icon={ "bug" }/>
+								<FontAwesomeIcon size="lg"
+								                 icon="bug" />
 							</Link>
 						</li>
 
 						<li className="nav-item">
-							<Link to={ "https://github.com/Kyri123/ArkLin2.0" } target="_blank"
+							<Link to="https://github.com/Kyri123/ArkLin2.0" target="_blank"
 							      className="nav-link px-2 text-body-secondary">
-								<FontAwesomeIcon size={ "lg" }
-								                 icon={ [ "fab", "github-square" ] }/>
+								<FontAwesomeIcon size="lg"
+								                 icon={ [ "fab", "github-square" ] } />
 							</Link>
 						</li>
 
 						<li className="nav-item">
-							<Link to={ "https://discord.gg/gzhpjP2CMY" } target="_blank"
+							<Link to="https://discord.gg/gzhpjP2CMY" target="_blank"
 							      className="nav-link px-2 text-body-secondary">
-								<FontAwesomeIcon size={ "lg" }
-								                 icon={ [ "fab", "discord" ] }/>
+								<FontAwesomeIcon size="lg"
+								                 icon={ [ "fab", "discord" ] } />
 							</Link>
 						</li>
 					</ul>

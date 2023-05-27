@@ -1,7 +1,8 @@
 import * as mongoose from "mongoose";
-import { z }         from "zod";
+import { z } from "zod";
 
-const ZodUsageSchema = z.object( {
+
+const zodUsageSchema = z.object( {
 	CPU: z.number(),
 	MemMax: z.number(),
 	MemUsed: z.number(),
@@ -15,7 +16,7 @@ const ZodUsageSchema = z.object( {
 	LogFiles: z.array( z.string() )
 } );
 
-const UsageSchema = new mongoose.Schema( {
+const usageSchema = new mongoose.Schema( {
 	CPU: { type: Number, required: true },
 	MemMax: { type: Number, required: true },
 	MemUsed: { type: Number, required: true },
@@ -30,9 +31,9 @@ const UsageSchema = new mongoose.Schema( {
 } );
 
 
-export type SystemUsage = z.infer<typeof ZodUsageSchema>
-export default mongoose.model<SystemUsage>( "usage", UsageSchema );
+export type SystemUsage = z.infer<typeof zodUsageSchema>;
+export default mongoose.model<SystemUsage>( "usage", usageSchema );
 export {
-	ZodUsageSchema,
-	UsageSchema
+	usageSchema, zodUsageSchema
 };
+

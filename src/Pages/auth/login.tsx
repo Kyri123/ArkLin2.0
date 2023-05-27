@@ -1,29 +1,30 @@
+import {
+    apiHandleError,
+    apiPublic,
+    fireSwalFromApi
+} from "@app/Lib/tRPC";
+import { IconButton } from "@comp/Elements/Buttons";
+import { Checkbox } from "@comp/Elements/SmartInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useAuth from "@hooks/useAuth";
 import type { FunctionComponent } from "react";
 import {
-	useRef,
-	useState
-}                                 from "react";
-import { FontAwesomeIcon }        from "@fortawesome/react-fontawesome";
-import { CLTECheckbox }           from "@comp/Elements/SmartInput";
-import useAuth                    from "@hooks/useAuth";
+    useRef,
+    useState
+} from "react";
 import {
-	Col,
-	FloatingLabel,
-	Form,
-	Row
-}                                 from "react-bootstrap";
-import { IconButton }             from "@comp/Elements/Buttons";
+    Col,
+    FloatingLabel,
+    Form,
+    Row
+} from "react-bootstrap";
 import {
-	Link,
-	useNavigate
-}                                 from "react-router-dom";
-import {
-	fireSwalFromApi,
-	tRPC_handleError,
-	tRPC_Public
-}                                 from "@app/Lib/tRPC";
+    Link,
+    useNavigate
+} from "react-router-dom";
 
-const Component : FunctionComponent = () => {
+
+const Component: FunctionComponent = () => {
 	const navigate = useNavigate();
 	const { SetToken } = useAuth();
 	const [ InputState, setInputState ] = useState<boolean[]>( [] );
@@ -34,7 +35,7 @@ const Component : FunctionComponent = () => {
 	const LoginRef = useRef<HTMLInputElement>( null );
 	const PasswordRef = useRef<HTMLInputElement>( null );
 
-	const DoLogin = async() => {
+	const doLogin = async() => {
 		setIsSending( true );
 
 		const target = {
@@ -44,26 +45,24 @@ const Component : FunctionComponent = () => {
 
 		setInputState( [ target.login.trim() === "", target.password.trim() === "" ] );
 
-		const Response = await tRPC_Public.login.mutate( {
+		const Response = await apiPublic.login.mutate( {
 			login: target.login,
 			password: target.password,
 			stayLoggedIn
-		} ).catch( tRPC_handleError );
+		} ).catch( apiHandleError );
 
-		if ( Response ) {
-			if ( Response.passwordResetToken ) {
+		if( Response ) {
+			if( Response.passwordResetToken ) {
 				setPasswortUrl( () => `/auth/reset/${ Response.passwordResetToken }` );
 				navigate( `/auth/reset/${ Response.passwordResetToken }`, { replace: true } );
 				fireSwalFromApi( Response.message, true );
-			}
-			else if ( Response.token ) {
+			} else if( Response.token ) {
 				SetToken( Response.token );
 				await fireSwalFromApi( Response.message, true );
 				navigate( "/app", { replace: true } );
 			}
 			setInputState( [ false, false ] );
-		}
-		else {
+		} else {
 			setInputState( [ true, true ] );
 		}
 
@@ -73,36 +72,30 @@ const Component : FunctionComponent = () => {
 	return (
 		<>
 
-			<FloatingLabel
-				controlId="login"
+			<FloatingLabel controlId="login"
 				label="E-Mail / Benutzername"
-				className="mb-3"
-			>
-				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] }/>
+				className="mb-3">
+				<Form.Control type="text" ref={ LoginRef } isInvalid={ InputState[ 0 ] } />
 			</FloatingLabel>
 
 			<FloatingLabel controlId="password" label="Passwort" className="mb-3">
-				<Form.Control
-					type="password"
+				<Form.Control type="password"
 					ref={ PasswordRef }
-					isInvalid={ InputState[ 1 ] }
-				/>
+					isInvalid={ InputState[ 1 ] } />
 			</FloatingLabel>
 
 			<Row>
 				<Col span={ 6 }>
-					<CLTECheckbox OnValueChanges={ setStayLoggedIn } Checked={ stayLoggedIn }>
+					<Checkbox onValueChanges={ setStayLoggedIn } Checked={ stayLoggedIn }>
 						Eingeloggt bleiben
-					</CLTECheckbox>
+					</Checkbox>
 				</Col>
 				<Col span={ 6 }>
-					<IconButton
-						className="w-100 mb-2 rounded-3"
-						onClick={ DoLogin }
+					<IconButton className="w-100 mb-2 rounded-3"
+						onClick={ doLogin }
 						varian="primary"
-						IsLoading={ IsSending }
-					>
-						<FontAwesomeIcon icon={ "sign-in" } className={ "pe-2" }/>
+						IsLoading={ IsSending }>
+						<FontAwesomeIcon icon="sign-in" className="pe-2" />
 						Einloggen
 					</IconButton>
 				</Col>
@@ -113,8 +106,8 @@ const Component : FunctionComponent = () => {
 					Klicke
 					hier!</Link> }
 
-			<hr className="my-4"/>
-			<Link className="w-100 mb-3 rounded-3 btn btn-dark" to={ "/auth/register" }>Account Erstellen</Link>
+			<hr className="my-4" />
+			<Link className="w-100 mb-3 rounded-3 btn btn-dark" to="/auth/register">Account Erstellen</Link>
 		</>
 	);
 };

@@ -1,177 +1,173 @@
+import { BC } from "@/server/src/Lib/system.Lib";
+import MongoGithubBranches from "@server/MongoDB/MongoGithubBranches";
+import fs from "fs";
+import path from "path";
 import type {
-	IAPI_BaseConfig,
-	IDashboard_BaseConfig,
-	IDebugConfig,
-	ITaskConfig
-}                        from "../Types/Config";
-import path              from "path";
-import fs                from "fs";
-import { SSHLib }        from "./SSH.Lib";
-import DB_GithubBranches from "@server/MongoDB/DB_GithubBranches";
-import { BC }            from "@server/Lib/System.Lib";
+	APIBaseConfig,
+	DashboardBaseConfig,
+	DebugConfig,
+	TaskConfig
+} from "../Types/Config";
+import { SSHLib } from "./ssh.Lib";
 
-export async function GetCurrentBranch() : Promise<[ string, string | undefined ]> {
-	let Branch = ConfigManager.GetDashboardConifg.PANEL_Branch;
 
-	const CurrentBranch = await DB_GithubBranches.findOne( { name: Branch } );
-	let Sha : string | undefined = undefined;
-	if ( !CurrentBranch ) {
-		ConfigManager.Write<IDashboard_BaseConfig>( "Dashboard_BaseConfig", {
-			...ConfigManager.GetDashboardConifg,
+export async function getCurrentBranch(): Promise<[ string, string | undefined ]> {
+	let name = configManager.getDashboardConfig.PANEL_Branch;
+
+	const branch = await MongoGithubBranches.findOne( { name } );
+	let sha: string | undefined = undefined;
+	if( !branch ) {
+		configManager.write<DashboardBaseConfig>( "Dashboard_BaseConfig", {
+			...configManager.getDashboardConfig,
 			PANEL_Branch: "main"
 		} );
-		Branch = "main";
-	}
-	else {
-		Sha = CurrentBranch.sha;
+		name = "main";
+	} else {
+		sha = branch.sha;
 	}
 
-	return [ Branch, Sha ];
+	return [ name, sha ];
 }
 
 export class ConfigManagerClass {
-	protected readonly Dashboard_BaseConfig : IDashboard_BaseConfig;
-	protected readonly API_BaseConfig : IAPI_BaseConfig;
-	protected readonly TaskConfig : ITaskConfig;
-	protected readonly DebugConfig : IDebugConfig;
-	protected readonly SSHKey : string;
+	protected readonly Dashboard_BaseConfig: DashboardBaseConfig;
+	protected readonly API_BaseConfig: APIBaseConfig;
+	protected readonly TaskConfig: TaskConfig;
+	protected readonly DebugConfig: DebugConfig;
+	protected readonly SSHKey: string;
 
 	constructor() {
-		this.DebugConfig = this.ReadConfigWithFallback<IDebugConfig>( "Debug.json" );
+		this.DebugConfig = this.readConfigWithfallback<DebugConfig>( "Debug.json" );
 
 		this.Dashboard_BaseConfig =
-			this.ReadConfigWithFallback<IDashboard_BaseConfig>(
+			this.readConfigWithfallback<DashboardBaseConfig>(
 				"Dashboard_BaseConfig.json"
 			);
 		// we want to set the Debug mod here on true if we want to
 
-		this.API_BaseConfig = this.ReadConfigWithFallback<IAPI_BaseConfig>(
+		this.API_BaseConfig = this.readConfigWithfallback<APIBaseConfig>(
 			"API_BaseConfig.json"
 		);
-		this.TaskConfig = this.ReadConfigWithFallback<ITaskConfig>( "Tasks.json" );
-		this.SSHKey = this.ReadConfigWithFallback<string>( "id_rsa", true );
+		this.TaskConfig = this.readConfigWithfallback<TaskConfig>( "Tasks.json" );
+		this.SSHKey = this.readConfigWithfallback<string>( "id_rsa", true );
 	}
 
-	public get GetDashboardConifg() : IDashboard_BaseConfig {
+	public get getDashboardConfig(): DashboardBaseConfig {
 		return this.Dashboard_BaseConfig;
 	}
 
-	public get GetApiConfig() : IAPI_BaseConfig {
+	public get getApiConfig(): APIBaseConfig {
 		return this.API_BaseConfig;
 	}
 
-	public get GetTaskConfig() : ITaskConfig {
+	public get getTaskConfig(): TaskConfig {
 		return this.TaskConfig;
 	}
 
-	public get GetDebugConfig() : IDebugConfig {
+	public get getDebugConfig(): DebugConfig {
 		return this.DebugConfig;
 	}
 
-	public get GetSSHKey() : string {
+	public get getSSHKey(): string {
 		return this.SSHKey;
 	}
 
-	public get GetSSHKeyPath() : string {
-		return path.join( __configdir, "id_rsa" );
+	public get getSSHKeyPath(): string {
+		return path.join( CONFIGDIR, "id_rsa" );
 	}
 
-	public get GetGitHash() : string | undefined {
+	public get getGitHash(): string | undefined {
 		try {
-			return fs.readFileSync( path.join( __git_dir, "HEAD" ) ).toString().split( " " )[ 0 ];
-		}
-		catch ( e ) {
+			return fs.readFileSync( path.join( GITDIR, "HEAD" ) ).toString().split( " " )[ 0 ];
+		} catch( e ) {
 		}
 		return undefined;
 	}
 
-	public Write<T>( Config : string, Data : T ) : boolean {
-		const ConfigFile = path.join( __configdir, `${ Config }.json` );
-		if ( fs.existsSync( ConfigFile ) && Data ) {
+	public write<T>( Config: string, Data: T ): boolean {
+		const configFile = path.join( CONFIGDIR, `${ Config }.json` );
+		if( fs.existsSync( configFile ) && Data ) {
 			try {
-				fs.writeFileSync( ConfigFile, JSON.stringify( Data, null, "\t" ) );
+				fs.writeFileSync( configFile, JSON.stringify( Data, null, "\t" ) );
 				return true;
-			}
-			catch ( e ) {
-				SystemLib.LogError( "CONFIG", e );
+			} catch( e ) {
+				SystemLib.logError( "CONFIG", e );
 			}
 		}
 		return false;
 	}
 
-	public Get<T = any>( Config : string ) : any | T {
-		const ConfigFile = path.join( __configdir, `${ Config }.json` );
-		if ( fs.existsSync( ConfigFile ) ) {
+	public get<T = any>( Config: string ): any | T {
+		const configFile = path.join( CONFIGDIR, `${ Config }.json` );
+		if( fs.existsSync( configFile ) ) {
 			try {
-				return JSON.parse( fs.readFileSync( ConfigFile ).toString() );
-			}
-			catch ( e ) {
-				SystemLib.LogError( "CONFIG", e );
+				return JSON.parse( fs.readFileSync( configFile ).toString() );
+			} catch( e ) {
+				SystemLib.logError( "CONFIG", e );
 			}
 		}
 		return {};
 	}
 
-	public ReadConfigWithFallback<T>( File : string, NotAJson = false ) : T {
-		const FallbackConfigPath = path.join( __basedir, "config", File );
-		const ConfigPath = path.join( __configdir, File );
+	public readConfigWithfallback<T>( File: string, NotAJson = false ): T {
+		const fallbackConfigPath = path.join( BASEDIR, "config", File );
+		const configPath = path.join( CONFIGDIR, File );
 
 		// Create default config file
-		if ( !fs.existsSync( ConfigPath ) ) {
+		if( !fs.existsSync( configPath ) ) {
 			try {
-				fs.mkdirSync( __configdir, { recursive: true } );
-			}
-			catch ( e ) {
+				fs.mkdirSync( CONFIGDIR, { recursive: true } );
+			} catch( e ) {
 			}
 			fs.writeFileSync(
-				ConfigPath,
-				fs.readFileSync( FallbackConfigPath ).toString()
+				configPath,
+				fs.readFileSync( fallbackConfigPath ).toString()
 			);
-			SystemLib.Log( "config", "Config recreated:", BC( "Red" ), File );
+			SystemLib.log( "config", "Config recreated:", BC( "Red" ), File );
 		}
 
-		if ( !NotAJson ) {
+		if( !NotAJson ) {
 			// Merge fallback (with maybe new values) to config file
-			const FallbackConfig = JSON.parse(
-				fs.readFileSync( FallbackConfigPath ).toString()
+			const fallbackConfig = JSON.parse(
+				fs.readFileSync( fallbackConfigPath ).toString()
 			);
-			const Config = JSON.parse( fs.readFileSync( ConfigPath ).toString() );
+			const config = JSON.parse( fs.readFileSync( configPath ).toString() );
 
-			const FallbackKeys = Object.keys( FallbackConfig );
+			const fallbackKeys = Object.keys( fallbackConfig );
 
-			const Return = {
-				...FallbackConfig,
-				...Config
+			const result = {
+				...fallbackConfig,
+				...config
 			};
 
-			for ( const Key of Object.keys( Return ) ) {
-				if ( !FallbackKeys.includes( Key ) ) {
-					SystemLib.DebugLog(
+			for( const key of Object.keys( result ) ) {
+				if( !fallbackKeys.includes( key ) ) {
+					SystemLib.debugLog(
 						"CONFIG", "Removed Key",
 						BC( "Red" ),
-						Key
+						key
 					);
-					delete Return[ Key ];
+					delete result[ key ];
 				}
 			}
 
 			// Save merge
-			fs.writeFileSync( ConfigPath, JSON.stringify( Return, null, "\t" ) );
+			fs.writeFileSync( configPath, JSON.stringify( result, null, "\t" ) );
 
-			return Return;
+			return result;
 		}
-		return fs.readFileSync( ConfigPath ).toString() as T;
+		return fs.readFileSync( configPath ).toString() as T;
 	}
 }
 
-if ( !global.CManager ) {
+if( !global.CManager ) {
 	global.CManager = new ConfigManagerClass();
 }
 
-export const ConfigManager = global.CManager;
+export const configManager = global.CManager;
 
-if ( !global.SSHManagerLib ) {
-	global.SSHManagerLib = new SSHLib();
+if( !global.sshManagerLib ) {
+	global.sshManagerLib = new SSHLib();
 }
 
-export const SSHManager = global.SSHManagerLib;
+export const sshManager = global.sshManagerLib;

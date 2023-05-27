@@ -1,23 +1,24 @@
-import type React          from "react";
-import { useArkServer }    from "@hooks/useArkServer";
-import { Link }            from "react-router-dom";
+import { onConfirm } from "@app/Lib/tRPC";
+import { IconButton } from "@comp/Elements/Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconButton }      from "@comp/Elements/Buttons";
-import type { SteamMod }   from "@server/MongoDB/DB_SteamAPI_Mods";
-import _                   from "lodash";
-import { onConfirm }       from "@app/Lib/tRPC";
+import { useArkServer } from "@hooks/useArkServer";
+import type { SteamMod } from "@server/MongoDB/MongoSteamAPIMods";
+import _ from "lodash";
+import type React from "react";
+import { Link } from "react-router-dom";
+
 
 interface IProps {
-	setMods : ( mods : number[], asToast? : boolean ) => Promise<void>,
-	allMods : number[],
-	isSending : boolean;
-	ModId : number;
-	ModData : SteamMod | undefined;
-	InstanceName : string;
-	ModIndex : number;
+	setMods: ( mods: number[], asToast?: boolean ) => Promise<void>,
+	allMods: number[],
+	isSending: boolean,
+	ModId: number,
+	ModData: SteamMod | undefined,
+	InstanceName: string,
+	ModIndex: number
 }
 
-const PCServerModsRow : React.FunctionComponent<IProps> = ( {
+const PCServerModsRow: React.FunctionComponent<IProps> = ( {
 	setMods,
 	allMods,
 	isSending,
@@ -28,15 +29,15 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 } ) => {
 	const { Data } = useArkServer( InstanceName );
 	const RemoveMod = async() => {
-		if ( await onConfirm( "Möchtest du diese mod wirklich entfernen?" ) ) {
+		if( await onConfirm( "Möchtest du diese mod wirklich entfernen?" ) ) {
 			const mods = _.clone( allMods );
 			mods.splice( ModIndex, 1 );
 			await setMods( mods );
 		}
 	};
 
-	const MoveMod = async( IndexOffset : 1 | -1 ) => {
-		if ( ModIndex + IndexOffset >= 0 && ModIndex + IndexOffset < allMods.length ) {
+	const MoveMod = async( IndexOffset: 1 | -1 ) => {
+		if( ModIndex + IndexOffset >= 0 && ModIndex + IndexOffset < allMods.length ) {
 			const mods = _.clone( allMods );
 			mods.swapElements( ModIndex, ModIndex + IndexOffset );
 			await setMods( mods, true );
@@ -47,62 +48,52 @@ const PCServerModsRow : React.FunctionComponent<IProps> = ( {
 	return (
 		<tr>
 			<td width="20px" className="p-0">
-				<IconButton
-					IsLoading={ isSending }
-					variant={ "gray-dark" }
+				<IconButton IsLoading={ isSending }
+					variant="gray-dark"
 					ForceDisable={ !( ModIndex - 1 >= 0 ) }
 					onClick={ () => MoveMod( -1 ) }
-					className="btn btn-sm flat text-bg-dark m-0"
-				>
-					<FontAwesomeIcon icon={ "arrow-up" }/>
+					className="btn btn-sm flat text-bg-dark m-0">
+					<FontAwesomeIcon icon="arrow-up" />
 				</IconButton>
-				<IconButton
-					IsLoading={ isSending }
-					variant={ "gray-dark" }
+				<IconButton IsLoading={ isSending }
+					variant="gray-dark"
 					onClick={ () => MoveMod( 1 ) }
 					ForceDisable={ ModIndex + 1 > Data.ark_GameModIds.length - 1 }
-					className="btn btn-sm flat text-bg-dark m-0"
-				>
-					<FontAwesomeIcon icon={ "arrow-down" }/>
+					className="btn btn-sm flat text-bg-dark m-0">
+					<FontAwesomeIcon icon="arrow-down" />
 				</IconButton>
 			</td>
 			<td width="62px" className="p-0">
-				<img
-					alt={ ModData?.title || "Warte auf SteamAPI daten..." }
+				<img alt={ ModData?.title || "Warte auf SteamAPI daten..." }
 					src={ ModData?.preview_url || "/img/logo/unknown.png" }
-					style={ { width: 62, height: 62 } }
-				/>
+					style={ { width: 62, height: 62 } } />
 			</td>
-			<td className={ "pt-1 pb-1" }>
+			<td className="pt-1 pb-1">
 				<b>
 					[{ ModId }] { ModData?.title || "Warte auf SteamAPI daten..." }
 				</b>{ " " }
-				<br/>
+				<br />
 				<span className="text-sm">
           ModID:{ " " }
-					<Link
-						to={ `https://steamcommunity.com/sharedfiles/filedetails/?id=${ ModId }` }
+					<Link to={ `https://steamcommunity.com/sharedfiles/filedetails/?id=${ ModId }` }
 						className="text-bold"
-						target="_blank"
-					>
-            { ModId }
-          </Link>{ " " }
+						target="_blank">
+						{ ModId }
+					</Link>{ " " }
 					| Letzes Update:{ " " }
 					<b>
-            { ModData
+						{ ModData
 	            ? new Date( ModData.time_updated ).toLocaleString()
 	            : "??.??.???? ??:??:??" }
-          </b>
-        </span>
+					</b>
+				</span>
 			</td>
 			<td style={ { width: 0 } } className="p-0">
 				<div className="btn-group">
-					<IconButton
-						IsLoading={ isSending }
+					<IconButton IsLoading={ isSending }
 						className="btn btn-danger m-0 flat"
-						onClick={ RemoveMod }
-					>
-						<FontAwesomeIcon icon={ "trash-alt" }/> Entfernen
+						onClick={ RemoveMod }>
+						<FontAwesomeIcon icon="trash-alt" /> Entfernen
 					</IconButton>
 				</div>
 			</td>

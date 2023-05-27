@@ -1,49 +1,51 @@
-import type { Instance }     from "@server/MongoDB/DB_Instances";
-import type { Cluster }      from "@server/MongoDB/DB_Cluster";
-import type { SystemUsage }  from "@server/MongoDB/DB_Usage";
+import User from "@app/Lib/User.Lib";
 import {
-	tRPC_Auth,
-	tRPC_handleError,
-	tRPC_token
-}                            from "@app/Lib/tRPC";
+	apiAuth,
+	apiHandleError,
+	getAuthToken
+} from "@app/Lib/tRPC";
+import type { Cluster } from "@server/MongoDB/MongoCluster";
+import type { Instance } from "@server/MongoDB/MongoInstances";
+import type { SystemUsage } from "@server/MongoDB/MongoUsage";
 import type { TPermissions } from "@shared/Enum/User.Enum";
-import User                  from "@app/Lib/User.Lib";
 import type {
-	Params} from "react-router-dom";
+	Params
+} from "react-router-dom";
 import {
 	json,
 	redirect
-}                            from "react-router-dom";
+} from "react-router-dom";
 
-export const fetchMainData = async() : Promise<[ number[], Record<string, Instance>, Record<string, Cluster>, SystemUsage ] | undefined> => {
+
+export const fetchMainData = async(): Promise<[ number[], Record<string, Instance>, Record<string, Cluster>, SystemUsage ] | undefined> => {
 	const [ globalState, server, cluster, usage ] = await Promise.all( [
-		tRPC_Auth.globaleState.state.query().catch( tRPC_handleError ),
-		tRPC_Auth.globaleState.getallserver.query().catch( tRPC_handleError ),
-		tRPC_Auth.globaleState.getallcluster.query().catch( tRPC_handleError ),
-		tRPC_Auth.globaleState.systemUsage.query().catch( tRPC_handleError )
+		apiAuth.globaleState.state.query().catch( apiHandleError ),
+		apiAuth.globaleState.getallserver.query().catch( apiHandleError ),
+		apiAuth.globaleState.getallcluster.query().catch( apiHandleError ),
+		apiAuth.globaleState.systemUsage.query().catch( apiHandleError )
 	] );
 
-	if ( globalState && server && cluster && usage ) {
+	if( globalState && server && cluster && usage ) {
 		return [ globalState, server, cluster, usage ];
 	}
 
 	return undefined;
 };
 
-export function sendWithPermission<T extends object>( data : T, permission : TPermissions ) : Response {
-	const user = new User( tRPC_token() );
+export function sendWithPermission<T extends object>( data: T, permission: TPermissions ): Response {
+	const user = new User( getAuthToken() );
 
-	if ( !user.HasPermission( permission ) ) {
+	if( !user.hasPermission( permission ) ) {
 		return redirect( "/error/401" );
 	}
 	return json<T>( data );
 }
 
-export function sendWithServerPermission<T extends object>( data : T, params : Params ) : Response {
+export function sendWithServerPermission<T extends object>( data: T, params: Params ): Response {
 	const { instance } = params;
-	const user = new User( tRPC_token() );
+	const user = new User( getAuthToken() );
 
-	if ( !user.HasPermissionForServer( instance || "NO!" ) ) {
+	if( !user.hasPermissionForServer( instance || "NO!" ) ) {
 		return redirect( "/error/401" );
 	}
 

@@ -1,50 +1,51 @@
-import { JobTaskCycle }       from "../TaskManager";
+import { queryArkServer } from "@/server/src/Lib/arkServerQuery.Lib";
 import {
-	ConfigManager,
-	SSHManager
-}                             from "@server/Lib/ConfigManager.Lib";
-import fs                     from "fs";
-import path                   from "path";
-import type { Instance }      from "@server/MongoDB/DB_Instances";
-import DB_Instances           from "@server/MongoDB/DB_Instances";
-import { ServerLib }          from "@server/Lib/Server.Lib";
-import { QueryArkServer }     from "@server/Lib/ArkServerQuery.Lib";
-import { BC }                 from "@server/Lib/System.Lib";
-import { EServerState }       from "@shared/Enum/EServerState";
-import type { InstanceState } from "@app/Types/ArkSE";
+	configManager,
+	sshManager
+} from "@/server/src/Lib/configManager.Lib";
+import { ServerLib } from "@/server/src/Lib/server.Lib";
+import { BC } from "@/server/src/Lib/system.Lib";
+import type { InstanceState } from "@/src/Types/ArkSE";
+import type { Instance } from "@server/MongoDB/MongoInstances";
+import MongoInstances from "@server/MongoDB/MongoInstances";
+import { EServerState } from "@shared/Enum/EServerState";
+import fs from "fs";
+import path from "path";
+import { JobTaskCycle } from "../taskManager";
+
 
 export default new JobTaskCycle<Instance>(
 	"ServerState",
 
-	async( Self ) => {
-		const EmitData : Record<string, Instance> = {};
-		for await ( const Server of DB_Instances.find<Instance>() ) {
-			const ServerClass = await ServerLib.build( Server.Instance );
-			if ( ServerClass.IsValid() ) {
-				EmitData[ Server.Instance ] = ServerClass.GetWithCluster();
+	async Self => {
+		const emitData: Record<string, Instance> = {};
+		for await ( const server of MongoInstances.find<Instance>() ) {
+			const serverClass = await ServerLib.build( server.Instance );
+			if( serverClass.isValid() ) {
+				emitData[ server.Instance ] = serverClass.getWithCluster();
 			}
 		}
-		Self.UpdateTickTime( ConfigManager.GetTaskConfig.ServerStateInterval / Math.max( Object.values( EmitData ).length, 1 ) );
-		return Object.values( EmitData );
+		Self.updatetickTime( configManager.getTaskConfig.ServerStateInterval / Math.max( Object.values( emitData ).length, 1 ) );
+		return Object.values( emitData );
 	},
 
 	async( CallIndex, Server ) => {
-		SystemLib.DebugLog(
+		SystemLib.debugLog(
 			"tasks", "Running Task ", CallIndex,
 			BC( "Red" ),
 			"ServerState"
 		);
 
-		if ( !Server ) {
+		if( !Server ) {
 			return;
 		}
 
-		const ServerL = await ServerLib.build( Server.Instance );
-		if ( ServerL.IsValid() ) {
-			const InstanceData = ServerL.Get.ArkmanagerCfg;
-			const InstanceName = ServerL.Instance;
-			const InstanceState : Partial<InstanceState> = {
-				allConfigs: Object.keys( ServerL.GetConfigFiles() ).filter( e => e !== "Arkmanager.cfg" ),
+		const serverL = await ServerLib.build( Server.Instance );
+		if( serverL.isValid() ) {
+			const instanceData = serverL.get.ArkmanagerCfg;
+			const instanceName = serverL.instanceId;
+			const instanceState: Partial<InstanceState> = {
+				allConfigs: Object.keys( serverL.getConfigFiles() ).filter( e => e !== "Arkmanager.cfg" ),
 				IsListen: false,
 				State: EServerState.notInstalled,
 				Player: 0,
@@ -54,111 +55,109 @@ export default new JobTaskCycle<Instance>(
 				ArkserverPID: 0
 			};
 
-			const VersionFile = path.join(
-				__server_dir,
-				InstanceName,
+			const versionFile = path.join(
+				SERVERDIR,
+				instanceName,
 				"version.txt"
 			);
-			const ServerExecFile = path.join(
-				__server_dir,
-				InstanceName,
-				InstanceData.arkserverexec
+			const serverExecFile = path.join(
+				SERVERDIR,
+				instanceName,
+				instanceData.arkserverexec
 			);
-			const ActionPIDFile = path.join(
-				__server_dir,
-				InstanceName,
-				`.${ InstanceName }.panel.pid`
+			const actionPIDFile = path.join(
+				SERVERDIR,
+				instanceName,
+				`.${ instanceName }.panel.pid`
 			);
-			const ArkServerPIDFile = path.join(
-				__server_dir,
-				InstanceName,
+			const arkServerPIDFile = path.join(
+				SERVERDIR,
+				instanceName,
 				"ShooterGame/Saved",
-				`.arkserver-${ InstanceName }.pid`
+				`.arkserver-${ instanceName }.pid`
 			);
 
-			const IsInstalled = fs.existsSync( ServerExecFile );
+			const isInstalled = fs.existsSync( serverExecFile );
 
-			if ( fs.existsSync( ActionPIDFile ) ) {
-				InstanceState.ArkmanagerPID = parseInt(
-					fs.readFileSync( ActionPIDFile ).toString()
+			if( fs.existsSync( actionPIDFile ) ) {
+				instanceState.ArkmanagerPID = parseInt(
+					fs.readFileSync( actionPIDFile ).toString()
 				);
-				if ( InstanceState.ArkmanagerPID !== 0 ) {
+				if( instanceState.ArkmanagerPID !== 0 ) {
 					try {
-						const Result = await SSHManager.ExecCommand(
-							`ps -fp ${ InstanceState.ArkmanagerPID.toString() }`,
+						const result = await sshManager.execCommand(
+							`ps -fp ${ instanceState.ArkmanagerPID.toString() }`,
 							{ encoding: "utf-8" }
 						);
-						if ( Result.code === 1 ) {
-							InstanceState.ArkmanagerPID = 0;
+						if( result.code === 1 ) {
+							instanceState.ArkmanagerPID = 0;
 						}
-					}
-					catch ( e ) {
-						InstanceState.ArkmanagerPID = 0;
+					} catch( e ) {
+						instanceState.ArkmanagerPID = 0;
 					}
 				}
 			}
 
-			if ( IsInstalled ) {
-				InstanceState.State = EServerState.offline;
-				if ( fs.existsSync( VersionFile ) ) {
-					InstanceState.ServerVersion = fs
-						.readFileSync( VersionFile )
+			if( isInstalled ) {
+				instanceState.State = EServerState.offline;
+				if( fs.existsSync( versionFile ) ) {
+					instanceState.ServerVersion = fs
+						.readFileSync( versionFile )
 						.toString()
 						.replaceAll( " ", "" )
 						.trim();
 				}
 
-				if ( fs.existsSync( ArkServerPIDFile ) ) {
-					InstanceState.ArkserverPID = parseInt(
-						fs.readFileSync( ArkServerPIDFile ).toString()
+				if( fs.existsSync( arkServerPIDFile ) ) {
+					instanceState.ArkserverPID = parseInt(
+						fs.readFileSync( arkServerPIDFile ).toString()
 					);
-					if ( InstanceState.ArkserverPID !== 0 ) {
+					if( instanceState.ArkserverPID !== 0 ) {
 						try {
-							const Result = await SSHManager.ExecCommand(
-								`ps -fp ${ InstanceState.ArkserverPID.toString() }`,
+							const result = await sshManager.execCommand(
+								`ps -fp ${ instanceState.ArkserverPID.toString() }`,
 								{ encoding: "utf-8" }
 							);
-							if ( Result.code === 1 ) {
-								InstanceState.ArkserverPID = 0;
+							if( result.code === 1 ) {
+								instanceState.ArkserverPID = 0;
 							}
-						}
-						catch ( e ) {
-							InstanceState.ArkserverPID = 0;
+						} catch( e ) {
+							instanceState.ArkserverPID = 0;
 						}
 					}
 				}
 
-				if ( InstanceState.ArkserverPID !== 0 ) {
-					const QueryResult = await QueryArkServer(
-						ServerL
+				if( instanceState.ArkserverPID !== 0 ) {
+					const queryResult = await queryArkServer(
+						serverL
 					);
-					InstanceState.IsListen = QueryResult.Online;
-					InstanceState.State = QueryResult.Online
+					instanceState.IsListen = queryResult.Online;
+					instanceState.State = queryResult.Online
 						? EServerState.online
 						: EServerState.running;
-					InstanceState.Player = QueryResult.Players.length;
-					InstanceState.OnlinePlayerList = QueryResult.Players;
+					instanceState.Player = queryResult.Players.length;
+					instanceState.OnlinePlayerList = queryResult.Players;
 				}
 			}
 
-			if ( InstanceState.ArkmanagerPID !== 0 ) {
-				InstanceState.State = EServerState.actionInProgress;
+			if( instanceState.ArkmanagerPID !== 0 ) {
+				instanceState.State = EServerState.actionInProgress;
 			}
 
-			const Icon = `/img/maps/${ ServerL.GetConfig().serverMap }.jpg`;
-			const Background = `/img/backgrounds/${
-				ServerL.GetConfig().serverMap
+			const icon = `/img/maps/${ serverL.getConfig().serverMap }.jpg`;
+			const background = `/img/backgrounds/${
+				serverL.getConfig().serverMap
 			}.jpg`;
 
-			await ServerL.SeEServerState( InstanceState, {
-				LOGO: fs.existsSync( path.join( __basedir, "public", Icon ) )
-					? Icon
+			await serverL.setServerState( instanceState, {
+				LOGO: fs.existsSync( path.join( BASEDIR, "public", icon ) )
+					? icon
 					: `/img/maps/TheIsland.jpg`,
-				BG: fs.existsSync( path.join( __basedir, "public", Background ) )
-					? Background
+				BG: fs.existsSync( path.join( BASEDIR, "public", background ) )
+					? background
 					: `/img/maps/TheIsland.jpg`
 			} );
-			ServerL.EmitUpdate();
+			serverL.emitUpdate();
 		}
 	}
 );

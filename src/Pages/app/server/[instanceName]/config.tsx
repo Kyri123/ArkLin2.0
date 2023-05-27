@@ -1,31 +1,31 @@
 import {
-	useEffect,
-	useMemo,
-	useRef,
-	useState
-}                              from "react";
+    apiAuth,
+    apiHandleError,
+    successSwal
+} from "@app/Lib/tRPC";
+import { json } from "@codemirror/lang-json";
+import { IconButton } from "@comp/Elements/Buttons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useArkServerConfigs } from "@hooks/useArkServerConfigs";
 import {
-	Alert,
-	ButtonGroup,
-	Card
-}                              from "react-bootstrap";
-import type { SingleValue }    from "react-select";
-import Select                  from "react-select";
-import { IconButton }          from "@comp/Elements/Buttons";
-import { FontAwesomeIcon }     from "@fortawesome/react-fontawesome";
-import CodeMirror              from "@uiw/react-codemirror";
-import { json }                from "@codemirror/lang-json";
+    defaultSettingsGruvboxDark,
+    gruvboxDarkinit
+} from "@uiw/codemirror-theme-gruvbox-dark";
+import CodeMirror from "@uiw/react-codemirror";
 import {
-	defaultSettingsGruvboxDark,
-	gruvboxDarkInit
-}                              from "@uiw/codemirror-theme-gruvbox-dark";
-import { useParams }           from "react-router-dom";
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 import {
-	successSwal,
-	tRPC_Auth,
-	tRPC_handleError
-}                              from "@app/Lib/tRPC";
+    Alert,
+    ButtonGroup,
+    Card
+} from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import type { SingleValue } from "react-select";
+import Select from "react-select";
 
 
 const Component = () => {
@@ -42,22 +42,22 @@ const Component = () => {
 	const codeMirrorRef = useRef<string>( "" );
 
 	useEffect( () => {
-		if ( ConfigContent ) {
+		if( ConfigContent ) {
 			setContent( ConfigContent );
 			codeMirrorRef.current = ConfigContent;
 		}
 	}, [ ConfigContent ] );
 
 	useEffect( () => {
-		if ( Object.keys( ConfigFiles ).length > 0 ) {
+		if( Object.keys( ConfigFiles ).length > 0 ) {
 			RequestConfigContent( Object.values( ConfigFiles )[ 0 ] );
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ ConfigFiles ] );
 
-	const GetOptions = useMemo( () => {
-		const Return : { value : string; label : string }[] = [];
-		for ( const [ FilePath, File ] of Object.entries( ConfigFiles ) ) {
+	const getOptions = useMemo( () => {
+		const Return: { value: string, label: string }[] = [];
+		for( const [ FilePath, File ] of Object.entries( ConfigFiles ) ) {
 			Return.push( {
 				value: File,
 				label: FilePath
@@ -67,9 +67,9 @@ const Component = () => {
 	}, [ ConfigFiles ] );
 
 	const SetOption = (
-		NewValue : SingleValue<{ value : string; label : string }>
+		NewValue: SingleValue<{ value: string, label: string }>
 	) => {
-		if ( NewValue ) {
+		if( NewValue ) {
 			RequestConfigContent( NewValue.value );
 		}
 	};
@@ -77,79 +77,69 @@ const Component = () => {
 	const SaveConfig = async() => {
 		setIsSending( true );
 
-		await tRPC_Auth.server.config.updateConfigClearText.mutate( {
+		await apiAuth.server.config.updateConfigClearText.mutate( {
 			instanceName: instanceName!,
 			content: codeMirrorRef.current,
 			file: CurrentFile
-		} ).then( successSwal ).catch( tRPC_handleError );
+		} ).then( successSwal ).catch( apiHandleError );
 
 		setIsSending( false );
 	};
 
 	return (
 		<Card>
-			<Card.Header className={ "p-0" }>
+			<Card.Header className="p-0">
 				<div className="d-flex bd-highlight w-100">
 					<div className="p-0 flex-grow-1 bd-highlight">
 						<h3 className="card-title p-3">Server Konfiguration</h3>
 					</div>
 					<div className="p-2 flex-grow-1 bd-highlight">
-						<Select
-							className={ "w-100" }
-							options={ GetOptions }
+						<Select className="w-100"
+							options={ getOptions }
 							value={ {
 								value: CurrentFile || "",
 								label: CurrentFile.split( "/" ).pop() || ""
 							} }
 							onChange={ E => {
 								SetOption( E );
-							} }
-						/>
+							} } />
 					</div>
 				</div>
 			</Card.Header>
-			<Card.Header className={ "p-0" }>
-				<ButtonGroup className={ "w-100" }>
-					<IconButton
-						IsLoading={ IsSending }
-						className={ "flat" }
+			<Card.Header className="p-0">
+				<ButtonGroup className="w-100">
+					<IconButton IsLoading={ IsSending }
+						className="flat"
 						onClick={ SaveConfig }
-						variant={ "success" }
-					>
-						<FontAwesomeIcon icon={ "save" }/> Speichern{ " " }
+						variant="success">
+						<FontAwesomeIcon icon="save" /> Speichern{ " " }
 					</IconButton>
 				</ButtonGroup>
 				{ JsonError !== "" && (
-					<Alert
-						variant="danger"
+					<Alert variant="danger"
 						onClose={ () => setJsonError( "" ) }
 						dismissible
-						className={ "rounded-0 m-0" }
-					>
-						<FontAwesomeIcon
-							icon={ "exclamation-triangle" }
-							className={ "icon" }
-							size={ "xl" }
-						/>{ " " }
+						className="rounded-0 m-0">
+						<FontAwesomeIcon icon="exclamation-triangle"
+							className="icon"
+							size="xl" />{ " " }
 						Wurde nicht gespeichert. Error wurde erkannt...
-						<hr/> <b>{ JsonError }</b>
+						<hr /> <b>{ JsonError }</b>
 					</Alert>
 				) }
 			</Card.Header>
 			<>
-				<Card.Body className={ "text-light p-0" } style={ { height: 750 } }>
-					<CodeMirror
-						height={ "750px" }
-						theme={ gruvboxDarkInit( {
+				<Card.Body className="text-light p-0" style={ { height: 750 } }>
+					<CodeMirror height="750px"
+						theme={ gruvboxDarkinit( {
 							settings: {
 								...defaultSettingsGruvboxDark
 							}
 						} ) }
-						className={ "h-100" }
+						className="h-100"
 						value={ content }
 						extensions={ [ json() ] }
-						onChange={ ( value ) => codeMirrorRef.current = value }
-					/>
+						onChange={ value => codeMirrorRef.current = value } />
 				</Card.Body>
 			</>
 		</Card>

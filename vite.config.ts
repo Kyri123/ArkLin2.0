@@ -3,16 +3,17 @@ import type { Alias } from "vite";
 import {
 	defineConfig,
 	loadEnv
-}                     from "vite";
+} from "vite";
 // @ts-ignore
-import react          from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
 // @ts-ignore
-import eslint         from "vite-plugin-eslint";
-import fs             from "fs";
+import fs from "fs";
 import {
 	join,
 	resolve
-}                     from "path";
+} from "path";
+import eslint from "vite-plugin-eslint";
+
 
 const reactchunk = [ "react", "react-router-dom", "react-dom" ];
 const bootstrap = [ "react-bootstrap", "bootstrap", "icheck-bootstrap" ];
@@ -23,12 +24,12 @@ const codemirror = [ "@uiw/react-codemirror" ];
 const codemirroraddons = [ "@uiw/codemirror-theme-gruvbox-dark", "@codemirror/lang-json" ];
 
 export default defineConfig( ( { mode } ) => {
-	const Paths : Record<string, string[]> = JSON.parse( fs.readFileSync( resolve( __dirname, "tsconfig.json" ), "utf-8" ).toString() ).compilerOptions.paths;
-	const alias = Object.entries( Paths ).map<Alias>( ( [ key, value ] ) => ( {
+	const paths: Record<string, string[]> = JSON.parse( fs.readFileSync( resolve( __dirname, "tsconfig.json" ), "utf-8" ).toString() ).compilerOptions.paths;
+	const alias = Object.entries( paths ).map<Alias>( ( [ key, value ] ) => ( {
 		find: key.replace( "/*", "" ),
 		replacement: join( __dirname, value[ 0 ].replace( "/*", "" ) )
 	} ) );
-	console.log( "Resolve Alias:", alias );
+	//console.log( "Resolve Alias:", alias );
 	const env = loadEnv( mode, process.cwd(), "" );
 	return {
 		define: {

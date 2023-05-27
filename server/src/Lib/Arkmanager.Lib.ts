@@ -1,98 +1,89 @@
-import path                  from "path";
-import fs                    from "fs";
-import { MakeRandomString }  from "@kyri123/k-javascript-utils";
-import { ToRealDir }         from "./PathBuilder.Lib";
 import type { InstanceData } from "@app/Types/ArkSE";
+import { MakeRandomString } from "@kyri123/k-javascript-utils";
+import fs from "fs";
+import path from "path";
+import { toRealDir } from "./pathBuilder.Lib";
 
-export function ConfigToJSON( Content : string ) : Partial<InstanceData> {
-	const InstanceData : Partial<InstanceData> = {
+
+export function configToJSON( Content: string ): Partial<InstanceData> {
+	const instanceData: Partial<InstanceData> = {
 		Flags: {},
 		Options: {}
 	};
 
-	const ClearInstance : string[] = Content.split( "\n" );
-	for ( let Line = 0; Line < ClearInstance.length; ++Line ) {
-		const [ DataKey, RawDataValue ] = ClearInstance[ Line ].split( "#" )[ 0 ]
+	const clearInstance: string[] = Content.split( "\n" );
+	for( let line = 0; line < clearInstance.length; ++line ) {
+		const [ dataKey, rawDataValue ] = clearInstance[ line ].split( "#" )[ 0 ]
 			.trim()
 			.split( "=", 2 ) as any[];
-		if ( DataKey.trim().slice( 0, 1 ) === "#" || !DataKey || !RawDataValue ) {
+		if( dataKey.trim().slice( 0, 1 ) === "#" || !dataKey || !rawDataValue ) {
 			continue;
 		}
 
-		let DataValue = RawDataValue.replaceAll( "'", "" );
+		let dataValue = rawDataValue.replaceAll( "'", "" );
 
-		if ( DataKey === "ark_GameModIds" ) {
-			DataValue = DataValue.split( "," )
-				.map( ( E ) => parseInt( E ) )
-				.filter( ( e ) => !isNaN( e ) );
-			DataValue = [ ...new Set( DataValue ) ];
-		}
-		else if ( DataKey.slice( 0, 7 ) === "arkopt_" && InstanceData.Options ) {
-			const key = DataKey.replace( "arkopt_", "" );
-			InstanceData.Options[ key ] = DataValue;
+		if( dataKey === "ark_GameModIds" ) {
+			dataValue = dataValue.split( "," )
+				.map( E => parseInt( E ) )
+				.filter( e => !isNaN( e ) );
+			dataValue = [ ...new Set( dataValue ) ];
+		} else if( dataKey.slice( 0, 7 ) === "arkopt_" && instanceData.Options ) {
+			const key = dataKey.replace( "arkopt_", "" );
+			instanceData.Options[ key ] = dataValue;
 			continue;
-		}
-		else if ( DataKey.slice( 0, 8 ) === "arkflag_" && InstanceData.Flags ) {
-			const key = DataKey.replace( "arkflag_", "" );
-			InstanceData.Flags[ key ] = DataValue;
+		} else if( dataKey.slice( 0, 8 ) === "arkflag_" && instanceData.Flags ) {
+			const key = dataKey.replace( "arkflag_", "" );
+			instanceData.Flags[ key ] = dataValue;
 			continue;
-		}
-		else if ( DataValue.trim() === "" ) {
+		} else if( dataValue.trim() === "" ) {
 			// SKIP!
-		}
-		else if ( !isNaN( Number( DataValue ) ) ) {
-			DataValue = Number( DataValue );
-		}
-		else if ( DataValue === "True" ) {
-			DataValue = true;
-		}
-		else if ( DataValue === "False" ) {
-			DataValue = false;
+		} else if( !isNaN( Number( dataValue ) ) ) {
+			dataValue = Number( dataValue );
+		} else if( dataValue === "True" ) {
+			dataValue = true;
+		} else if( dataValue === "False" ) {
+			dataValue = false;
 		}
 
-		InstanceData[ DataKey ] = DataValue;
+		instanceData[ dataKey ] = dataValue;
 	}
 
-	return InstanceData;
+	return instanceData;
 }
 
-export function JSONtoConfig( Content : Partial<InstanceData> ) : string {
-	const Lines : string[] = [];
+export function jsonToConfig( Content: Partial<InstanceData> ): string {
+	const lines: string[] = [];
 
-	if ( !Content.Options ) {
+	if( !Content.Options ) {
 		Content.Options = {};
 	}
 	Content.Options.culture = "en";
 
-	for ( const [ Key, Value ] of Object.entries( Content ) ) {
-		if ( Value === "" ) {
-			Lines.push( `${ Key }='${ Value }'` );
-		}
-		else if ( Key === "Flags" || Key === "Options" ) {
-			for ( const [ ExtraKey, ExtraValue ] of Object.entries( Value ) ) {
-				Lines.push(
+	for( const [ key, value ] of Object.entries( Content ) ) {
+		if( value === "" ) {
+			lines.push( `${ key }='${ value }'` );
+		} else if( key === "Flags" || key === "Options" ) {
+			for( const [ extraKey, extraValue ] of Object.entries( value ) ) {
+				lines.push(
 					`${
-						Key === "Flags" ? "arkflag_" : "arkopt_"
-					}${ ExtraKey }='${ ExtraValue }'`
+						key === "Flags" ? "arkflag_" : "arkopt_"
+					}${ extraKey }='${ extraValue }'`
 				);
 			}
-		}
-		else if ( Array.isArray( Value ) ) {
-			Lines.push( `${ Key }='${ ( Value as number[] ).join( "," ) }'` );
-		}
-		else if ( typeof Value === "boolean" ) {
-			Lines.push( `${ Key }='${ Value ? "True" : "False" }'` );
-		}
-		else {
-			Lines.push( `${ Key }='${ Value }'` );
+		} else if( Array.isArray( value ) ) {
+			lines.push( `${ key }='${ ( value as number[] ).join( "," ) }'` );
+		} else if( typeof value === "boolean" ) {
+			lines.push( `${ key }='${ value ? "True" : "False" }'` );
+		} else {
+			lines.push( `${ key }='${ value }'` );
 		}
 	}
 
-	return Lines.join( "\n" );
+	return lines.join( "\n" );
 }
 
-export function GetDefaultInstanceData( Servername : string ) : InstanceData {
-	const Content = {
+export function getDefaultInstanceData( Servername: string ): InstanceData {
+	return {
 		arkMaxBackupSizeMB: 4096,
 		arkNoPortDecrement: true,
 		arkStartDelay: 0,
@@ -138,42 +129,42 @@ export function GetDefaultInstanceData( Servername : string ) : InstanceData {
 		ark_SessionName: "[ARKLIN2] ArkServer",
 		ark_TotalConversionMod: "",
 		arkbackupcompress: true,
-		arkbackupdir: ToRealDir( path.join( __server_backups, Servername ) ),
-		arkserverroot: ToRealDir( path.join( __server_dir, Servername ) ),
-		logdir: ToRealDir( path.join( __server_logs, Servername ) ),
-		arkStagingDir: ToRealDir( path.join( __server_backups, "Staging" ) ),
+		arkbackupdir: toRealDir( path.join( SERVERBACKUPDIR, Servername ) ),
+		arkserverroot: toRealDir( path.join( SERVERDIR, Servername ) ),
+		logdir: toRealDir( path.join( SERVERLOGSDIR, Servername ) ),
+		arkStagingDir: toRealDir( path.join( SERVERBACKUPDIR, "Staging" ) ),
 		arkserverexec: "ShooterGame/Binaries/Linux/ShooterGameServer",
 		arkwarnminutes: 0,
 		serverMap: "TheIsland",
 		serverMapModId: "",
-		panel_publicip: __PublicIP
+		panel_publicip: SERVERIP
 	};
-
-	return Content;
 }
 
-export function FillWithDefaultValues(
-	Servername : string,
-	Content : Partial<InstanceData>
-) : InstanceData {
-	if ( global.__PublicIP ) {
-		Content.panel_publicip = __PublicIP;
+export function fillWithDefaultValues(
+	Servername: string,
+	Content: Partial<InstanceData>
+): InstanceData {
+	if( global.SERVERIP ) {
+		Content.panel_publicip = SERVERIP;
 	}
 
 	try {
-		fs.mkdirSync( path.join( __server_dir, Servername ), { recursive: true } );
-		fs.mkdirSync( path.join( __server_backups, Servername ), { recursive: true } );
-		fs.mkdirSync( path.join( __server_logs, Servername ), { recursive: true } );
-	}
-	catch ( e ) {
+		fs.mkdirSync( path.join( SERVERDIR, Servername ), { recursive: true } );
+		fs.mkdirSync( path.join( SERVERBACKUPDIR, Servername ), { recursive: true } );
+		fs.mkdirSync( path.join( SERVERLOGSDIR, Servername ), { recursive: true } );
+	} catch( e ) {
+		if( e instanceof Error ) {
+			SystemLib.debugLog( "Fill Dir Error", e.message );
+		}
 	}
 
 	return {
-		...GetDefaultInstanceData( Servername ),
+		...getDefaultInstanceData( Servername ),
 		...Content,
-		arkbackupdir: ToRealDir( path.join( __server_backups, Servername ) ),
-		arkserverroot: ToRealDir( path.join( __server_dir, Servername ) ),
-		logdir: ToRealDir( path.join( __server_logs, Servername ) ),
-		arkStagingDir: ToRealDir( path.join( __server_backups, "Staging" ) )
+		arkbackupdir: toRealDir( path.join( SERVERBACKUPDIR, Servername ) ),
+		arkserverroot: toRealDir( path.join( SERVERDIR, Servername ) ),
+		logdir: toRealDir( path.join( SERVERLOGSDIR, Servername ) ),
+		arkStagingDir: toRealDir( path.join( SERVERBACKUPDIR, "Staging" ) )
 	};
 }
