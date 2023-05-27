@@ -101,7 +101,7 @@ export function createHttpServer() {
 		next();
 	} );
 
-	installRoutings( path.join( __dirname, "Routings" ), Api );
+	installRoutings( path.join( __dirname, "..", "Routings" ), Api );
 }
 
 export function installErrorHandler() {
