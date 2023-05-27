@@ -83,7 +83,6 @@ const instanceSchema = new mongoose.Schema( {
 	cluster: { type: [ mongoose.Schema.Types.ObjectId ], ref: 'kadmin_cluster', required: false }
 } );
 
-
 export interface InstanceInterface extends z.infer<typeof zodInstanceSchema> {
 	ArkmanagerCfg: InstanceData & Record<string, any>
 }

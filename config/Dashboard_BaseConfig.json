@@ -4,6 +4,7 @@
   "PANEL_UseCommitAsUpdateIndicator": false,
   "PANEL_GithubToken": "",
   "PANEL_ArkServerIp": "",
+  "PANEL_ArkServerIpFallback": "127.0.0.1",
   "LOG_MaxLogCount": 25,
   "SSH_Host": "localhost",
   "SSH_User": "steam",

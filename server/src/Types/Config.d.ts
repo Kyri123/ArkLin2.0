@@ -18,6 +18,7 @@ export interface DashboardBaseConfig {
 	PANEL_UseCommitAsUpdateIndicator: boolean,
 	PANEL_GithubToken: string,
 	PANEL_ArkServerIp: string,
+	PANEL_ArkServerIpFallback: string,
 	LOG_MaxLogCount: number,
 	SSH_Host: string,
 	SSH_User: string,

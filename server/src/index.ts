@@ -1,3 +1,5 @@
+import "./initDirs";
+
 import { BC } from "@/server/src/Lib/system.Lib";
 import { createHttpServer, installErrorHandler } from "@/server/src/trpc/middleware";
 import "@kyri123/k-javascript-utils/lib/useAddons";
@@ -19,7 +21,7 @@ import { default as AccountKey, default as MongoAccountKey } from "./MongoDB/Mon
 import MongoAccounts from "./MongoDB/MongoAccounts";
 import taskManager from "./Tasks/taskManager";
 import { runTest } from "./Testing";
-import "./initDirs";
+
 
 
 // Small fix if the cert fails!
@@ -61,9 +63,14 @@ mongoose
 		if( configManager.getDashboardConfig.PANEL_ArkServerIp.clearWs() !== "" ) {
 			global.SERVERIP = configManager.getDashboardConfig.PANEL_ArkServerIp.clearWs();
 		} else {
-			const ipResponse = await fetch( "http://api.ipify.org" );
-			global.SERVERIP = ( await ipResponse.text() ).clearWs();
-			SystemLib.log( "ip", "Public IP: " + global.SERVERIP );
+			const ipResponse = await fetch( "http://api.ipify.org" ).catch( () => null );
+			if(  ipResponse ) {
+				global.SERVERIP = ( await ipResponse.text() ).clearWs();
+				SystemLib.log( "ip", global.SERVERIP );
+			} else {
+				SystemLib.log( "ip", "Fallback to config: " + global.SERVERIP );
+				global.SERVERIP = configManager.getDashboardConfig.PANEL_ArkServerIpFallback.clearWs();
+			}
 		}
 
 		await import( "@server/trpc/server" );

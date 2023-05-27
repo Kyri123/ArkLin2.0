@@ -1,7 +1,7 @@
 import path from "path";
 
 
-global.BASEDIR = path.join( __dirname, "./../.." );
+global.BASEDIR = path.join( process.cwd() );
 global.LOGDIR = path.join( BASEDIR, "/mount/PanelLogs/" );
 global.LOGFILE = path.join(
 	LOGDIR,

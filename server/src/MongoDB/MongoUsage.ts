@@ -30,7 +30,6 @@ const usageSchema = new mongoose.Schema( {
 	LogFiles: { type: [ String ], required: true }
 } );
 
-
 export type SystemUsage = z.infer<typeof zodUsageSchema>;
 export default mongoose.model<SystemUsage>( "usage", usageSchema );
 export {
