@@ -7,14 +7,6 @@ module.exports = {
 	darkMode: 'class',
 	important: true,
 	mode: 'jit',
-	colors: {
-		'orange': {
-			500: '#fa9549'
-		},
-		'blue': {
-			500: '#5f668c'
-		}
-	},
 	content: [
 		'./index.html',
 		'./src/**/*.{js,jsx,ts,tsx}'
