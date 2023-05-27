@@ -1,3 +1,4 @@
+import { EServerState } from "@/src/Shared/Enum/EServerState";
 import {
 	apiAuth,
 	apiHandleError,
@@ -25,22 +26,24 @@ import SmartInput from "./Elements/SmartInput";
 
 
 const options = [
-	{ value: EArkmanagerCommands.install, label: "Installieren" },
-	{ value: EArkmanagerCommands.start, label: "Server Starten" },
-	{ value: EArkmanagerCommands.update, label: "Updaten" },
-	{ value: EArkmanagerCommands.restart, label: "Neustarten" },
-	{ value: EArkmanagerCommands.backup, label: "Backup Erstellen" },
+	{ value: EArkmanagerCommands.install, disabled: false, label: "Installieren" },
+	{ value: EArkmanagerCommands.start, disabled: false, label: "Server Starten" },
+	{ value: EArkmanagerCommands.boradcast, disabled: true, label: "Broadcast" },
+	{ value: EArkmanagerCommands.update, disabled: undefined, label: "Updaten" },
+	{ value: EArkmanagerCommands.restart, disabled: true, label: "Neustarten" },
+	{ value: EArkmanagerCommands.backup, disabled: undefined, label: "Backup Erstellen" },
 	{
 		value: EArkmanagerCommands.cancelshutdown,
+		disabled: true,
 		label: "Runterfahren abbrechen"
 	},
-	{ value: EArkmanagerCommands.checkmodupdate, label: "Prüfen auf Mod Update" },
-	{ value: EArkmanagerCommands.listMods, label: "Mods Auflisten" },
-	{ value: EArkmanagerCommands.saveworld, label: "Welt Speichern" },
-	{ value: EArkmanagerCommands.status, label: "Status" },
-	{ value: EArkmanagerCommands.stop, label: "Stoppen" },
-	{ value: EArkmanagerCommands.installmods, label: "Mods Installieren" },
-	{ value: EArkmanagerCommands.uninstallmods, label: "Mods Deinstallieren" }
+	{ value: EArkmanagerCommands.checkmodupdate, disabled: undefined, label: "Prüfen auf Mod Update" },
+	{ value: EArkmanagerCommands.listMods, disabled: undefined, label: "Mods Auflisten" },
+	{ value: EArkmanagerCommands.saveworld, disabled: true, label: "Welt Speichern" },
+	{ value: EArkmanagerCommands.status, disabled: undefined, label: "Status" },
+	{ value: EArkmanagerCommands.stop, disabled: undefined, label: "Stoppen" },
+	{ value: EArkmanagerCommands.installmods, disabled: undefined, label: "Mods Installieren" },
+	{ value: EArkmanagerCommands.uninstallmods, disabled: undefined, label: "Mods Deinstallieren" }
 ];
 
 interface ServerActionProps {
@@ -96,6 +99,10 @@ const ServerAction: FC<ServerActionProps> = ( { instanceName, onClose, Show } ) 
 				<Select defaultValue={ selected }
 					onChange={ setSelected }
 					options={ options }
+					isOptionDisabled={ option => {
+						console.log( option );
+						return !( option.disabled === undefined || option.disabled === ( state.State === EServerState.online ) );
+					} }
 					isClearable={ true } />
 				{ parameterMask.para.length > 0 && selected !== null && (
 					<>
