@@ -402,6 +402,20 @@ export class ServerLib {
 			"Arkmanager.cfg": "Arkmanager.cfg"
 		};
 
+		Logs[ "PlayersExclusiveJoinList.txt" ] = path.join(
+			__server_dir,
+			this.Instance,
+			"ShooterGame/Binaries/Linux/",
+			"PlayersExclusiveJoinList.txt"
+		);
+
+		Logs[ "AllowedCheaterSteamIDs.txt" ] = path.join(
+			__server_dir,
+			this.Instance,
+			"ShooterGame/Saved/",
+			"AllowedCheaterSteamIDs.txt"
+		);
+
 		const panelDirPath = path.join(
 			SERVERDIR,
 			this.instanceId,
@@ -451,22 +465,44 @@ export class ServerLib {
 		return "";
 	}
 
-	setServerConfigRaw(
-		File: string | "arkmanager.cfg",
-		Content: string
-	): boolean {
-		// make sure we have only a filename not a path!
-		File = File.split( "/" ).at( -1 )!;
+	SetServerConfigRaw(
+		File : string,
+		Content : string
+	) : boolean {
 		try {
-			if( File.toLowerCase().trim() === "arkmanager.cfg" ) {
+			File = path.basename(File);
+			if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
 				throw new Error( "File not found" );
 			}
-			if( File.toLowerCase().trim() !== "arkmanager.cfg" ) {
 
+			if ( File.toLowerCase().trim() !== "arkmanager.cfg" && File.toLowerCase().trim() !== "playersexclusivejoinlist.txt" && File.toLowerCase().trim() !== "allowedcheatersteamids.txt" ) {
 				const configFile = path.join(
 					SERVERDIR,
 					this.instanceId,
-					"ShooterGame/Saved/Config/LinuxServer",
+					"ShooterGame/Saved/Config/LinuxServer/",
+					File
+				);
+				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
+				fs.writeFileSync( configFile, Content );
+				return true;
+			}
+			else if ( File.toLowerCase().trim() === "playersexclusivejoinlist.txt" ) {
+				const configFile = path.join(
+					SERVERDIR,
+					this.instanceId,
+					"ShooterGame/Binaries/Linux/",
+					File
+				);
+
+				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
+				fs.writeFileSync( configFile, Content );
+				return true;
+			}
+			else if ( File.toLowerCase().trim() === "allowedcheatersteamids.txt" ) {
+				const configFile = path.join(
+					SERVERDIR,
+					this.instanceId,
+					"ShooterGame/Saved/",
 					File
 				);
 
