@@ -123,7 +123,7 @@ export class ConfigManagerClass {
 				configPath,
 				fs.readFileSync( fallbackConfigPath ).toString()
 			);
-			SystemLib.log( "config", "Config recreated:", BC( "Red" ), File );
+			SystemLib.log( "CONFIG", "Config recreated:", BC( "Red" ), File );
 		}
 
 		if( !NotAJson ) {

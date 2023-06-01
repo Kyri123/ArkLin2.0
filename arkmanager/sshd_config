@@ -1,0 +1,9 @@
+ChallengeResponseAuthentication no
+UsePAM yes
+PermitRootLogin yes
+PrintMotd no
+X11Forwarding no
+AllowTcpForwarding no
+AllowAgentForwarding no
+PermitTunnel no
+Subsystem sftp /usr/lib/openssh/sftp-server

@@ -100,7 +100,6 @@ const ServerAction: FC<ServerActionProps> = ( { instanceName, onClose, Show } ) 
 					onChange={ setSelected }
 					options={ options }
 					isOptionDisabled={ option => {
-						console.log( option );
 						return !( option.disabled === undefined || option.disabled === ( state.State === EServerState.online ) );
 					} }
 					isClearable={ true } />

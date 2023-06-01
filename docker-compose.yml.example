@@ -1,17 +1,14 @@
 version: "3.9"
 
-# ----------------------------------------
-# Version: 0.1
-# if you want to edit that move to a other location otherwise with a git pull will that overwritten!
-# ----------------------------------------
-
 services:
   kadmin-arklin2:
-    user: "${DOCKER_UID}:${DOCKER_GID}"
+    container_name: arklin2-panel
+    #user: "${DOCKER_UID}:${DOCKER_GID}"
     depends_on:
       - mongodb
+      - arkmanager
     build: "./"
-    restart: always
+    #restart: always
     environment:
       - APPEND_BASEDIR=/home/steam/KAdmin/
       - API_EXPRESS_HTTP_PORT=28080
@@ -21,6 +18,8 @@ services:
       - MONGODB_USER=kadmin
       - MONGODB_PASSWD=arklin2
       - MONGODB_DATABASE=arklin2
+      - ARKMANAGER_HOST=arkmanager
+    hostname: arklin2-arklin2
     ports:
       - target: 28100
         published: 28100
@@ -32,29 +31,66 @@ services:
         mode: host
       - "28080:28080"
     volumes:
-      # config for the cashboard if you want to edit that copy to a other path and mount it to here.
       - ../mount/PanelLogs/:/mount/PanelLogs/
       - ./.git:/mount/Git/
-      - /etc/arkmanager/:/mount/Arkmanager/
+      - ../mount/arkmanager/:/mount/Arkmanager/
       - ../mount/Server/:/mount/Server/
       - ../mount/Logs/:/mount/Logs/
       - ../mount/Backups/:/mount/Backups/
       - ../mount/config/:/mount/config/
-      - /home/steam/Steam/:/mount/steamCMD/
+      - ../mount/steamcmd/:/mount/steamCMD/
     networks:
-      - arklin2
+      - arklin2_network
 
   mongodb:
-    # user: "${DOCKER_UID}:${DOCKER_GID}"
+    container_name: arklin2-mongodb
+    #user: "${DOCKER_UID}:${DOCKER_GID}"
     image: mongo
     volumes:
       - '../mount/mongodb:/data/db'
     environment:
-      MONGO_INITMongoDATABASE: arklin2
-      MONGO_INITMongoROOT_USERNAME: kadmin
-      MONGO_INITMongoROOT_PASSWORD: arklin2
+      MONGO_INITDB_DATABASE: arklin2
+      MONGO_INITDB_ROOT_USERNAME: kadmin
+      MONGO_INITDB_ROOT_PASSWORD: arklin2
+    hostname: arklin2-mongodb
     networks:
-      - arklin2
+      - arklin2_network
+
+  arkmanager:
+    container_name: arklin2-arkmanager
+    #user: "${DOCKER_UID}:${DOCKER_GID}"
+    build:
+      context: ./arkmanager
+      args:
+        SSH_ROOT_USER: root
+        SSH_ROOT_PASS: arklin2
+        SSH_STEAM_USER: steam
+        SSH_STEAM_PASS: arklin2
+    hostname: arklin2-arkmanager
+    volumes:
+      - ../mount/arkmanager/:/etc/arkmanager/
+      - ../mount/Server/:/mount/Server/
+      - ../mount/Logs/:/mount/Logs/
+      - ../mount/Backups/:/mount/Backups/
+      - ../mount/steamcmd/:/mount/steamCMD/
+    ports:
+      # SSH port temporary for testing purposes. TODO: allow ssh on docker network arklin2 only later
+      #- "2222:22"
+      # Ports must be set to range for multiple gameservers (maybe automated, when creating new server in arklin2)
+      # Port for connections from ARK game client
+      - "7777:7777/udp"
+      # Raw UDP socket port (always Game client port +1)
+      - "7778:7778/udp"
+      # RCON management port
+      - "27020:27020/tcp"
+      # Steam's server-list port
+      - "27015:27015/udp"
+    # temporary fix steamcmd can not resolve download servers
+    extra_hosts:
+      - "media.steampowered.com:23.10.249.160"
+      - "client-download.steampowered.com:23.10.249.160"
+    networks:
+      - arklin2_network
 
 networks:
-  arklin2:
+  arklin2_network:

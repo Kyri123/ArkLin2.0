@@ -6,9 +6,9 @@
   "PANEL_ArkServerIp": "",
   "PANEL_ArkServerIpFallback": "127.0.0.1",
   "LOG_MaxLogCount": 25,
-  "SSH_Host": "localhost",
+  "SSH_Host": "arklin2-arkmanager",
   "SSH_User": "steam",
-  "SSH_Password": "RandomSteamPassword",
+  "SSH_Password": "arklin2",
   "Shell_ArkmanagerCommand": "arkmanager",
   "Shell_SteamCMDCommand": "steamcmd",
   "SteamApi_Key": ""
