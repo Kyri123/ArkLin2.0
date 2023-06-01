@@ -123,7 +123,7 @@ const ServerAdminCard: FC<ServerAdminCardProps> = ( { instanceName } ) => {
 					</div>
 					<div className="rounded-0 widget-user-header text-white"
 						style={ {
-							background: "url('/img/backgrounds/sc.jpg') center center"
+							background: `url('${ Server.ServerMap.BG }') center center`
 						} }>
 						<div style={ { zIndex: 1000, height: 150 } }
 							className="position-relative">
