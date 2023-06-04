@@ -72,8 +72,13 @@ export class ServerLib {
 	private mongoDocument: HydratedDocument<Instance> | null = null;
 	private cluster: HydratedDocument<Cluster> | null = null;
 
+	private whileListFile = "";
+	private adminFile = "";
+
 	private constructor( ServerInstance: string ) {
 		this.instanceId = ServerInstance;
+		this.whileListFile = path.join( SERVERDIR, ServerInstance, "ShooterGame/Binaries/Linux/", "PlayersExclusiveJoinList.txt" );
+		this.adminFile = path.join( SERVERDIR, ServerInstance, "ShooterGame/Saved/", "AllowedCheaterSteamIDs.txt" );
 		this.instanceConfigFile = path.join(
 			SERVERARKMANAGER,
 			"instances",
@@ -399,22 +404,10 @@ export class ServerLib {
 
 	getConfigFiles(): Record<string, string> {
 		const logs: Record<string, string> = {
-			"Arkmanager.cfg": "Arkmanager.cfg"
+			"Arkmanager.cfg": "Arkmanager.cfg",
+			"PlayersExclusiveJoinList.txt": this.whileListFile,
+			"AllowedCheaterSteamIDs.txt": this.adminFile
 		};
-
-		Logs[ "PlayersExclusiveJoinList.txt" ] = path.join(
-			__server_dir,
-			this.Instance,
-			"ShooterGame/Binaries/Linux/",
-			"PlayersExclusiveJoinList.txt"
-		);
-
-		Logs[ "AllowedCheaterSteamIDs.txt" ] = path.join(
-			__server_dir,
-			this.Instance,
-			"ShooterGame/Saved/",
-			"AllowedCheaterSteamIDs.txt"
-		);
 
 		const panelDirPath = path.join(
 			SERVERDIR,
@@ -465,17 +458,17 @@ export class ServerLib {
 		return "";
 	}
 
-	SetServerConfigRaw(
-		File : string,
-		Content : string
-	) : boolean {
+	setServerConfigRaw(
+		File: string,
+		Content: string
+	): boolean {
 		try {
-			File = path.basename(File);
-			if ( File.toLowerCase().trim() === "arkmanager.cfg" ) {
+			File = path.basename( File );
+			if( File.toLowerCase().trim() === "arkmanager.cfg" ) {
 				throw new Error( "File not found" );
 			}
 
-			if ( File.toLowerCase().trim() !== "arkmanager.cfg" && File.toLowerCase().trim() !== "playersexclusivejoinlist.txt" && File.toLowerCase().trim() !== "allowedcheatersteamids.txt" ) {
+			if( ![ "arkmanager.cfg", "playersexclusivejoinlist.txt", "allowedcheatersteamids.txt" ].includes( File.toLowerCase().trim() ) ) {
 				const configFile = path.join(
 					SERVERDIR,
 					this.instanceId,
@@ -485,31 +478,14 @@ export class ServerLib {
 				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
 				fs.writeFileSync( configFile, Content );
 				return true;
-			}
-			else if ( File.toLowerCase().trim() === "playersexclusivejoinlist.txt" ) {
-				const configFile = path.join(
-					SERVERDIR,
-					this.instanceId,
-					"ShooterGame/Binaries/Linux/",
-					File
-				);
-
-				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
-				fs.writeFileSync( configFile, Content );
+			} else if( File.toLowerCase().trim() === "playersexclusivejoinlist.txt" ) {
+				SystemLib.debugLog( "Filewrite", "Saved Config:", this.whileListFile );
+				fs.writeFileSync( this.whileListFile, Content );
 				return true;
-			}
-			else if ( File.toLowerCase().trim() === "allowedcheatersteamids.txt" ) {
-				const configFile = path.join(
-					SERVERDIR,
-					this.instanceId,
-					"ShooterGame/Saved/",
-					File
-				);
-
-				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
-				fs.writeFileSync( configFile, Content );
+			} else if( File.toLowerCase().trim() === "allowedcheatersteamids.txt" ) {
+				SystemLib.debugLog( "Filewrite", "Saved Config:", this.adminFile );
+				fs.writeFileSync( this.adminFile, Content );
 				return true;
-			} else {
 			}
 		} catch( e ) {
 			try {
@@ -517,6 +493,9 @@ export class ServerLib {
 				fs.writeFileSync( this.instanceConfigFile, Content );
 				return true;
 			} catch( e ) {
+				if( e instanceof Error ) {
+					SystemLib.logError( "Serverlib", e.message );
+				}
 			}
 		}
 

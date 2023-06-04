@@ -1,11 +1,14 @@
 {
 	"typescript.preferences.importModuleSpecifier": "non-relative",
 	"files.autoSave": "onFocusChange",
+	"files.eol": "\r\n",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
 		"source.fixAll": true,
 		"editor.formatOnSave": true
-	}, 
-	"eslint.validate": ["typescript"],
+	},
+	"eslint.validate": [
+		"typescript"
+	],
 	"typescript.tsdk": "node_modules\\typescript\\lib"
 }

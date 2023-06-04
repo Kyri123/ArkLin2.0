@@ -90,19 +90,18 @@ const ServerAction: FC<ServerActionProps> = ( { instanceName, onClose, Show } ) 
 
 	return (
 		<Modal onShow={ onShow }
-		       onHide={ onClose }
-		       show={ Show && state.ArkmanagerPID === 0 }
-		       centered
-		       size="lg">
+			onHide={ onClose }
+			show={ Show && state.ArkmanagerPID === 0 }
+			centered
+			size="lg">
 			<Modal.Header closeButton>Server Aktion</Modal.Header>
 			<Modal.Body>
 				<Select defaultValue={ selected }
 					onChange={ setSelected }
 					options={ options }
-					isOptionDisabled={ option => {
-						console.log( option );
-						return !( option.disabled === undefined || option.disabled === ( state.State === EServerState.online ) );
-					} }
+					isOptionDisabled={ option =>
+						//console.log( option );
+						!( option.disabled === undefined || option.disabled === ( state.State === EServerState.online ) ) }
 					isClearable={ true } />
 				{ parameterMask.para.length > 0 && selected !== null && (
 					<>
