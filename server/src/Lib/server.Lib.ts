@@ -72,8 +72,13 @@ export class ServerLib {
 	private mongoDocument: HydratedDocument<Instance> | null = null;
 	private cluster: HydratedDocument<Cluster> | null = null;
 
+	private whileListFile = "";
+	private adminFile = "";
+
 	private constructor( ServerInstance: string ) {
 		this.instanceId = ServerInstance;
+		this.whileListFile = path.join( SERVERDIR, ServerInstance, "ShooterGame/Binaries/Linux/", "PlayersExclusiveJoinList.txt" );
+		this.adminFile = path.join( SERVERDIR, ServerInstance, "ShooterGame/Saved/", "AllowedCheaterSteamIDs.txt" );
 		this.instanceConfigFile = path.join(
 			SERVERARKMANAGER,
 			"instances",
@@ -399,7 +404,9 @@ export class ServerLib {
 
 	getConfigFiles(): Record<string, string> {
 		const logs: Record<string, string> = {
-			"Arkmanager.cfg": "Arkmanager.cfg"
+			"Arkmanager.cfg": "Arkmanager.cfg",
+			"PlayersExclusiveJoinList.txt": this.whileListFile,
+			"AllowedCheaterSteamIDs.txt": this.adminFile
 		};
 
 		const panelDirPath = path.join(
@@ -452,28 +459,33 @@ export class ServerLib {
 	}
 
 	setServerConfigRaw(
-		File: string | "arkmanager.cfg",
+		File: string,
 		Content: string
 	): boolean {
-		// make sure we have only a filename not a path!
-		File = File.split( "/" ).at( -1 )!;
 		try {
+			File = path.basename( File );
 			if( File.toLowerCase().trim() === "arkmanager.cfg" ) {
 				throw new Error( "File not found" );
 			}
-			if( File.toLowerCase().trim() !== "arkmanager.cfg" ) {
 
+			if( ![ "arkmanager.cfg", "playersexclusivejoinlist.txt", "allowedcheatersteamids.txt" ].includes( File.toLowerCase().trim() ) ) {
 				const configFile = path.join(
 					SERVERDIR,
 					this.instanceId,
-					"ShooterGame/Saved/Config/LinuxServer",
+					"ShooterGame/Saved/Config/LinuxServer/",
 					File
 				);
-
 				SystemLib.debugLog( "Filewrite", "Saved Config:", configFile );
 				fs.writeFileSync( configFile, Content );
 				return true;
-			} else {
+			} else if( File.toLowerCase().trim() === "playersexclusivejoinlist.txt" ) {
+				SystemLib.debugLog( "Filewrite", "Saved Config:", this.whileListFile );
+				fs.writeFileSync( this.whileListFile, Content );
+				return true;
+			} else if( File.toLowerCase().trim() === "allowedcheatersteamids.txt" ) {
+				SystemLib.debugLog( "Filewrite", "Saved Config:", this.adminFile );
+				fs.writeFileSync( this.adminFile, Content );
+				return true;
 			}
 		} catch( e ) {
 			try {
@@ -481,6 +493,9 @@ export class ServerLib {
 				fs.writeFileSync( this.instanceConfigFile, Content );
 				return true;
 			} catch( e ) {
+				if( e instanceof Error ) {
+					SystemLib.logError( "Serverlib", e.message );
+				}
 			}
 		}
 

@@ -65,8 +65,7 @@ export function jsonToConfig( Content: Partial<InstanceData> ): string {
 		} else if( key === "Flags" || key === "Options" ) {
 			for( const [ extraKey, extraValue ] of Object.entries( value ) ) {
 				lines.push(
-					`${
-						key === "Flags" ? "arkflag_" : "arkopt_"
+					`${ key === "Flags" ? "arkflag_" : "arkopt_"
 					}${ extraKey }='${ extraValue }'`
 				);
 			}
