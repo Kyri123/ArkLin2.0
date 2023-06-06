@@ -9,8 +9,8 @@ RUN apt-get update \
     sudo \
     openssh-server
 
-#COPY arkmanager/ssh_config /etc/ssh/ssh_config
-#COPY arkmanager/sshd_config /etc/ssh/sshd_config
+COPY arkmanager/ssh_config /etc/ssh/ssh_config
+COPY arkmanager/sshd_config /etc/ssh/sshd_config
 
 COPY arkmanager/user.sh /usr/local/bin/user.sh
 RUN chmod +x /usr/local/bin/user.sh
