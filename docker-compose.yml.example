@@ -62,15 +62,19 @@ services:
     build:
       context: ./arkmanager
       args:
-        SSH_MASTER_USER: root
-        SSH_MASTER_PASS: arklin2
+        SSH_ROOT_USER: root
+        SSH_ROOT_PASS: arklin2
     hostname: arkmanager
     volumes:
-      - ../mount/sshd:/etc/ssh/
       - ../mount/arkmanager/:/etc/arkmanager/
+      - ../mount/Server/:/mount/Server/
+      - ../mount/Logs/:/mount/Logs/
+      - ../mount/Backups/:/mount/Backups/
       - ../mount/steamcmd/:/mount/steamCMD/
     ports:
+      # SSH port temporary for testing purposes. TODO: allow ssh on docker network arklin2 only later
       - "2222:22"
+      # Ports must be set to range for multiple gameservers
       # Port for connections from ARK game client
       - "7777:7777/udp"
       # Raw UDP socket port (always Game client port +1)
@@ -81,6 +85,9 @@ services:
       - "27015:27015/udp"
     networks:
       - arklin2
+    extra_hosts:
+      - "media.steampowered.com:23.10.249.160"
+      - "client-download.steampowered.com:23.10.249.160"
 
 networks:
   arklin2:
