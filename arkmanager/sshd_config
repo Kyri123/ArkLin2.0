@@ -1,7 +1,6 @@
 ChallengeResponseAuthentication no
 UsePAM yes
 PermitRootLogin yes
-
 PrintMotd no
 X11Forwarding no
 AllowTcpForwarding no
