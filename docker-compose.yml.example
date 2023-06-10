@@ -9,7 +9,7 @@ services:
   kadmin-arklin2:
     user: "${DOCKER_UID}:${DOCKER_GID}"
     depends_on:
-      - mongodb
+      #- mongodb
       - arkmanager
     build: "./"
     #restart: always
@@ -45,25 +45,27 @@ services:
     networks:
       - arklin2
 
-  mongodb:
-    # user: "${DOCKER_UID}:${DOCKER_GID}"
-    image: mongo
-    volumes:
-      - '../mount/mongodb:/data/db'
-    environment:
-      MONGO_INITDB_DATABASE: arklin2
-      MONGO_INITDB_ROOT_USERNAME: kadmin
-      MONGO_INITDB_ROOT_PASSWORD: arklin2
-    networks:
-      - arklin2
+  #mongodb:
+  #  # user: "${DOCKER_UID}:${DOCKER_GID}"
+  #  image: mongo
+  #  volumes:
+  #    - '../mount/mongodb:/data/db'
+  #  environment:
+  #    MONGO_INITDB_DATABASE: arklin2
+  #    MONGO_INITDB_ROOT_USERNAME: kadmin
+  #    MONGO_INITDB_ROOT_PASSWORD: arklin2
+  #  networks:
+  #    - arklin2
 
   arkmanager:
-    image: arkmanager
+    user: "${DOCKER_UID}:${DOCKER_GID}"
     build:
       context: ./arkmanager
       args:
         SSH_ROOT_USER: root
         SSH_ROOT_PASS: arklin2
+        SSH_STEAM_USER: steam
+        SSH_STEAM_PASS: arklin2
     hostname: arkmanager
     volumes:
       - ../mount/arkmanager/:/etc/arkmanager/
