@@ -9,10 +9,10 @@ services:
   kadmin-arklin2:
     user: "${DOCKER_UID}:${DOCKER_GID}"
     depends_on:
-      #- mongodb
+      - mongodb
       - arkmanager
     build: "./"
-    #restart: always
+    restart: always
     environment:
       - APPEND_BASEDIR=/home/steam/KAdmin/
       - API_EXPRESS_HTTP_PORT=28080
@@ -45,17 +45,17 @@ services:
     networks:
       - arklin2
 
-  #mongodb:
-  #  # user: "${DOCKER_UID}:${DOCKER_GID}"
-  #  image: mongo
-  #  volumes:
-  #    - '../mount/mongodb:/data/db'
-  #  environment:
-  #    MONGO_INITDB_DATABASE: arklin2
-  #    MONGO_INITDB_ROOT_USERNAME: kadmin
-  #    MONGO_INITDB_ROOT_PASSWORD: arklin2
-  #  networks:
-  #    - arklin2
+  mongodb:
+    # user: "${DOCKER_UID}:${DOCKER_GID}"
+    image: mongo
+    volumes:
+      - '../mount/mongodb:/data/db'
+    environment:
+      MONGO_INITDB_DATABASE: arklin2
+      MONGO_INITDB_ROOT_USERNAME: kadmin
+      MONGO_INITDB_ROOT_PASSWORD: arklin2
+    networks:
+      - arklin2
 
   arkmanager:
     user: "${DOCKER_UID}:${DOCKER_GID}"
