@@ -10,10 +10,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Change root password (is there a better way?)
 RUN echo ${SSH_ROOT_USER}:${SSH_ROOT_PASS} | chpasswd
 
-# Install dependencies (as minimal, as possible)
+# Install dependencies (as minimal, as possible. some tools for testing, cleanup later)
 RUN dpkg --add-architecture i386
 RUN apt-get update -qy && apt-get dist-upgrade -y
-RUN apt-get install -y --no-install-recommends openssh-server sudo nano lib32gcc-s1 curl ca-certificates software-properties-common locales iputils-ping
+RUN apt-get install -y --no-install-recommends openssh-server sudo nano lib32gcc-s1 curl ca-certificates software-properties-common locales iputils-ping perl rsync sed tar perl-modules lsof libc6-i386 bzip2
 COPY ssh_config /etc/ssh/ssh_config
 COPY sshd_config /etc/ssh/sshd_config
 
@@ -29,7 +29,7 @@ RUN echo "${SSH_STEAM_USER} ALL=NOPASSWD:/usr/sbin/deluser" >> /etc/sudoers
 RUN echo "${SSH_STEAM_USER} ALL=NOPASSWD:/usr/sbin/chpasswd" >> /etc/sudoers
 
 #############
-### Option 1: Install steamcmd from akamai/valve (unfinished, use option2 yet)
+### Option 1: Install steamcmd from akamai/valve (unfinished, use Option 2 yet)
 #RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" --create-dirs --output /usr/games/steamcmd/steamcmd_linux.tar.gz
 #RUN tar zxvf /usr/games/steamcmd/steamcmd_linux.tar.gz --directory /usr/games/steamcmd/
 #RUN chmod +x /usr/games/steamcmd/linux32/steamcmd
@@ -38,7 +38,6 @@ RUN echo "${SSH_STEAM_USER} ALL=NOPASSWD:/usr/sbin/chpasswd" >> /etc/sudoers
 
 #############
 ### Option 2: Install steamcmd from repo https://developer.valvesoftware.com/wiki/SteamCMD#Package_From_Repositories
-# Add contrib and non-free
 RUN apt-add-repository contrib
 RUN apt-add-repository non-free
 RUN apt-get update -qy && \
@@ -49,7 +48,9 @@ RUN ln -sf /usr/games/steamcmd /usr/bin/steamcmd
 RUN ln -sf /usr/games/steamcmd /home/steam/steamcmd
 
 #############
-### Arkmanager aka ARK Server Tools installation (finally arrived here?) ...
+### Arkmanager aka ARK Server Tools installation
+# documetnation https://github.com/arkmanager/ark-server-tools
+RUN curl -sL https://raw.githubusercontent.com/arkmanager/ark-server-tools/master/netinstall.sh | sudo bash -s steam
 
 #############
 # Define Entrypoint
