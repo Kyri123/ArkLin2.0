@@ -29,7 +29,7 @@ RUN echo "${SSH_STEAM_USER} ALL=NOPASSWD:/usr/sbin/deluser" >> /etc/sudoers
 RUN echo "${SSH_STEAM_USER} ALL=NOPASSWD:/usr/sbin/chpasswd" >> /etc/sudoers
 
 #############
-### Option 1: Install steamcmd from akamai/valve (unfinished, use Option 2 yet)
+### Option 1: Install steamcmd from akamai/valve (unfinished! use Option 2 yet)
 #RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" --create-dirs --output /usr/games/steamcmd/steamcmd_linux.tar.gz
 #RUN tar zxvf /usr/games/steamcmd/steamcmd_linux.tar.gz --directory /usr/games/steamcmd/
 #RUN chmod +x /usr/games/steamcmd/linux32/steamcmd
@@ -49,7 +49,6 @@ RUN ln -sf /usr/games/steamcmd /home/steam/steamcmd
 
 #############
 ### Arkmanager aka ARK Server Tools installation
-# documetnation https://github.com/arkmanager/ark-server-tools
 RUN curl -sL https://raw.githubusercontent.com/arkmanager/ark-server-tools/master/netinstall.sh | sudo bash -s steam
 
 #############
