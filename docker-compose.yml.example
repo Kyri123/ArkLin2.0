@@ -58,7 +58,7 @@ services:
 
   arkmanager:
     container_name: arklin2-arkmanager
-    user: "${DOCKER_UID}:${DOCKER_GID}"
+    #user: "${DOCKER_UID}:${DOCKER_GID}"
     build:
       context: ./arkmanager
       args:
@@ -75,7 +75,7 @@ services:
       - ../mount/steamcmd/:/mount/steamCMD/
     ports:
       # SSH port temporary for testing purposes. TODO: allow ssh on docker network arklin2 only later
-      - "2222:22"
+      #- "2222:22"
       # Ports must be set to range for multiple gameservers (maybe automated, when creating new server in arklin2)
       # Port for connections from ARK game client
       - "7777:7777/udp"
